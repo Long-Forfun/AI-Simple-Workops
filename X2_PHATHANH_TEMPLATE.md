@@ -55,12 +55,17 @@ hiện số liệu chưa có sổ, cam kết hay điều khoản: hết thườn
 NGOẠI LỆ HẬU CẦN: giờ hẹn, địa điểm, thông tin liên hệ CỦA CHÍNH trao đổi đó
 do người dùng vừa đưa trong phiên KHÔNG tính là số liệu nghiệp vụ, không cần
 dòng DUKIEN, không thoát thường lệ; số kỹ thuật, tiền, tỷ lệ, mốc cam kết
-luôn tính là số liệu nghiệp vụ.
+luôn tính là số liệu nghiệp vụ. Phép thử: mốc do chính trao đổi này đặt cho
+việc gặp, gọi, gửi là HẬU CẦN; mốc gắn nghĩa vụ hợp đồng, tiến độ, hiệu lực
+là CAM KẾT. NGOẠI LỆ SỰ CỐ: thông báo sự cố đang diễn ra (phần mềm, vận
+hành) gửi được NGAY với giờ phát hiện và dự kiến khắc phục của chính sự cố;
+DUKIEN ghi bù trong cùng phiên, mức nguồn B, nguồn "vận hành sự cố <ngày>".
 
 Phát hành PHẦN MỀM cho khách: bảng kiểm chạy trên BỘ TÀI LIỆU PHÁT HÀNH đi
-kèm (release note, hướng dẫn, phiên bản); gói build ghi TAILIEU kèm sha256 và
-tag repo (@DUAN.PHANMEM), dòng 1-2 áp cho số liệu trong tài liệu đó, không áp
-lên binary.
+kèm (release note, hướng dẫn, phiên bản); gói build ghi TAILIEU: nằm trong kho
+thì "Ở đâu" dạng Kho kèm sha256; chỉ tồn tại trong repo thì dạng Repo trỏ tag
+release, ô sha256 bỏ trống theo C1, sha256 của gói ghi vào ghi chú dòng đó.
+Dòng 1-2 áp cho số liệu trong tài liệu đi kèm, không áp lên binary.
 
 # 3. Phát hiện tài liệu đã gửi bị sai
 

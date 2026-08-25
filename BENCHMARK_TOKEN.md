@@ -17,8 +17,9 @@ runtime.
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự cộng INSTRUCTION) xấp xỉ 4.000 token, vẫn thấp hơn trước tối ưu.
-Nền tảng nào kéo CẢ X5 (hiện ~4765 token) thay vì đúng mục thì mỗi thao tác đổi
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.884) xấp xỉ 4.084
+token, vẫn thấp hơn trước tối ưu.
+Nền tảng nào kéo CẢ X5 (hiện ~5080 token) thay vì đúng mục thì mỗi thao tác đổi
 trạng thái tốn thêm phần chênh; luật đọc theo mục của X5 mục 5 áp cho cả X3, X5.
 
 ## Chi phí context theo loại yêu cầu (ngoài thuế, chưa tính tài liệu nghiệp vụ)
@@ -29,13 +30,13 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1577 (thêm X5 mục 3 ~950 khi ghi sổ) | |
-| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~4765 + khối | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2481 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3278) + THU theo khối | ~5759 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1461 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3052 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3052 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1768 (thêm X5 mục 3 ~950 khi ghi sổ) | |
+| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5080 + khối | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2672 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3593) + THU theo khối | ~6265 + khối | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1485 | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3484 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3484 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 

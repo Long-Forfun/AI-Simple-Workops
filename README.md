@@ -1,8 +1,9 @@
 # WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
 
-Bộ mẫu dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn file, chạy
-trên Claude (Project + phiên Cowork): luật thường trực, bộ cấu hình X0 tới X5,
-năm sổ lõi, hai script kiểm bằng máy. Repo này là BỘ MẪU. Vận hành hằng ngày
+Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm và
+tự ghi chép có kiểm soát; công ty có PHẦN MỀM cũng dùng được (code ở repo,
+secret không vào kho, deploy có mức duyệt). Bên trong là luật thường trực, bộ
+cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này là BỘ MẪU. Vận hành hằng ngày
 diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc thư mục mây đồng bộ như Dropbox).
 
 Việc tay duy nhất phải làm ĐÚNG là dán INSTRUCTION vào Project instructions.

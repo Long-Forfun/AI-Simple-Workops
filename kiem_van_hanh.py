@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v23 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v24 · 20260825
+# v24, theo hội đồng vòng 4: MỘT file không đọc được (khóa Office, sai
+# encoding) không giết cả báo cáo nữa: doc() và sha_file() bắt lỗi, gom vào
+# phép 0f "file không đọc được" thay vì traceback · file tạm ~$/.tmp không
+# hash (đằng nào cũng bị loại khỏi suy hiện hành) · bộ lọc bản chính dùng
+# CHUNG (TEMPLATE, conflicted, xung đột) cho X0 lẫn NHATKY: chỉ còn bản
+# (xung đột) của NHATKY thì 0d LỆCH "bản chính mất" thay vì PASS tự mâu
+# thuẫn với 0b · 12k khi nhật ký mất hay rỗng đổi chẩn đoán GIỮ index, hết
+# xúi dọn _thu_ap_dung.json · kiểm basename áp cho CẢ đính kèm de_ngoai ·
+# 12e nhận dạng hiển thị "Tên <mail@dom>" và danh sách hộp cũ @NHIP.HOPTHU_CU.
 # v23, theo hội đồng vòng 3 (giám khảo dựng kho giả lập chạy thật): glob
 # NHATKY loại _TEMPLATE (template nằm trong _so theo cài chuẩn che phép 0d,
 # xóa trục sự thật vẫn "hệ sạch") · kiem_payload miễn sha256/bytes cho đính
@@ -173,18 +182,30 @@ def bao(ten, ok, chi_tiet=""):
         loi.append(ten)
 
 
+LOI_DOC = []  # (đường dẫn, lý do) các file KHÔNG ĐỌC ĐƯỢC trong lượt chạy;
+              # phép 0f báo một dòng LỆCH đích danh thay vì chết traceback (v24)
+
+
 def doc(p):
-    return p.read_text(encoding="utf-8") if p.is_file() else ""
+    try:
+        return p.read_text(encoding="utf-8") if p.is_file() else ""
+    except (UnicodeDecodeError, OSError) as e:
+        LOI_DOC.append((str(p), type(e).__name__))
+        return ""
 
 
 def sha_file(p):
-    if p.stat().st_size > TRAN_CANH_BAO:
-        print(f"        LƯU Ý: file lớn {p.name} ({p.stat().st_size // (1 << 20)} MB), hash sẽ chậm")
-    h = hashlib.sha256()
-    with open(p, "rb") as f:
-        for khoi in iter(lambda: f.read(1 << 20), b""):
-            h.update(khoi)
-    return h.hexdigest()
+    try:
+        if p.stat().st_size > TRAN_CANH_BAO:
+            print(f"        LƯU Ý: file lớn {p.name} ({p.stat().st_size // (1 << 20)} MB), hash sẽ chậm")
+        h = hashlib.sha256()
+        with open(p, "rb") as f:
+            for khoi in iter(lambda: f.read(1 << 20), b""):
+                h.update(khoi)
+        return h.hexdigest()
+    except OSError as e:
+        LOI_DOC.append((str(p), type(e).__name__))
+        return ""
 
 
 def dong_bang(nd):
@@ -397,7 +418,9 @@ def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
             khoa = khoa_ho_cua(rel)
         if khoa_ho and khoa != khoa_ho:
             continue  # cùng thư mục nhưng KHÁC họ: ngoài phạm vi --ho
-        sha = sha_file(f)
+        # file tạm (~$ đang bị Office khóa, .tmp...) đằng nào cũng bị loại khỏi
+        # suy hiện hành: không hash, vừa nhanh vừa khỏi chết vì PermissionError
+        sha = "" if khoa[1] == "tam" else sha_file(f)
         tr = truoc.get(rel) or {}
         if isinstance(tr, str):
             tr = {"sha": tr, "luc": 0}
@@ -580,6 +603,11 @@ def kiem_payload(p, khoa=""):
         for d in dk:
             if not isinstance(d, dict) or not isinstance(d.get("ten"), str):
                 loi.append("đính kèm thiếu ten")
+            elif ("/" in d["ten"] or "\\" in d["ten"] or d["ten"] in (".", "..")
+                  or not d["ten"].strip()):
+                # basename áp cho MỌI đính kèm, kể cả de_ngoai: tên vẫn vào sổ
+                loi.append(f"tên đính kèm {d['ten']!r} phải là basename thuần,"
+                           f" không được mang đường dẫn")
             elif d.get("de_ngoai"):
                 # vượt @NHIP.TRANDINHKEM hay dữ liệu nhạy: để ngoài staging theo
                 # X3E mục 2, chỉ đòi lý do; sha256/bytes miễn vì file không kéo về
@@ -588,10 +616,6 @@ def kiem_payload(p, khoa=""):
             elif (not isinstance(d.get("sha256"), str)
                     or not isinstance(d.get("bytes"), int)):
                 loi.append("đính kèm thiếu ten, sha256 hay bytes")
-            elif ("/" in d["ten"] or "\\" in d["ten"] or d["ten"] in (".", "..")
-                  or not d["ten"].strip()):
-                loi.append(f"tên đính kèm {d['ten']!r} phải là basename thuần,"
-                           f" không được mang đường dẫn")
     return loi
 
 
@@ -768,12 +792,17 @@ def kiem_email(goc, so):
     x0nd = "".join(doc(q) for q in sorted(goc.glob("X0_CAUHINH_*.md"))
                    if "TEMPLATE" not in q.name and "conflicted" not in q.name.lower()
                    and "xung đột" not in q.name.lower())
-    m = re.search(r"@NHIP\.HOPTHU(?:\s*\(EMAIL\))?\s+(\S+@\S+)", x0nd)
-    if m:
-        hop_khai = m.group(1).strip().lower()
-        sai_hop = sorted(h for h in hop_thu_cua(luot) if h != hop_khai)
+    hop_khai_tap = set()
+    for m_h in re.finditer(r"@NHIP\.HOPTHU(?:_CU)?(?:\s*\(EMAIL\))?[^\n]*", x0nd):
+        # nhận cả dạng hiển thị "Văn phòng <vp@cty.vn>" và danh sách hộp CŨ
+        # sau đổi domain (@NHIP.HOPTHU_CU): nhật ký lịch sử không bị đá oan
+        hop_khai_tap |= {e.lower() for e in
+                         re.findall(r"[\w.+-]+@[\w.-]+", m_h.group(0))}
+    if hop_khai_tap:
+        sai_hop = sorted(h for h in hop_thu_cua(luot) if h not in hop_khai_tap)
         ket.append(("12e. mọi mail trong nhật ký thuộc ĐÚNG hộp thư khai báo",
-                    not sai_hop, f"hộp lạ {sai_hop[:3]} so với {hop_khai}"))
+                    not sai_hop,
+                    f"hộp lạ {sai_hop[:3]} so với {sorted(hop_khai_tap)}"))
     else:
         ket.append(("12e. mọi mail trong nhật ký thuộc ĐÚNG hộp thư khai báo",
                     False, "EMAIL đã chạy mà X0 CHƯA khai @NHIP.HOPTHU,"
@@ -864,7 +893,13 @@ def kiem_email(goc, so):
     idx_p = so / "_thu_ap_dung.json"
     idx, idx_ok = doc_index(doc(idx_p))
     loi_idx = []
-    if not idx_ok:
+    if not luot and reg:
+        # nhật ký MẤT hay RỖNG (12a/12d đã lệch): index và registry là thứ CÒN
+        # ĐÚNG, thứ mất là nhật ký; không liệt kê "thừa mục" kẻo xúi dọn nhầm
+        loi_idx.append("nhật ký MẤT hay RỖNG: GIỮ NGUYÊN _thu_ap_dung.json và"
+                       " registry, thứ phải khôi phục là nhật ký (xem 12a)")
+        idx = {}
+    elif not idx_ok:
         loi_idx.append("index không phải object của các mục {so, dong}")
     thao_tac_cua = {}
     for k in sorted(committed):
@@ -941,10 +976,12 @@ def main(goc):
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
-    def loc_x0(cac):
+    def loc_ban_chinh(cac):
+        """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay
+        file cấu hình: loại _TEMPLATE, conflicted copy, bản xung đột."""
         return [q for q in sorted(cac) if "TEMPLATE" not in q.name
                 and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()]
-    x0s = loc_x0(goc.glob("X0_CAUHINH_*.md"))
+    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"))
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
     if not x0s and co_template:
         print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
@@ -966,16 +1003,21 @@ def main(goc):
             bool(yc and iv and yc.group(1) == iv.group(1)),
             f"X0={yc and yc.group(1)} INSTR={iv and iv.group(1)}")
 
+    LOI_DOC.clear()
     rev = re.search(r"rev (\d+)", doc(x0s[0])) if x0s else None
     chua_cai = bool(rev and rev.group(1) == "0") or (not x0s and co_template)
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào")
     else:
-        co_nk = [q for q in so.glob("NHATKY_*.md")
-                 if "TEMPLATE" not in q.name and "conflicted" not in q.name.lower()]
+        co_nk = loc_ban_chinh(so.glob("NHATKY_*.md"))
+        chi_conflict = (not co_nk and any(
+            "TEMPLATE" not in q.name for q in so.glob("NHATKY_*.md")))
         bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
-            "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
-            " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại")
+            ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
+             " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
+             if chi_conflict else
+             "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
+             " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại"))
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
@@ -1003,9 +1045,7 @@ def main(goc):
         else:
             print("  BỎ QUA  2. chưa có X0_INDEX")
 
-    nk = "".join(doc(p) for p in sorted(so.glob("NHATKY_*.md"))
-                if "TEMPLATE" not in p.name and "conflicted" not in p.name.lower()
-                and "xung đột" not in p.name.lower())
+    nk = "".join(doc(p) for p in loc_ban_chinh(so.glob("NHATKY_*.md")))
     hang_nk = dong_bang(nk)
     ma_cot_dau = [re.sub(r"\*", "", h[0]).strip() for h in hang_nk if h]
     ma_g = [m for m in ma_cot_dau if re.fullmatch(MAU_G, m)]
@@ -1119,6 +1159,15 @@ def main(goc):
 
     # 12 (profile EMAIL): đối chiếu nhật ký nạp, registry, THU, hộp thư khai báo
     kiem_email(goc, so)
+
+    # 0f. File KHÔNG ĐỌC ĐƯỢC trong lượt chạy (khóa Office, sai encoding...):
+    #     một dòng LỆCH đích danh thay vì chết traceback giữa báo cáo (v24).
+    #     Đặt cuối để gom đủ mọi phép; các phép trên đã xử file lỗi như rỗng.
+    if LOI_DOC:
+        bao("0f. mọi file cần đọc đều đọc được", False,
+            f"{sorted(set(LOI_DOC))[:5]}: file bị khóa hay sai encoding được các phép trên"
+            f" coi như RỖNG, kết quả liên quan tới chúng chưa tin được; đóng"
+            f" ứng dụng đang giữ file hay sửa encoding rồi rà lại")
 
     print()
     if loi:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v20 · 20260824
+# kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai, tổng 68 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.

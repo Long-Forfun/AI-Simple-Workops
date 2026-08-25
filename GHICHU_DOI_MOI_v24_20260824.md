@@ -1,8 +1,45 @@
 # GHI CHÚ ĐỔI MỚI · STARTER · 20260824
 
 File này cho người đánh giá. Không phải luật, không cần copy vào bộ chạy.
-Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
+Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
+
+## Vòng 28: vá theo hội đồng vòng 4 (20260825, điểm vòng 4: 85/100)
+
+Điểm vòng 4: VẬN HÀNH 7,5 · KHÔNG SAI 8,0 · THÔNG MINH 8,5 · TOKEN 8,7 ·
+KHÔNG MISS 9,0 · ĐƠN GIẢN 9,3. Vá:
+
+1. kiem_van_hanh v24, CHỐNG CHẾT GIỮA BÁO CÁO (CAO của vòng 4, đã chạy thật):
+   doc() và sha_file() bắt UnicodeDecodeError, OSError, gom vào phép 0f "file
+   không đọc được" kèm chỉ dẫn, hết traceback vì file Office đang mở hay sổ
+   sai encoding; file tạm ~$ không hash. Bộ lọc bản chính (TEMPLATE,
+   conflicted, xung đột) dùng CHUNG cho X0 và NHATKY: chỉ còn bản xung đột
+   thì 0d LỆCH "bản chính mất" thay vì PASS tự mâu thuẫn với 0b; 12k khi
+   nhật ký mất hay rỗng đổi chẩn đoán GIỮ index; basename áp cho cả đính kèm
+   de_ngoai; 12e nhận dạng hiển thị "Tên <mail@dom>".
+2. ĐỔI HỘP THƯ có đường: @NHIP.HOPTHU_CU giữ danh sách hộp cũ (đổi hộp là
+   mức C kèm QUYETDINH), 12e chấp nhận hộp lịch sử, nhật ký cũ hết bị đá oan.
+3. MAIL MÁY có lối thoát nghiệp vụ (2 giám khảo cùng chỉ): hóa đơn, bản ký
+   DocuSign, thông báo giao dịch, thư có đính kèm cần lưu THOÁT luật gom, đi
+   pipeline như thư thường; chỉ thư thuần thông báo mới gom một dòng digest.
+4. de_ngoai dữ-liệu-khách siết về đúng ý: chỉ DUMP, LOG, EXPORT hàng loạt từ
+   hệ thống phần mềm; hợp đồng, CV có thông tin cá nhân vẫn theo 99_Goc.
+5. Bảng REPO chuyển từ X0 C2 về X5 mục 1 (gom luật mức về một chỗ, X0 nhẹ
+   bớt, công ty không phần mềm khỏi kéo khối này khi mở C2); thêm migration
+   dev/staging = A, lệnh "rollback đi" giữa sự cố là gật plan; danh mục B
+   "dọn nháp" khai rõ không áp trong repo.
+6. RA_NGOAI thành phạm vi BAO TRÙM có luật quan hệ với phạm vi chi tiết và
+   luật từ cấm (hết chặn oan hay lách lưới); X2 thêm NGOẠI LỆ SỰ CỐ (thông
+   báo sự cố gửi ngay, DUKIEN ghi bù cùng phiên) và phép thử HẬU CẦN vs CAM
+   KẾT; gói build hết đá luật bốn dạng (trong kho dạng Kho kèm sha, trong
+   repo dạng Repo, sha vào ghi chú); XÓA THEO YÊU CẦU PHÁP LÝ có thủ tục
+   xuyên tầng ở X5 mục 7; nghiệm thu source thuê ngoài vào 99_Goc.
+7. BENCHMARK: các số route sinh lại sau khi X5 phình (phép 2c tự bắt trôi
+   đúng như thiết kế); đoạn runtime-max hết dùng trần cũ; README câu mở
+   tiếng người kèm tín hiệu "công ty có phần mềm cũng dùng được"; GHICHU
+   header hết đếm tay số vòng; kiem_tra_bo header lên v21.
+
+Watchlist trần: X0 ~15,6k/16.000 (97%) · X9 ~5,9k/6.500 · X3E ~10,8k/12.000.
 
 ## Vòng 27: vá theo hội đồng vòng 3 (20260825, điểm vòng 3: 80/100)
 

@@ -18,11 +18,19 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt theo ngoại lệ C11 · dọn hay xóa nháp
-   CHƯA vào sổ
+   CHƯA vào sổ (trong repo phần mềm: theo bảng REPO dưới, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
    MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4
 ```
+
+REPO, chỉ dự án @DUAN.PHANMEM (X0 C2): sửa code trên nhánh trong việc đã
+mở, deploy hay migration trên dev, staging, xóa nhánh ĐÃ merge là A · deploy
+hay migration môi trường CHẠY THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy
+thật, ROLLBACK chạy thật, force-push hay xóa lịch sử, xóa nhánh CHƯA merge
+(mất code) là C; lệnh trực tiếp "rollback đi" giữa sự cố là gật plan, plan
+ghi trong cùng lượt · danh mục "cấu trúc folder hàng loạt" và "dọn nháp"
+của kho KHÔNG áp cho bên trong repo, mức lấy theo bảng này.
 
 Vòng đời theo mức:
 
@@ -238,6 +246,11 @@ nằm một kho. Đổi tên hàng loạt là mức C kèm QUYETDINH. Tài liệ
 nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ Summary.
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
+
+XÓA THEO YÊU CẦU PHÁP LÝ (mức C, QUYETDINH ghi căn cứ): quét đủ các tầng sổ
+· _lich_su · backup · _thu_staging · 04_Trao_doi. Sổ và nhật ký CHỈ-THÊM
+không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]", giữ
+khung dòng; bản backup cũ còn chứa dữ liệu thì xóa cả bản backup đó.
 
 COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
 _thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\

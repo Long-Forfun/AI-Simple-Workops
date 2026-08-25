@@ -81,12 +81,7 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
-  commit hay PR. MỨC cho thao tác repo: sửa code trên nhánh trong việc đã
-  mở là A · deploy dev, staging là A của dự án đó · deploy môi trường CHẠY
-  THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy thật, migration dữ liệu
-  chạy thật, force-push hay xóa lịch sử là C (X5 mục 1); ROLLBACK môi trường
-  chạy thật là C; xóa nhánh ĐÃ merge là A, CHƯA merge (mất code) là C; danh
-  mục "cấu trúc folder hàng loạt là C" KHÔNG áp cho bên trong repo. Một phần mềm nhiều
+  commit hay PR. MỨC cho từng thao tác repo: bảng REPO ở X5 mục 1. Một phần mềm nhiều
   repo: mỗi repo một vế trên cùng dòng. Đặc tả, tài liệu sống cùng code nằm
   trong repo, TAILIEU trỏ dạng "Repo" theo C1.
   SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
@@ -96,6 +91,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   câu về rủi ro rồi xử tiếp việc chính; sổ chỉ mô tả LOẠI secret và hệ liên
   quan, CẤM chép giá trị secret vào bất kỳ sổ hay file nào của kho. Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu
   đó coi là đầu ra có phạm vi theo C5, không kéo về kho tùy tiện.
+  Bản BÀN GIAO source từ thuê ngoài là FILE GỐC NGOÀI: vào 99_Goc, cờ GỐC,
+  sha256 (luật "code không chép vào kho" chỉ áp cho repo của CHÍNH công ty).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn. Mục nào
   chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
@@ -146,6 +143,10 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
   NOI_BO         trong công ty                              luôn có
   RA_NGOAI       mọi đầu ra rời công ty khi chưa khai phạm vi chi tiết
                  (LITE dùng ngay giá trị này, khỏi dừng hỏi)   luôn có
+  RA_NGOAI là phạm vi BAO TRÙM: dữ kiện khai phạm vi chi tiết nào cũng tự
+  thỏa RA_NGOAI; đầu ra mang phạm vi chi tiết KHÔNG dùng được dữ kiện chỉ
+  khai RA_NGOAI. Đã khai phạm vi chi tiết: đầu ra mới phải mang phạm vi chi
+  tiết; từ cấm áp cho RA_NGOAI là HỢP của mọi dòng @PHAMVI.CAM cộng X1
 
 @PHAMVI.CAM      <điền: phạm vi nào cấm từ nào. Trúng một từ là dừng>
 @PHAMVI.BATBUOC  <điền: phạm vi nào bắt buộc khai gì, hậu quả nếu thiếu>
@@ -241,6 +242,9 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>
+@NHIP.HOPTHU_CU  (EMAIL) <các hộp thư CŨ sau khi đổi domain hay đổi hộp,
+                 hoặc "chưa có"; đổi @NHIP.HOPTHU là mức C kèm QUYETDINH,
+                 hộp cũ chuyển xuống đây để nhật ký lịch sử không bị đá oan>
 @NHIP.TAIKHOAN   (EMAIL) <điền các địa chỉ NGƯỜI DÙNG dùng để gửi, CỘNG các
                  alias hay hộp nhóm mà thư nhắm tới người dùng vẫn đến (info@,
                  sales@...); dùng nhận diện "thư của mình", "mình ở To" X3E>
