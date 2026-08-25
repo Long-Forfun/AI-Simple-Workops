@@ -22,8 +22,8 @@ X5 MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ              X9 cài đặt, ch�
 X1 tới X5 là luật, TRỎ về mục X0; cần giá trị thì đọc đúng mục X0 lúc dùng, cấm
 chép ra làm việc trên bản chép. X0 khai `instruction_yeu_cau`, phải khớp bản này,
 lệch thì dừng. X0 `rev 0`: chế độ CÀI ĐẶT theo X9; khi rev 0, điền giá trị ban
-đầu không tính là sửa nhóm khóa. Đụng `<chưa điền>`: dừng, hỏi đúng câu thiếu,
-update ngược X0, rồi làm tiếp.
+đầu không tính là sửa nhóm khóa. Đụng `<chưa điền>`: dừng, GOM mọi tham
+số thiếu của CÙNG việc vào MỘT lượt hỏi, update ngược X0, rồi làm tiếp.
 
 Khối luật gắn nhãn profile (REGULATED, PARALLEL, AUTOMATED, EMAIL) chỉ áp khi X0
 C0 bật profile đó; không bật thì bỏ qua khối, không đọc. Một mục có thể phục vụ
@@ -38,10 +38,11 @@ COWORK_CAU_NOI qua cầu nối. In hai dòng, số liệu lấy từ `_so\X0_IND
 
 ```
 WORKOPS · <mã> · <phiên> · chạm được: <kho> · rev <khớp/lệch> · bảng <YYYY-MM-DD>
-<n> quá hạn · <n> chờ đối tác · <n> plan C treo · mail <n> ngày · mốc: <mốc>
+<n> quá hạn · <n> chờ đối tác · <n> plan C treo · <n> ĐANG GHI · mail <n> ngày · mốc: <mốc>
 ```
 
 Bàn sạch: dòng hai còn "bàn sạch · mốc: <mốc>". Gõ `điểm danh` mới bung đủ.
+Còn lượt ĐANG GHI: chạy "chốt sổ" của X4 trước lượt ghi đầu tiên của phiên.
 Plan C treo KHÔNG chặn việc khác; chỉ phải xử lý trước khi yêu cầu mới chạm cùng
 tài liệu, dữ kiện hay dòng sổ. Bảng cũ hơn lượt ghi gần nhất, chứa mốc đã qua,
 hoặc quá 7 ngày: COWORK sinh lại ngay; CHAT in kèm "(bảng ngày <ngày>)".
@@ -70,7 +71,7 @@ SOAN_RA   X1 + X2 + DUKIEN, kèm mục X0 được trỏ
 SUA_FILE  X5 + TAILIEU bản mới nhất; sẽ ra ngoài thì thêm X1, X2
 CUA_VAO   X3 + VIEC + TAILIEU
 RA_SOAT   X4
-NOI_BO    X5 + X1 mục ký tự, động từ cấm
+NOI_BO    X5 mục 1 (thêm mục 3 khi ghi sổ) + X1 mục 3, 4
 ```
 
 MỌI việc đổi trạng thái đọc thêm X5 mục 1 trước khi làm. Mọi việc, dữ kiện, tài
@@ -85,9 +86,8 @@ C RỦI RO   plan vào PLANNING; gật mới làm, chốt mới ghi
 ```
 
 C tối thiểu, cấm hạ: đầu ra rời công ty (trừ thường lệ, điều kiện ở X5 mục 1) ·
-chạm bản đã gửi, đã nộp, đã ký · sửa X0 nhóm khóa C11, X1 tới X5, file này (một
-ngoại lệ duy nhất, khai tại C11: chỉ THÊM lệnh hay từ cấm để siết chặt là mức B;
-gỡ hay nới vẫn C) · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên
+chạm bản đã gửi, đã nộp, đã ký · sửa X0 nhóm khóa C11, X1 tới X5, file này (ngoại lệ duy
+nhất khai tại X0 C11) · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên
 hay di chuyển hàng loạt · xóa thứ đã vào sổ. X0 C13 chỉ được NÂNG mức. Phân vân giữa hai mức: lấy mức
 cao. Lệnh trực tiếp "sửa đi", "làm luôn" là đồng ý của B và gật plan của C.
 Danh mục A, B đầy đủ, ngoại lệ thường lệ, ranh giới nháp, kiểm bản mới nhất,

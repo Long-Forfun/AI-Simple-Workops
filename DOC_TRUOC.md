@@ -1,6 +1,6 @@
 # BỘ KHỞI TẠO WORKOPS · v24 · 20260824 · đọc file này trước
 
-Bộ này dựng hệ vận hành cho MỘT công ty mới, từ zero. Bốn bước: người dùng làm 1
+Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9 mục 3b). Bốn bước: người dùng làm 1
 và 2, bước 3 chỉ cần khi dùng phiên CHAT, AI làm bước 4. Từ mở phiên đầu tới
 làm việc được: ba câu bắt buộc, một câu profile.
 
@@ -18,7 +18,10 @@ làm việc được: ba câu bắt buộc, một câu profile.
    A và một vòng mức C
 ```
 
-Từ đó về sau: mọi phiên chạy theo INSTRUCTION. Nguyên tắc vận hành:
+Từ đó về sau: mỗi lần làm việc mở phiên Cowork, GẮN LẠI folder gốc, nói việc
+bằng tiếng người; câu tắt hằng ngày: "điểm danh" xem bàn làm việc · "quét
+mail" · "rà file" · "chốt sổ" kết phiên; AI trình plan thì gõ "chốt" hay
+"ok" là duyệt. Mọi phiên chạy theo INSTRUCTION. Nguyên tắc vận hành:
 
 ```
 Luật ở INSTRUCTION và X1 tới X5 · tham số ở X0, nguồn duy nhất, không chép đi đâu
@@ -27,7 +30,7 @@ ro mới cần plan và chốt · truy vết đầy đủ ở mọi mức, dồn
 ```
 
 Hệ sổ, gọi cho đúng: NĂM sổ lõi (VIEC, DUKIEN, TAILIEU, QUYETDINH, NHATKY) ·
-PLANNING chỉ mở cho việc mức C · THU chỉ tồn tại khi bật profile EMAIL ·
+PLANNING chỉ mở cho việc mức C · THU chỉ DÙNG khi bật profile EMAIL ·
 X0_INDEX và BANG_DIEU_KHIEN là VIEW máy sinh, không phải sổ. Hệ lõi không
 phình quá năm sổ.
 

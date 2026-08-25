@@ -4,6 +4,49 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 24: hội đồng 6 lăng kính chấm độc lập (20260825)
+
+Sáu giám khảo AI độc lập, mỗi người một lăng kính, đọc trọn bộ không nhiễm
+nhận định của nhau: VẬN HÀNH 7,5 · TOKEN 7,5 · THÔNG MINH 7,5 · KHÔNG SAI 6,5
+· KHÔNG MISS 6,5 · ĐƠN GIẢN 6,0. Trung bình 6,9/10. Vá theo phát hiện, ưu
+tiên cái được nhiều lăng kính cùng chỉ:
+
+1. LUẬT BẤT KHẢ THI (Không sai, CAO): X5 mục 3 bước 6 lệnh "COWORK đồng bộ
+   view lên tài liệu Project", nền tảng không cho phiên ghi vào Project. Sửa:
+   COWORK NHẮC người dùng tải, CHAT coi bản Project có thể cũ hơn kho.
+2. VÊNH PROFILE (Không sai, CAO): luật cốt lõi 1 đòi mức nguồn "mọi lúc"
+   nhưng DUKIEN ở LITE ghi "không áp dụng"; C9 gắn nhãn AUTOMATED/EMAIL trong
+   khi X3, X4 (CORE) bắt đọc ngưỡng ở đó. Sửa: thang A-D và các ngưỡng nhịp
+   là CORE; REGULATED chỉ giữ nguồn chỉ định và phạm vi chi tiết.
+3. _INBOX VÔ GIA CƯ (Không sai + Không miss): dùng khắp X3, X4 mà không khai
+   tọa độ. Thêm @DUONG.INBOX ở X0 C1, X9 dựng khi cài.
+4. VẬN HÀNH: conflicted copy của CHÍNH file sổ có luật hòa giải (X5) và phép
+   dò 0b; phép 0 đòi sổ lõi tồn tại (trước đây mất sổ PASS im lặng); banner
+   đếm lượt ĐANG GHI; chốt sổ cấm đoán nội dung, lượt mở dòng ghi kèm giá trị
+   chính; mất RIÊNG nhật ký thư thì GIỮ registry, thông điệp 12a/12d hết chỉ
+   sai hướng; backup _so mỗi ngày 7 bản. kiem_van_hanh lên v21.
+5. THÔNG MINH: luật gom MỘT lượt hỏi đưa vào INSTRUCTION (trước nằm ở X9 là
+   file "đọc xong thì thôi"); vòng quý có chỗ đếm (mỗi lần rà ghi một dòng
+   NHATKY); ngoại lệ HẬU CẦN cho giờ hẹn, địa chỉ trong X2; "làm luôn" hoàn
+   tất trọn lượt được tính là CHỐT; @NHIP.TAIKHOAN nhận alias.
+6. TOKEN: route NOI_BO chốt một mối (X5 mục 1 + mục 3 khi ghi sổ, ba nơi hết
+   vênh); cắt lặp C11 ở INSTRUCTION; BENCHMARK thêm ghi chú trung thực về
+   phiên CHAT nạp cả bộ. Còn treo: tách X3 mục 6 thành X3E (X3 dư 12 ký tự).
+7. KHÔNG MISS: X9 thêm mục 3b kho CÓ SẴN file và 3c NÂNG CẤP BỘ khi git pull;
+   NHATKY sang quý mới tự tạo từ template; hòa giải trùng mã G chạy MỌI
+   profile (trước khóa sau nhãn PARALLEL); đánh số câu X9 hết trùng "câu 4".
+8. ĐƠN GIẢN: README thêm "Ngày thường của bạn" (câu tắt, gắn folder mỗi
+   phiên, chốt/ok), bảng "AI báo chữ lạ" (rev lệch, XUNG ĐỘT, CHƯA KIỂM),
+   bẫy ZIP lồng thư mục, ghi chú Mac, "dữ liệu là của bạn"; bốn bước khớp
+   DOC_TRUOC; TAILIEU trong X5 mục 4 sửa đúng thứ tự cột template; lệnh chạy
+   script trong X4 đúng cú pháp và đủ tham số.
+
+Trần X9 nâng 5.400 lên 6.500 (đọc một lần mỗi công ty, không phải thuế thường
+trực). Chưa vá, ghi nhận cho vòng sau: tách X3E_EMAIL (gỡ bom trần X3, bớt
+~2.700 token/lượt CUA_VAO cho LITE trên nền nạp cả file) · trả lời inline
+trong trích dẫn cho CHỜ TÔI · nguồn scan không đọc được chữ · thủ tục bàn
+giao người dùng · trạng thái dự án NGỪNG · staging mồ côi.
+
 ## Vá 20260825: phát hành qua git, chạy được trên Windows, cài đặt ba bước
 
 Không đổi luật vận hành, không đổi INSTRUCTION, không đổi X1 tới X5. Hai phần:

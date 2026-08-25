@@ -8,7 +8,7 @@ duyệt. Các ngưỡng đọc từ X0 C9.
 
 ```
 FILE
- 1  có trong TAILIEU mà không thấy trên kho
+ 1  có trong TAILIEU mà không thấy trên kho; sổ lõi hay _so vắng trên đĩa
  2  có trên kho mà chưa vào TAILIEU
  3  hai KHO cùng giữ bản cuối (các cửa của cùng một kho không tính)
  4  file 99_Goc có sha256 khác lúc nhận
@@ -37,7 +37,8 @@ HẠN VÀ ĐỒNG BỘ                        ngưỡng theo X0 C9
 EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
 24  đã chạy EMAIL mà thiếu nhật ký sự kiện HAY thiếu registry
 25  nhật ký có dòng hỏng, hoặc lượt PREPARED không có COMMITTED (dở dang)
-26  registry khác tập khóa COMMITTED: thiếu là chưa dựng lại, THỪA là chặn oan
+26  registry khác tập khóa COMMITTED: thiếu là chưa dựng lại; THỪA: chặn oan
+    HOẶC nhật ký đã mất (xem 24 trước, nhật ký mất thì GIỮ registry, X5 mục 4)
 27  một khóa (Message-ID hay fallback) đứng cuối ở hai luồng THU
 28  nhật ký có mail thuộc hộp thư khác giá trị khai @NHIP.HOPTHU (so chính xác),
     hoặc có bằng chứng EMAIL chạy mà X0 CHƯA khai @NHIP.HOPTHU
@@ -50,13 +51,15 @@ EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
     chuỗi toàn văn)
 ```
 
-Phần dò được bằng máy (12, 17, 19, 22, 23 và schema bảng): có Python thì chạy
-`python3 00_Index\kiem_van_hanh.py 00_Index` TRƯỚC, dán kết quả vào báo cáo;
+Phần dò được bằng máy (12, 17, 19, 22, 23 và schema bảng): có Python thì chạy từ gốc
+kho `python 00_Index\kiem_van_hanh.py 00_Index .` TRƯỚC (thiếu tham số gốc kho
+thì phần rà FILE 1 tới 5 bị bỏ qua), dán kết quả vào báo cáo;
 không có Python thì kiểm tay đúng các dòng đó. Máy chỉ báo cáo, không sửa.
 Xuất bảng `| # | Loại lệch | Đối tượng | Chi tiết | Đề xuất |`. Sạch thì một dòng
 "sổ khớp thực tế <ngày>".
 
-Mỗi quý đọc thêm CHƯA KIỂM và MÂU THUẪN: cùng loại lệch từ 3 lần là thiếu luật, đề
+Mỗi lần rà xong ghi MỘT dòng NHATKY tóm tắt các loại lệch (mức A); vòng quý
+đếm từ các dòng đó, không từ trí nhớ. Mỗi quý đọc thêm CHƯA KIỂM và MÂU THUẪN: cùng loại lệch từ 3 lần là thiếu luật, đề
 xuất vào X0 hoặc X1. Cùng câu hỏi lặp từ 2 lần là thiếu mục X0. Kết luận ghi QUYETDINH.
 
 # Năm câu tắt
@@ -71,5 +74,7 @@ rà file     chạy danh mục trên, xuất bảng, chưa sửa gì
             KHÔNG XÁC ĐỊNH. RA_SOAT thuần vẫn chỉ báo cáo; tự ghi chỉ xảy ra
             qua câu tắt này hay khi nạp CUA_VAO theo X3
 chốt sổ     lưới an toàn theo trình tự X5 mục 3: dòng NHATKY còn ĐANG GHI, đọc "Chạm
-            sổ nào", kiểm "Ghi lần", thiếu ghi nốt, đổi XONG, plan sang ĐÃ GHI
+            sổ nào", kiểm "Ghi lần", thiếu ghi nốt; nội dung không tái
+            lập chắc từ "Làm gì" và plan: ghi VIEC hỏi người dùng, CẤM đoán;
+            đủ thì đổi XONG, plan sang ĐÃ GHI
 ```

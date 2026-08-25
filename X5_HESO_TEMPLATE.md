@@ -1,7 +1,7 @@
 ```
 X5 · MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ · <MÃ> · v21 · <YYYYMMDD>
-Mục 1 đọc trước MỌI việc đổi trạng thái. Các mục sau đọc khi SUA_FILE, NOI_BO,
-hoặc sắp ghi sổ. Dự án, folder, tên file đọc từ X0 C2 C3 C4; mức nâng ở X0 C13.
+Mục 1 đọc trước MỌI việc đổi trạng thái. Các mục sau đọc khi SUA_FILE
+hoặc sắp ghi sổ (mục 3). Dự án, folder, tên file đọc từ X0 C2 C3 C4; mức nâng ở X0 C13.
 ```
 
 # 1. Mức tác động và vòng đời
@@ -67,7 +67,9 @@ KIỂM BẢN    "đã cũ" định nghĩa TẤT ĐỊNH: họ tài liệu CHƯA 
             thì so sha256; không có thì mtime VÀ dung lượng cùng đổi; đồng bộ mây
             đổi mtime suông không tính, nghi ngờ thì mở đối chiếu nội dung.
             Khác thật: dừng, hỏi, tức tự nâng một mức
-CHỐT        người dùng gõ "chốt", "ok", hoặc xác nhận không sửa nữa. Nhiều plan
+CHỐT        người dùng gõ "chốt", "ok", hoặc xác nhận không sửa nữa. Việc C người dùng đã lệnh
+            "làm luôn" và hoàn tất TRỌN trong cùng lượt, kết quả đã trình:
+            coi là CHỐT, plan sang ĐÃ GHI, không treo. Nhiều plan
             CHỜ CHỐT: lệnh chốt phải nêu mã, không nêu thì hỏi kèm danh sách.
             Bỏ sang việc khác: plan giữ CHỜ CHỐT, không ghi, phiên sau nhắc
 KHÔNG NGƯỜI (profile AUTOMATED) phiên hẹn giờ, không ai trả lời: A làm và ghi
@@ -95,12 +97,16 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
 ```
 1  cấp mã G-<YYYYMMDD>-<CỬA>-<NN>, CỬA là cửa vào kho của phiên theo X0 C1 (kho
    một cửa thì luôn là CUA1): hai phiên khác cửa không thể trùng mã. Số NN đọc
-   NHATKY ngay trước khi cấp. Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
+   NHATKY ngay trước khi cấp; sang quý chưa có file thì tạo NHATKY_<năm>Q<quý>
+   mới từ template trong cùng lượt (mức A), NN đọc ở file của quý mang ngày
+   cấp mã. Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
    của NHATKY ghi ĐỊNH DANH LƯỢT = <CỬA>.<giờ phút>.<hậu tố ngẫu nhiên 3-4 ký
    tự>; cặp (mã G, định danh lượt) dùng để HÒA GIẢI XUNG ĐỘT, không phải khóa
    nguyên tử; mã G chỉ là số hiển thị
 2  MỞ dòng NHATKY, Trạng thái ĐANG GHI, "Chạm sổ nào" ghi mã cụ thể (C chép từ
-   plan). (profile PARALLEL) đọc LẠI sổ ngay sau khi mở: hai dòng cùng mã G thì
+   plan); lượt tạo DÒNG MỚI ở sổ khác thì ô "Làm gì" ghi kèm giá trị chính
+   của dòng đó, đủ để tái lập khi đứt lượt. MỌI profile đọc LẠI sổ ngay sau
+   khi mở: hai dòng cùng mã G thì
    dòng nằm SAU trong file đổi mã sang số kế tiếp kèm ghi chú "đổi từ <mã> do
    trùng"; hai dòng hệt vị trí thì so định danh lượt, nhỏ hơn theo thứ tự chữ
    đứng, lớn hơn đổi mã: quy tắc tất định, hai phiên cùng áp nên không lặp. Mã G
@@ -117,13 +123,17 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    tự thời gian tin được, "mới nhất" chỉ có nghĩa trong một cửa). Bảng có thêm:
    khối "Tài liệu đang hoạt động" (tên, vN hiện hành, trạng thái, ở đâu, của các
    tài liệu đang trong chu kỳ) và một dòng nhắc lấy từ X0 C12 khi còn mục thiếu
-   chặn phát hành. Sinh xong, COWORK đồng bộ BANG_DIEU_KHIEN và X0_INDEX lên tài
-   liệu Project (@DUONG.PROJECT ở X0 C1): đây là đường duy nhất để phiên CHAT
-   đọc được trạng thái, CHAT đọc bản Project kèm nhãn ngày của bảng
+   chặn phát hành. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
+   lên tài liệu Project (@DUONG.PROJECT ở X0 C1): nền tảng KHÔNG cho phiên tự
+   ghi vào Project; CHAT chỉ đọc được bản người dùng đã tải, luôn kèm nhãn
+   ngày của bảng và coi bản đó có thể cũ hơn kho
 ```
 
 NHATKY chỉ-thêm với MỘT ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
+dòng mình khi trùng theo bước 2). Thấy bản "conflicted copy" của MỘT SỔ trong
+_so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
+bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
+ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
 quả, khớp qua mã G.
 
 # 4. Sổ nào giữ gì
@@ -133,12 +143,12 @@ VIEC.md       dự án · mã · việc · bước tiếp theo · ai làm · ch�
               · trạng thái · liên kết · ghi lần
 DUKIEN.md     dự án · mã · dữ kiện · giá trị · hiệu lực từ · phạm vi được phép
               · nguồn · MỨC NGUỒN A B C D theo X0 C7 (schema CỐ ĐỊNH mọi
-              profile; không bật REGULATED thì ô này ghi "không áp dụng",
-              khỏi migration khi bật sau) · trạng thái · rà lại trước · ghi lần
+              profile, ô này LUÔN ghi A tới D; thang là CORE, REGULATED chỉ
+              thêm nguồn chỉ định và phạm vi chi tiết) · trạng thái · rà lại trước · ghi lần
 TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN BẢN (HIỆN HÀNH,
-              CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · nguồn · trạng thái nghiệp vụ ·
-              QUAN SÁT LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho,
-              biên nhận...) · hết hạn · cờ · sha256 · ghi lần
+              CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ · QUAN SÁT
+              LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
+              nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH
               hay ĐÃ THAY) · thay bởi · ghi lần. Không xóa, không sửa NỘI DUNG;
               dòng cũ chỉ được cập nhật hai ô quản trị Trạng thái và Thay bởi
@@ -158,7 +168,9 @@ _thu_nhat_ky.ndjson  (profile EMAIL) nhật ký SỰ KIỆN append-only, máy si
               NGUỒN SỰ THẬT: mỗi mail đúng hai sự kiện, PREPARED (kèm payload
               phục hồi: đường dẫn staging cộng danh sách thao tác ghi sổ chuẩn
               hóa) đứng TRƯỚC COMMITTED; registry chỉ dựng từ COMMITTED; mất cả
-              nhật ký lẫn registry thì lần quét đầu chỉ đề xuất, không tự nạp
+              nhật ký lẫn registry thì lần quét đầu chỉ đề xuất, không tự nạp;
+              mất RIÊNG nhật ký khi registry còn: GIỮ registry làm rào chống
+              nạp trùng, CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH
 _thu_ap_dung.json  (profile EMAIL) index máy sinh cho ghi idempotent: mỗi thao
               tác đã áp một dòng "khóa + operation_id" trỏ "sổ + mã dòng"; sổ
               người đọc không mang cột khóa máy; mất thì dựng lại bằng đối
@@ -238,6 +250,9 @@ nằm một kho. Đổi tên hàng loạt là mức C kèm QUYETDINH. Tài liệ
 nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ Summary.
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
+
+COWORK sao _so\ vào _so\_lich_suackup_<YYYYMMDD>\ tối đa một lần mỗi ngày,
+trước lượt ghi đầu tiên của ngày, giữ 7 bản gần nhất (mức A, không vào sổ).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.

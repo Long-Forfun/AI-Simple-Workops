@@ -50,6 +50,8 @@ giữ bản cuối" giữa các cửa của cùng một kho.
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
 @KHO.CU          <kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
 @DUONG.SO        <gốc kho>\00_Index\_so\
+@DUONG.INBOX     <gốc kho>\00_Index\_so\_inbox\ · mục đã nạp chuyển
+                 vào _da_nap\ con của chính folder này
 @DUONG.LUAT      <gốc kho>\00_Index\
 @DUONG.PROJECT   Claude Project "<tên>", thư viện đọc, không phải sổ
 @DUONG.DRIVE     <chưa điền, chỉ khai khi dùng tầng chia sẻ mây riêng>
@@ -132,7 +134,8 @@ Vai chỉ đổi khi có văn bản ký mới. Cách gọi trong hội thoại k
 Gỡ một lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã", chỉ gỡ khi dữ kiện
 gốc đổi trạng thái.
 
-# C7. Nguồn thẩm quyền và mức nguồn (mức nguồn chi tiết: profile REGULATED)
+# C7. Nguồn thẩm quyền và mức nguồn (CORE: thang A-D và mức tối thiểu áp MỌI
+profile; riêng nguồn chỉ định và phạm vi chi tiết: profile REGULATED)
 
 ```
 @NGUON.<LOẠI>    <loại dữ kiện> lấy từ <tài liệu + bản + ngày>
@@ -188,15 +191,18 @@ chọn. Bản mới thay bản cũ chỉ khi có mail hoặc biên bản xác nh
 @HINHTHUC.QUANHE     dùng sự kiện kèm ngày · động từ cấm: <điền>
 ```
 
-# C9. Nhịp và bộ thực thi (profile AUTOMATED và EMAIL: bật MỘT trong hai là đọc)
+# C9. Nhịp và bộ thực thi (các ngưỡng @NHIP.RALAI, HETHAN, CHODOITAC, INBOX,
+MUIGIO và @MATHU là CORE, mọi profile đọc khi X3, X4 trỏ tới; dòng gắn nhãn
+AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>
-@NHIP.TAIKHOAN   (EMAIL) <điền các địa chỉ NGƯỜI DÙNG dùng để gửi trong hộp thư trên;
-                 dùng để nhận diện "thư của mình" trong X3 mục 6>
+@NHIP.TAIKHOAN   (EMAIL) <điền các địa chỉ NGƯỜI DÙNG dùng để gửi, CỘNG các
+                 alias hay hộp nhóm mà thư nhắm tới người dùng vẫn đến (info@,
+                 sales@...); dùng nhận diện "thư của mình", "mình ở To" X3 mục 6>
 @NHIP.TENGOI     (EMAIL) <tên, cách xưng hô, bí danh của người dùng trong thư
                  (Long, anh Long, Mr. Long...); bộ email TỰ điền từ tên tài
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
@@ -269,11 +275,12 @@ tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 Để soát tay khi nghi lệch. Không phải bản chép, chỉ là mục lục.
 
 ```
-X1  đọc C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu tên) · C8 (ký tự, số, động từ)
+X1  đọc C1 (ba dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
+    tên) · C8 (ký tự, số, động từ)
 X2  đọc C5 · C6 · C7 · C8 · C10
-X3  đọc C9
+X3  đọc C7 (mức nguồn khi rút dữ kiện) · C9
 X4  đọc C9 (các ngưỡng rà)
-X5  đọc C0 · C2 · C3 · C4 · C13
+X5  đọc C0 · C1 (danh sách cửa cho mã G) · C2 · C3 · C4 · C13
 ```
 
 Rev hiện tại: **0, chưa cài đặt**.

@@ -43,7 +43,8 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
    thêm sau được, là việc mức B
 ```
 
-Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, điền X0 C0 C1 C2, đặt
+Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, dựng _so\_inbox\
+và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
@@ -62,21 +63,21 @@ chưa rõ dùng tiếng gì). Xuất hiện số liệu hay cam kết là hết 
 và hỏi đủ nhóm B:**
 
 ```
-4  Đầu ra chia mấy phạm vi? Phạm vi nào cấm nhắc từ nào? Phạm vi nào bắt buộc
+5  Đầu ra chia mấy phạm vi? Phạm vi nào cấm nhắc từ nào? Phạm vi nào bắt buộc
    khai gì?
-5  Các bên liên quan: tên, vai, tỷ lệ nếu có, và VĂN BẢN KÝ nào xác lập vai đó?
+6  Các bên liên quan: tên, vai, tỷ lệ nếu có, và VĂN BẢN KÝ nào xác lập vai đó?
    Bên nào chưa có văn bản thì ghi CHƯA KIỂM và cấm đưa ra ngoài
-6  Loại dữ kiện nào lấy từ nguồn nào là nguồn thắng? Mức nguồn tối thiểu từng
+7  Loại dữ kiện nào lấy từ nguồn nào là nguồn thắng? Mức nguồn tối thiểu từng
    phạm vi giữ mặc định X0 C7 hay chỉnh?
-7  Thuật ngữ bắt buộc dùng, thuật ngữ cấm? Quy tắc hình thức văn bản?
+8  Thuật ngữ bắt buộc dùng, thuật ngữ cấm? Quy tắc hình thức văn bản?
 ```
 
 **Nhóm C, điền dần được, hỏi khi chạm tới:**
 
 ```
-8   Nhịp: quét mail bằng gì, ai giữ, bao lâu nhắc? Ngưỡng rà lại dữ kiện?
-9   Dòng kiểm riêng nào cần cộng vào bảng kiểm phát hành?
-10  Mục nào của X0 khóa thêm ngoài mặc định C11? Loại việc nào cần nâng mức (C13)?
+9   Nhịp: quét mail bằng gì, ai giữ, bao lâu nhắc? Ngưỡng rà lại dữ kiện?
+10  Dòng kiểm riêng nào cần cộng vào bảng kiểm phát hành?
+11  Mục nào của X0 khóa thêm ngoài mặc định C11? Loại việc nào cần nâng mức (C13)?
 ```
 
 Câu nào người dùng chưa trả lời được: ghi `<chưa điền>`, đưa vào X0 C12, không đoán,
@@ -91,6 +92,24 @@ Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy �
 2  một việc mức C thu nhỏ: mở plan, làm một việc con, người dùng chốt, ghi theo
    trình tự X5 mục 3
 ```
+
+# 3b. Kho CÓ SẴN file, không từ zero
+
+Công ty đã có đống file trước khi cài: KHÔNG đi từng mục _INBOX. Chạy
+kiem_van_hanh lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
+bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành, file
+cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
+khi đụng việc thật.
+
+# 3c. Nâng cấp bộ khi repo mẫu ra bản mới
+
+git pull (hay chép bản mới) xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
+mang mã: chúng là NGUỒN LUẬT, không phải bộ chạy. AI diff template mới với bản
+mang mã, áp phần LUẬT sang bản mã bằng MỘT plan mức C, QUYETDINH ghi version;
+X0 đã điền giữ nguyên giá trị, chỉ đối chiếu schema mục. instruction_yeu_cau
+tăng: NHẮC người dùng dán lại INSTRUCTION vào Project instructions TRƯỚC khi
+làm việc tiếp. File _TEMPLATE để nguyên trong 00_Index, không tính là "hai
+bản bộ X" của rà 18.
 
 # 4. Luật hỏi lại, áp mãi mãi về sau
 

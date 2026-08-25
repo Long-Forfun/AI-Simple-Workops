@@ -1,7 +1,7 @@
 ```
 X2 · PHÁT HÀNH · <MÃ> · v06 · <YYYYMMDD>
 Đọc TOÀN BỘ cùng X1 khi SOAN_RA, hoặc SUA_FILE mà bản sửa sẽ gửi ra ngoài.
-Phát hành là việc mức C; trao đổi thường lệ đi vòng rút gọn theo INSTRUCTION mục 5.
+Phát hành là việc mức C; trao đổi thường lệ đi vòng rút gọn, điều kiện ở X5 mục 1.
 Giá trị đọc từ X0 các mục C5 C6 C7 C8 C10.
 ```
 
@@ -48,10 +48,14 @@ nháp cũ vào `_lich_su\` · VIEC cập nhật.
 
 Theo X0 C10 mục @KIEM.MUC. Dòng 1 và 3 không bao giờ được bỏ với đầu ra rời công ty.
 
-Mức THƯỜNG LỆ, chỉ cho đầu ra đạt điều kiện ngoại lệ thường lệ ở INSTRUCTION mục 5:
+Mức THƯỜNG LỆ, chỉ cho đầu ra đạt điều kiện ngoại lệ thường lệ ở X5 mục 1:
 in dòng 3 · 4 · 7 · 8, kèm một câu xác nhận "không chứa cam kết, điều khoản". Có
 nhắc tới số liệu hay tên định danh kỹ thuật ĐÃ CÓ SỔ: in thêm dòng 1 và 2. Xuất
 hiện số liệu chưa có sổ, cam kết hay điều khoản: hết thường lệ, chạy ĐẦY ĐỦ.
+NGOẠI LỆ HẬU CẦN: giờ hẹn, địa điểm, thông tin liên hệ CỦA CHÍNH trao đổi đó
+do người dùng vừa đưa trong phiên KHÔNG tính là số liệu nghiệp vụ, không cần
+dòng DUKIEN, không thoát thường lệ; số kỹ thuật, tiền, tỷ lệ, mốc cam kết
+luôn tính là số liệu nghiệp vụ.
 
 # 3. Phát hiện tài liệu đã gửi bị sai
 

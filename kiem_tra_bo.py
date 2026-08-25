@@ -64,7 +64,7 @@ NGAN_SACH = {
     "X3_CUAVAO_TEMPLATE.md": 11500,
     "X4_RASOAT_TEMPLATE.md": 4200,
     "X5_HESO_TEMPLATE.md": 16000,
-    "X9_CAIDAT.md": 5400,
+    "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }

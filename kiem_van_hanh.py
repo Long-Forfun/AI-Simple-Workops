@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v20 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v21 · 20260825
+# v21, theo hội đồng đánh giá 6 lăng kính: phép 0 đòi sổ lõi TỒN TẠI trên đĩa
+# (trước đây doc() nuốt file vắng thành chuỗi rỗng, mất sổ mà PASS im lặng) ·
+# phép 0b dò conflicted copy của file sổ trong _so (đồng bộ mây sinh, trước
+# đây vô hình vì 00_Index bị loại khỏi vùng quét, riêng bản conflict của
+# NHATKY còn lọt glob gây chẩn sai "trùng mã G") · glob NHATKY loại file
+# conflict · thông điệp 12a/12d hết gợi ý sai hướng khi mất RIÊNG nhật ký:
+# GIỮ registry, cấm dựng lại từ tập COMMITTED rỗng.
 # v20, vá chạy trên Windows: containment staging và đính kèm so bằng
 # pathlib (d.parents) thay vì so chuỗi có "/", vì resolve() trên Windows
 # trả "\\" nên phép so chuỗi báo lệch oan cả bộ sạch · stdout ép UTF-8,
@@ -693,7 +700,7 @@ def kiem_email(goc, so):
                 nk_p.is_file() and reg_p.is_file(),
                 f"nhật ký={'có' if nk_p.is_file() else 'MẤT'},"
                 f" registry={'có' if reg_p.is_file() else 'MẤT'};"
-                f" mất nhật ký là mất nguồn sự thật, mất registry thì dựng lại từ COMMITTED"))
+                f" mất nhật ký: GIỮ NGUYÊN registry làm rào chống nạp trùng, CẤM dựng lại từ tập COMMITTED rỗng (X5 mục 4); mất registry thì dựng lại từ COMMITTED"))
 
     luot, hong = doc_nhat_ky(doc(nk_p))
     committed = khoa_committed(luot)
@@ -871,6 +878,24 @@ def main(goc):
     goc = Path(goc)
     so = goc / "_so"
 
+    # 0. Sổ lõi phải TỒN TẠI trên đĩa: doc() nuốt file vắng thành chuỗi rỗng nên
+    #    thiếu phép này thì xóa nhầm cả một sổ vẫn PASS im lặng (hội đồng v21).
+    SO_LOI = ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md",
+              "PLANNING.md", "BANG_DIEU_KHIEN.md", "X0_INDEX.md"]
+    vang = [t for t in SO_LOI if not (so / t).is_file()]
+    bao("0. sổ lõi và view tồn tại trên đĩa", not vang,
+        f"vắng {vang}: khôi phục là mức C, ưu tiên version history của kho mây,"
+        f" NHATKY làm trục sự thật, cấm gõ lại sổ từ trí nhớ")
+
+    # 0b. Conflicted copy của file sổ do đồng bộ mây: chứa lượt ghi bị kẹt,
+    #     phải hòa giải theo X5 mục 3 rồi chuyển _lich_su, không được để im.
+    xung = sorted(f.name for f in so.glob("*")
+                  if f.is_file() and ("conflicted" in f.name.lower()
+                                      or "xung đột" in f.name.lower()))
+    bao("0b. không bản conflicted copy của sổ trong _so", not xung,
+        f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
+        f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
+
     x0s = sorted(goc.glob("X0_CAUHINH_*.md"))
     instrs = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))
     yc = re.search(r"instruction_yeu_cau:\s*(v\d+)", doc(x0s[0])) if x0s else None
@@ -907,7 +932,8 @@ def main(goc):
         else:
             print("  BỎ QUA  2. chưa có X0_INDEX")
 
-    nk = "".join(doc(p) for p in sorted(so.glob("NHATKY_*.md")))
+    nk = "".join(doc(p) for p in sorted(so.glob("NHATKY_*.md"))
+                if "conflicted" not in p.name.lower() and "xung đột" not in p.name.lower())
     hang_nk = dong_bang(nk)
     ma_cot_dau = [re.sub(r"\*", "", h[0]).strip() for h in hang_nk if h]
     ma_g = [m for m in ma_cot_dau if re.fullmatch(MAU_G, m)]

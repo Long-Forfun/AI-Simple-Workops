@@ -1,45 +1,78 @@
 # WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
 
-Bộ mẫu dựng hệ vận hành cho MỘT công ty mới, từ zero, chạy trên Claude
-(Project + phiên Cowork): luật thường trực, bộ cấu hình X0 tới X5, năm sổ lõi,
-và hai script kiểm bằng máy. Repo này là BỘ MẪU. Vận hành hằng ngày diễn ra ở
-KHO CÔNG TY của bạn (ổ máy đơn hoặc thư mục mây đồng bộ), không diễn ra ở repo.
+Bộ mẫu dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn file, chạy
+trên Claude (Project + phiên Cowork): luật thường trực, bộ cấu hình X0 tới X5,
+năm sổ lõi, hai script kiểm bằng máy. Repo này là BỘ MẪU. Vận hành hằng ngày
+diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc thư mục mây đồng bộ như Dropbox).
 
-Từ mở phiên đầu tới làm việc được: BA câu bắt buộc cộng MỘT câu chọn profile.
-Phần còn lại AI hỏi đúng lúc cần, điền dần. Việc tay duy nhất là dán INSTRUCTION
-vào Project instructions; mọi thứ khác copy nguyên trạng hoặc để AI tự dựng.
+Việc tay duy nhất phải làm ĐÚNG là dán INSTRUCTION vào Project instructions.
+Mọi thứ khác: copy nguyên trạng hoặc để AI tự dựng. Mọi sổ sách là file văn bản
+thường (markdown) nằm trong kho CỦA BẠN, mở được bằng Notepad; ngừng dùng
+WORKOPS lúc nào cũng được, không mất gì, không bị nhốt.
 
-## Dùng cho công ty mới: ba bước
-
-Việc tay duy nhất phải làm ĐÚNG là bước 2, dán INSTRUCTION. Còn lại đưa file
-về nguyên trạng và để AI tự làm ở phiên đầu.
+## Cài đặt: bốn bước (bước 3 tùy chọn)
 
 ```
-1  Đưa bộ về thành <gốc>\00_Index\ của công ty. Kho là ổ máy đơn hoặc thư mục
-   mây đồng bộ như Dropbox:
+1  Đưa bộ về thành <gốc>\00_Index\ của công ty:
 
      git clone https://github.com/Long-Forfun/AI-Simple-Workops.git "<gốc>\00_Index"
 
-   hoặc bấm Code, Download ZIP, giải nén rồi đổi tên thư mục thành 00_Index.
-   NGUYÊN TRẠNG: không chọn lọc file, không đổi tên gì.
+   Không có git: bấm nút Code màu xanh trên trang GitHub, Download ZIP, giải
+   nén. LƯU Ý: giải nén ra thư mục AI-Simple-Workops-main; đổi tên CHÍNH thư
+   mục đó (thư mục chứa file README.md này) thành 00_Index rồi chuyển vào
+   <gốc>. NGUYÊN TRẠNG: không chọn lọc file, không đổi tên file nào.
+   Máy Mac: đường dẫn dùng dấu / thay cho \.
 
-2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN nội dung file
-   INSTRUCTION_WORKOPS_v11.md vào Project instructions. Không sửa chữ nào.
+2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
+   Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
+   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad, Ctrl+A, Ctrl+C).
+   Không sửa chữ nào.
 
-3  Mở phiên Cowork, gắn folder <gốc> vào phiên, gõ: "cài đặt". AI đọc X9, hỏi
-   BỐN câu (mã và tên công ty · kho ở đâu · dự án đầu tiên · chọn profile,
-   không rõ thì LITE), rồi tự làm phần còn lại: đổi tên các file _TEMPLATE
-   theo mã công ty, điền X0, dựng cây folder, sinh view, chạy thử một vòng
-   mức A và một vòng mức C. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0
+   tới X5 và X9 vào tài liệu của Project để phiên CHAT có luật mà đọc.
+   Chỉ dùng Cowork thì bỏ qua.
+
+4  Mở phiên Cowork, gắn folder <gốc> vào phiên. QUAN TRỌNG: gắn folder GỐC
+   (thư mục CHỨA 00_Index), không phải chính 00_Index. Gõ: "cài đặt".
+   AI hỏi BỐN câu (mã và tên công ty · kho ở đâu · dự án đầu tiên · chọn
+   profile, không rõ thì trả lời LITE), rồi tự làm phần còn lại: đổi tên
+   file theo mã, điền X0, dựng cây folder, chạy thử. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+   Kho đã có sẵn đống file? Nói với AI, nó nạp hàng loạt theo X9 mục 3b.
 ```
 
-Tùy chọn: nếu sẽ dùng phiên CHAT (không chạm được kho) thì đưa X0 tới X5 và
-X9 vào tài liệu của Project để CHAT có luật mà đọc. Dùng Cowork thuần thì bỏ
-qua được. Cập nhật bộ về sau: git pull ngay trong 00_Index.
+## Ngày thường của bạn
+
+Mỗi lần làm việc: mở phiên Cowork, gắn folder gốc (PHIÊN NÀO CŨNG PHẢI GẮN,
+quên gắn thì AI không thấy kho và hệ có vẻ "hỏng"), rồi cứ nói việc bằng tiếng
+người. Vài câu tắt đáng nhớ:
+
+```
+điểm danh   xem bàn làm việc: việc quá hạn, chờ ai, mail đọng
+quét mail   xử thư trong phiên, ra bảng chờ duyệt      (khi bật EMAIL)
+rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa
+chốt sổ     kết phiên an toàn, vét các lượt ghi dở
+```
+
+Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
+Chỉ vậy. Mã số, rev, trace, mức nguồn là việc của AI, bạn không cần hiểu.
+
+Khi AI báo chữ lạ:
+
+```
+rev lệch    bản luật dán trong Project cũ hơn bộ trong kho. Mở file
+            INSTRUCTION mới nhất, dán đè lại vào Project instructions
+XUNG ĐỘT    hai bản file cùng số hiệu khác nội dung. AI sẽ hỏi, bạn chọn bản đúng
+CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ được,
+            chỉ bị chặn khi đưa ra ngoài công ty
+```
+
+Cập nhật bộ về sau: `git pull` ngay trong 00_Index (người dùng ZIP: tải ZIP
+mới, nhờ AI trong phiên Cowork thay bộ luật). Pull xong AI sẽ tự đối chiếu và
+nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
-X0 tới X5 trước, AI route tới đúng mục đúng lúc.
+X0 tới X5, AI route tới đúng mục đúng lúc.
 
 ## Trong repo có gì
 
@@ -51,10 +84,10 @@ X0 tới X5 trước, AI route tới đúng mục đúng lúc.
 | [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm: ký tự, động từ, từ theo phạm vi |
 | [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành đầu ra rời công ty |
 | [X3_CUAVAO_TEMPLATE.md](X3_CUAVAO_TEMPLATE.md) | Luật cửa vào: mail, file đến, chống nạp trùng |
-| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế |
+| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế, các câu tắt |
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
-| [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt, chạy đúng một lần ở phiên đầu |
-| [_so/](_so) | Năm sổ lõi rỗng (VIEC, DUKIEN, TAILIEU, QUYETDINH, NHATKY) + PLANNING (mức C) + THU (chỉ khi bật EMAIL) + hai view máy sinh |
+| [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
+| [_so/](_so) | Năm sổ lõi rỗng (VIEC, DUKIEN, TAILIEU, QUYETDINH, NHATKY) + PLANNING (mức C) + THU (chỉ dùng khi bật EMAIL) + hai view máy sinh |
 | [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ của công ty ĐANG CHẠY; RA_SOAT chạy nó trước |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |

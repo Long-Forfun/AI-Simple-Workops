@@ -164,8 +164,8 @@ TRẠNG THÁI  CHỜ TÔI chỉ khi đủ NĂM điều: thư cuối không phả
             bí danh để nhận "thư chào đích danh MÌNH" đọc từ X0 C9
             @NHIP.TENGOI, bộ email TỰ lấy từ tên tài khoản khi cài, chỉ hỏi
             khi không lấy được
-DIGEST      KHUÔN BẮT BUỘC, đúng thứ tự: 1 dòng đầu đếm CẦN TÔI và CHỜ ĐỐI
-            TÁC QUÁ HẠN · 2 CẦN TÔI, mỗi thư đủ: mã luồng, người gửi, tiêu
+DIGEST      KHUÔN BẮT BUỘC, đúng thứ tự: 1 dòng đầu đếm CHỜ TÔI và CHỜ ĐỐI
+            TÁC QUÁ HẠN · 2 CHỜ TÔI, mỗi thư đủ: mã luồng, người gửi, tiêu
             đề, ý chính một câu, TÔI CẦN LÀM GÌ, hạn nếu có, file liên quan
             · 3 CHỜ ĐỐI TÁC: đang chờ BÊN NÀO, chờ VIỆC GÌ, từ NGÀY nào · 4 CHỈ
             THEO DÕI để riêng, trình bày ngắn · 5 cuối tin: giờ quét THẬT
