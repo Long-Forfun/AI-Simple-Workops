@@ -4,6 +4,24 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vá 20260825: phát hành qua git, chạy được trên Windows
+
+Không đổi luật, không đổi INSTRUCTION, không đổi X0 tới X5. Ba lỗi lộ ra khi
+đưa bộ lên GitHub và chạy phép kiểm trên máy Windows thật:
+
+1. Console Windows mặc định cp1252 không in được tiếng Việt, cả hai script
+   crash ngay dòng in đầu tiên. Sửa: ép stdout, stderr sang UTF-8 khi mở, lỗi
+   ký tự thì thay thế chứ không dừng phép kiểm.
+2. Phép 12j so containment staging bằng chuỗi có "/", nhưng resolve() trên
+   Windows trả "\\" nên BỘ SẠCH cũng bị báo "resolve ra ngoài _thu_staging"
+   oan, kéo fixture 66 ca FAIL. Sửa: so bằng pathlib (goc_staging in
+   d.parents), áp cho cả kiểm đính kèm. kiem_van_hanh lên v20.
+3. Docstring bao_phu chứa "\ " gây SyntaxWarning mỗi lần import. Chuyển raw
+   string.
+
+Kèm README.md làm cửa vào cho người tới từ link git: repo là BỘ MẪU, không
+phải kho công ty; các bước từ clone tới gõ "cài đặt" ở phiên đầu.
+
 ## Vòng 23: v23 sang v24, khóa nốt chế độ --ho (vòng đánh giá 22, 9,6/10)
 
 Lại chỉ sửa công cụ, không đổi luật, không đổi INSTRUCTION, không đổi X0 tới X5.

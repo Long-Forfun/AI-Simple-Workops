@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v19 · 20260824
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v20 · 20260825
+# v20, vá chạy trên Windows: containment staging và đính kèm so bằng
+# pathlib (d.parents) thay vì so chuỗi có "/", vì resolve() trên Windows
+# trả "\\" nên phép so chuỗi báo lệch oan cả bộ sạch · stdout ép UTF-8,
+# console cp1252 hết crash khi in tiếng Việt · docstring bao_phu thành
+# raw string, hết SyntaxWarning khi import.
 # v19, theo vòng đánh giá 22: phạm vi ĐÃ VÀO SỔ tính trên TOÀN BỘ TAILIEU kể cả
 # ở chế độ --ho, nên một dòng trỏ THƯ MỤC vẫn bao phủ file con; v18 lọc dòng sổ
 # theo họ TRƯỚC khi tính bao phủ nên file đã nằm trong bộ hồ sơ bị đề xuất
@@ -90,6 +95,12 @@ import json
 import re
 import sys
 from pathlib import Path
+
+# Console Windows mặc định cp1252 không in được tiếng Việt: ép UTF-8,
+# lỗi ký tự thì thay thế chứ không crash giữa chừng phép kiểm.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 loi = []
 MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
@@ -383,7 +394,7 @@ def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
 
 
 def bao_phu(dong_kho):
-    """Từ các dòng TAILIEU trỏ Kho: tách (tập đường dẫn FILE, tập đường dẫn THƯ MỤC).
+    r"""Từ các dòng TAILIEU trỏ Kho: tách (tập đường dẫn FILE, tập đường dẫn THƯ MỤC).
     Dòng trỏ thư mục nhận diện bằng dấu / hay \ ở cuối."""
     files, dirs = set(), set()
     for h in dong_kho:
@@ -764,7 +775,7 @@ def kiem_email(goc, so):
             continue  # payload hỏng đã lệch ở 12h, không kiểm chồng
         p = m2["payload"]
         d = (goc / p["staging"].replace("\\", "/").strip()).resolve()
-        if not (str(d) + "/").startswith(str(goc_staging) + "/") and d != goc_staging:
+        if d != goc_staging and goc_staging not in d.parents:
             loi_staging.append(f"{k}: staging resolve ra ngoài _thu_staging (symlink?)")
             continue
         if not d.is_dir():
@@ -789,7 +800,7 @@ def kiem_email(goc, so):
             loi_staging.append(f"{k}: không file .eml hay body nào khớp eml_sha256")
         for dk in p.get("dinh_kem", []):
             f = (d / dk["ten"]).resolve()
-            if not (str(f) + "/").startswith(str(goc_staging) + "/"):
+            if f != goc_staging and goc_staging not in f.parents:
                 loi_staging.append(f"{k}: đính kèm {dk['ten']} trỏ ra ngoài staging")
             elif not f.is_file():
                 loi_staging.append(f"{k}: thiếu đính kèm {dk['ten']}")
