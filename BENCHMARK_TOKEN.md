@@ -30,8 +30,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1628 (thêm X5 mục 3 ~950 khi ghi sổ) | |
-| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5449 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1628 (thêm X5 mục 3 ~950 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5449 + khối (không phần mềm ~5028, trừ mục 1b) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2532 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3681) + THU theo khối | ~6213 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |

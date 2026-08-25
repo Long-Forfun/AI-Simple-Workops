@@ -4,6 +4,44 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 30: vá theo hội đồng vòng 6 (20260825, điểm vòng 6: 89/100)
+
+Điểm vòng 6: VẬN HÀNH 8,5 · THÔNG MINH 8,5 · KHÔNG SAI 8,5 · TOKEN 9,0 ·
+KHÔNG MISS 9,4 · ĐƠN GIẢN 9,5. Hội đồng không còn phát hiện CAO nào; giám
+khảo KHÔNG MISS vẽ bản đồ độ phủ tổng thể: 8/11 nhóm PHỦ chắc, xác suất công
+ty nhỏ VN gặp tình huống TRỐNG trong 12 tháng ước 8-12% (persona đích ~5%).
+Vá:
+
+1. kiem_van_hanh v26: nhận dạng bản sao đồng bộ về MỘT nguồn ba tầng -
+   MAU_TAM học khuôn " (1)", " copy", " copy 2", "(bản sao)" nên bản sao
+   file nghiệp vụ hết được ĐỀ XUẤT vào sổ mức A; NHATKY và X0 chọn bản
+   chính theo TÊN CHUẨN (NHATKY_<năm>Q<quý>, X0_CAUHINH_<MÃ>) nên khuôn
+   OneDrive -<TênMáy> và mọi hậu tố lạ bị 0b flag thay vì gây lệch giả
+   "trùng mã G" · tự vệ tham số vế hai (gốc kho trùng 00_Index dừng sớm).
+2. XÓA PHÁP LÝ khâu nốt: dòng TAILIEU, THU trỏ file đã xóa thì XÓA DÒNG
+   trong chính plan C (hai sổ đó không phải chỉ-thêm; "CHỈ-THÊM" định danh
+   rõ NHATKY, QUYETDINH, nhật ký thư); tầng quét thêm "MỌI file theo con
+   trỏ sổ, kể cả 01_Phap_ly/_NOP, 99_Archive, file digest"; ô tên đính kèm
+   mang dữ liệu cá nhân cũng trung hòa; danh mục C của X5 mục 1 trỏ thủ
+   tục mục 7 (phiên NOI_BO cũng thấy đường).
+3. Schema @DUAN.PHANMEM thêm ô "nơi giữ secret" (con trỏ SECRET của X5 1b
+   hết trỏ vào ô không tồn tại), ví dụ đã điền cập nhật; C14 hàng X5 thêm
+   C5; "tự khai" RA_NGOAI được định nghĩa một vế (chữ phải NẰM trong danh
+   sách của chính dữ kiện, luật bao trùm không dùng cho lối người nhận
+   mới); X3E MAIL MÁY "một dòng ở phần 5" khớp khuôn digest; BENCHMARK
+   NOI_BO ghi chú "+mục 1b ~421 khi phần mềm", SUA_FILE hai số; header
+   kiem_tra_bo đếm đúng 69 ca; README rewrap dòng dài cuối; DOC_TRUOC
+   "X9 mục 1 câu 3".
+
+QUY ƯỚC MỚI cho người bảo trì (đề xuất giám khảo TOKEN): nâng trần một file
+phải kèm (a) gate để phần nâng không thành thuế chung, hoặc (b) cắt tương
+đương ở file khác cùng route. Phép 9 giữ trần; quy ước này giữ chính cái trần.
+
+Còn ghi nhận, chưa vá (đều NHẸ): kênh chat Zalo chưa có pipeline luồng kiểu
+THU · phân quyền nhiều người dùng "ai được chốt C" · X3E mục 1 tách gate
+phục hồi khi chạm ~95% trần · khuôn bản sao OneDrive cho FILE NGHIỆP VỤ
+(ngoài sổ) cần heuristic cùng-tiền-tố, để vòng sau cân nhắc.
+
 ## Vòng 29: khâu đường nối theo hội đồng vòng 5 (20260825, điểm vòng 5: 84,5/100)
 
 Điểm vòng 5: KHÔNG SAI 7,5 · THÔNG MINH 8,0 · VẬN HÀNH 8,0 · TOKEN 8,6 ·

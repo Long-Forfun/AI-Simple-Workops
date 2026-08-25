@@ -13,7 +13,8 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ duy
    nhất theo X0 C11: chỉ THÊM lệnh hay từ cấm để siết chặt là B; gỡ, nới vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
-   hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành · deploy môi trường CHẠY THẬT
+   hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
+   PHÁP LÝ: thủ tục riêng ở mục 7) · deploy môi trường CHẠY THẬT
    của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
@@ -262,9 +263,12 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 XÓA THEO YÊU CẦU PHÁP LÝ (mức C, QUYETDINH ghi căn cứ; là ngoại lệ DUY NHẤT
 của X1 mục 5 "cờ GỐC KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã>): quét
 đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
-· _thu_staging và manifest dọn · 04_Trao_doi. Sổ và nhật ký CHỈ-THÊM không
-xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]", giữ khung
-dòng; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
+· _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
+con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
+CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
+giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng
+TAILIEU, THU trỏ file đã xóa thì XÓA DÒNG ngay trong plan C này, hai sổ đó
+không phải chỉ-thêm; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
 cờ de_ngoai lý do "đã xóa theo Q-<mã>" (phép 12j tự nhận, không báo oan);
 backup cũ còn dữ liệu thì xóa cả bản backup; nhắc người dùng thay bản
 BANG_DIEU_KHIEN, X0_INDEX đã tải lên Project; bản ĐÃ GỬI ra ngoài không xóa

@@ -79,7 +79,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
 
 @DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
   <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
-           (dev, staging, prod ở đâu) · nơi chạy thật
+           (dev, staging, prod ở đâu) · nơi chạy thật · nơi giữ secret
+           (vault, secret manager, hoặc "chưa rõ")
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
@@ -88,7 +89,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   theo C1. Mức từng thao tác repo, SECRET, dữ liệu khách trong dump và log,
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
-  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn. Mục nào
+  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret giữ
+  ở GitHub Actions secrets. Mục nào
   chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
 ```
 
@@ -141,8 +143,9 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
   thỏa RA_NGOAI; đầu ra mang phạm vi chi tiết KHÔNG dùng được dữ kiện chỉ
   khai RA_NGOAI. Đã khai phạm vi chi tiết: đầu ra mới phải mang phạm vi chi
   tiết, TRỪ người nhận chưa thuộc phạm vi nào: dùng RA_NGOAI với điều kiện
-  mọi dữ kiện trong đầu ra tự khai RA_NGOAI trong danh sách phạm vi của
-  CHÍNH nó, và mở việc mức B đề xuất khai phạm vi mới; từ cấm áp cho
+  mọi dữ kiện trong đầu ra TỰ KHAI RA_NGOAI (chữ RA_NGOAI phải NẰM trong
+  danh sách phạm vi của CHÍNH dữ kiện; luật bao trùm "tự thỏa" không dùng
+  cho lối này), và mở việc mức B đề xuất khai phạm vi mới; từ cấm áp cho
   RA_NGOAI là HỢP của mọi dòng @PHAMVI.CAM cộng X1
 
 @PHAMVI.CAM      <điền: phạm vi nào cấm từ nào. Trúng một từ là dừng>
@@ -331,7 +334,8 @@ X3E đọc C9 (@NHIP.HOPTHU, TAIKHOAN, TENGOI, DEMSTAGING, TRANDINHKEM,
     TRANGTHAI, DAUGUI, BANGIAO, HOPTHU_CU; chỉ khi bật EMAIL)
 X4  đọc C1 (@DUONG.INBOX) · C9 (các ngưỡng rà, @NHIP.HOPTHU, HOPTHU_CU)
 X5  đọc C0 · C1 (danh sách cửa cho mã G, @DUONG.PROJECT) · C2 · C3 · C4 ·
-    C11 (ngoại lệ siết chặt) · C12 (dòng nhắc của bảng) · C13
+    C5 (phạm vi dump, log ở mục 1b) · C11 (ngoại lệ siết chặt) · C12 (dòng
+    nhắc của bảng) · C13
 ```
 
 Rev hiện tại: **0, chưa cài đặt**.

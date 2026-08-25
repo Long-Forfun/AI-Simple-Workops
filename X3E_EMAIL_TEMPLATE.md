@@ -148,7 +148,7 @@ QUÁ LỚN     staging hay kho đồng bộ; trong payload PREPARED mục đó k
             theo luật 99_Goc và 04_Trao_doi
 MAIL MÁY    thư từ no-reply, bot, CI/CD, alert giám sát THUẦN THÔNG BÁO:
             không cấp luồng mới cho từng thư, không xét CHỜ TÔI, gom MỘT
-            dòng cuối digest (đếm theo nguồn); địa chỉ bot của CHÍNH công
+            dòng ở phần 5 của digest (đếm theo nguồn); địa chỉ bot của CHÍNH công
             ty không tính là "thư của mình" dù nằm cùng tên miền.
             NGOẠI LỆ: thư máy mang NỘI DUNG NGHIỆP VỤ (hóa đơn, biên nhận,
             bản ký DocuSign, thông báo giao dịch, kết quả nộp hồ sơ, hay có

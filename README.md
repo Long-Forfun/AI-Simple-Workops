@@ -32,8 +32,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
-   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad, bấm Ctrl+A rồi Ctrl+C; máy Mac dùng TextEdit,
-   phím là Cmd+A, Cmd+C).
+   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad, bấm Ctrl+A rồi
+   Ctrl+C; máy Mac dùng TextEdit, phím là Cmd+A, Cmd+C).
    Không sửa chữ nào.
 
 3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0

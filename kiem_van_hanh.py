@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v25 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v26 · 20260825
+# v26, theo hội đồng vòng 6: nhận dạng bản sao đồng bộ về MỘT nguồn cho cả
+# ba tầng - MAU_TAM (quan sát kho) học thêm khuôn " (1)", " copy", " copy 2"
+# của Drive và macOS nên bản sao file nghiệp vụ hết được ĐỀ XUẤT vào sổ mức
+# A; sổ NHATKY và X0 chọn bản chính theo TÊN CHUẨN (NHATKY_<năm>Q<quý>,
+# X0_CAUHINH_<MÃ>) nên khuôn OneDrive -<TênMáy> hay bất kỳ hậu tố lạ nào
+# đều bị 0b flag thay vì lọt vào glob gây lệch giả "trùng mã G" · tự vệ
+# tham số vế hai: gốc kho trùng 00_Index cũng dừng sớm kèm gợi ý.
 # v25, khâu đường nối theo hội đồng vòng 5 (không tính năng mới): ghi_cache
 # bọc lỗi GHI, cache hỏng chỉ in lưu ý rồi chạy tiếp hết báo cáo · truyền
 # nhầm gốc kho thay vì 00_Index được tự nhận, dừng sớm kèm gợi ý thay vì
@@ -145,7 +152,11 @@ loi = []
 MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
 BAT_BIEN = ("ĐÃ GỬI DUYỆT", "ĐÃ DUYỆT NỘI BỘ", "ĐÃ PHÁT HÀNH", "ĐÃ NỘP",
             "TRẢ HỒ SƠ", "ĐÃ KÝ", "ĐÃ CẤP")
-MAU_TAM = re.compile(r"^~\$|\.tmp$|\.bak\d*$|conflicted copy|xung đột|autosave|-nhap\d+", re.I)
+MAU_TAM = re.compile(r"^~\$|\.tmp$|\.bak\d*$|conflicted copy|xung đột|autosave|-nhap\d+"
+                     r"| \(\d+\)\.| copy( \d+)?\.| - copy|\(bản sao\)", re.I)
+# khuôn " (1).", " copy.", " copy 2.", " - Copy", "(bản sao)": bản sao đồng bộ
+# của Drive, macOS, Windows - coi như file tạm, không vào suy hiện hành,
+# không được đề xuất vào sổ (hội đồng vòng 6)
 MAU_V = re.compile(r"[-_ (]v(\d+)(?=[^0-9A-Za-z]|$)", re.I)
 DUOI_BO = (".tmp", ".bak", ".log", ".lnk", ".ini", ".exe", ".dll", ".pyc",
            ".ds_store", ".crdownload", ".part")  # chỉ loại rác thật; script và
@@ -1001,20 +1012,32 @@ def main(goc):
                   for f in vung
                   if f.is_file() and ("conflicted" in f.name.lower()
                                       or "xung đột" in f.name.lower()
-                                      or re.search(r"( \(\d+\)| - copy|\(bản sao\))\.\w+$",
-                                                   f.name, re.I)))
+                                      or la_file_tam(f.name)))
+    # hậu tố LẠ trên tên sổ chuẩn (khuôn OneDrive -<TênMáy>...): cũng là bản sao
+    xung += sorted(f.name for f in so.glob("NHATKY_*.md")
+                   if f.name not in {x.split("/")[-1] for x in xung}
+                   and "TEMPLATE" not in f.name
+                   and not re.fullmatch(r"NHATKY_\d{4}Q[1-4]\.md", f.name))
+    xung += sorted(f.name for f in goc.glob("X0_CAUHINH_*.md")
+                   if "TEMPLATE" not in f.name
+                   and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{2,6}\.md", f.name))
+    xung = sorted(set(xung))
     bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
-    def loc_ban_chinh(cac):
+    def loc_ban_chinh(cac, mau=None):
         """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay
-        file cấu hình: loại _TEMPLATE, conflicted copy, bản xung đột."""
-        return [q for q in sorted(cac) if "TEMPLATE" not in q.name
-                and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
-                and not re.search(r"( \(\d+\)| - copy|\(bản sao\))\.\w+$",
-                                  q.name, re.I)]
-    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"))
+        file cấu hình: loại _TEMPLATE, conflicted, mọi khuôn bản sao đồng bộ;
+        mau (regex fullmatch) là TÊN CHUẨN - có mau thì chỉ nhận đúng tên chuẩn,
+        nên khuôn conflict lạ (OneDrive -<TênMáy>...) cũng không lọt (v26)."""
+        ket = [q for q in sorted(cac) if "TEMPLATE" not in q.name
+               and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
+               and not la_file_tam(q.name)]
+        if mau:
+            ket = [q for q in ket if re.fullmatch(mau, q.name)]
+        return ket
+    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{2,6}\.md")
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
     if not x0s and co_template:
         print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
@@ -1042,7 +1065,7 @@ def main(goc):
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào")
     else:
-        co_nk = loc_ban_chinh(so.glob("NHATKY_*.md"))
+        co_nk = loc_ban_chinh(so.glob("NHATKY_*.md"), r"NHATKY_\d{4}Q[1-4]\.md")
         chi_conflict = (not co_nk and any(
             "TEMPLATE" not in q.name for q in so.glob("NHATKY_*.md")))
         bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
@@ -1078,7 +1101,8 @@ def main(goc):
         else:
             print("  BỎ QUA  2. chưa có X0_INDEX")
 
-    nk = "".join(doc(p) for p in loc_ban_chinh(so.glob("NHATKY_*.md")))
+    nk = "".join(doc(p) for p in loc_ban_chinh(so.glob("NHATKY_*.md"),
+                                               r"NHATKY_\d{4}Q[1-4]\.md"))
     hang_nk = dong_bang(nk)
     ma_cot_dau = [re.sub(r"\*", "", h[0]).strip() for h in hang_nk if h]
     ma_g = [m for m in ma_cot_dau if re.fullmatch(MAU_G, m)]
@@ -1183,7 +1207,14 @@ def main(goc):
         bao("9-11. chế độ --ho giải được đúng một họ tài liệu", False, str(e))
         args_thuong, loc_ho = [], None
     if len(args_thuong) > 1:
-        quan_sat_kho(goc, so, Path(args_thuong[1]), loc_ho)
+        kho_arg = Path(args_thuong[1])
+        if kho_arg.resolve() == goc.resolve():
+            # dán trùng đường 00_Index vào cả hai tham số: dừng sớm thay vì
+            # phun "file khai Kho đã mất" oan (hội đồng vòng 6, tự vệ vế hai)
+            print(f"  BỎ QUA  9-11: tham số <gốc kho> trùng với 00_Index;"
+                  f" gốc kho là thư mục CHỨA 00_Index, ví dụ: {goc.parent}")
+        else:
+            quan_sat_kho(goc, so, kho_arg, loc_ho)
     elif loc_ho is not None:
         bao("9-11. chế độ --ho giải được đúng một họ tài liệu", False,
             "--ho cần cả <gốc kho> đứng trước")
