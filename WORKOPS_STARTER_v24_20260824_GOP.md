@@ -1019,7 +1019,9 @@ là FAIL.
 
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
-là cả bộ: CHAT không EMAIL ~19046 token, CHAT có EMAIL (kèm X3E) ~22727
+là cả bộ:
+CHAT không EMAIL ~19046 token
+CHAT có EMAIL (kèm X3E) ~22727 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
