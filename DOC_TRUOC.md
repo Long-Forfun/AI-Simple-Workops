@@ -1,17 +1,21 @@
 # BỘ KHỞI TẠO WORKOPS · v24 · 20260824 · đọc file này trước
 
-Bộ này dựng hệ vận hành cho MỘT công ty mới, từ zero. Bốn bước, người dùng làm 1 tới
-3, AI làm bước 4. Thời gian từ mở phiên đầu tới làm việc được: ba câu bắt buộc, một câu profile.
+Bộ này dựng hệ vận hành cho MỘT công ty mới, từ zero. Bốn bước: người dùng làm 1
+và 2, bước 3 chỉ cần khi dùng phiên CHAT, AI làm bước 4. Từ mở phiên đầu tới
+làm việc được: ba câu bắt buộc, một câu profile.
 
 ```
-1  Tạo folder gốc công ty trên kho (máy đơn hoặc thư mục mây đồng bộ). Copy cả bộ
-   này vào <gốc>\00_Index\. Đổi <MÃ> trong tên file thành mã công ty
+1  Đưa bộ này về thành <gốc>\00_Index\ của công ty: clone git hay giải nén ZIP,
+   NGUYÊN TRẠNG, không chọn lọc file, không đổi tên gì. Kho là ổ máy đơn hoặc
+   thư mục mây đồng bộ
 2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN file INSTRUCTION_WORKOPS_v11.md
-   vào Project instructions. Không sửa chữ nào
-3  Đưa X0 tới X5 và X9 vào tài liệu của Project. Gắn folder gốc vào phiên Cowork
-4  Mở phiên đầu tiên, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu chạy được,
-   câu bốn chọn profile), điền X0, dựng cây folder mặc định, sinh X0_INDEX và
-   bảng điều khiển, chạy thử một vòng mức A và một vòng mức C
+   vào Project instructions. Không sửa chữ nào. VIỆC TAY DUY NHẤT PHẢI LÀM ĐÚNG
+3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5 và X9 vào tài liệu
+   của Project. Dùng Cowork thuần thì bỏ qua được
+4  Mở phiên Cowork gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
+   chạy được, câu bốn chọn profile), đổi tên file theo mã công ty, điền X0, dựng
+   cây folder mặc định, sinh X0_INDEX và bảng điều khiển, chạy thử một vòng mức
+   A và một vòng mức C
 ```
 
 Từ đó về sau: mọi phiên chạy theo INSTRUCTION. Nguyên tắc vận hành:

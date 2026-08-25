@@ -6,38 +6,36 @@ và hai script kiểm bằng máy. Repo này là BỘ MẪU. Vận hành hằng 
 KHO CÔNG TY của bạn (ổ máy đơn hoặc thư mục mây đồng bộ), không diễn ra ở repo.
 
 Từ mở phiên đầu tới làm việc được: BA câu bắt buộc cộng MỘT câu chọn profile.
-Phần còn lại AI hỏi đúng lúc cần, điền dần.
+Phần còn lại AI hỏi đúng lúc cần, điền dần. Việc tay duy nhất là dán INSTRUCTION
+vào Project instructions; mọi thứ khác copy nguyên trạng hoặc để AI tự dựng.
 
-## Dùng cho công ty mới: sáu bước
+## Dùng cho công ty mới: ba bước
 
-Người dùng làm bước 1 tới 5, AI làm bước 6.
+Việc tay duy nhất phải làm ĐÚNG là bước 2, dán INSTRUCTION. Còn lại đưa file
+về nguyên trạng và để AI tự làm ở phiên đầu.
 
 ```
-1  Lấy bộ về máy:
-     git clone https://github.com/Long-Forfun/AI-Simple-Workops.git
-   hoặc bấm Code, Download ZIP rồi giải nén.
+1  Đưa bộ về thành <gốc>\00_Index\ của công ty. Kho là ổ máy đơn hoặc thư mục
+   mây đồng bộ như Dropbox:
 
-2  Tạo folder gốc công ty trên kho (máy đơn hoặc thư mục mây như Dropbox).
-   Copy BỘ CHẠY vào <gốc>\00_Index\ :
-     INSTRUCTION_WORKOPS_v11.md · DOC_TRUOC.md · X0 tới X5 · X9_CAIDAT.md
-     · cả thư mục _so\ · kiem_van_hanh.py
-   Bốn thứ còn lại (GHICHU_DOI_MOI, BENCHMARK_TOKEN, *_GOP.md, kiem_tra_bo.py)
-   là hồ sơ của người bảo trì bộ mẫu, không cần copy; copy thừa cũng không hại.
+     git clone https://github.com/Long-Forfun/AI-Simple-Workops.git "<gốc>\00_Index"
 
-3  Đổi hậu tố _TEMPLATE trong tên file X0 tới X5 thành mã công ty (3-4 ký tự
-   viết hoa). Ví dụ mã ABC: X0_CAUHINH_TEMPLATE.md thành X0_CAUHINH_ABC.md.
+   hoặc bấm Code, Download ZIP, giải nén rồi đổi tên thư mục thành 00_Index.
+   NGUYÊN TRẠNG: không chọn lọc file, không đổi tên gì.
 
-4  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN nội dung file
+2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN nội dung file
    INSTRUCTION_WORKOPS_v11.md vào Project instructions. Không sửa chữ nào.
 
-5  Đưa X0 tới X5 và X9 vào tài liệu của Project. Mở phiên Cowork, gắn folder
-   gốc công ty vào phiên.
-
-6  Ở phiên đầu tiên, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (mã và tên công ty
-   · kho đặt ở đâu · dự án đầu tiên · chọn profile, không rõ thì LITE), điền
-   X0, dựng cây folder mặc định, sinh X0_INDEX và bảng điều khiển, chạy thử
-   một vòng mức A và một vòng mức C. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+3  Mở phiên Cowork, gắn folder <gốc> vào phiên, gõ: "cài đặt". AI đọc X9, hỏi
+   BỐN câu (mã và tên công ty · kho ở đâu · dự án đầu tiên · chọn profile,
+   không rõ thì LITE), rồi tự làm phần còn lại: đổi tên các file _TEMPLATE
+   theo mã công ty, điền X0, dựng cây folder, sinh view, chạy thử một vòng
+   mức A và một vòng mức C. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 ```
+
+Tùy chọn: nếu sẽ dùng phiên CHAT (không chạm được kho) thì đưa X0 tới X5 và
+X9 vào tài liệu của Project để CHAT có luật mà đọc. Dùng Cowork thuần thì bỏ
+qua được. Cập nhật bộ về sau: git pull ngay trong 00_Index.
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc

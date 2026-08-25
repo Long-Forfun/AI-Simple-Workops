@@ -9,15 +9,16 @@ Phần còn lại điền dần đúng lúc cần.
 
 ```
 INSTRUCTION_WORKOPS      dán vào Project instructions, dùng nguyên văn, không sửa
-X0_CAUHINH_TEMPLATE      đổi tên thành X0_CAUHINH_<MÃ>, phiên đầu điền vào đây
-X1..X5 TEMPLATE          đổi tên theo mã công ty. Là luật, trỏ về X0, không phải điền
+X0_CAUHINH_TEMPLATE      phiên đầu AI đổi tên thành X0_CAUHINH_<MÃ> rồi điền
+X1..X5 TEMPLATE          luật, trỏ về X0, không phải điền; AI đổi tên theo mã cùng lượt
 X9 file này              đọc ở phiên đầu, xong thì thôi
 _so\                     NĂM sổ lõi rỗng + PLANNING (mức C) + THU (chỉ khi
                          bật EMAIL) + hai view máy sinh, copy nguyên
 ```
 
-Người dùng làm trước: tạo folder gốc trên kho · copy cả bộ vào `<gốc>\00_Index\`
-· dán INSTRUCTION vào Project instructions · mở phiên Cowork đầu tiên.
+Người dùng làm trước: đưa bộ này về thành `<gốc>\00_Index\` (clone hay giải nén
+nguyên trạng, không chọn lọc, không đổi tên gì) · dán INSTRUCTION vào Project
+instructions · mở phiên Cowork đầu tiên. Mọi việc còn lại là của AI.
 
 # 1. Phiên đầu tiên: ba câu bắt buộc, một câu profile
 
@@ -42,8 +43,8 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
    thêm sau được, là việc mức B
 ```
 
-Xong bốn câu: điền X0 C0 C1 C2, đặt rev 1, dựng cây folder mặc định theo X0 C3,
-sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, điền X0 C0 C1 C2, đặt
+rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
 thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B nếu mở folder mới).

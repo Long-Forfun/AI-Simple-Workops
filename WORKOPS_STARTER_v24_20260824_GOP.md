@@ -9,18 +9,22 @@ FILE: DOC_TRUOC.md
 
 # BỘ KHỞI TẠO WORKOPS · v24 · 20260824 · đọc file này trước
 
-Bộ này dựng hệ vận hành cho MỘT công ty mới, từ zero. Bốn bước, người dùng làm 1 tới
-3, AI làm bước 4. Thời gian từ mở phiên đầu tới làm việc được: ba câu bắt buộc, một câu profile.
+Bộ này dựng hệ vận hành cho MỘT công ty mới, từ zero. Bốn bước: người dùng làm 1
+và 2, bước 3 chỉ cần khi dùng phiên CHAT, AI làm bước 4. Từ mở phiên đầu tới
+làm việc được: ba câu bắt buộc, một câu profile.
 
 ```
-1  Tạo folder gốc công ty trên kho (máy đơn hoặc thư mục mây đồng bộ). Copy cả bộ
-   này vào <gốc>\00_Index\. Đổi <MÃ> trong tên file thành mã công ty
+1  Đưa bộ này về thành <gốc>\00_Index\ của công ty: clone git hay giải nén ZIP,
+   NGUYÊN TRẠNG, không chọn lọc file, không đổi tên gì. Kho là ổ máy đơn hoặc
+   thư mục mây đồng bộ
 2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN file INSTRUCTION_WORKOPS_v11.md
-   vào Project instructions. Không sửa chữ nào
-3  Đưa X0 tới X5 và X9 vào tài liệu của Project. Gắn folder gốc vào phiên Cowork
-4  Mở phiên đầu tiên, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu chạy được,
-   câu bốn chọn profile), điền X0, dựng cây folder mặc định, sinh X0_INDEX và
-   bảng điều khiển, chạy thử một vòng mức A và một vòng mức C
+   vào Project instructions. Không sửa chữ nào. VIỆC TAY DUY NHẤT PHẢI LÀM ĐÚNG
+3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5 và X9 vào tài liệu
+   của Project. Dùng Cowork thuần thì bỏ qua được
+4  Mở phiên Cowork gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
+   chạy được, câu bốn chọn profile), đổi tên file theo mã công ty, điền X0, dựng
+   cây folder mặc định, sinh X0_INDEX và bảng điều khiển, chạy thử một vòng mức
+   A và một vòng mức C
 ```
 
 Từ đó về sau: mọi phiên chạy theo INSTRUCTION. Nguyên tắc vận hành:
@@ -61,23 +65,39 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
-## Vá 20260825: phát hành qua git, chạy được trên Windows
+## Vá 20260825: phát hành qua git, chạy được trên Windows, cài đặt ba bước
 
-Không đổi luật, không đổi INSTRUCTION, không đổi X0 tới X5. Ba lỗi lộ ra khi
-đưa bộ lên GitHub và chạy phép kiểm trên máy Windows thật:
+Không đổi luật vận hành, không đổi INSTRUCTION, không đổi X1 tới X5. Hai phần:
+
+Phần một, ba lỗi lộ ra khi đưa bộ lên GitHub và chạy phép kiểm trên Windows:
 
 1. Console Windows mặc định cp1252 không in được tiếng Việt, cả hai script
    crash ngay dòng in đầu tiên. Sửa: ép stdout, stderr sang UTF-8 khi mở, lỗi
    ký tự thì thay thế chứ không dừng phép kiểm.
 2. Phép 12j so containment staging bằng chuỗi có "/", nhưng resolve() trên
-   Windows trả "\\" nên BỘ SẠCH cũng bị báo "resolve ra ngoài _thu_staging"
+   Windows trả "\" nên BỘ SẠCH cũng bị báo "resolve ra ngoài _thu_staging"
    oan, kéo fixture 66 ca FAIL. Sửa: so bằng pathlib (goc_staging in
    d.parents), áp cho cả kiểm đính kèm. kiem_van_hanh lên v20.
 3. Docstring bao_phu chứa "\ " gây SyntaxWarning mỗi lần import. Chuyển raw
    string.
 
-Kèm README.md làm cửa vào cho người tới từ link git: repo là BỘ MẪU, không
-phải kho công ty; các bước từ clone tới gõ "cài đặt" ở phiên đầu.
+Phần hai, rà phản biện THỦ TỤC cài đặt (đổi X9 mục 0 và DOC_TRUOC, không đổi
+luật): thủ tục cũ bắt người dùng làm ba việc thừa mà máy hay AI làm được.
+
+1. Chọn lọc file để copy vào 00_Index: thừa, kiem_van_hanh loại hẳn 00_Index
+   khỏi vùng quét nghiệp vụ nên file của người bảo trì nằm đó vô hại. Giờ:
+   clone hay giải nén NGUYÊN TRẠNG thành 00_Index, còn được git pull khi bộ
+   có bản mới.
+2. Đổi tên file _TEMPLATE theo mã công ty trước khi cài: ngược quy trình, mã
+   công ty là CÂU HỎI SỐ MỘT của phiên cài đặt; script cũng glob
+   X0_CAUHINH_*.md nên tên nào máy cũng đọc. Giờ: AI đổi tên trong phiên cài
+   đặt, sau khi biết mã.
+3. Đưa X0 tới X5, X9 vào tài liệu Project là bước bắt buộc: chỉ phiên CHAT
+   (không chạm kho) mới cần. Giờ là bước tùy chọn.
+
+Việc tay còn đúng MỘT bước phải làm chính xác: dán NGUYÊN VĂN INSTRUCTION vào
+Project instructions (AI không tạo hay sửa Project được). README.md là cửa vào
+cho người tới từ link git, ba bước từ clone tới gõ "cài đặt".
 
 ## Vòng 23: v23 sang v24, khóa nốt chế độ --ho (vòng đánh giá 22, 9,6/10)
 
@@ -1863,15 +1883,16 @@ Phần còn lại điền dần đúng lúc cần.
 
 ```
 INSTRUCTION_WORKOPS      dán vào Project instructions, dùng nguyên văn, không sửa
-X0_CAUHINH_TEMPLATE      đổi tên thành X0_CAUHINH_<MÃ>, phiên đầu điền vào đây
-X1..X5 TEMPLATE          đổi tên theo mã công ty. Là luật, trỏ về X0, không phải điền
+X0_CAUHINH_TEMPLATE      phiên đầu AI đổi tên thành X0_CAUHINH_<MÃ> rồi điền
+X1..X5 TEMPLATE          luật, trỏ về X0, không phải điền; AI đổi tên theo mã cùng lượt
 X9 file này              đọc ở phiên đầu, xong thì thôi
 _so\                     NĂM sổ lõi rỗng + PLANNING (mức C) + THU (chỉ khi
                          bật EMAIL) + hai view máy sinh, copy nguyên
 ```
 
-Người dùng làm trước: tạo folder gốc trên kho · copy cả bộ vào `<gốc>\00_Index\`
-· dán INSTRUCTION vào Project instructions · mở phiên Cowork đầu tiên.
+Người dùng làm trước: đưa bộ này về thành `<gốc>\00_Index\` (clone hay giải nén
+nguyên trạng, không chọn lọc, không đổi tên gì) · dán INSTRUCTION vào Project
+instructions · mở phiên Cowork đầu tiên. Mọi việc còn lại là của AI.
 
 # 1. Phiên đầu tiên: ba câu bắt buộc, một câu profile
 
@@ -1896,8 +1917,8 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
    thêm sau được, là việc mức B
 ```
 
-Xong bốn câu: điền X0 C0 C1 C2, đặt rev 1, dựng cây folder mặc định theo X0 C3,
-sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, điền X0 C0 C1 C2, đặt
+rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
 thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B nếu mở folder mới).
