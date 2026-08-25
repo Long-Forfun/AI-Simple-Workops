@@ -40,7 +40,8 @@ EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
 26  registry khác tập khóa COMMITTED: thiếu là chưa dựng lại; THỪA: chặn oan
     HOẶC nhật ký đã mất (xem 24 trước, nhật ký mất thì GIỮ registry, X5 mục 4)
 27  một khóa (Message-ID hay fallback) đứng cuối ở hai luồng THU
-28  nhật ký có mail thuộc hộp thư khác giá trị khai @NHIP.HOPTHU (so chính xác),
+28  nhật ký có mail thuộc hộp thư khác các giá trị khai @NHIP.HOPTHU và
+    @NHIP.HOPTHU_CU (so chính xác; hộp cũ là lịch sử hợp lệ, không loại),
     hoặc có bằng chứng EMAIL chạy mà X0 CHƯA khai @NHIP.HOPTHU
 29  (mục mang cờ de_ngoai để ngoài staging theo X3E mục 2, không tính)
     staging vắng khi lượt chưa COMMITTED hay không có manifest dọn hợp lệ;

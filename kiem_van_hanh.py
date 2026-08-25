@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v24 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v25 · 20260825
+# v25, khâu đường nối theo hội đồng vòng 5 (không tính năng mới): ghi_cache
+# bọc lỗi GHI, cache hỏng chỉ in lưu ý rồi chạy tiếp hết báo cáo · truyền
+# nhầm gốc kho thay vì 00_Index được tự nhận, dừng sớm kèm gợi ý thay vì
+# phun "khôi phục mức C" oan · 10a/10b phân nhánh KHÔNG KIỂM ĐƯỢC khi file
+# bị khóa (sha rỗng), hết cáo buộc "bị sửa tại chỗ" oan cho bản ĐÃ KÝ đang
+# mở trong app · bộ lọc bản chính và 0b nhận thêm khuôn bản sao đồng bộ
+# " (1)", " - Copy", "(bản sao)" cho sổ.
 # v24, theo hội đồng vòng 4: MỘT file không đọc được (khóa Office, sai
 # encoding) không giết cả báo cáo nữa: doc() và sha_file() bắt lỗi, gom vào
 # phép 0f "file không đọc được" thay vì traceback · file tạm ~$/.tmp không
@@ -377,8 +384,14 @@ def nap_cache(cache, bay_gio=None):
 
 
 def ghi_cache(cache, luc_kho, files):
-    cache.write_text(json.dumps({"v": 2, "luc": luc_kho, "files": files},
-                                ensure_ascii=False, indent=0), encoding="utf-8")
+    try:
+        cache.write_text(json.dumps({"v": 2, "luc": luc_kho, "files": files},
+                                    ensure_ascii=False, indent=0), encoding="utf-8")
+    except OSError as e:
+        # cache là máy sinh, mất thì lần sau coi như quét đầu; lỗi GHI (file bị
+        # khóa, thư mục thiếu) không được giết báo cáo (hội đồng vòng 5)
+        print(f"        LƯU Ý: không ghi được cache {cache.name} ({type(e).__name__}),"
+              f" lần quét sau coi như quan sát mới")
 
 
 def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
@@ -505,7 +518,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         dong_kho = [h for h in dong_kho_all
                     if khoa_ho_cua(h[5][4:].strip("` ").replace("\\", "/").strip("/")) == khoa_ho]
 
-    mat, sua_bat_bien, lech_sha = [], [], []
+    mat, sua_bat_bien, lech_sha, khong_kiem = [], [], [], []
     for h in dong_kho:
         rel = h[5][4:].strip("` ").replace("\\", "/").strip("/")
         duong = kho / rel
@@ -515,12 +528,20 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         sha_so = next((o for o in h if re.fullmatch(r"[0-9a-f]{12,64}", o)), None)
         if sha_so and duong.is_file():
             sha_that = (moi.get(rel) or {}).get("sha") or sha_file(duong)
-            if not sha_that.startswith(sha_so[:12]):
+            if not sha_that:
+                # file bị khóa hay không đọc được (đã vào LOI_DOC): CHƯA KIỂM
+                # ĐƯỢC, không phải "bị sửa" - hết cáo buộc oan bản ĐÃ KÝ đang mở
+                khong_kiem.append((h[1], rel))
+            elif not sha_that.startswith(sha_so[:12]):
                 (sua_bat_bien if any(t in h for t in BAT_BIEN) else lech_sha).append(h[1])
     bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat, str(mat[:5]))
     bao("10a. bản ẢNH CHỤP và mốc chính thức (từ ĐÃ GỬI DUYỆT trở đi) không bị sửa"
         " tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
     bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha, str(lech_sha[:5]))
+    if khong_kiem:
+        bao("10c. sha kiểm được (file không bị khóa)" + pv, False,
+            f"{khong_kiem[:5]}: file đang bị khóa hay không đọc được, CHƯA KIỂM"
+            f" ĐƯỢC sha, KHÔNG kết luận bị sửa; đóng ứng dụng đang giữ rồi rà lại")
 
     xung_dot, de_xuat, cho_on_dinh = [], [], 0
     for (tm, ho), kq in sorted(nhom.items()):
@@ -956,6 +977,14 @@ def main(goc):
     goc = Path(goc)
     so = goc / "_so"
 
+    # Tự vệ tham số (hội đồng vòng 5): truyền nhầm GỐC KHO thay vì 00_Index thì
+    # dừng sớm kèm gợi ý, không phun "khôi phục mức C" oan trên hệ khỏe mạnh.
+    if (not so.is_dir() and not list(goc.glob("X0_CAUHINH_*.md"))
+            and (goc / "00_Index" / "_so").is_dir()):
+        print(f"Thư mục truyền vào không có _so hay X0, nhưng CHỨA 00_Index hợp lệ."
+              f" Có phải bạn định chạy: python kiem_van_hanh.py {goc / '00_Index'} ?")
+        sys.exit(2)
+
     # 0. Sổ lõi phải TỒN TẠI trên đĩa: doc() nuốt file vắng thành chuỗi rỗng nên
     #    thiếu phép này thì xóa nhầm cả một sổ vẫn PASS im lặng (hội đồng v21).
     SO_LOI = ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md",
@@ -971,7 +1000,9 @@ def main(goc):
     xung = sorted(f.name for vung in (so.glob("*"), goc.glob("*.md"))
                   for f in vung
                   if f.is_file() and ("conflicted" in f.name.lower()
-                                      or "xung đột" in f.name.lower()))
+                                      or "xung đột" in f.name.lower()
+                                      or re.search(r"( \(\d+\)| - copy|\(bản sao\))\.\w+$",
+                                                   f.name, re.I)))
     bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
@@ -980,7 +1011,9 @@ def main(goc):
         """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay
         file cấu hình: loại _TEMPLATE, conflicted copy, bản xung đột."""
         return [q for q in sorted(cac) if "TEMPLATE" not in q.name
-                and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()]
+                and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
+                and not re.search(r"( \(\d+\)| - copy|\(bản sao\))\.\w+$",
+                                  q.name, re.I)]
     x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"))
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
     if not x0s and co_template:

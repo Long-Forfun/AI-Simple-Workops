@@ -65,7 +65,7 @@ NGAN_SACH = {
     "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
     "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
-    "X5_HESO_TEMPLATE.md": 16000,
+    "X5_HESO_TEMPLATE.md": 17000,  # mục 1b gate theo dự án phần mềm, không phải thuế chung
     "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
@@ -93,10 +93,17 @@ def do_route(docs):
     x1, x2 = docs["X1_CAM_TEMPLATE.md"], docs["X2_PHATHANH_TEMPLATE.md"]
     x3, x3e = docs["X3_CUAVAO_TEMPLATE.md"], docs["X3E_EMAIL_TEMPLATE.md"]
     x4, x5 = docs["X4_RASOAT_TEMPLATE.md"], docs["X5_HESO_TEMPLATE.md"]
-    x5m1 = _muc(x5, 1, 2)
+    x5m1 = _muc(x5, 1, '1b')  # mục 1 thuần, không nuốt mục 1b gate phần mềm
     x1m34 = _muc(x1, 3, 5)
     t = lambda n: round(n / 3)
+    tong_bo = sum(len(docs[k]) for k in
+                  ["X0_CAUHINH_TEMPLATE.md", "X1_CAM_TEMPLATE.md",
+                   "X2_PHATHANH_TEMPLATE.md", "X3_CUAVAO_TEMPLATE.md",
+                   "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md",
+                   "X9_CAIDAT.md"]) + len(docs["INSTRUCTION"])
     return {
+        "CHAT không EMAIL": t(tong_bo),
+        "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
         "CUA_VAO thường": t(_muc(x3, 1, 6) + x5m1),
         "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)),
@@ -434,6 +441,35 @@ def main(goc):
         r = chay_email(nk=p_hut + "\n" + C("<a@x>") + "\n", reg=["<a@x>"])
         ca.append(("PREPARED thiếu payload phục hồi bị bắt (dù đã COMMITTED)",
                    r.get(TEN_12H) is False))
+        # HỘP CŨ hợp lệ: nhật ký mang hộp lịch sử, X0 khai @NHIP.HOPTHU_CU
+        # -> 12e phải PASS (fixture dương cho vá đổi hộp thư vòng 28)
+        THU_MUC_CU = _hl.sha256(b"<cu@x>").hexdigest()
+        PAY_CU = dict(PAY, staging=f"_so/_thu_staging/{THU_MUC_CU}/", dinh_kem=[])
+        P_CU = _json.dumps({"ev": "PREPARED", "khoa": "<cu@x>",
+                            "hop_thu": "cu@abc-cu.vn", "payload": PAY_CU})
+        C_CU = _json.dumps({"ev": "COMMITTED", "khoa": "<cu@x>",
+                            "hop_thu": "cu@abc-cu.vn"})
+        import contextlib as _ctx, io as _io2
+        with tempfile.TemporaryDirectory() as tdc:
+            gc9 = Path(tdc); sc9 = gc9 / "_so"; sc9.mkdir()
+            (gc9 / "X0_CAUHINH_T.md").write_text(
+                "@NHIP.HOPTHU (EMAIL) mail@congty.vn\n"
+                "@NHIP.HOPTHU_CU (EMAIL) cu@abc-cu.vn\n", encoding="utf-8")
+            st9 = sc9 / "_thu_staging" / THU_MUC_CU
+            st9.mkdir(parents=True)
+            (st9 / "thu.eml").write_text("eml", encoding="utf-8")
+            (sc9 / "VIEC.md").write_text("| V-001 | viec |\n", encoding="utf-8")
+            (sc9 / "_thu_nhat_ky.ndjson").write_text(
+                P_CU + "\n" + C_CU + "\n", encoding="utf-8")
+            (sc9 / "_thu_da_nap.json").write_text(
+                _json.dumps(["<cu@x>"]), encoding="utf-8")
+            (sc9 / "_thu_ap_dung.json").write_text(
+                _json.dumps({"<cu@x>|op1": {"so": "VIEC", "dong": "V-001"}}),
+                encoding="utf-8")
+            with _ctx.redirect_stdout(_io2.StringIO()):
+                rcu = {t: ok for t, ok, _ in kiem_email(gc9, sc9)}
+            ca.append(("hộp cũ khai @NHIP.HOPTHU_CU không bị 12e đá oan",
+                       rcu.get(TEN_12E) is not False))
         # đính kèm de_ngoai HỢP LỆ (ten + ly_do, không sha256): 12h phải PASS
         # và 12j không đòi file trong staging (X3E mục 2); chạy ngược trên v22
         # thì 12h FAIL oan - fixture này giữ cho máy khỏi đá luật lần nữa
@@ -784,8 +820,14 @@ def main(goc):
         ("đã cũ định nghĩa tất định: chưa quét trong phiên hiện tại", "TẤT ĐỊNH" in docs["X5_HESO_TEMPLATE.md"] and "PHIÊN hiện tại" in docs["X5_HESO_TEMPLATE.md"]),
         ("schema @NHIP.TRANGTHAI bắt buộc, FAILED hay thiếu coi là dữ liệu cũ", "last_success_utc" in docs["X0_CAUHINH_TEMPLATE.md"] and "DỮ LIỆU CŨ" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("khóa digest đã gửi lưu bền ở @NHIP.DAUGUI, ghi sau xác nhận", "@NHIP.DAUGUI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.DAUGUI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("mail máy có lối thoát nghiệp vụ, không nuốt hóa đơn bản ký", "THOÁT luật gom" in docs["X3E_EMAIL_TEMPLATE.md"]),
+        ("bảng mức thao tác repo tồn tại, rollback chạy thật là C", "ROLLBACK" in docs["X5_HESO_TEMPLATE.md"] and "REPO" in docs["X5_HESO_TEMPLATE.md"]),
+        ("ngoại lệ sự cố cho thông báo đang cháy, DUKIEN ghi bù", "NGOẠI LỆ SỰ CỐ" in docs["X2_PHATHANH_TEMPLATE.md"]),
+        ("xóa theo yêu cầu pháp lý có thủ tục xuyên tầng", "XÓA THEO YÊU CẦU PHÁP LÝ" in docs["X5_HESO_TEMPLATE.md"]),
+        ("RA_NGOAI là phạm vi bao trùm có luật quan hệ", "BAO TRÙM" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("hộp thư cũ sau đổi domain có chỗ khai", "@NHIP.HOPTHU_CU" in docs["X0_CAUHINH_TEMPLATE.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (37 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (43 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}

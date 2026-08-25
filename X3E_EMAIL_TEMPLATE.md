@@ -10,7 +10,9 @@ từ X0 C9. Không bật EMAIL thì file này không được nạp, không tín
 ```
 MỘT HỘP THƯ bộ quét chỉ đọc đúng hộp thư khai ở X0 C9 @NHIP.HOPTHU. Máy có
             nhiều hộp thư nhiều công ty: mỗi công ty một hộp, một pipeline,
-            một bộ sổ riêng; mail hộp khác lọt vào là lệch, rà và loại
+            một bộ sổ riêng; mail hộp khác lọt vào là lệch, rà và loại;
+            hộp khai ở @NHIP.HOPTHU_CU (X0 C9) là hộp CŨ hợp lệ của nhật ký
+            lịch sử, không tính hộp lạ; bộ quét vẫn chỉ đọc hộp hiện hành
 SỔ THƯ      _so\THU.md: một dòng một LUỒNG, mã #L-<NNN>, luồng nhận diện bằng
             Conversation-ID (tiêu đề đổi khi Re/Fw, không làm khóa); một
             Conversation-ID chỉ được nằm ở MỘT dòng THU. KHÓA của
@@ -100,7 +102,7 @@ DIGEST      KHUÔN BẮT BUỘC, đúng thứ tự: 1 dòng đầu đếm CHỜ 
             TÁC QUÁ HẠN · 2 CHỜ TÔI, mỗi thư đủ: mã luồng, người gửi, tiêu
             đề, ý chính một câu, TÔI CẦN LÀM GÌ, hạn nếu có, file liên quan
             · 3 CHỜ ĐỐI TÁC: đang chờ BÊN NÀO, chờ VIỆC GÌ, từ NGÀY nào · 4 CHỈ
-            THEO DÕI để riêng, trình bày ngắn · 5 cuối tin: giờ quét THẬT
+            THEO DÕI để riêng, trình bày ngắn · 5 MỘT dòng gom mail máy theo nguồn (nếu có) · 6 cuối tin: giờ quét THẬT
             (đọc từ nguồn X0 C9 @NHIP.TRANGTHAI, không lấy giờ chạy báo
             cáo), giờ tạo bản tin, tình trạng DỮ LIỆU MỚI hay CŨ.
             Chống gửi lặp bằng khóa NỘI DUNG: chỉ GIÁ TRỊ giờ trình bày nằm
@@ -150,7 +152,8 @@ MAIL MÁY    thư từ no-reply, bot, CI/CD, alert giám sát THUẦN THÔNG BÁ
             ty không tính là "thư của mình" dù nằm cùng tên miền.
             NGOẠI LỆ: thư máy mang NỘI DUNG NGHIỆP VỤ (hóa đơn, biên nhận,
             bản ký DocuSign, thông báo giao dịch, kết quả nộp hồ sơ, hay có
-            đính kèm cần lưu) THOÁT luật gom, cấp luồng và xử như thư
+            đính kèm là tài liệu nghiệp vụ - không tính log máy của chính
+            alert đó) THOÁT luật gom, cấp luồng và xử như thư
             thường theo mục 1
 BÀN GIAO    người dùng mới thay người cũ (giá trị khai @NHIP.BANGIAO, X0
             C9): đổi @NHIP.TAIKHOAN, TENGOI là mức B; mọi luồng CHỜ TÔI

@@ -57,7 +57,8 @@ thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B
 
 **Nhóm B, bắt buộc TRƯỚC khi soạn TÀI LIỆU CHÍNH THỨC đầu tiên gửi ra ngoài
 (có số liệu, cam kết, điều khoản, hay là văn bản chính thức). Đụng loại đó mà
-nhóm này trống thì dừng, hỏi, rồi mới soạn. NGOẠI LỆ THƯỜNG LỆ: mail, tin công
+nhóm này trống thì dừng, hỏi, rồi mới soạn (riêng thông báo SỰ CỐ đang diễn
+ra theo NGOẠI LỆ SỰ CỐ của X2: gửi được ngay cả khi nhóm B còn trống). NGOẠI LỆ THƯỜNG LỆ: mail, tin công
 việc không cam kết không số liệu chạy được NGAY với mặc định ngầm hiểu, không
 hỏi: ngôn ngữ theo luồng thư hay người nhận · giọng chuyên nghiệp, ngắn gọn ·
 từ cấm theo danh mục mặc định X1 · người nhận và phạm vi lấy từ chính thư đó.

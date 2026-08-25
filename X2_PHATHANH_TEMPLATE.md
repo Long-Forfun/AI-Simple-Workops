@@ -55,9 +55,10 @@ hiện số liệu chưa có sổ, cam kết hay điều khoản: hết thườn
 NGOẠI LỆ HẬU CẦN: giờ hẹn, địa điểm, thông tin liên hệ CỦA CHÍNH trao đổi đó
 do người dùng vừa đưa trong phiên KHÔNG tính là số liệu nghiệp vụ, không cần
 dòng DUKIEN, không thoát thường lệ; số kỹ thuật, tiền, tỷ lệ, mốc cam kết
-luôn tính là số liệu nghiệp vụ. Phép thử: mốc do chính trao đổi này đặt cho
-việc gặp, gọi, gửi là HẬU CẦN; mốc gắn nghĩa vụ hợp đồng, tiến độ, hiệu lực
-là CAM KẾT. NGOẠI LỆ SỰ CỐ: thông báo sự cố đang diễn ra (phần mềm, vận
+luôn tính là số liệu nghiệp vụ (một ngoại lệ duy nhất: NGOẠI LỆ SỰ CỐ dưới
+đây). Phép thử: mốc do chính trao đổi này đặt cho việc GẶP, GỌI, HẸN là HẬU
+CẦN; mốc giao hàng, gửi tài liệu ĐÃ HỨA, nghĩa vụ hợp đồng, tiến độ, hiệu
+lực là CAM KẾT. NGOẠI LỆ SỰ CỐ: thông báo sự cố đang diễn ra (phần mềm, vận
 hành) gửi được NGAY với giờ phát hiện và dự kiến khắc phục của chính sự cố;
 DUKIEN ghi bù trong cùng phiên, mức nguồn B, nguồn "vận hành sự cố <ngày>".
 

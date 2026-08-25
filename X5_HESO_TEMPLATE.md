@@ -1,7 +1,7 @@
 ```
 X5 · MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ · <MÃ> · v21 · <YYYYMMDD>
-Mục 1 đọc trước MỌI việc đổi trạng thái. Các mục sau đọc khi SUA_FILE
-hoặc sắp ghi sổ (mục 3). Dự án, folder, tên file đọc từ X0 C2 C3 C4; mức nâng ở X0 C13.
+Mục 1 đọc trước MỌI việc đổi trạng thái; mục 1b CHỈ khi dự án phần mềm.
+Các mục sau đọc khi SUA_FILE hoặc sắp ghi sổ (mục 3). Dự án, folder, tên file đọc từ X0 C2 C3 C4; mức nâng ở X0 C13.
 ```
 
 # 1. Mức tác động và vòng đời
@@ -18,19 +18,11 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt theo ngoại lệ C11 · dọn hay xóa nháp
-   CHƯA vào sổ (trong repo phần mềm: theo bảng REPO dưới, không theo dòng này)
+   CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
    MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4
 ```
-
-REPO, chỉ dự án @DUAN.PHANMEM (X0 C2): sửa code trên nhánh trong việc đã
-mở, deploy hay migration trên dev, staging, xóa nhánh ĐÃ merge là A · deploy
-hay migration môi trường CHẠY THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy
-thật, ROLLBACK chạy thật, force-push hay xóa lịch sử, xóa nhánh CHƯA merge
-(mất code) là C; lệnh trực tiếp "rollback đi" giữa sự cố là gật plan, plan
-ghi trong cùng lượt · danh mục "cấu trúc folder hàng loạt" và "dọn nháp"
-của kho KHÔNG áp cho bên trong repo, mức lấy theo bảng này.
 
 Vòng đời theo mức:
 
@@ -62,7 +54,8 @@ THƯỜNG LỆ   trao đổi rời công ty (mail, tin công việc) không ch�
             chỉ được xuất hiện khi đã có dòng DUKIEN đúng phạm vi (số hậu
             cần của chính trao đổi miễn theo NGOẠI LỆ HẬU CẦN của X2), khi có thì
             bảng kiểm thêm dòng 1 và 2; số chưa có sổ, cam kết, điều khoản xuất
-            hiện là hết thường lệ, nâng lên C đầy đủ. X1, X2 vẫn luôn đọc
+            hiện là hết thường lệ, nâng lên C đầy đủ (riêng thông báo sự cố
+            đang diễn ra: NGOẠI LỆ SỰ CỐ của X2, gửi ngay, DUKIEN ghi bù). X1, X2 vẫn luôn đọc
 NHÁP        note, nháp mặc định KHÔNG vào TAILIEU (tạo là A, dọn là B); chỉ vào
             TAILIEU khi người dùng cần tìm lại về sau (mức B), từ đó xóa là C
 LÔ          lô nhiều mục độc lập: tách theo mức, phần A làm và ghi luôn, phần B
@@ -87,6 +80,28 @@ KHÔNG NGƯỜI (profile AUTOMATED) phiên hẹn giờ, không ai trả lời: A
             hạn phiên sau; ngoài dòng đó không ghi sổ, không gửi, không update
             ngược X0. Người dùng về duyệt một lượt
 ```
+
+# 1b. Phần mềm và repo (CHỈ đọc khi dự án thuộc X0 C2 @DUAN.PHANMEM)
+
+BẢNG MỨC REPO: sửa code trên nhánh trong việc đã
+mở, deploy hay migration trên dev, staging, xóa nhánh ĐÃ merge là A · deploy
+hay migration môi trường CHẠY THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy
+thật, ROLLBACK chạy thật, force-push hay xóa lịch sử, xóa nhánh CHƯA merge
+(mất code) là C; lệnh trực tiếp "rollback đi" giữa sự cố là gật plan, plan
+ghi trong cùng lượt · danh mục "cấu trúc folder hàng loạt" và "dọn nháp"
+của kho KHÔNG áp cho bên trong repo, mức lấy theo bảng này.
+
+SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
+bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
+mềm của C2 (vault, secret manager). Lộ secret RA NGOÀI công ty: VIEC mức
+gấp, thu hồi trước, ghi sau. Người dùng TỰ dán secret vào phiên: nhắc một
+câu về rủi ro rồi xử tiếp việc chính; sổ chỉ mô tả LOẠI secret và hệ liên
+quan, CẤM chép giá trị secret vào bất kỳ sổ hay file nào của kho.
+
+Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu đó coi là đầu ra
+có phạm vi theo C5, không kéo về kho tùy tiện. Bản BÀN GIAO source từ thuê
+ngoài là FILE GỐC NGOÀI: vào 99_Goc, cờ GỐC, sha256 (luật "code không chép
+vào kho" chỉ áp cho repo của CHÍNH công ty).
 
 # 2. Planning, chỉ việc mức C
 
@@ -143,8 +158,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    ngày của bảng và coi bản đó có thể cũ hơn kho
 ```
 
-NHATKY chỉ-thêm với MỘT ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2). Thấy bản "conflicted copy" của MỘT SỔ trong
+NHATKY chỉ-thêm với HAI ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
+dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục 7. Thấy bản "conflicted copy" của MỘT SỔ trong
 _so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
 bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
 ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
@@ -164,7 +179,8 @@ TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN 
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
               nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH
-              hay ĐÃ THAY) · thay bởi · ghi lần. Không xóa, không sửa NỘI DUNG;
+              hay ĐÃ THAY) · thay bởi · ghi lần. Không xóa, không sửa NỘI DUNG
+              (ngoại lệ duy nhất: XÓA PHÁP LÝ mục 7);
               dòng cũ chỉ được cập nhật hai ô quản trị Trạng thái và Thay bởi
 NHATKY_<quý>  mã ghi · ngày · phiên · mức · làm gì · chạm sổ nào · file ra
               · trạng thái · chờ ai
@@ -212,15 +228,11 @@ VIEC     MỚI · ĐANG LÀM · CHỜ ĐỐI TÁC · CHỜ DUYỆT · TREO · XO
 DUKIEN   CHƯA KIỂM · ĐÃ KIỂM · MÂU THUẪN · ĐÃ THAY · HẾT HẠN
 TAILIEU  NHÁP · CHỜ DUYỆT NỘI BỘ · ĐÃ GỬI DUYỆT · ĐÃ DUYỆT NỘI BỘ ·
          ĐÃ PHÁT HÀNH · ĐÃ NỘP · TRẢ HỒ SƠ · ĐÃ CẤP · ĐÃ KÝ
-         Gửi sếp hay đối tác GÓP Ý là ĐÃ GỬI DUYỆT: đúng FILE đã gửi là ẢNH
-         CHỤP bằng chứng, KHÔNG sửa đè; công việc tiếp tục trên bản vN+1 mới,
-         plan không đóng. BẤT BIẾN nghĩa là NỘI DUNG (byte) của chính file đã
-         gửi không được sửa đè, áp từ ĐÃ GỬI DUYỆT trở đi; còn TRẠNG THÁI
-         NGHIỆP VỤ của dòng TAILIEU vẫn được TIẾN LÊN khi có bằng chứng
-         (ĐÃ GỬI DUYỆT sang ĐÃ DUYỆT NỘI BỘ khi có câu xác nhận rõ). Khác
-         nhau ở chỗ ĐÃ GỬI DUYỆT thì chu kỳ còn mở, còn ĐÃ PHÁT HÀNH, ĐÃ
-         NỘP, ĐÃ KÝ, ĐÃ CẤP là mốc chính thức, sửa gì cũng bằng văn bản mới
-         theo luật cốt lõi 3
+         Gửi sếp hay đối tác GÓP Ý là ĐÃ GỬI DUYỆT: FILE đã gửi là ẢNH
+         CHỤP, việc tiếp tục trên vN+1 (luật đầy đủ: mục 1 GHI MỐC). BẤT
+         BIẾN là NỘI DUNG (byte) không sửa đè; TRẠNG THÁI NGHIỆP VỤ vẫn
+         tiến lên khi có bằng chứng. ĐÃ PHÁT HÀNH, ĐÃ NỘP, ĐÃ KÝ, ĐÃ CẤP
+         là mốc chính thức, sửa bằng văn bản mới theo luật cốt lõi 3
 ```
 
 Việc chưa xong đủ bước, người, hạn. Cái gì đổi ghi vào đâu: số mới vào DUKIEN kèm
@@ -247,10 +259,16 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
 
-XÓA THEO YÊU CẦU PHÁP LÝ (mức C, QUYETDINH ghi căn cứ): quét đủ các tầng sổ
-· _lich_su · backup · _thu_staging · 04_Trao_doi. Sổ và nhật ký CHỈ-THÊM
-không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]", giữ
-khung dòng; bản backup cũ còn chứa dữ liệu thì xóa cả bản backup đó.
+XÓA THEO YÊU CẦU PHÁP LÝ (mức C, QUYETDINH ghi căn cứ; là ngoại lệ DUY NHẤT
+của X1 mục 5 "cờ GỐC KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã>): quét
+đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
+· _thu_staging và manifest dọn · 04_Trao_doi. Sổ và nhật ký CHỈ-THÊM không
+xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]", giữ khung
+dòng; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
+cờ de_ngoai lý do "đã xóa theo Q-<mã>" (phép 12j tự nhận, không báo oan);
+backup cũ còn dữ liệu thì xóa cả bản backup; nhắc người dùng thay bản
+BANG_DIEU_KHIEN, X0_INDEX đã tải lên Project; bản ĐÃ GỬI ra ngoài không xóa
+được, ghi nhận vào QUYETDINH.
 
 COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
 _thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\

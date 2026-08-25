@@ -4,6 +4,42 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 29: khâu đường nối theo hội đồng vòng 5 (20260825, điểm vòng 5: 84,5/100)
+
+Điểm vòng 5: KHÔNG SAI 7,5 · THÔNG MINH 8,0 · VẬN HÀNH 8,0 · TOKEN 8,6 ·
+KHÔNG MISS 9,2 · ĐƠN GIẢN 9,4. Bài học hội tụ từ ba giám khảo: mỗi vòng THÊM
+tính năng lại sinh đường nối mới; vòng này CHỈ KHÂU, không mở gì mới.
+
+1. kiem_van_hanh v25: ghi_cache bọc lỗi GHI (cache bị khóa chỉ in lưu ý, báo
+   cáo chạy trọn) · truyền nhầm gốc kho được tự nhận, dừng sớm kèm gợi ý ·
+   10a/10b có nhánh KHÔNG KIỂM ĐƯỢC khi file bị khóa (hết cáo buộc "bị sửa"
+   oan cho bản ĐÃ KÝ đang mở) · bộ lọc bản chính và 0b nhận khuôn bản sao
+   đồng bộ " (1)", " - Copy", "(bản sao)".
+2. XÓA PHÁP LÝ khâu kín: là ngoại lệ DUY NHẤT của X1 "cờ GỐC KHÔNG SỬA" và
+   luật cốt lõi 3 (phải có Q-<mã>); tầng quét thêm 99_Goc, _Summary,
+   _inbox/_da_nap, manifest dọn; đính kèm mail đã COMMITTED trung hòa bằng
+   cờ de_ngoai "đã xóa theo Q-<mã>" (12j tự nhận); nhắc thay bản đã tải lên
+   Project; "MỘT ngoại lệ" của NHATKY và QUYETDINH thành HAI, khai ở cả X5
+   lẫn hai template sổ.
+3. HOPTHU_CU đồng bộ chữ luật với máy: X4 rà 28 và X3E mục 1 nhận hộp cũ là
+   lịch sử hợp lệ; C14 đủ cạnh; fixture DƯƠNG hộp cũ (bộ 69 ca).
+4. Tách X5 mục 1b "Phần mềm và repo" GATE theo @DUAN.PHANMEM: bảng REPO,
+   SECRET, dữ liệu khách, bàn giao source dồn về một chỗ; công ty không phần
+   mềm hết trả thuế repo trên mọi việc đổi trạng thái (NOI_BO ~1628); X0 C2
+   còn con trỏ; khối ẢNH CHỤP trùng luật GHI MỐC rút gọn; trần X5 lên 17.000
+   với gate.
+5. NGOẠI LỆ SỰ CỐ nối đủ ba đầu: X2 "luôn tính" có vế trừ; X5 THƯỜNG LỆ
+   trỏ; X9 nhóm B trống vẫn gửi được thông báo sự cố. Phép thử HẬU CẦN vs
+   CAM KẾT hết mơ hồ chữ "gửi". RA_NGOAI có lối cho người nhận mới (điều
+   kiện dữ kiện tự khai RA_NGOAI + mở việc mức B khai phạm vi). MAIL MÁY
+   "đính kèm cần lưu" có phép thử; khuôn DIGEST có ô dòng mail máy.
+6. Máy giữ lời: phép 12 ghim 6 luật vòng 28 (43 luật); phép 2c phủ thêm hai
+   số CHAT; cảnh báo kho Ổ MÁY ĐƠN (backup cùng ổ) ở X0 C1 và README; UX
+   vòng 5 (câu mở tách chủ ngữ, vai trò trong câu 1, rewrap DOC_TRUOC, tín
+   hiệu phần mềm ở cả hai cửa ngõ).
+
+Watchlist trần: X0 ~15,4k/16.000 · X5 ~16,3k/17.000 · X9 ~6,0k/6.500.
+
 ## Vòng 28: vá theo hội đồng vòng 4 (20260825, điểm vòng 4: 85/100)
 
 Điểm vòng 4: VẬN HÀNH 7,5 · KHÔNG SAI 8,0 · THÔNG MINH 8,5 · TOKEN 8,7 ·

@@ -48,6 +48,8 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <đường dẫn gốc trên máy 1> · thiết bị <tên>
                  <thêm CUA2... nếu kho mây có nhiều máy cùng vào>
+                 Kho Ổ MÁY ĐƠN: backup máy sinh nằm CÙNG Ổ, hỏng phần cứng
+                 là mất cả hai; phải có sao lưu định kỳ ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
 @KHO.CU          <kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
@@ -81,18 +83,10 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
-  commit hay PR. MỨC cho từng thao tác repo: bảng REPO ở X5 mục 1. Một phần mềm nhiều
-  repo: mỗi repo một vế trên cùng dòng. Đặc tả, tài liệu sống cùng code nằm
-  trong repo, TAILIEU trỏ dạng "Repo" theo C1.
-  SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
-  bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng
-  phần mềm (vault, secret manager). Lộ secret RA NGOÀI công ty: VIEC mức
-  gấp, thu hồi trước, ghi sau. Người dùng TỰ dán secret vào phiên: nhắc một
-  câu về rủi ro rồi xử tiếp việc chính; sổ chỉ mô tả LOẠI secret và hệ liên
-  quan, CẤM chép giá trị secret vào bất kỳ sổ hay file nào của kho. Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu
-  đó coi là đầu ra có phạm vi theo C5, không kéo về kho tùy tiện.
-  Bản BÀN GIAO source từ thuê ngoài là FILE GỐC NGOÀI: vào 99_Goc, cờ GỐC,
-  sha256 (luật "code không chép vào kho" chỉ áp cho repo của CHÍNH công ty).
+  commit hay PR. Một phần mềm nhiều repo: mỗi repo một vế trên cùng dòng.
+  Đặc tả, tài liệu sống cùng code nằm trong repo, TAILIEU trỏ dạng "Repo"
+  theo C1. Mức từng thao tác repo, SECRET, dữ liệu khách trong dump và log,
+  bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn. Mục nào
   chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
@@ -146,7 +140,10 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
   RA_NGOAI là phạm vi BAO TRÙM: dữ kiện khai phạm vi chi tiết nào cũng tự
   thỏa RA_NGOAI; đầu ra mang phạm vi chi tiết KHÔNG dùng được dữ kiện chỉ
   khai RA_NGOAI. Đã khai phạm vi chi tiết: đầu ra mới phải mang phạm vi chi
-  tiết; từ cấm áp cho RA_NGOAI là HỢP của mọi dòng @PHAMVI.CAM cộng X1
+  tiết, TRỪ người nhận chưa thuộc phạm vi nào: dùng RA_NGOAI với điều kiện
+  mọi dữ kiện trong đầu ra tự khai RA_NGOAI trong danh sách phạm vi của
+  CHÍNH nó, và mở việc mức B đề xuất khai phạm vi mới; từ cấm áp cho
+  RA_NGOAI là HỢP của mọi dòng @PHAMVI.CAM cộng X1
 
 @PHAMVI.CAM      <điền: phạm vi nào cấm từ nào. Trúng một từ là dừng>
 @PHAMVI.BATBUOC  <điền: phạm vi nào bắt buộc khai gì, hậu quả nếu thiếu>
@@ -331,8 +328,8 @@ X1  đọc C1 (bốn dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6
 X2  đọc C5 · C6 · C7 · C8 · C10
 X3  đọc C1 (@DUONG.INBOX) · C7 (mức nguồn khi rút dữ kiện) · C9
 X3E đọc C9 (@NHIP.HOPTHU, TAIKHOAN, TENGOI, DEMSTAGING, TRANDINHKEM,
-    TRANGTHAI, DAUGUI, BANGIAO; chỉ khi bật EMAIL)
-X4  đọc C1 (@DUONG.INBOX) · C9 (các ngưỡng rà)
+    TRANGTHAI, DAUGUI, BANGIAO, HOPTHU_CU; chỉ khi bật EMAIL)
+X4  đọc C1 (@DUONG.INBOX) · C9 (các ngưỡng rà, @NHIP.HOPTHU, HOPTHU_CU)
 X5  đọc C0 · C1 (danh sách cửa cho mã G, @DUONG.PROJECT) · C2 · C3 · C4 ·
     C11 (ngoại lệ siết chặt) · C12 (dòng nhắc của bảng) · C13
 ```

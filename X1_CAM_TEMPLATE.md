@@ -30,7 +30,8 @@ Danh sách tại X0 C8 mục @HINHTHUC.QUANHE. Thay bằng sự kiện kèm ngà
 # 5. Hành vi cấm với file và sổ, dùng chung mọi công ty
 
 ```
-Sửa hoặc xóa file đã ký, đã nộp, file gốc bên ngoài (cờ GỐC KHÔNG SỬA)
+Sửa hoặc xóa file đã ký, đã nộp, file gốc bên ngoài (cờ GỐC KHÔNG SỬA;
+ngoại lệ duy nhất: XÓA PHÁP LÝ theo X5 mục 7, phải có Q-<mã>)
 Ghi cột "Ở đâu" của TAILIEU ngoài bốn dạng khai ở X0 C1
 Chép giá trị của X0 sang file khác rồi làm việc trên bản chép (X0_INDEX là view
 máy sinh hợp lệ, nhưng giá trị đưa vào đầu ra phải đọc từ X0 đúng mục)

@@ -1,10 +1,11 @@
 # WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
 
-Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm và
-tự ghi chép có kiểm soát; công ty có PHẦN MỀM cũng dùng được (code ở repo,
-secret không vào kho, deploy có mức duyệt). Bên trong là luật thường trực, bộ
-cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này là BỘ MẪU. Vận hành hằng ngày
-diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc thư mục mây đồng bộ như Dropbox).
+Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
+Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM cũng dùng được (code ở
+repo, secret không vào kho, deploy có mức duyệt). Bên trong: luật thường
+trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
+là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
+thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
 
 Việc tay duy nhất phải làm ĐÚNG là dán INSTRUCTION vào Project instructions.
 Mọi thứ khác: copy nguyên trạng hoặc để AI tự dựng. Mọi sổ sách là file văn bản
@@ -43,7 +44,7 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    độ Cowork), bấm nút gắn thư mục và chọn folder <gốc>. QUAN TRỌNG: gắn
    folder GỐC (thư mục CHỨA 00_Index), không phải chính 00_Index. Gõ:
    "cài đặt".
-   AI hỏi BỐN câu (mã và tên công ty · kho ở đâu · dự án đầu tiên · chọn
+   AI hỏi BỐN câu (mã, tên công ty và vai trò · kho ở đâu · dự án đầu tiên · chọn
    profile, không rõ thì trả lời LITE), rồi tự làm phần còn lại: đổi tên
    file theo mã, điền X0, dựng cây folder, chạy thử. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
    Kho đã có sẵn đống file? Nói với AI, nó nạp hàng loạt theo X9 mục 3b.
