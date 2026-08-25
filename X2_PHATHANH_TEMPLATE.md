@@ -1,0 +1,60 @@
+```
+X2 · PHÁT HÀNH · <MÃ> · v06 · <YYYYMMDD>
+Đọc TOÀN BỘ cùng X1 khi SOAN_RA, hoặc SUA_FILE mà bản sửa sẽ gửi ra ngoài.
+Phát hành là việc mức C; trao đổi thường lệ đi vòng rút gọn theo INSTRUCTION mục 5.
+Giá trị đọc từ X0 các mục C5 C6 C7 C8 C10.
+```
+
+# 1. Bảng kiểm trước khi phát hành
+
+Chạy TRƯỚC khi tài liệu rời công ty. Cấm thay bằng câu "đã kiểm". Cách in: dòng
+TRƯỢT hay cần người dùng quyết in đầy đủ kèm chứng minh; các dòng ĐẠT gom thành
+một khối ngắn, mỗi dòng một câu chứng minh tối thiểu. Gấp đến đâu cũng không bỏ
+dòng nào, chỉ được in gọn.
+
+Bước 1, xác định: tên chuẩn và vN · phạm vi, một giá trị trong tập đóng X0 C5 · gửi
+cho ai · mức kiểm theo X0 C10. Không xác định được phạm vi thì dừng, hỏi.
+
+Bước 2, bảng kiểm:
+
+```
+1   số kỹ thuật, số tiền, mốc, tỷ lệ đều có dòng ở DUKIEN
+    liệt kê <số> = <mã dữ kiện> | <nguồn>. Số dẫn xuất ghi công thức
+2   phạm vi tài liệu nằm trong danh sách phạm vi của mọi dữ kiện dùng
+3   chỉ chứa dữ kiện của đúng công ty này
+4   vai các bên đúng theo X0 C6
+5   số kỹ thuật khớp nguồn thẩm quyền X0 C7, kèm đơn vị hoặc loại số đo
+6   mọi dữ kiện dùng đạt MỨC NGUỒN tối thiểu của phạm vi theo X0 C7, hoặc đi theo
+    ngoại lệ nguồn chỉ định của C7 với đủ bốn hàng rào; liệt kê dữ kiện nào mức
+    nào, nguồn chỉ định nào. Hồ sơ nhà nước dùng nguồn dưới A: in cảnh báo "dưới
+    chuẩn mặc định, theo nguồn chỉ định <mã>", người dùng xác nhận riêng dòng này
+7   thuật ngữ bắt buộc và cấm theo X0 C8 và X1
+8   không ký tự cấm, không làm tròn ngoài khai báo X0 C8
+9   mục lục khớp 1:1 file thực tế
+10  file gốc đính kèm còn nguyên vẹn, so lại sha256
+11  giấy tờ viện dẫn còn hiệu lực tại ngày gửi
+12  bản này khớp bản đã duyệt nội bộ
+13+ dòng kiểm riêng của công ty theo X0 C10
+```
+
+Bước 3: một dấu sai là không phát hành, ghi VIEC. Đủ thì trình người dùng duyệt.
+AI không tự gửi.
+
+Bước 4, sau khi người dùng xác nhận đã gửi: TAILIEU đổi trạng thái kèm ngày và cho
+ai, dán danh sách số đã dùng · bản nộp vào `01_Phap_ly\_NOP_YYYYMMDD\` rồi khóa ·
+nháp cũ vào `_lich_su\` · VIEC cập nhật.
+
+# 2. Mức áp dụng
+
+Theo X0 C10 mục @KIEM.MUC. Dòng 1 và 3 không bao giờ được bỏ với đầu ra rời công ty.
+
+Mức THƯỜNG LỆ, chỉ cho đầu ra đạt điều kiện ngoại lệ thường lệ ở INSTRUCTION mục 5:
+in dòng 3 · 4 · 7 · 8, kèm một câu xác nhận "không chứa cam kết, điều khoản". Có
+nhắc tới số liệu hay tên định danh kỹ thuật ĐÃ CÓ SỔ: in thêm dòng 1 và 2. Xuất
+hiện số liệu chưa có sổ, cam kết hay điều khoản: hết thường lệ, chạy ĐẦY ĐỦ.
+
+# 3. Phát hiện tài liệu đã gửi bị sai
+
+Dừng ngay · ghi VIEC mức gấp: sai gì, bản nào, gửi ai ngày nào · trình phương án cho
+người dùng chọn · CẤM tự đính chính, tự sửa, tự đổi trạng thái bản đó. Bản đã ra
+ngoài bất biến kể cả khi sai, sửa bằng văn bản mới.

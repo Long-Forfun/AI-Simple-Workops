@@ -1,0 +1,50 @@
+# BENCHMARK_TOKEN · STARTER v24 · 20260824
+
+Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt), SINH LẠI TỰ ĐỘNG
+mỗi lần đóng gói từ kích thước file THẬT của đúng bản này, version lấy theo
+DOC_TRUOC (phép kiểm 2b giữ khớp). Đây là BENCHMARK TĨNH; cột "phiên thật" để
+trống, điền dần từ log phiên chạy thật, chưa có số đó thì không tuyên bố kết quả
+runtime.
+
+## Thuế thường trực mỗi phiên
+
+| Thành phần | trước tối ưu (v05) | hiện tại |
+|---|---:|---:|
+| INSTRUCTION dán trong Project | 4148 | 1830 |
+| Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
+| BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
+| CỘNG | ~6969 | ~2159 |
+
+Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
+RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
+4.200 ký tự cộng INSTRUCTION) xấp xỉ 4.000 token, vẫn thấp hơn trước tối ưu.
+Nền tảng nào kéo CẢ X5 (hiện ~4687 token) thay vì đúng mục thì mỗi thao tác đổi
+trạng thái tốn thêm phần chênh; luật đọc theo mục của X5 mục 5 áp cho cả X3, X5.
+
+## Chi phí context theo loại yêu cầu (ngoài thuế, chưa tính tài liệu nghiệp vụ)
+
+Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
+
+| Loại | Context bắt buộc | Token đọc thêm | Phiên thật: token · tool calls · đọc thừa · đúng sai |
+|---|---|---:|---|
+| HOI | DUKIEN theo khối | theo khối | |
+| BAN | không | 0 | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1471 | |
+| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~4687 + khối | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (~1003) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2361 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3 mục 6 (~2752) + THU theo khối | ~5113 + khối | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1215 | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~2863 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~2863 + khối | |
+
+## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
+
+INSTRUCTION 8.000 ký tự · X0 14.500 · X5 16.000 · X3 11.500 · X9 5.400 · X4
+4.200 · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
+là FAIL.
+
+## Ghi chú profile
+
+Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED, EMAIL
+nên X0 ngắn hơn đáng kể; X3 mục 6 và sổ THU chỉ được nạp khi bật EMAIL, không
+tăng thuế của bộ lõi.
