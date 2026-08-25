@@ -4,6 +4,25 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 25: tách X3E, phạm vi phần mềm, vét nốt danh sách treo (20260825)
+
+1. TÁCH X3E_EMAIL: X3 mục 6 (71% file, kín trần 11.488/11.500) thành file
+   riêng X3E_EMAIL_TEMPLATE.md, X3 giữ stub trỏ sang. X3 xuống ~3.4k/4.500,
+   X3E ~9.2k/12.000: hết bom trần, công ty LITE trên nền nạp cả file bớt
+   ~2.700 token mỗi lượt CUA_VAO, EMAIL có chỗ vá. Phép kiểm 12 đọc gộp
+   X3 cộng X3E; mô tả _thu_* trong X5 mục 4 nén còn bốn dòng trỏ X3E.
+2. PHẠM VI TỔ CHỨC PHẦN MỀM (X0 C2 @DUAN.PHANMEM): công ty có dự án phần
+   mềm khai repo, thành phần, môi trường, nơi chạy thật cho TỪNG phần mềm.
+   Repo là nguồn sự thật của code, code không chép vào kho, không qua
+   _INBOX; kho giữ hồ sơ và quyết định; deploy môi trường chạy thật là mức
+   C (vào danh mục C của X5). X9 câu 3 hỏi thêm khi dự án là phần mềm.
+3. Vét danh sách treo của vòng 24: trả lời INLINE tính là phần vừa viết
+   (X3E mục 2) · đính kèm vượt @NHIP.TRANDINHKEM không kéo vào staging ·
+   staging mồ côi có luật (X3E) và phép dò 12j2 (kiem_van_hanh) · nguồn
+   scan không đọc được: cờ CHƯA ĐỌC ĐƯỢC, cấm rút dữ kiện (X0 C7) · bàn
+   giao người dùng @NHIP.BANGIAO · dự án có trạng thái NGỪNG kèm thủ tục
+   đóng (X0 C2).
+
 ## Vòng 24: hội đồng 6 lăng kính chấm độc lập (20260825)
 
 Sáu giám khảo AI độc lập, mỗi người một lăng kính, đọc trọn bộ không nhiễm

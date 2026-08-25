@@ -25,7 +25,7 @@ không đọc, không hỏi.
                   người ở X5 mục 1)
   [ ] EMAIL       mail là kênh nghiệp vụ chính: sổ mã thư THU, Message-ID chống
                   nạp trùng, cột chờ phản hồi, chống lặp digest, quy trình tải
-                  đính kèm (X3 mục 6, sổ _so\THU.md)
+                  đính kèm (X3E, sổ _so\THU.md)
   LITE = chỉ CORE, không bật gì thêm
 ```
 
@@ -68,10 +68,20 @@ cho dòng trỏ file).
 Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắn đúng một dự án.
 
 ```
-@DUAN.<MÃ DA>    <tên dự án>          đang chạy
+@DUAN.<MÃ DA>    <tên dự án>          đang chạy | NGỪNG
 @DUAN.CTY        việc của công ty, không thuộc dự án nào    luôn có
+
+@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
+  <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
+           (dev, staging, prod ở đâu) · nơi chạy thật
+  Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
+  KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
+  Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
+  commit hay PR; deploy môi trường CHẠY THẬT là việc mức C (X5 mục 1)
 ```
 
+Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
+án khác, sổ giữ nguyên tra lịch sử, bàn làm việc và digest lọc bỏ.
 Dự án mới: thêm dòng ở đây (mức B), dựng folder con trong các folder chức năng cần
 dùng, rồi mới mở việc đầu tiên.
 
@@ -176,7 +186,9 @@ Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
 mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo <tên nguồn> <bản, ngày>". Mức
 tối thiểu áp cho mọi dữ kiện KHÔNG có nguồn chỉ định.
 
-Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
+Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file kèm cờ CHƯA
+ĐỌC ĐƯỢC, CẤM rút dữ kiện từ đó cho tới khi có bản đọc được hay người dùng
+đọc tay và xác nhận từng số. Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
 chọn. Bản mới thay bản cũ chỉ khi có mail hoặc biên bản xác nhận (tức từ mức B).
 
 # C8. Thuật ngữ và hình thức
@@ -202,7 +214,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  trên cùng máy tuyệt đối không vào pipeline>
 @NHIP.TAIKHOAN   (EMAIL) <điền các địa chỉ NGƯỜI DÙNG dùng để gửi, CỘNG các
                  alias hay hộp nhóm mà thư nhắm tới người dùng vẫn đến (info@,
-                 sales@...); dùng nhận diện "thư của mình", "mình ở To" X3 mục 6>
+                 sales@...); dùng nhận diện "thư của mình", "mình ở To" X3E>
 @NHIP.TENGOI     (EMAIL) <tên, cách xưng hô, bí danh của người dùng trong thư
                  (Long, anh Long, Mr. Long...); bộ email TỰ điền từ tên tài
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
@@ -214,6 +226,10 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.INBOX      chưa nạp cảnh báo sau <N> ngày
 @NHIP.DEMSTAGING (profile EMAIL) thời gian đệm trước khi dọn staging đã
                  COMMITTED và xác minh, mặc định 30 ngày
+@NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
+                 định 50 MB; vượt trần xử theo X3E mục 2
+@NHIP.BANGIAO    <người dùng thay người cũ: đổi TAIKHOAN, TENGOI là mức B;
+                 luồng CHỜ TÔI đang mở điểm danh lại một lượt, hoặc "chưa có">
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
                  quét (file status máy sinh); digest đọc giờ quét THẬT từ
                  đây, không lấy giờ chạy báo cáo>. Schema tối thiểu BẮT BUỘC:

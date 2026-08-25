@@ -68,6 +68,25 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 25: tách X3E, phạm vi phần mềm, vét nốt danh sách treo (20260825)
+
+1. TÁCH X3E_EMAIL: X3 mục 6 (71% file, kín trần 11.488/11.500) thành file
+   riêng X3E_EMAIL_TEMPLATE.md, X3 giữ stub trỏ sang. X3 xuống ~3.4k/4.500,
+   X3E ~9.2k/12.000: hết bom trần, công ty LITE trên nền nạp cả file bớt
+   ~2.700 token mỗi lượt CUA_VAO, EMAIL có chỗ vá. Phép kiểm 12 đọc gộp
+   X3 cộng X3E; mô tả _thu_* trong X5 mục 4 nén còn bốn dòng trỏ X3E.
+2. PHẠM VI TỔ CHỨC PHẦN MỀM (X0 C2 @DUAN.PHANMEM): công ty có dự án phần
+   mềm khai repo, thành phần, môi trường, nơi chạy thật cho TỪNG phần mềm.
+   Repo là nguồn sự thật của code, code không chép vào kho, không qua
+   _INBOX; kho giữ hồ sơ và quyết định; deploy môi trường chạy thật là mức
+   C (vào danh mục C của X5). X9 câu 3 hỏi thêm khi dự án là phần mềm.
+3. Vét danh sách treo của vòng 24: trả lời INLINE tính là phần vừa viết
+   (X3E mục 2) · đính kèm vượt @NHIP.TRANDINHKEM không kéo vào staging ·
+   staging mồ côi có luật (X3E) và phép dò 12j2 (kiem_van_hanh) · nguồn
+   scan không đọc được: cờ CHƯA ĐỌC ĐƯỢC, cấm rút dữ kiện (X0 C7) · bàn
+   giao người dùng @NHIP.BANGIAO · dự án có trạng thái NGỪNG kèm thủ tục
+   đóng (X0 C2).
+
 ## Vòng 24: hội đồng 6 lăng kính chấm độc lập (20260825)
 
 Sáu giám khảo AI độc lập, mỗi người một lăng kính, đọc trọn bộ không nhiễm
@@ -824,14 +843,15 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1471 | |
 | SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~4687 + khối | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (~1003) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2361 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3 mục 6 (~2752) + THU theo khối | ~5113 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3050) + THU theo khối | ~5400 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1215 | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~2863 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~2863 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
-INSTRUCTION 8.000 ký tự · X0 14.500 · X5 16.000 · X3 11.500 · X9 6.500 · X4
+INSTRUCTION 8.000 ký tự · X0 14.500 · X5 16.000 · X3 4.500 · X3E 12.000 (chỉ
+nạp khi bật EMAIL) · X9 6.500 · X4
 4.200 · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
 là FAIL.
 
@@ -845,8 +865,8 @@ BAN, soạn nháp, không phải phiên ghi sổ chính.
 ## Ghi chú profile
 
 Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED, EMAIL
-nên X0 ngắn hơn đáng kể; X3 mục 6 và sổ THU chỉ được nạp khi bật EMAIL, không
-tăng thuế của bộ lõi.
+nên X0 ngắn hơn đáng kể; X3E và sổ THU chỉ được nạp khi bật EMAIL, không
+tăng thuế của bộ lõi; CUA_VAO thường của LITE nay chỉ đọc X3 ~3.4k ký tự.
 
 ════════════════════════════════════════
 FILE: INSTRUCTION_WORKOPS_v11.md
@@ -871,6 +891,7 @@ ro là PHÊ DUYỆT trước khi làm, không phải ghi chép sau khi làm.
 X0 CẤU HÌNH   nguồn duy nhất mọi tham số, giữ rev và profile
 X1 CẤM        X2 PHÁT HÀNH        X3 CỬA VÀO        X4 RÀ SOÁT
 X5 MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ              X9 cài đặt, chạy một lần
+X3E EMAIL: pipeline mail đầy đủ, CHỈ nạp khi bật profile EMAIL
 ```
 
 X1 tới X5 là luật, TRỎ về mục X0; cần giá trị thì đọc đúng mục X0 lúc dùng, cấm
@@ -1016,7 +1037,7 @@ không đọc, không hỏi.
                   người ở X5 mục 1)
   [ ] EMAIL       mail là kênh nghiệp vụ chính: sổ mã thư THU, Message-ID chống
                   nạp trùng, cột chờ phản hồi, chống lặp digest, quy trình tải
-                  đính kèm (X3 mục 6, sổ _so\THU.md)
+                  đính kèm (X3E, sổ _so\THU.md)
   LITE = chỉ CORE, không bật gì thêm
 ```
 
@@ -1059,10 +1080,20 @@ cho dòng trỏ file).
 Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắn đúng một dự án.
 
 ```
-@DUAN.<MÃ DA>    <tên dự án>          đang chạy
+@DUAN.<MÃ DA>    <tên dự án>          đang chạy | NGỪNG
 @DUAN.CTY        việc của công ty, không thuộc dự án nào    luôn có
+
+@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
+  <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
+           (dev, staging, prod ở đâu) · nơi chạy thật
+  Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
+  KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
+  Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
+  commit hay PR; deploy môi trường CHẠY THẬT là việc mức C (X5 mục 1)
 ```
 
+Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
+án khác, sổ giữ nguyên tra lịch sử, bàn làm việc và digest lọc bỏ.
 Dự án mới: thêm dòng ở đây (mức B), dựng folder con trong các folder chức năng cần
 dùng, rồi mới mở việc đầu tiên.
 
@@ -1167,7 +1198,9 @@ Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
 mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo <tên nguồn> <bản, ngày>". Mức
 tối thiểu áp cho mọi dữ kiện KHÔNG có nguồn chỉ định.
 
-Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
+Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file kèm cờ CHƯA
+ĐỌC ĐƯỢC, CẤM rút dữ kiện từ đó cho tới khi có bản đọc được hay người dùng
+đọc tay và xác nhận từng số. Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
 chọn. Bản mới thay bản cũ chỉ khi có mail hoặc biên bản xác nhận (tức từ mức B).
 
 # C8. Thuật ngữ và hình thức
@@ -1193,7 +1226,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  trên cùng máy tuyệt đối không vào pipeline>
 @NHIP.TAIKHOAN   (EMAIL) <điền các địa chỉ NGƯỜI DÙNG dùng để gửi, CỘNG các
                  alias hay hộp nhóm mà thư nhắm tới người dùng vẫn đến (info@,
-                 sales@...); dùng nhận diện "thư của mình", "mình ở To" X3 mục 6>
+                 sales@...); dùng nhận diện "thư của mình", "mình ở To" X3E>
 @NHIP.TENGOI     (EMAIL) <tên, cách xưng hô, bí danh của người dùng trong thư
                  (Long, anh Long, Mr. Long...); bộ email TỰ điền từ tên tài
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
@@ -1205,6 +1238,10 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.INBOX      chưa nạp cảnh báo sau <N> ngày
 @NHIP.DEMSTAGING (profile EMAIL) thời gian đệm trước khi dọn staging đã
                  COMMITTED và xác minh, mặc định 30 ngày
+@NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
+                 định 50 MB; vượt trần xử theo X3E mục 2
+@NHIP.BANGIAO    <người dùng thay người cũ: đổi TAIKHOAN, TENGOI là mức B;
+                 luồng CHỜ TÔI đang mở điểm danh lại một lượt, hoặc "chưa có">
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
                  quét (file status máy sinh); digest đọc giờ quét THẬT từ
                  đây, không lấy giờ chạy báo cáo>. Schema tối thiểu BẮT BUỘC:
@@ -1475,7 +1512,21 @@ hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 
-Không bật EMAIL: bỏ qua mục này, mail vẫn đi qua bốn cửa như file thường.
+Không bật EMAIL: bỏ qua, mail đi qua bốn cửa như file thường. Bật EMAIL: đọc
+X3E_EMAIL_<MÃ>.md, luật đầy đủ của pipeline mail nằm trọn ở đó.
+
+════════════════════════════════════════
+FILE: X3E_EMAIL_TEMPLATE.md
+════════════════════════════════════════
+
+```
+X3E · EMAIL · <MÃ> · v01 · <YYYYMMDD>
+Chỉ đọc khi X0 C0 bật profile EMAIL; là phần đầy đủ của X3 mục 6, giá trị đọc
+từ X0 C9. Không bật EMAIL thì file này không được nạp, không tính thuế context.
+```
+
+# 1. Pipeline mail
+
 
 ```
 MỘT HỘP THƯ bộ quét chỉ đọc đúng hộp thư khai ở X0 C9 @NHIP.HOPTHU. Máy có
@@ -1593,6 +1644,22 @@ AN TOÀN     token và bí mật của kênh báo (Telegram...) để NGOÀI kho
             đối không gửi lại bản cũ, báo lỗi thay vì báo DONE
 ```
 
+# 2. Luật bổ sung
+
+```
+TRẢ LỜI     nội dung người gửi viết XEN TRONG phần trích dẫn (trả lời inline,
+INLINE      "[xem trả lời bên dưới từng mục]") vẫn tính là PHẦN NGƯỜI GỬI VỪA
+            VIẾT khi xét năm điều CHỜ TÔI; chỉ phần trích dẫn nguyên văn không
+            có chữ mới mới bị cắt
+ĐÍNH KÈM    đính kèm vượt trần @NHIP.TRANDINHKEM (X0 C9): KHÔNG kéo vào
+QUÁ LỚN     staging hay kho đồng bộ; ghi dòng TAILIEU trỏ nguồn (link, mã thư)
+            kèm sha256 nếu lấy được, mở VIEC "tải tay" cho người dùng; mail đó
+            vẫn COMMITTED với ghi chú đính kèm để ngoài
+STAGING     thư mục trong _thu_staging không có khóa nào trong nhật ký (crash
+MỒ CÔI      giữa lưu staging và append PREPARED): rà thấy thì báo, người dùng
+            duyệt rồi mới xóa (mức B); không tự coi là rác
+```
+
 ════════════════════════════════════════
 FILE: X4_RASOAT_TEMPLATE.md
 ════════════════════════════════════════
@@ -1697,7 +1764,8 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ duy
    nhất theo X0 C11: chỉ THÊM lệnh hay từ cấm để siết chặt là B; gỡ, nới vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
-   hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành
+   hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành · deploy môi trường CHẠY THẬT
+   của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt theo ngoại lệ C11 · dọn hay xóa nháp
@@ -1846,28 +1914,10 @@ X0_INDEX.md   view máy sinh của X0: rev, kho, profile, dự án, vị trí m�
               đầu ra phải đọc từ X0 đúng mục, không lấy từ view
 _quan_sat_truoc.json  cache máy sinh của bộ quan sát (giữ luật ổn định hai lần
               quét), không phải sổ, không sửa tay, mất thì tự dựng lại
-_thu_da_nap.json  (profile EMAIL) registry máy sinh, DANH SÁCH CHUỖI khóa đã
-              nạp, chống nạp trùng khi quét lại; mất thì dựng lại từ _thu_nhat_ky
-_thu_nhat_ky.ndjson  (profile EMAIL) nhật ký SỰ KIỆN append-only, máy sinh,
-              NGUỒN SỰ THẬT: mỗi mail đúng hai sự kiện, PREPARED (kèm payload
-              phục hồi: đường dẫn staging cộng danh sách thao tác ghi sổ chuẩn
-              hóa) đứng TRƯỚC COMMITTED; registry chỉ dựng từ COMMITTED; mất cả
-              nhật ký lẫn registry thì lần quét đầu chỉ đề xuất, không tự nạp;
-              mất RIÊNG nhật ký khi registry còn: GIỮ registry làm rào chống
-              nạp trùng, CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH
-_thu_ap_dung.json  (profile EMAIL) index máy sinh cho ghi idempotent: mỗi thao
-              tác đã áp một dòng "khóa + operation_id" trỏ "sổ + mã dòng"; sổ
-              người đọc không mang cột khóa máy; mất thì dựng lại bằng đối
-              chiếu payload với sổ
-_thu_staging\ (profile EMAIL) vùng bền vững máy sinh giữ nguyên văn thư và
-              đính kèm, mỗi mail một thư mục tên sha256(khóa), lưu TRƯỚC khi
-              append PREPARED; dọn mức A theo bốn điều kiện X3 mục 6
-              (COMMITTED, đích và sha xác minh, .eml bằng chứng đã chuyển,
-              qua đệm @NHIP.DEMSTAGING)
-_thu_don_staging.json  (profile EMAIL) manifest dọn máy sinh, ghi TRƯỚC khi
-              xóa staging: mỗi khóa một mục purged_at, eml_final_path,
-              attachment_final_paths, sha256; là căn cứ để staging vắng của
-              mail đã COMMITTED không bị coi là lệch
+_thu_*            (profile EMAIL) năm file và vùng máy sinh của pipeline mail
+              (registry, nhật ký sự kiện, index, staging, manifest dọn): vai
+              trò, schema và luật phục hồi TẤT CẢ nằm ở X3E; mất riêng nhật
+              ký khi registry còn: GIỮ registry, cấm dựng lại từ tập rỗng
 _quan_sat_bo.txt  danh sách đường dẫn công ty muốn loại khỏi bộ quan sát (một
               dòng một mục), người dùng sửa tay được, mặc định không có
 ```
@@ -1968,7 +2018,8 @@ Phần còn lại điền dần đúng lúc cần.
 ```
 INSTRUCTION_WORKOPS      dán vào Project instructions, dùng nguyên văn, không sửa
 X0_CAUHINH_TEMPLATE      phiên đầu AI đổi tên thành X0_CAUHINH_<MÃ> rồi điền
-X1..X5 TEMPLATE          luật, trỏ về X0, không phải điền; AI đổi tên theo mã cùng lượt
+X1..X5, X3E TEMPLATE     luật, trỏ về X0, không phải điền; AI đổi tên theo mã
+                         cùng lượt (X3E chỉ được nạp khi bật EMAIL)
 X9 file này              đọc ở phiên đầu, xong thì thôi
 _so\                     NĂM sổ lõi rỗng + PLANNING (mức C) + THU (chỉ khi
                          bật EMAIL) + hai view máy sinh, copy nguyên
@@ -1989,7 +2040,9 @@ chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
    việc chính?
 2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
    thì khai các cửa)
-3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn)
+3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
+   là PHẦN MỀM thì hỏi thêm phạm vi tổ chức theo X0 C2 @DUAN.PHANMEM: repo,
+   thành phần, môi trường, nơi chạy thật)
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:
@@ -2128,6 +2181,7 @@ FILE_BAT_BUOC = [
     "X1_CAM_TEMPLATE.md",
     "X2_PHATHANH_TEMPLATE.md",
     "X3_CUAVAO_TEMPLATE.md",
+    "X3E_EMAIL_TEMPLATE.md",
     "X4_RASOAT_TEMPLATE.md",
     "X5_HESO_TEMPLATE.md",
     "X9_CAIDAT.md",
@@ -2153,7 +2207,8 @@ NGAN_SACH = {
     "X0_CAUHINH_TEMPLATE.md": 14500,
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
-    "X3_CUAVAO_TEMPLATE.md": 11500,
+    "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
+    "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
     "X4_RASOAT_TEMPLATE.md": 4200,
     "X5_HESO_TEMPLATE.md": 16000,
     "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
@@ -2773,38 +2828,38 @@ def main(goc):
         ("bất biến chỉ cho phát hành nộp ký cấp", "ĐÃ PHÁT HÀNH" in x5nd),
         ("GHI MỐC không đóng plan", "GHI MỐC" in x5nd and "KHÔNG chốt" in x5nd),
         ("XUNG ĐỘT cấm tự chọn", "XUNG ĐỘT" in x5nd),
-        ("sự kiện người dùng ghi mức A hồi tố", "không xin phép hồi tố" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("registry Message-ID chống nạp trùng", "_thu_da_nap.json" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("chờ đối tác cần bằng chứng mong phản hồi", "BẰNG CHỨNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("chạy lại digest sau lỗi là hợp lệ", "lần lỗi là hợp lệ" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("nhật ký nạp mail append-only dựng lại được registry", "_thu_nhat_ky" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("mất cả registry lẫn nhật ký thì chỉ đề xuất, không tự nạp", "ỨNG VIÊN" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("nhật ký sự kiện PREPARED/COMMITTED kèm payload phục hồi", "PREPARED" in docs["X3_CUAVAO_TEMPLATE.md"] and "PAYLOAD PHỤC HỒI" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("ghi sổ idempotent theo khóa + operation_id", "khoa + operation_id" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("registry chỉ dựng từ COMMITTED", "CHỈ dựng từ" in docs["X3_CUAVAO_TEMPLATE.md"] or "registry CHỈ dựng" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("fallback thiếu Message-ID đủ mạnh và duy nhất", "tiêu đề chuẩn hóa" in docs["X3_CUAVAO_TEMPLATE.md"] and "khóa nào khác" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("staging bền vững lưu TRƯỚC khi append PREPARED", "STAGING trước, PREPARED sau" in docs["X3_CUAVAO_TEMPLATE.md"] and "_thu_staging" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("index áp thao tác cho ghi idempotent, sổ người đọc không mang khóa máy", "_thu_ap_dung" in docs["X3_CUAVAO_TEMPLATE.md"] and "operation_id" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("mỗi mail đúng hai sự kiện, PREPARED đứng trước, COMMITTED không mồ côi", "đúng HAI sự kiện" in docs["X3_CUAVAO_TEMPLATE.md"] and "COMMITTED không có PREPARED" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("Conversation-ID duy nhất một dòng THU", "MỘT dòng THU" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("registry là danh sách chuỗi khóa", "DANH SÁCH CHUỖI" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("khóa một dạng duy nhất, msgId kiểu cũ chỉ qua migration", '"khoa" DUY NHẤT' in docs["X3_CUAVAO_TEMPLATE.md"] and "migration" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("khóa fallback serialize cố định FB-sha256", "FB-<sha256(" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("index đối chiếu sổ trước ghi sau, đóng khe chết giữa ghi sổ và ghi index", "ĐỐI CHIẾU trước ghi sau" in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ bổ sung index" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("staging dọn mức A theo bốn điều kiện, có thời gian đệm", "DỌN STAGING" in docs["X3_CUAVAO_TEMPLATE.md"] and "@NHIP.DEMSTAGING" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("staging mỗi mail một thư mục tên sha256 của khóa", "sha256(khóa)" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("tên đính kèm basename thuần, không thoát đường dẫn", "BASENAME thuần" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("manifest dọn ghi trước khi xóa staging", "MANIFEST DỌN" in docs["X3_CUAVAO_TEMPLATE.md"] and "_thu_don_staging" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("sau COMMITTED index bằng đúng tập thao tác payload", "không thừa không thiếu" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("CHỜ TÔI đủ năm điều, yêu cầu phải nhắm vào mình từ phần vừa viết", "đủ NĂM điều" in docs["X3_CUAVAO_TEMPLATE.md"] and "NHẮM VÀO MÌNH" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("digest chống lặp bằng khóa nội dung, không phải khóa ngày", "khóa NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("digest có khuôn trình bày bắt buộc đúng thứ tự", "KHUÔN BẮT BUỘC" in docs["X3_CUAVAO_TEMPLATE.md"] and "LÀM GÌ" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("tên và bí danh người dùng khai ở @NHIP.TENGOI, tự lấy khi cài", "@NHIP.TENGOI" in docs["X3_CUAVAO_TEMPLATE.md"] and "@NHIP.TENGOI" in docs["X0_CAUHINH_TEMPLATE.md"]),
-        ("giờ quét thật đọc từ nguồn @NHIP.TRANGTHAI khai ở X0", "@NHIP.TRANGTHAI" in docs["X3_CUAVAO_TEMPLATE.md"] and "@NHIP.TRANGTHAI" in docs["X0_CAUHINH_TEMPLATE.md"]),
-        ("tình trạng dữ liệu và việc quá hạn nằm TRONG hash, cảnh báo cũ gửi một lần", "PHẢI nằm trong hash" in docs["X3_CUAVAO_TEMPLATE.md"] and "MỘT lần" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("sự kiện người dùng ghi mức A hồi tố", "không xin phép hồi tố" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("registry Message-ID chống nạp trùng", "_thu_da_nap.json" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("chờ đối tác cần bằng chứng mong phản hồi", "BẰNG CHỨNG" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("chạy lại digest sau lỗi là hợp lệ", "lần lỗi là hợp lệ" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("nhật ký nạp mail append-only dựng lại được registry", "_thu_nhat_ky" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("mất cả registry lẫn nhật ký thì chỉ đề xuất, không tự nạp", "ỨNG VIÊN" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("nhật ký sự kiện PREPARED/COMMITTED kèm payload phục hồi", "PREPARED" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "PAYLOAD PHỤC HỒI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("ghi sổ idempotent theo khóa + operation_id", "khoa + operation_id" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("registry chỉ dựng từ COMMITTED", "CHỈ dựng từ" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) or "registry CHỈ dựng" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("fallback thiếu Message-ID đủ mạnh và duy nhất", "tiêu đề chuẩn hóa" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "khóa nào khác" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("staging bền vững lưu TRƯỚC khi append PREPARED", "STAGING trước, PREPARED sau" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "_thu_staging" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("index áp thao tác cho ghi idempotent, sổ người đọc không mang khóa máy", "_thu_ap_dung" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "operation_id" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("mỗi mail đúng hai sự kiện, PREPARED đứng trước, COMMITTED không mồ côi", "đúng HAI sự kiện" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "COMMITTED không có PREPARED" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("Conversation-ID duy nhất một dòng THU", "MỘT dòng THU" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("registry là danh sách chuỗi khóa", "DANH SÁCH CHUỖI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("khóa một dạng duy nhất, msgId kiểu cũ chỉ qua migration", '"khoa" DUY NHẤT' in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "migration" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("khóa fallback serialize cố định FB-sha256", "FB-<sha256(" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("index đối chiếu sổ trước ghi sau, đóng khe chết giữa ghi sổ và ghi index", "ĐỐI CHIẾU trước ghi sau" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "CHỈ bổ sung index" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("staging dọn mức A theo bốn điều kiện, có thời gian đệm", "DỌN STAGING" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "@NHIP.DEMSTAGING" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("staging mỗi mail một thư mục tên sha256 của khóa", "sha256(khóa)" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("tên đính kèm basename thuần, không thoát đường dẫn", "BASENAME thuần" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("manifest dọn ghi trước khi xóa staging", "MANIFEST DỌN" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "_thu_don_staging" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("sau COMMITTED index bằng đúng tập thao tác payload", "không thừa không thiếu" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("CHỜ TÔI đủ năm điều, yêu cầu phải nhắm vào mình từ phần vừa viết", "đủ NĂM điều" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "NHẮM VÀO MÌNH" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("digest chống lặp bằng khóa nội dung, không phải khóa ngày", "khóa NỘI DUNG" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("digest có khuôn trình bày bắt buộc đúng thứ tự", "KHUÔN BẮT BUỘC" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "LÀM GÌ" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
+        ("tên và bí danh người dùng khai ở @NHIP.TENGOI, tự lấy khi cài", "@NHIP.TENGOI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "@NHIP.TENGOI" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("giờ quét thật đọc từ nguồn @NHIP.TRANGTHAI khai ở X0", "@NHIP.TRANGTHAI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "@NHIP.TRANGTHAI" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("tình trạng dữ liệu và việc quá hạn nằm TRONG hash, cảnh báo cũ gửi một lần", "PHẢI nằm trong hash" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"]) and "MỘT lần" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
         ("đã cũ định nghĩa tất định: chưa quét trong phiên hiện tại", "TẤT ĐỊNH" in docs["X5_HESO_TEMPLATE.md"] and "PHIÊN hiện tại" in docs["X5_HESO_TEMPLATE.md"]),
         ("schema @NHIP.TRANGTHAI bắt buộc, FAILED hay thiếu coi là dữ liệu cũ", "last_success_utc" in docs["X0_CAUHINH_TEMPLATE.md"] and "DỮ LIỆU CŨ" in docs["X0_CAUHINH_TEMPLATE.md"]),
-        ("khóa digest đã gửi lưu bền ở @NHIP.DAUGUI, ghi sau xác nhận", "@NHIP.DAUGUI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.DAUGUI" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("khóa digest đã gửi lưu bền ở @NHIP.DAUGUI, ghi sau xác nhận", "@NHIP.DAUGUI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.DAUGUI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
     ] if not dk]
     kiem("12. luật nghiệp vụ then chốt có mặt (37 luật)", not thieu_luat, str(thieu_luat))
 
@@ -3674,6 +3729,16 @@ def kiem_email(goc, so):
                 loi_staging.append(f"{k}: thiếu đính kèm {dk['ten']}")
             elif f.stat().st_size != dk["bytes"] or sha_file(f) != dk["sha256"]:
                 loi_staging.append(f"{k}: đính kèm {dk['ten']} sai sha256 hay byte")
+    # 12j2. staging MỒ CÔI: thư mục không có khóa nào trong nhật ký (crash giữa
+    #       lưu staging và append PREPARED, X3E mục 2); báo, người duyệt mới xóa.
+    if goc_staging.is_dir():
+        co_khoa = {hashlib.sha256(k.encode("utf-8")).hexdigest() for k in luot}
+        mo_coi = sorted(d.name for d in goc_staging.iterdir()
+                        if d.is_dir() and d.name not in co_khoa)
+        if mo_coi:
+            loi_staging.append(
+                f"{len(mo_coi)} thư mục staging mồ côi ({mo_coi[0][:12]}...): không khóa"
+                f" nào trong nhật ký, trình người dùng duyệt rồi mới xóa (mức B)")
     ket.append(("12j. staging đúng vòng đời: còn thì đúng nội dung, vắng thì có manifest dọn",
                 not loi_staging, "; ".join(loi_staging[:3])))
 
@@ -4081,7 +4146,7 @@ so: THU
 
 Một dòng một LUỒNG mail, mã #L-<NNN>; luồng nhận diện bằng Conversation-ID.
 Chống nạp trùng bằng REGISTRY `_so\_thu_da_nap.json` (máy sinh, giữ TẬP mọi
-Message-ID đã nạp; Message-ID cuối ở đây chỉ để tra nhanh), theo X3 mục 6.
+Message-ID đã nạp; Message-ID cuối ở đây chỉ để tra nhanh), theo X3E.
 Trạng thái: CHỜ TÔI · CHỜ ĐỐI TÁC · THEO DÕI · ĐÃ ĐÓNG · BỎ QUA.
 Người dùng nói "không cần theo luồng này" một lần: chuyển BỎ QUA, ghi lý do, KHÔNG
 bao giờ nhắc lại trừ khi có mail mới mang cam kết hay số liệu.

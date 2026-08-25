@@ -17,6 +17,7 @@ ro là PHÊ DUYỆT trước khi làm, không phải ghi chép sau khi làm.
 X0 CẤU HÌNH   nguồn duy nhất mọi tham số, giữ rev và profile
 X1 CẤM        X2 PHÁT HÀNH        X3 CỬA VÀO        X4 RÀ SOÁT
 X5 MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ              X9 cài đặt, chạy một lần
+X3E EMAIL: pipeline mail đầy đủ, CHỈ nạp khi bật profile EMAIL
 ```
 
 X1 tới X5 là luật, TRỎ về mục X0; cần giá trị thì đọc đúng mục X0 lúc dùng, cấm

@@ -813,6 +813,16 @@ def kiem_email(goc, so):
                 loi_staging.append(f"{k}: thiếu đính kèm {dk['ten']}")
             elif f.stat().st_size != dk["bytes"] or sha_file(f) != dk["sha256"]:
                 loi_staging.append(f"{k}: đính kèm {dk['ten']} sai sha256 hay byte")
+    # 12j2. staging MỒ CÔI: thư mục không có khóa nào trong nhật ký (crash giữa
+    #       lưu staging và append PREPARED, X3E mục 2); báo, người duyệt mới xóa.
+    if goc_staging.is_dir():
+        co_khoa = {hashlib.sha256(k.encode("utf-8")).hexdigest() for k in luot}
+        mo_coi = sorted(d.name for d in goc_staging.iterdir()
+                        if d.is_dir() and d.name not in co_khoa)
+        if mo_coi:
+            loi_staging.append(
+                f"{len(mo_coi)} thư mục staging mồ côi ({mo_coi[0][:12]}...): không khóa"
+                f" nào trong nhật ký, trình người dùng duyệt rồi mới xóa (mức B)")
     ket.append(("12j. staging đúng vòng đời: còn thì đúng nội dung, vắng thì có manifest dọn",
                 not loi_staging, "; ".join(loi_staging[:3])))
 

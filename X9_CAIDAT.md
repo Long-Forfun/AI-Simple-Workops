@@ -10,7 +10,8 @@ Phần còn lại điền dần đúng lúc cần.
 ```
 INSTRUCTION_WORKOPS      dán vào Project instructions, dùng nguyên văn, không sửa
 X0_CAUHINH_TEMPLATE      phiên đầu AI đổi tên thành X0_CAUHINH_<MÃ> rồi điền
-X1..X5 TEMPLATE          luật, trỏ về X0, không phải điền; AI đổi tên theo mã cùng lượt
+X1..X5, X3E TEMPLATE     luật, trỏ về X0, không phải điền; AI đổi tên theo mã
+                         cùng lượt (X3E chỉ được nạp khi bật EMAIL)
 X9 file này              đọc ở phiên đầu, xong thì thôi
 _so\                     NĂM sổ lõi rỗng + PLANNING (mức C) + THU (chỉ khi
                          bật EMAIL) + hai view máy sinh, copy nguyên
@@ -31,7 +32,9 @@ chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
    việc chính?
 2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
    thì khai các cửa)
-3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn)
+3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
+   là PHẦN MỀM thì hỏi thêm phạm vi tổ chức theo X0 C2 @DUAN.PHANMEM: repo,
+   thành phần, môi trường, nơi chạy thật)
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:

@@ -13,7 +13,8 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ duy
    nhất theo X0 C11: chỉ THÊM lệnh hay từ cấm để siết chặt là B; gỡ, nới vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
-   hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành
+   hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành · deploy môi trường CHẠY THẬT
+   của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt theo ngoại lệ C11 · dọn hay xóa nháp
@@ -162,28 +163,10 @@ X0_INDEX.md   view máy sinh của X0: rev, kho, profile, dự án, vị trí m�
               đầu ra phải đọc từ X0 đúng mục, không lấy từ view
 _quan_sat_truoc.json  cache máy sinh của bộ quan sát (giữ luật ổn định hai lần
               quét), không phải sổ, không sửa tay, mất thì tự dựng lại
-_thu_da_nap.json  (profile EMAIL) registry máy sinh, DANH SÁCH CHUỖI khóa đã
-              nạp, chống nạp trùng khi quét lại; mất thì dựng lại từ _thu_nhat_ky
-_thu_nhat_ky.ndjson  (profile EMAIL) nhật ký SỰ KIỆN append-only, máy sinh,
-              NGUỒN SỰ THẬT: mỗi mail đúng hai sự kiện, PREPARED (kèm payload
-              phục hồi: đường dẫn staging cộng danh sách thao tác ghi sổ chuẩn
-              hóa) đứng TRƯỚC COMMITTED; registry chỉ dựng từ COMMITTED; mất cả
-              nhật ký lẫn registry thì lần quét đầu chỉ đề xuất, không tự nạp;
-              mất RIÊNG nhật ký khi registry còn: GIỮ registry làm rào chống
-              nạp trùng, CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH
-_thu_ap_dung.json  (profile EMAIL) index máy sinh cho ghi idempotent: mỗi thao
-              tác đã áp một dòng "khóa + operation_id" trỏ "sổ + mã dòng"; sổ
-              người đọc không mang cột khóa máy; mất thì dựng lại bằng đối
-              chiếu payload với sổ
-_thu_staging\ (profile EMAIL) vùng bền vững máy sinh giữ nguyên văn thư và
-              đính kèm, mỗi mail một thư mục tên sha256(khóa), lưu TRƯỚC khi
-              append PREPARED; dọn mức A theo bốn điều kiện X3 mục 6
-              (COMMITTED, đích và sha xác minh, .eml bằng chứng đã chuyển,
-              qua đệm @NHIP.DEMSTAGING)
-_thu_don_staging.json  (profile EMAIL) manifest dọn máy sinh, ghi TRƯỚC khi
-              xóa staging: mỗi khóa một mục purged_at, eml_final_path,
-              attachment_final_paths, sha256; là căn cứ để staging vắng của
-              mail đã COMMITTED không bị coi là lệch
+_thu_*            (profile EMAIL) năm file và vùng máy sinh của pipeline mail
+              (registry, nhật ký sự kiện, index, staging, manifest dọn): vai
+              trò, schema và luật phục hồi TẤT CẢ nằm ở X3E; mất riêng nhật
+              ký khi registry còn: GIỮ registry, cấm dựng lại từ tập rỗng
 _quan_sat_bo.txt  danh sách đường dẫn công ty muốn loại khỏi bộ quan sát (một
               dòng một mục), người dùng sửa tay được, mặc định không có
 ```
