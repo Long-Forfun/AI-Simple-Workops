@@ -19,9 +19,10 @@ làm việc được: ba câu bắt buộc, một câu profile.
    thư mục mây đồng bộ
 2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN file INSTRUCTION_WORKOPS_v11.md
    vào Project instructions. Không sửa chữ nào. VIỆC TAY DUY NHẤT PHẢI LÀM ĐÚNG
-3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5 và X9 vào tài liệu
-   của Project. Dùng Cowork thuần thì bỏ qua được
-4  Mở phiên Cowork gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
+3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5, X9, và X3E nếu
+   bật profile EMAIL, vào tài liệu của Project. Dùng Cowork thuần thì bỏ qua được
+4  Mở phiên Cowork (loại phiên Claude đọc ghi được file trên máy, làm trên
+   máy tính) gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
    chạy được, câu bốn chọn profile), đổi tên file theo mã công ty, điền X0, dựng
    cây folder mặc định, sinh X0_INDEX và bảng điều khiển, chạy thử một vòng mức
    A và một vòng mức C
@@ -67,6 +68,45 @@ FILE: GHICHU_DOI_MOI_v24_20260824.md
 File này cho người đánh giá. Không phải luật, không cần copy vào bộ chạy.
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
+
+## Vòng 26: vá theo hội đồng vòng 2 (20260825, điểm vòng 2: 77,5/100)
+
+Hội đồng chấm lại sau vòng 24-25: VẬN HÀNH 7,0 (tụt vì bản vá backup tự sinh
+lỗi) · KHÔNG SAI 7,5 · KHÔNG MISS 7,5 · THÔNG MINH 8,0 · ĐƠN GIẢN 8,0 · TOKEN
+8,5. Ba giám khảo chạy thật kịch bản đứt gãy và bắt được lỗi do chính vòng vá
+trước sinh ra. Vá:
+
+1. BACKUP HỎNG KÉP (3 giám khảo cùng bắt): đường dẫn chứa byte backspace 0x08
+   (escape bị nuốt khi soạn) VÀ sao đệ quy _so vào con của _so. Sửa: chỉ sao
+   năm sổ lõi + PLANNING + THU, loại _lich_su, _thu_staging, _inbox; phép
+   kiểm 4 thêm CẢ DẢI control char để lớp lỗi này máy tự chặn từ nay.
+2. CHỌN X0 TẤT ĐỊNH: sau git pull, X0_CAUHINH_TEMPLATE đứng trước bản mã theo
+   bảng chữ nên kiem_van_hanh đọc nhầm rev 0, báo "chưa cài" trên hệ đang
+   chạy. Sửa: glob loại _TEMPLATE và conflicted, nhiều ứng viên là LỆCH (0c);
+   12e cũng lọc template và nhận dòng mang nhãn (EMAIL) đúng khuôn, fixture
+   sửa theo (fixture cũ che đúng lỗi này). kiem_van_hanh lên v22.
+3. TRỤC SỰ THẬT PHẢI TỒN TẠI: 0d đòi NHATKY khi rev >= 1, 0e đòi THU khi
+   pipeline EMAIL có dấu vết; 0b quét conflicted cả bộ X ở gốc; thông điệp
+   phép 0 tách VIEW (sinh lại mức A) khỏi SỔ (khôi phục mức C); 12d khi nhật
+   ký mất đổi chẩn đoán "GIỮ registry", hết xúi xóa.
+4. BANNER ĐANG GHI có nguồn số: bảng giữ bộ đếm cho banner, bảng cũ hơn lượt
+   ghi gần nhất thì số ĐANG GHI đọc lại từ NHATKY trước khi tin.
+5. ĐÍNH KÈM QUÁ LỚN hết đá pipeline: payload khai cờ de_ngoai kèm lý do,
+   12j bỏ qua mục mang cờ; luật viết cả hai đầu (X3E mục 1 và 2).
+6. PHẦN MỀM sâu thêm theo goal: SECRET không vào kho, sổ, phiên (lộ = VIEC
+   mức gấp); TAILIEU trỏ được vào repo (dạng "Ở đâu" thứ tư); bản đồ mức
+   thao tác repo (merge vào nhánh CI/CD deploy chạy thật = C, dev/staging =
+   A, danh mục folder-C không áp trong repo); dump, log mang dữ liệu khách
+   theo phạm vi C5; ví dụ đã điền và lối "chưa rõ" cho người không kỹ thuật.
+7. Xác nhận BẰNG CHỮ của người dùng có thẩm quyền trong phiên = mức B (hết
+   đường cụt "sếp nói trực tiếp vẫn là nguồn D"); thủ tục BÀN GIAO chuyển
+   thành luật ở X3E mục 2 (X0 chỉ giữ giá trị); vòng quý có trigger tất định
+   (lượt tạo NHATKY quý mới); C14 thêm hàng X3E, X5 thêm C11 C12; C0 và
+   INSTRUCTION hết tàn dư "thang A-D thuộc REGULATED"; phiên CHAT bật EMAIL
+   đưa thêm X3E vào Project (ba tài liệu cùng sửa); README định nghĩa Cowork,
+   nói rõ cần máy tính, ví dụ <gốc>, TextEdit cho Mac, câu tắt thứ năm.
+8. Trần theo vai đọc: X0 lên 16.000 (đọc theo mục, thuế là X0_INDEX), X4 lên
+   5.500 (chỉ đọc khi RA_SOAT); phép kiểm 10 phủ cả tham chiếu "X3E mục n".
 
 ## Vòng 25: tách X3E, phạm vi phần mềm, vét nốt danh sách treo (20260825)
 
@@ -130,7 +170,7 @@ trực). Chưa vá, ghi nhận cho vòng sau: tách X3E_EMAIL (gỡ bom trần X
 trong trích dẫn cho CHỜ TÔI · nguồn scan không đọc được chữ · thủ tục bàn
 giao người dùng · trạng thái dự án NGỪNG · staging mồ côi.
 
-## Vá 20260825: phát hành qua git, chạy được trên Windows, cài đặt ba bước
+## Vá 20260825: phát hành qua git, chạy được trên Windows, cài đặt gọn
 
 Không đổi luật vận hành, không đổi INSTRUCTION, không đổi X1 tới X5. Hai phần:
 
@@ -850,15 +890,15 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
-INSTRUCTION 8.000 ký tự · X0 14.500 · X5 16.000 · X3 4.500 · X3E 12.000 (chỉ
-nạp khi bật EMAIL) · X9 6.500 · X4
-4.200 · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
+INSTRUCTION 8.000 ký tự · X0 16.000 (đọc theo mục, thuế là X0_INDEX) · X5
+16.000 · X3 4.500 · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4 5.500
+(chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
 là FAIL.
 
 ## Ghi chú phiên CHAT
 
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
-X5, X9 qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
+X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ (~16.500 token cộng INSTRUCTION); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -901,9 +941,9 @@ lệch thì dừng. X0 `rev 0`: chế độ CÀI ĐẶT theo X9; khi rev 0, đi�
 số thiếu của CÙNG việc vào MỘT lượt hỏi, update ngược X0, rồi làm tiếp.
 
 Khối luật gắn nhãn profile (REGULATED, PARALLEL, AUTOMATED, EMAIL) chỉ áp khi X0
-C0 bật profile đó; không bật thì bỏ qua khối, không đọc. Một mục có thể phục vụ
-nhiều profile (X0 C9 dùng cho AUTOMATED và EMAIL): bật MỘT trong các profile đó
-là phải đọc mục ấy.
+C0 bật profile đó; không bật thì bỏ qua khối, không đọc. Một mục có thể trộn: các
+NGƯỠNG CORE trong X0 C9 mọi profile đều đọc khi X3, X4 trỏ tới; dòng gắn nhãn
+(AUTOMATED, EMAIL) chỉ đọc khi bật profile đó.
 
 # 2. MỞ PHIÊN
 
@@ -1029,8 +1069,9 @@ không đọc, không hỏi.
 
 ```
 @PROFILE   CORE luôn bật: việc, tài liệu, quyết định, mức A B C, ghi sổ
-  [ ] REGULATED   mức nguồn A-D, phạm vi chi tiết, phát hành chính thức, hồ sơ
-                  nhà nước (kích hoạt C5 C7 chi tiết, X2 đầy đủ)
+  [ ] REGULATED   nguồn chỉ định, phạm vi chi tiết, phát hành chính thức, hồ
+                  sơ nhà nước (thang mức nguồn A-D là CORE theo C7; REGULATED
+                  kích hoạt C5 và phần chi tiết C7, X2 đầy đủ)
   [ ] PARALLEL    kho nhiều cửa, nhiều phiên cùng ghi (luật cửa ở C1, kiểm trùng
                   mã ở X5 mục 3 bước 2)
   [ ] AUTOMATED   tác vụ hẹn giờ, giám sát (C9, X3 nhịp, luật phiên không
@@ -1070,7 +1111,9 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 ```
 
 Cột "Ở đâu" của sổ TAILIEU chỉ nhận: "Kho <đường dẫn tương đối từ gốc kho>" ·
-"Project <đường dẫn doc>" · "Drive <ID folder>". Ngoài ba dạng đó là cấm.
+"Project <đường dẫn doc>" · "Drive <ID folder>" · "Repo <mã PM> <đường dẫn
+trong repo>@<commit hay tag>" (chỉ cho dòng thuộc dự án @DUAN.PHANMEM, ô
+sha256 bỏ trống vì repo tự giữ lịch sử). Ngoài bốn dạng đó là cấm.
 Trỏ tới MỘT FILE thì ghi tới tận tên file; trỏ tới cả BỘ HỒ SƠ thì ghi đường dẫn
 thư mục kết thúc bằng dấu \ và bỏ trống ô sha256 (bộ quan sát chỉ đối chiếu sha
 cho dòng trỏ file).
@@ -1089,7 +1132,21 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
-  commit hay PR; deploy môi trường CHẠY THẬT là việc mức C (X5 mục 1)
+  commit hay PR. MỨC cho thao tác repo: sửa code trên nhánh trong việc đã
+  mở là A · deploy dev, staging là A của dự án đó · deploy môi trường CHẠY
+  THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy thật, migration dữ liệu
+  chạy thật, force-push hay xóa lịch sử là C (X5 mục 1); danh mục "cấu trúc
+  folder hàng loạt là C" KHÔNG áp cho bên trong repo. Một phần mềm nhiều
+  repo: mỗi repo một vế trên cùng dòng. Đặc tả, tài liệu sống cùng code nằm
+  trong repo, TAILIEU trỏ dạng "Repo" theo C1.
+  SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
+  bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng
+  phần mềm (vault, secret manager). Lộ secret: VIEC mức gấp, thu hồi
+  trước, ghi sau. Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu
+  đó coi là đầu ra có phạm vi theo C5, không kéo về kho tùy tiện.
+  Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
+  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn. Mục nào
+  chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
@@ -1198,6 +1255,9 @@ Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
 mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo <tên nguồn> <bản, ngày>". Mức
 tối thiểu áp cho mọi dữ kiện KHÔNG có nguồn chỉ định.
 
+Xác nhận BẰNG CHỮ của người dùng ngay trong phiên, khi người dùng là bên có
+thẩm quyền của dữ kiện đó: ghi mức B, nguồn "xác nhận trong phiên <ngày>";
+chỉ lời KỂ về bên thứ ba ("đối tác nói...") mới là D.
 Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file kèm cờ CHƯA
 ĐỌC ĐƯỢC, CẤM rút dữ kiện từ đó cho tới khi có bản đọc được hay người dùng
 đọc tay và xác nhận từng số. Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
@@ -1240,8 +1300,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  COMMITTED và xác minh, mặc định 30 ngày
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
                  định 50 MB; vượt trần xử theo X3E mục 2
-@NHIP.BANGIAO    <người dùng thay người cũ: đổi TAIKHOAN, TENGOI là mức B;
-                 luồng CHỜ TÔI đang mở điểm danh lại một lượt, hoặc "chưa có">
+@NHIP.BANGIAO    <tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
+                 Thủ tục bàn giao là LUẬT, ở X3E mục 2 khối BÀN GIAO
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
                  quét (file status máy sinh); digest đọc giờ quét THẬT từ
                  đây, không lấy giờ chạy báo cáo>. Schema tối thiểu BẮT BUỘC:
@@ -1307,8 +1367,11 @@ X1  đọc C1 (ba dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (l
     tên) · C8 (ký tự, số, động từ)
 X2  đọc C5 · C6 · C7 · C8 · C10
 X3  đọc C7 (mức nguồn khi rút dữ kiện) · C9
+X3E đọc C9 (@NHIP.HOPTHU, TAIKHOAN, TENGOI, DEMSTAGING, TRANDINHKEM,
+    TRANGTHAI, DAUGUI, BANGIAO; chỉ khi bật EMAIL)
 X4  đọc C9 (các ngưỡng rà)
-X5  đọc C0 · C1 (danh sách cửa cho mã G) · C2 · C3 · C4 · C13
+X5  đọc C0 · C1 (danh sách cửa cho mã G, @DUONG.PROJECT) · C2 · C3 · C4 ·
+    C11 (ngoại lệ siết chặt) · C12 (dòng nhắc của bảng) · C13
 ```
 
 Rev hiện tại: **0, chưa cài đặt**.
@@ -1462,6 +1525,7 @@ BANG_DIEU_KHIEN, không bằng trí nhớ. Phát hiện hai bộ cùng đọc m�
 
 ```
 CHẶNG 1  đọc, phân loại, rút dữ kiện, lập danh sách file cần tải, ghi _INBOX
+         (tọa độ ở X0 C1 @DUONG.INBOX)
 CHẶNG 2  chỉ phiên chạm được kho: tải về đúng folder, đổi tên chuẩn, ghi sổ,
          chuyển _da_nap
 ```
@@ -1513,7 +1577,9 @@ hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 
 Không bật EMAIL: bỏ qua, mail đi qua bốn cửa như file thường. Bật EMAIL: đọc
-X3E_EMAIL_<MÃ>.md, luật đầy đủ của pipeline mail nằm trọn ở đó.
+X3E_EMAIL_<MÃ>.md, luật đầy đủ của pipeline mail nằm trọn ở đó; khi đó mail
+KHÔNG đi qua _INBOX và event_id (chống trùng bằng khóa và registry của X3E),
+X3 chỉ còn áp mục 4 xếp chỗ và mục 5 bảng chờ duyệt cho mail.
 
 ════════════════════════════════════════
 FILE: X3E_EMAIL_TEMPLATE.md
@@ -1551,7 +1617,7 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
             phục hồi không append PREPARED mới, dùng lại payload cũ.
             Thứ tự ghi an toàn bốn bước:
             1  STAGING trước, PREPARED sau: lưu nguyên văn thư (.eml hay body
-               đầy đủ, KHÔNG rỗng) cùng MỌI đính kèm vào thư mục
+               đầy đủ, KHÔNG rỗng) cùng MỌI đính kèm (TRỪ mục mang cờ de_ngoai, mục 2) vào thư mục
                _so\_thu_staging\<sha256(khóa)>\ (mỗi mail MỘT thư mục riêng,
                tên bằng đúng sha256 của khóa, không dùng chung), rồi mới
                append PREPARED có PAYLOAD PHỤC HỒI: convId, người gửi, thời
@@ -1560,7 +1626,8 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
                đối, cấm chấm chấm, cấm symlink thoát ra), sha256 của file
                .eml hay body, danh sách đính kèm kèm sha256 và byte của TỪNG
                file (tên đính kèm là BASENAME thuần, không dấu phân cách
-               đường dẫn, không chấm chấm), danh sách THAO TÁC ghi sổ đã
+               đường dẫn, không chấm chấm; file vượt trần thì khai cờ
+               de_ngoai kèm lý do thay cho sha256, xem mục 2), danh sách THAO TÁC ghi sổ đã
                chuẩn hóa: mỗi thao tác đủ operation_id (DUY NHẤT trong một
                mail), sổ đích (THU VIEC DUKIEN TAILIEU QUYETDINH), mã dòng,
                nội dung dòng.
@@ -1586,7 +1653,9 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
             nhật ký hỏng, rà ngay. Mất registry: dựng lại từ COMMITTED. Mất
             index: dựng lại bằng cách đối chiếu thao tác trong payload với sổ.
             Mất CẢ nhật ký lẫn registry: lần quét đầu chỉ xuất danh sách
-            ỨNG VIÊN chờ duyệt, không tự nạp.
+            ỨNG VIÊN chờ duyệt, không tự nạp. Mất RIÊNG nhật ký khi
+            registry còn: GIỮ NGUYÊN registry làm rào chống nạp trùng,
+            CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH.
             DỌN STAGING là việc mức A, tự làm khi đủ BỐN điều: mail đã
             COMMITTED · file đích và sha256 đã xác minh · .eml cần làm bằng
             chứng đã chuyển sang 04_Trao_doi hay vùng lưu chính · đã qua thời
@@ -1652,9 +1721,15 @@ INLINE      "[xem trả lời bên dưới từng mục]") vẫn tính là PHẦ
             VIẾT khi xét năm điều CHỜ TÔI; chỉ phần trích dẫn nguyên văn không
             có chữ mới mới bị cắt
 ĐÍNH KÈM    đính kèm vượt trần @NHIP.TRANDINHKEM (X0 C9): KHÔNG kéo vào
-QUÁ LỚN     staging hay kho đồng bộ; ghi dòng TAILIEU trỏ nguồn (link, mã thư)
-            kèm sha256 nếu lấy được, mở VIEC "tải tay" cho người dùng; mail đó
-            vẫn COMMITTED với ghi chú đính kèm để ngoài
+QUÁ LỚN     staging hay kho đồng bộ; trong payload PREPARED mục đó khai cờ
+            de_ngoai kèm lý do (phép kiểm 12j bỏ qua, không báo thiếu oan);
+            ghi dòng TAILIEU trỏ nguồn (link, mã thư) kèm sha256 nếu lấy
+            được, mở VIEC "tải tay" cho người dùng; mail vẫn COMMITTED
+BÀN GIAO    người dùng mới thay người cũ (giá trị khai @NHIP.BANGIAO, X0
+            C9): đổi @NHIP.TAIKHOAN, TENGOI là mức B; mọi luồng CHỜ TÔI
+            và CHỜ ĐỐI TÁC đang mở rà lại MỘT lượt (thư chào đích danh
+            người cũ xét lại theo TENGOI mới), digest kế tiếp ghi chú
+            "đã bàn giao <ngày>"
 STAGING     thư mục trong _thu_staging không có khóa nào trong nhật ký (crash
 MỒ CÔI      giữa lưu staging và append PREPARED): rà thấy thì báo, người dùng
             duyệt rồi mới xóa (mức B); không tự coi là rác
@@ -1691,7 +1766,7 @@ SỔ                                    ngưỡng theo X0 C9
     mâu thuẫn mà chưa đánh ĐÃ THAY
 HẠN VÀ ĐỒNG BỘ                        ngưỡng theo X0 C9
 14  giấy tờ hết hạn trong ngưỡng cảnh báo
-15  _INBOX chưa nạp quá ngưỡng
+15  _INBOX (@DUONG.INBOX, X0 C1) chưa nạp quá ngưỡng
 16  sổ kho phụ cũ hơn bản chính
 17  INSTRUCTION không khớp bản X0 khai ở instruction_yeu_cau
 18  có hơn một bản bộ X ngoài nơi giữ bản chính
@@ -1711,21 +1786,25 @@ EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
 29  staging vắng khi lượt chưa COMMITTED hay không có manifest dọn hợp lệ;
     staging còn nhưng thiếu .eml hay body, file rỗng, sai sha256; đính kèm
     khai trong payload thiếu file, sai sha256, sai byte, tên thoát đường dẫn
+29b thư mục staging không có khóa nào trong nhật ký (mồ côi): báo, người
+    dùng duyệt rồi mới xóa, mức B (X3E mục 2; máy dò bằng phép 12j2)
 30  tập mục index khác tập "khoa + operation_id" của các mail đã COMMITTED
     (thừa hay thiếu đều lệch), hoặc sổ với mã dòng trong index khác payload
 31  index trỏ tới mã dòng không tồn tại trong sổ đích (so đúng ô, không so
     chuỗi toàn văn)
 ```
 
-Phần dò được bằng máy (12, 17, 19, 22, 23 và schema bảng): có Python thì chạy từ gốc
-kho `python 00_Index\kiem_van_hanh.py 00_Index .` TRƯỚC (thiếu tham số gốc kho
-thì phần rà FILE 1 tới 5 bị bỏ qua), dán kết quả vào báo cáo;
+Phần dò được bằng máy (1, 2, 4 của FILE; 12, 17, 19, 22, 23; nhóm EMAIL 24
+tới 31; schema bảng; riêng 3 và 5 kiểm tay): có Python thì chạy từ gốc kho
+`python 00_Index\kiem_van_hanh.py 00_Index .` TRƯỚC (thiếu tham số gốc kho thì
+phần quan sát file 1, 2, 4 bị bỏ qua), dán kết quả vào báo cáo;
 không có Python thì kiểm tay đúng các dòng đó. Máy chỉ báo cáo, không sửa.
 Xuất bảng `| # | Loại lệch | Đối tượng | Chi tiết | Đề xuất |`. Sạch thì một dòng
 "sổ khớp thực tế <ngày>".
 
 Mỗi lần rà xong ghi MỘT dòng NHATKY tóm tắt các loại lệch (mức A); vòng quý
-đếm từ các dòng đó, không từ trí nhớ. Mỗi quý đọc thêm CHƯA KIỂM và MÂU THUẪN: cùng loại lệch từ 3 lần là thiếu luật, đề
+đếm từ các dòng đó, không từ trí nhớ. Lượt tạo file NHATKY quý mới (X5 mục
+3 bước 1) là lời nhắc TẤT ĐỊNH chạy vòng quý cho quý vừa đóng. Mỗi quý đọc thêm CHƯA KIỂM và MÂU THUẪN: cùng loại lệch từ 3 lần là thiếu luật, đề
 xuất vào X0 hoặc X1. Cùng câu hỏi lặp từ 2 lần là thiếu mục X0. Kết luận ghi QUYETDINH.
 
 # Năm câu tắt
@@ -1801,8 +1880,9 @@ Các luật kèm theo:
 THƯỜNG LỆ   trao đổi rời công ty (mail, tin công việc) không chứa cam kết, điều
             khoản, không phải tài liệu chính thức hay biểu mẫu nhà nước: bỏ plan,
             trình bản xem trước kèm bảng kiểm THƯỜNG LỆ của X2; người dùng xác
-            nhận gửi là chốt; ghi như mức B. Số liệu và tên định danh kỹ thuật
-            chỉ được xuất hiện khi đã có dòng DUKIEN đúng phạm vi, khi có thì
+            nhận gửi là chốt; ghi như mức B. Số liệu nghiệp vụ và tên định danh kỹ thuật
+            chỉ được xuất hiện khi đã có dòng DUKIEN đúng phạm vi (số hậu
+            cần của chính trao đổi miễn theo NGOẠI LỆ HẬU CẦN của X2), khi có thì
             bảng kiểm thêm dòng 1 và 2; số chưa có sổ, cam kết, điều khoản xuất
             hiện là hết thường lệ, nâng lên C đầy đủ. X1, X2 vẫn luôn đọc
 NHÁP        note, nháp mặc định KHÔNG vào TAILIEU (tạo là A, dọn là B); chỉ vào
@@ -1875,7 +1955,10 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    tự thời gian tin được, "mới nhất" chỉ có nghĩa trong một cửa). Bảng có thêm:
    khối "Tài liệu đang hoạt động" (tên, vN hiện hành, trạng thái, ở đâu, của các
    tài liệu đang trong chu kỳ) và một dòng nhắc lấy từ X0 C12 khi còn mục thiếu
-   chặn phát hành. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
+   chặn phát hành. Bảng giữ các BỘ ĐẾM cho banner mở phiên: quá hạn, chờ đối
+   tác quá ngưỡng, plan C treo, lượt ĐANG GHI còn trong NHATKY lúc sinh, số
+   ngày từ lần quét mail cuối; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
+   phải đọc lại từ NHATKY trước khi tin. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
    lên tài liệu Project (@DUONG.PROJECT ở X0 C1): nền tảng KHÔNG cho phiên tự
    ghi vào Project; CHAT chỉ đọc được bản người dùng đã tải, luôn kèm nhãn
    ngày của bảng và coi bản đó có thể cũ hơn kho
@@ -1985,8 +2068,10 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
 
-COWORK sao _so\ vào _so\_lich_suackup_<YYYYMMDD>\ tối đa một lần mỗi ngày,
-trước lượt ghi đầu tiên của ngày, giữ 7 bản gần nhất (mức A, không vào sổ).
+COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
+_thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\
+tối đa một lần mỗi ngày, trước lượt ghi đầu tiên của ngày, giữ 7 bản gần
+nhất (mức A, không vào sổ).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.
@@ -2108,8 +2193,9 @@ Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy �
 
 Công ty đã có đống file trước khi cài: KHÔNG đi từng mục _INBOX. Chạy
 kiem_van_hanh lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
-bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành, file
-cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
+bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành (căn
+cứ nhận diện: lời người dùng hay dấu vết _SIGNED, _NOP; KHÔNG suy từ tên
+suông), file cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
 khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới
@@ -2204,18 +2290,21 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
-    "X0_CAUHINH_TEMPLATE.md": 14500,
+    "X0_CAUHINH_TEMPLATE.md": 16000,  # đọc theo mục; thuế thường trực là X0_INDEX
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
     "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
-    "X4_RASOAT_TEMPLATE.md": 4200,
+    "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
     "X5_HESO_TEMPLATE.md": 16000,
     "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
-KY_TU_CAM = ["—", "–", "→", "←", "≈"]  # em-dash en-dash mũi tên xấp xỉ
+KY_TU_CAM = ["—", "–", "→", "←", "≈"] + [chr(c) for c in range(0x20)
+             if chr(c) not in "\n\t\r"]  # em/en-dash, mũi tên, xấp xỉ, control char
+# control char: hội đồng vòng 2 bắt được backspace 0x08 lọt vào đường dẫn
+# backup của X5 do escape bị nuốt khi soạn; dò cả dải để lớp lỗi này tuyệt chủng
 TRANG_THAI_HOP_LE = {
     "VIEC": "MỚI ĐANG LÀM CHỜ ĐỐI TÁC CHỜ DUYỆT TREO XONG HỦY",
     "DUKIEN": "CHƯA KIỂM ĐÃ KIỂM MÂU THUẪN ĐÃ THAY HẾT HẠN",
@@ -2436,7 +2525,7 @@ def main(goc):
                 g9 = Path(td9); s9 = g9 / "_so"; s9.mkdir()
                 if x0_hop is not None:
                     (g9 / "X0_CAUHINH_T.md").write_text(
-                        f"@NHIP.HOPTHU     {x0_hop}\n", encoding="utf-8")
+                        f"@NHIP.HOPTHU (EMAIL) {x0_hop}\n", encoding="utf-8")
                 else:
                     (g9 / "X0_CAUHINH_T.md").write_text("rong\n", encoding="utf-8")
                 if nk is not None:
@@ -2868,10 +2957,11 @@ def main(goc):
     for k in ["X1_CAM_TEMPLATE.md", "X2_PHATHANH_TEMPLATE.md", "X3_CUAVAO_TEMPLATE.md",
               "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md"]:
         muc_cua["X" + k[1]] = set(re.findall(r"^# (\d+)\.", docs[k], re.M))
+    muc_cua["X3E"] = set(re.findall(r"^# (\d+)\.", docs["X3E_EMAIL_TEMPLATE.md"], re.M))
     muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+)\.", docs["INSTRUCTION"], re.M))
     sai_ref = []
     for ten, nd in docs.items():
-        for dich, n in re.findall(r"(X[1-5]|INSTRUCTION) mục (\d+)", nd):
+        for dich, n in re.findall(r"(X[1-5]E?|INSTRUCTION) mục (\d+)", nd):
             if n not in muc_cua.get(dich, set()):
                 sai_ref.append((ten, f"{dich} mục {n}"))
     kiem("10. tham chiếu chéo tới mục có thật", not sai_ref, str(sorted(set(sai_ref))))
@@ -2915,7 +3005,15 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v21 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v22 · 20260825
+# v22, theo hội đồng vòng 2 (chạy thật 4 kịch bản đứt gãy): chọn X0 TẤT ĐỊNH,
+# loại _TEMPLATE và conflicted khỏi glob (sau git pull template rev 0 đứng
+# trước bản mã theo bảng chữ, hệ đang chạy bị báo "chưa cài" oan) · 0d đòi
+# NHATKY tồn tại khi rev >= 1 và THU khi pipeline EMAIL có dấu vết (trước đây
+# xóa trọn trục sự thật vẫn "hệ sạch") · 0b quét conflicted copy cả bộ X ở
+# gốc 00_Index · 12e nhận dòng mang nhãn (EMAIL) đúng khuôn template, lọc
+# template khỏi nguồn đọc · 12d khi nhật ký mất đổi chẩn đoán, hết xúi xóa
+# registry · 12j bỏ qua đính kèm mang cờ de_ngoai (vượt @NHIP.TRANDINHKEM).
 # v21, theo hội đồng đánh giá 6 lăng kính: phép 0 đòi sổ lõi TỒN TẠI trên đĩa
 # (trước đây doc() nuốt file vắng thành chuỗi rỗng, mất sổ mà PASS im lặng) ·
 # phép 0b dò conflicted copy của file sổ trong _so (đồng bộ mây sinh, trước
@@ -3648,16 +3746,20 @@ def kiem_email(goc, so):
                 f" và staging, cấm đọc lại hộp thư"))
 
     reg, reg_ok = doc_registry(doc(reg_p))
+    chi_tiet_12d = ((f"dạng sai (phải là danh sách chuỗi khóa); " if not reg_ok else "")
+                    + f"thiếu {sorted(committed - reg)[:3]}, thừa {sorted(reg - committed)[:3]};"
+                    + (" nhật ký MẤT: xem 12a, GIỮ NGUYÊN registry làm rào chống nạp"
+                       " trùng, KHÔNG phải chặn oan, cấm xóa"
+                       if not nk_p.is_file() and reg
+                       else " thừa nghĩa là registry chặn mail chưa từng nạp"))
     ket.append(("12d. registry là DANH SÁCH CHUỖI và BẰNG ĐÚNG tập khóa COMMITTED",
-                reg_ok and reg == committed,
-                (f"dạng sai (phải là danh sách chuỗi khóa); " if not reg_ok else "")
-                + f"thiếu {sorted(committed - reg)[:3]}, thừa {sorted(reg - committed)[:3]};"
-                f" thừa nghĩa là registry chặn mail chưa từng nạp"))
+                reg_ok and reg == committed, chi_tiet_12d))
 
     # 12e. hộp thư so CHÍNH XÁC sau chuẩn hóa, không substring. EMAIL đã chạy
     #      mà X0 chưa khai @NHIP.HOPTHU là LỆCH cấu hình, không phải BỎ QUA
-    x0nd = "".join(doc(q) for q in sorted(goc.glob("X0_CAUHINH_*.md")))
-    m = re.search(r"@NHIP\.HOPTHU\s+(\S+@\S+)", x0nd)
+    x0nd = "".join(doc(q) for q in sorted(goc.glob("X0_CAUHINH_*.md"))
+                   if "TEMPLATE" not in q.name)
+    m = re.search(r"@NHIP\.HOPTHU(?:\s*\(EMAIL\))?\s+(\S+@\S+)", x0nd)
     if m:
         hop_khai = m.group(1).strip().lower()
         sai_hop = sorted(h for h in hop_thu_cua(luot) if h != hop_khai)
@@ -3722,6 +3824,8 @@ def kiem_email(goc, so):
         elif not any(sha_file(f) == p["eml_sha256"] for f in eml):
             loi_staging.append(f"{k}: không file .eml hay body nào khớp eml_sha256")
         for dk in p.get("dinh_kem", []):
+            if dk.get("de_ngoai"):
+                continue  # vượt @NHIP.TRANDINHKEM, để ngoài staging theo X3E mục 2
             f = (d / dk["ten"]).resolve()
             if f != goc_staging and goc_staging not in f.parents:
                 loi_staging.append(f"{k}: đính kèm {dk['ten']} trỏ ra ngoài staging")
@@ -3810,19 +3914,27 @@ def main(goc):
               "PLANNING.md", "BANG_DIEU_KHIEN.md", "X0_INDEX.md"]
     vang = [t for t in SO_LOI if not (so / t).is_file()]
     bao("0. sổ lõi và view tồn tại trên đĩa", not vang,
-        f"vắng {vang}: khôi phục là mức C, ưu tiên version history của kho mây,"
-        f" NHATKY làm trục sự thật, cấm gõ lại sổ từ trí nhớ")
+        f"vắng {vang}: SỔ mất thì khôi phục là mức C (version history kho mây,"
+        f" NHATKY làm trục sự thật, cấm gõ lại từ trí nhớ); riêng hai VIEW"
+        f" BANG_DIEU_KHIEN, X0_INDEX chỉ cần sinh lại, mức A")
 
     # 0b. Conflicted copy của file sổ do đồng bộ mây: chứa lượt ghi bị kẹt,
     #     phải hòa giải theo X5 mục 3 rồi chuyển _lich_su, không được để im.
-    xung = sorted(f.name for f in so.glob("*")
+    xung = sorted(f.name for vung in (so.glob("*"), goc.glob("*.md"))
+                  for f in vung
                   if f.is_file() and ("conflicted" in f.name.lower()
                                       or "xung đột" in f.name.lower()))
-    bao("0b. không bản conflicted copy của sổ trong _so", not xung,
+    bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
-    x0s = sorted(goc.glob("X0_CAUHINH_*.md"))
+    def loc_x0(cac):
+        return [q for q in sorted(cac) if "TEMPLATE" not in q.name
+                and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()]
+    x0s = loc_x0(goc.glob("X0_CAUHINH_*.md"))
+    bao("0c. đúng MỘT bản X0 đang chạy (không tính _TEMPLATE, conflicted)",
+        len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ không tự"
+        f" chọn, gộp về một bản rồi rà lại")
     instrs = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))
     yc = re.search(r"instruction_yeu_cau:\s*(v\d+)", doc(x0s[0])) if x0s else None
     iv = re.search(r"INSTRUCTION · WORKOPS · (v\d+)", doc(instrs[0])) if instrs else None
@@ -3834,6 +3946,14 @@ def main(goc):
     chua_cai = bool(rev and rev.group(1) == "0")
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào")
+    else:
+        co_nk = [q for q in so.glob("NHATKY_*.md") if "conflicted" not in q.name.lower()]
+        bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
+            "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
+            " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại")
+    if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
+        bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
+            "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
 
     bdk_nd = doc(so / "BANG_DIEU_KHIEN.md")
     if bdk_nd:
@@ -4145,8 +4265,8 @@ so: THU
 ```
 
 Một dòng một LUỒNG mail, mã #L-<NNN>; luồng nhận diện bằng Conversation-ID.
-Chống nạp trùng bằng REGISTRY `_so\_thu_da_nap.json` (máy sinh, giữ TẬP mọi
-Message-ID đã nạp; Message-ID cuối ở đây chỉ để tra nhanh), theo X3E.
+Chống nạp trùng bằng REGISTRY `_so\_thu_da_nap.json` (máy sinh, giữ TẬP mọi KHÓA
+đã nạp (Message-ID hay fallback FB-); Message-ID cuối ở đây chỉ để tra nhanh), theo X3E.
 Trạng thái: CHỜ TÔI · CHỜ ĐỐI TÁC · THEO DÕI · ĐÃ ĐÓNG · BỎ QUA.
 Người dùng nói "không cần theo luồng này" một lần: chuyển BỎ QUA, ghi lý do, KHÔNG
 bao giờ nhắc lại trừ khi có mail mới mang cam kết hay số liệu.

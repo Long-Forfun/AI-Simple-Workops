@@ -50,8 +50,9 @@ Các luật kèm theo:
 THƯỜNG LỆ   trao đổi rời công ty (mail, tin công việc) không chứa cam kết, điều
             khoản, không phải tài liệu chính thức hay biểu mẫu nhà nước: bỏ plan,
             trình bản xem trước kèm bảng kiểm THƯỜNG LỆ của X2; người dùng xác
-            nhận gửi là chốt; ghi như mức B. Số liệu và tên định danh kỹ thuật
-            chỉ được xuất hiện khi đã có dòng DUKIEN đúng phạm vi, khi có thì
+            nhận gửi là chốt; ghi như mức B. Số liệu nghiệp vụ và tên định danh kỹ thuật
+            chỉ được xuất hiện khi đã có dòng DUKIEN đúng phạm vi (số hậu
+            cần của chính trao đổi miễn theo NGOẠI LỆ HẬU CẦN của X2), khi có thì
             bảng kiểm thêm dòng 1 và 2; số chưa có sổ, cam kết, điều khoản xuất
             hiện là hết thường lệ, nâng lên C đầy đủ. X1, X2 vẫn luôn đọc
 NHÁP        note, nháp mặc định KHÔNG vào TAILIEU (tạo là A, dọn là B); chỉ vào
@@ -124,7 +125,10 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    tự thời gian tin được, "mới nhất" chỉ có nghĩa trong một cửa). Bảng có thêm:
    khối "Tài liệu đang hoạt động" (tên, vN hiện hành, trạng thái, ở đâu, của các
    tài liệu đang trong chu kỳ) và một dòng nhắc lấy từ X0 C12 khi còn mục thiếu
-   chặn phát hành. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
+   chặn phát hành. Bảng giữ các BỘ ĐẾM cho banner mở phiên: quá hạn, chờ đối
+   tác quá ngưỡng, plan C treo, lượt ĐANG GHI còn trong NHATKY lúc sinh, số
+   ngày từ lần quét mail cuối; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
+   phải đọc lại từ NHATKY trước khi tin. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
    lên tài liệu Project (@DUONG.PROJECT ở X0 C1): nền tảng KHÔNG cho phiên tự
    ghi vào Project; CHAT chỉ đọc được bản người dùng đã tải, luôn kèm nhãn
    ngày của bảng và coi bản đó có thể cũ hơn kho
@@ -234,8 +238,10 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
 
-COWORK sao _so\ vào _so\_lich_suackup_<YYYYMMDD>\ tối đa một lần mỗi ngày,
-trước lượt ghi đầu tiên của ngày, giữ 7 bản gần nhất (mức A, không vào sổ).
+COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
+_thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\
+tối đa một lần mỗi ngày, trước lượt ghi đầu tiên của ngày, giữ 7 bản gần
+nhất (mức A, không vào sổ).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.

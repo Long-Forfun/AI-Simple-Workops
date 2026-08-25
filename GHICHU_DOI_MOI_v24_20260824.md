@@ -4,6 +4,45 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 26: vá theo hội đồng vòng 2 (20260825, điểm vòng 2: 77,5/100)
+
+Hội đồng chấm lại sau vòng 24-25: VẬN HÀNH 7,0 (tụt vì bản vá backup tự sinh
+lỗi) · KHÔNG SAI 7,5 · KHÔNG MISS 7,5 · THÔNG MINH 8,0 · ĐƠN GIẢN 8,0 · TOKEN
+8,5. Ba giám khảo chạy thật kịch bản đứt gãy và bắt được lỗi do chính vòng vá
+trước sinh ra. Vá:
+
+1. BACKUP HỎNG KÉP (3 giám khảo cùng bắt): đường dẫn chứa byte backspace 0x08
+   (escape bị nuốt khi soạn) VÀ sao đệ quy _so vào con của _so. Sửa: chỉ sao
+   năm sổ lõi + PLANNING + THU, loại _lich_su, _thu_staging, _inbox; phép
+   kiểm 4 thêm CẢ DẢI control char để lớp lỗi này máy tự chặn từ nay.
+2. CHỌN X0 TẤT ĐỊNH: sau git pull, X0_CAUHINH_TEMPLATE đứng trước bản mã theo
+   bảng chữ nên kiem_van_hanh đọc nhầm rev 0, báo "chưa cài" trên hệ đang
+   chạy. Sửa: glob loại _TEMPLATE và conflicted, nhiều ứng viên là LỆCH (0c);
+   12e cũng lọc template và nhận dòng mang nhãn (EMAIL) đúng khuôn, fixture
+   sửa theo (fixture cũ che đúng lỗi này). kiem_van_hanh lên v22.
+3. TRỤC SỰ THẬT PHẢI TỒN TẠI: 0d đòi NHATKY khi rev >= 1, 0e đòi THU khi
+   pipeline EMAIL có dấu vết; 0b quét conflicted cả bộ X ở gốc; thông điệp
+   phép 0 tách VIEW (sinh lại mức A) khỏi SỔ (khôi phục mức C); 12d khi nhật
+   ký mất đổi chẩn đoán "GIỮ registry", hết xúi xóa.
+4. BANNER ĐANG GHI có nguồn số: bảng giữ bộ đếm cho banner, bảng cũ hơn lượt
+   ghi gần nhất thì số ĐANG GHI đọc lại từ NHATKY trước khi tin.
+5. ĐÍNH KÈM QUÁ LỚN hết đá pipeline: payload khai cờ de_ngoai kèm lý do,
+   12j bỏ qua mục mang cờ; luật viết cả hai đầu (X3E mục 1 và 2).
+6. PHẦN MỀM sâu thêm theo goal: SECRET không vào kho, sổ, phiên (lộ = VIEC
+   mức gấp); TAILIEU trỏ được vào repo (dạng "Ở đâu" thứ tư); bản đồ mức
+   thao tác repo (merge vào nhánh CI/CD deploy chạy thật = C, dev/staging =
+   A, danh mục folder-C không áp trong repo); dump, log mang dữ liệu khách
+   theo phạm vi C5; ví dụ đã điền và lối "chưa rõ" cho người không kỹ thuật.
+7. Xác nhận BẰNG CHỮ của người dùng có thẩm quyền trong phiên = mức B (hết
+   đường cụt "sếp nói trực tiếp vẫn là nguồn D"); thủ tục BÀN GIAO chuyển
+   thành luật ở X3E mục 2 (X0 chỉ giữ giá trị); vòng quý có trigger tất định
+   (lượt tạo NHATKY quý mới); C14 thêm hàng X3E, X5 thêm C11 C12; C0 và
+   INSTRUCTION hết tàn dư "thang A-D thuộc REGULATED"; phiên CHAT bật EMAIL
+   đưa thêm X3E vào Project (ba tài liệu cùng sửa); README định nghĩa Cowork,
+   nói rõ cần máy tính, ví dụ <gốc>, TextEdit cho Mac, câu tắt thứ năm.
+8. Trần theo vai đọc: X0 lên 16.000 (đọc theo mục, thuế là X0_INDEX), X4 lên
+   5.500 (chỉ đọc khi RA_SOAT); phép kiểm 10 phủ cả tham chiếu "X3E mục n".
+
 ## Vòng 25: tách X3E, phạm vi phần mềm, vét nốt danh sách treo (20260825)
 
 1. TÁCH X3E_EMAIL: X3 mục 6 (71% file, kín trần 11.488/11.500) thành file
@@ -66,7 +105,7 @@ trực). Chưa vá, ghi nhận cho vòng sau: tách X3E_EMAIL (gỡ bom trần X
 trong trích dẫn cho CHỜ TÔI · nguồn scan không đọc được chữ · thủ tục bàn
 giao người dùng · trạng thái dự án NGỪNG · staging mồ côi.
 
-## Vá 20260825: phát hành qua git, chạy được trên Windows, cài đặt ba bước
+## Vá 20260825: phát hành qua git, chạy được trên Windows, cài đặt gọn
 
 Không đổi luật vận hành, không đổi INSTRUCTION, không đổi X1 tới X5. Hai phần:
 

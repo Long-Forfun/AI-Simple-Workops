@@ -59,18 +59,21 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
-    "X0_CAUHINH_TEMPLATE.md": 14500,
+    "X0_CAUHINH_TEMPLATE.md": 16000,  # đọc theo mục; thuế thường trực là X0_INDEX
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
     "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
-    "X4_RASOAT_TEMPLATE.md": 4200,
+    "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
     "X5_HESO_TEMPLATE.md": 16000,
     "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
-KY_TU_CAM = ["—", "–", "→", "←", "≈"]  # em-dash en-dash mũi tên xấp xỉ
+KY_TU_CAM = ["—", "–", "→", "←", "≈"] + [chr(c) for c in range(0x20)
+             if chr(c) not in "\n\t\r"]  # em/en-dash, mũi tên, xấp xỉ, control char
+# control char: hội đồng vòng 2 bắt được backspace 0x08 lọt vào đường dẫn
+# backup của X5 do escape bị nuốt khi soạn; dò cả dải để lớp lỗi này tuyệt chủng
 TRANG_THAI_HOP_LE = {
     "VIEC": "MỚI ĐANG LÀM CHỜ ĐỐI TÁC CHỜ DUYỆT TREO XONG HỦY",
     "DUKIEN": "CHƯA KIỂM ĐÃ KIỂM MÂU THUẪN ĐÃ THAY HẾT HẠN",
@@ -291,7 +294,7 @@ def main(goc):
                 g9 = Path(td9); s9 = g9 / "_so"; s9.mkdir()
                 if x0_hop is not None:
                     (g9 / "X0_CAUHINH_T.md").write_text(
-                        f"@NHIP.HOPTHU     {x0_hop}\n", encoding="utf-8")
+                        f"@NHIP.HOPTHU (EMAIL) {x0_hop}\n", encoding="utf-8")
                 else:
                     (g9 / "X0_CAUHINH_T.md").write_text("rong\n", encoding="utf-8")
                 if nk is not None:
@@ -723,10 +726,11 @@ def main(goc):
     for k in ["X1_CAM_TEMPLATE.md", "X2_PHATHANH_TEMPLATE.md", "X3_CUAVAO_TEMPLATE.md",
               "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md"]:
         muc_cua["X" + k[1]] = set(re.findall(r"^# (\d+)\.", docs[k], re.M))
+    muc_cua["X3E"] = set(re.findall(r"^# (\d+)\.", docs["X3E_EMAIL_TEMPLATE.md"], re.M))
     muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+)\.", docs["INSTRUCTION"], re.M))
     sai_ref = []
     for ten, nd in docs.items():
-        for dich, n in re.findall(r"(X[1-5]|INSTRUCTION) mục (\d+)", nd):
+        for dich, n in re.findall(r"(X[1-5]E?|INSTRUCTION) mục (\d+)", nd):
             if n not in muc_cua.get(dich, set()):
                 sai_ref.append((ten, f"{dich} mục {n}"))
     kiem("10. tham chiếu chéo tới mục có thật", not sai_ref, str(sorted(set(sai_ref))))

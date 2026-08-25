@@ -30,7 +30,7 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
             phục hồi không append PREPARED mới, dùng lại payload cũ.
             Thứ tự ghi an toàn bốn bước:
             1  STAGING trước, PREPARED sau: lưu nguyên văn thư (.eml hay body
-               đầy đủ, KHÔNG rỗng) cùng MỌI đính kèm vào thư mục
+               đầy đủ, KHÔNG rỗng) cùng MỌI đính kèm (TRỪ mục mang cờ de_ngoai, mục 2) vào thư mục
                _so\_thu_staging\<sha256(khóa)>\ (mỗi mail MỘT thư mục riêng,
                tên bằng đúng sha256 của khóa, không dùng chung), rồi mới
                append PREPARED có PAYLOAD PHỤC HỒI: convId, người gửi, thời
@@ -39,7 +39,8 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
                đối, cấm chấm chấm, cấm symlink thoát ra), sha256 của file
                .eml hay body, danh sách đính kèm kèm sha256 và byte của TỪNG
                file (tên đính kèm là BASENAME thuần, không dấu phân cách
-               đường dẫn, không chấm chấm), danh sách THAO TÁC ghi sổ đã
+               đường dẫn, không chấm chấm; file vượt trần thì khai cờ
+               de_ngoai kèm lý do thay cho sha256, xem mục 2), danh sách THAO TÁC ghi sổ đã
                chuẩn hóa: mỗi thao tác đủ operation_id (DUY NHẤT trong một
                mail), sổ đích (THU VIEC DUKIEN TAILIEU QUYETDINH), mã dòng,
                nội dung dòng.
@@ -65,7 +66,9 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
             nhật ký hỏng, rà ngay. Mất registry: dựng lại từ COMMITTED. Mất
             index: dựng lại bằng cách đối chiếu thao tác trong payload với sổ.
             Mất CẢ nhật ký lẫn registry: lần quét đầu chỉ xuất danh sách
-            ỨNG VIÊN chờ duyệt, không tự nạp.
+            ỨNG VIÊN chờ duyệt, không tự nạp. Mất RIÊNG nhật ký khi
+            registry còn: GIỮ NGUYÊN registry làm rào chống nạp trùng,
+            CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH.
             DỌN STAGING là việc mức A, tự làm khi đủ BỐN điều: mail đã
             COMMITTED · file đích và sha256 đã xác minh · .eml cần làm bằng
             chứng đã chuyển sang 04_Trao_doi hay vùng lưu chính · đã qua thời
@@ -131,9 +134,15 @@ INLINE      "[xem trả lời bên dưới từng mục]") vẫn tính là PHẦ
             VIẾT khi xét năm điều CHỜ TÔI; chỉ phần trích dẫn nguyên văn không
             có chữ mới mới bị cắt
 ĐÍNH KÈM    đính kèm vượt trần @NHIP.TRANDINHKEM (X0 C9): KHÔNG kéo vào
-QUÁ LỚN     staging hay kho đồng bộ; ghi dòng TAILIEU trỏ nguồn (link, mã thư)
-            kèm sha256 nếu lấy được, mở VIEC "tải tay" cho người dùng; mail đó
-            vẫn COMMITTED với ghi chú đính kèm để ngoài
+QUÁ LỚN     staging hay kho đồng bộ; trong payload PREPARED mục đó khai cờ
+            de_ngoai kèm lý do (phép kiểm 12j bỏ qua, không báo thiếu oan);
+            ghi dòng TAILIEU trỏ nguồn (link, mã thư) kèm sha256 nếu lấy
+            được, mở VIEC "tải tay" cho người dùng; mail vẫn COMMITTED
+BÀN GIAO    người dùng mới thay người cũ (giá trị khai @NHIP.BANGIAO, X0
+            C9): đổi @NHIP.TAIKHOAN, TENGOI là mức B; mọi luồng CHỜ TÔI
+            và CHỜ ĐỐI TÁC đang mở rà lại MỘT lượt (thư chào đích danh
+            người cũ xét lại theo TENGOI mới), digest kế tiếp ghi chú
+            "đã bàn giao <ngày>"
 STAGING     thư mục trong _thu_staging không có khóa nào trong nhật ký (crash
 MỒ CÔI      giữa lưu staging và append PREPARED): rà thấy thì báo, người dùng
             duyệt rồi mới xóa (mức B); không tự coi là rác

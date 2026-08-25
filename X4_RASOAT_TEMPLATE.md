@@ -25,7 +25,7 @@ SỔ                                    ngưỡng theo X0 C9
     mâu thuẫn mà chưa đánh ĐÃ THAY
 HẠN VÀ ĐỒNG BỘ                        ngưỡng theo X0 C9
 14  giấy tờ hết hạn trong ngưỡng cảnh báo
-15  _INBOX chưa nạp quá ngưỡng
+15  _INBOX (@DUONG.INBOX, X0 C1) chưa nạp quá ngưỡng
 16  sổ kho phụ cũ hơn bản chính
 17  INSTRUCTION không khớp bản X0 khai ở instruction_yeu_cau
 18  có hơn một bản bộ X ngoài nơi giữ bản chính
@@ -45,21 +45,25 @@ EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
 29  staging vắng khi lượt chưa COMMITTED hay không có manifest dọn hợp lệ;
     staging còn nhưng thiếu .eml hay body, file rỗng, sai sha256; đính kèm
     khai trong payload thiếu file, sai sha256, sai byte, tên thoát đường dẫn
+29b thư mục staging không có khóa nào trong nhật ký (mồ côi): báo, người
+    dùng duyệt rồi mới xóa, mức B (X3E mục 2; máy dò bằng phép 12j2)
 30  tập mục index khác tập "khoa + operation_id" của các mail đã COMMITTED
     (thừa hay thiếu đều lệch), hoặc sổ với mã dòng trong index khác payload
 31  index trỏ tới mã dòng không tồn tại trong sổ đích (so đúng ô, không so
     chuỗi toàn văn)
 ```
 
-Phần dò được bằng máy (12, 17, 19, 22, 23 và schema bảng): có Python thì chạy từ gốc
-kho `python 00_Index\kiem_van_hanh.py 00_Index .` TRƯỚC (thiếu tham số gốc kho
-thì phần rà FILE 1 tới 5 bị bỏ qua), dán kết quả vào báo cáo;
+Phần dò được bằng máy (1, 2, 4 của FILE; 12, 17, 19, 22, 23; nhóm EMAIL 24
+tới 31; schema bảng; riêng 3 và 5 kiểm tay): có Python thì chạy từ gốc kho
+`python 00_Index\kiem_van_hanh.py 00_Index .` TRƯỚC (thiếu tham số gốc kho thì
+phần quan sát file 1, 2, 4 bị bỏ qua), dán kết quả vào báo cáo;
 không có Python thì kiểm tay đúng các dòng đó. Máy chỉ báo cáo, không sửa.
 Xuất bảng `| # | Loại lệch | Đối tượng | Chi tiết | Đề xuất |`. Sạch thì một dòng
 "sổ khớp thực tế <ngày>".
 
 Mỗi lần rà xong ghi MỘT dòng NHATKY tóm tắt các loại lệch (mức A); vòng quý
-đếm từ các dòng đó, không từ trí nhớ. Mỗi quý đọc thêm CHƯA KIỂM và MÂU THUẪN: cùng loại lệch từ 3 lần là thiếu luật, đề
+đếm từ các dòng đó, không từ trí nhớ. Lượt tạo file NHATKY quý mới (X5 mục
+3 bước 1) là lời nhắc TẤT ĐỊNH chạy vòng quý cho quý vừa đóng. Mỗi quý đọc thêm CHƯA KIỂM và MÂU THUẪN: cùng loại lệch từ 3 lần là thiếu luật, đề
 xuất vào X0 hoặc X1. Cùng câu hỏi lặp từ 2 lần là thiếu mục X0. Kết luận ghi QUYETDINH.
 
 # Năm câu tắt

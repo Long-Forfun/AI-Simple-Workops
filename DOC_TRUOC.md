@@ -10,9 +10,10 @@ làm việc được: ba câu bắt buộc, một câu profile.
    thư mục mây đồng bộ
 2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN file INSTRUCTION_WORKOPS_v11.md
    vào Project instructions. Không sửa chữ nào. VIỆC TAY DUY NHẤT PHẢI LÀM ĐÚNG
-3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5 và X9 vào tài liệu
-   của Project. Dùng Cowork thuần thì bỏ qua được
-4  Mở phiên Cowork gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
+3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5, X9, và X3E nếu
+   bật profile EMAIL, vào tài liệu của Project. Dùng Cowork thuần thì bỏ qua được
+4  Mở phiên Cowork (loại phiên Claude đọc ghi được file trên máy, làm trên
+   máy tính) gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
    chạy được, câu bốn chọn profile), đổi tên file theo mã công ty, điền X0, dựng
    cây folder mặc định, sinh X0_INDEX và bảng điều khiển, chạy thử một vòng mức
    A và một vòng mức C

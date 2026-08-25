@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v21 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v22 · 20260825
+# v22, theo hội đồng vòng 2 (chạy thật 4 kịch bản đứt gãy): chọn X0 TẤT ĐỊNH,
+# loại _TEMPLATE và conflicted khỏi glob (sau git pull template rev 0 đứng
+# trước bản mã theo bảng chữ, hệ đang chạy bị báo "chưa cài" oan) · 0d đòi
+# NHATKY tồn tại khi rev >= 1 và THU khi pipeline EMAIL có dấu vết (trước đây
+# xóa trọn trục sự thật vẫn "hệ sạch") · 0b quét conflicted copy cả bộ X ở
+# gốc 00_Index · 12e nhận dòng mang nhãn (EMAIL) đúng khuôn template, lọc
+# template khỏi nguồn đọc · 12d khi nhật ký mất đổi chẩn đoán, hết xúi xóa
+# registry · 12j bỏ qua đính kèm mang cờ de_ngoai (vượt @NHIP.TRANDINHKEM).
 # v21, theo hội đồng đánh giá 6 lăng kính: phép 0 đòi sổ lõi TỒN TẠI trên đĩa
 # (trước đây doc() nuốt file vắng thành chuỗi rỗng, mất sổ mà PASS im lặng) ·
 # phép 0b dò conflicted copy của file sổ trong _so (đồng bộ mây sinh, trước
@@ -732,16 +740,20 @@ def kiem_email(goc, so):
                 f" và staging, cấm đọc lại hộp thư"))
 
     reg, reg_ok = doc_registry(doc(reg_p))
+    chi_tiet_12d = ((f"dạng sai (phải là danh sách chuỗi khóa); " if not reg_ok else "")
+                    + f"thiếu {sorted(committed - reg)[:3]}, thừa {sorted(reg - committed)[:3]};"
+                    + (" nhật ký MẤT: xem 12a, GIỮ NGUYÊN registry làm rào chống nạp"
+                       " trùng, KHÔNG phải chặn oan, cấm xóa"
+                       if not nk_p.is_file() and reg
+                       else " thừa nghĩa là registry chặn mail chưa từng nạp"))
     ket.append(("12d. registry là DANH SÁCH CHUỖI và BẰNG ĐÚNG tập khóa COMMITTED",
-                reg_ok and reg == committed,
-                (f"dạng sai (phải là danh sách chuỗi khóa); " if not reg_ok else "")
-                + f"thiếu {sorted(committed - reg)[:3]}, thừa {sorted(reg - committed)[:3]};"
-                f" thừa nghĩa là registry chặn mail chưa từng nạp"))
+                reg_ok and reg == committed, chi_tiet_12d))
 
     # 12e. hộp thư so CHÍNH XÁC sau chuẩn hóa, không substring. EMAIL đã chạy
     #      mà X0 chưa khai @NHIP.HOPTHU là LỆCH cấu hình, không phải BỎ QUA
-    x0nd = "".join(doc(q) for q in sorted(goc.glob("X0_CAUHINH_*.md")))
-    m = re.search(r"@NHIP\.HOPTHU\s+(\S+@\S+)", x0nd)
+    x0nd = "".join(doc(q) for q in sorted(goc.glob("X0_CAUHINH_*.md"))
+                   if "TEMPLATE" not in q.name)
+    m = re.search(r"@NHIP\.HOPTHU(?:\s*\(EMAIL\))?\s+(\S+@\S+)", x0nd)
     if m:
         hop_khai = m.group(1).strip().lower()
         sai_hop = sorted(h for h in hop_thu_cua(luot) if h != hop_khai)
@@ -806,6 +818,8 @@ def kiem_email(goc, so):
         elif not any(sha_file(f) == p["eml_sha256"] for f in eml):
             loi_staging.append(f"{k}: không file .eml hay body nào khớp eml_sha256")
         for dk in p.get("dinh_kem", []):
+            if dk.get("de_ngoai"):
+                continue  # vượt @NHIP.TRANDINHKEM, để ngoài staging theo X3E mục 2
             f = (d / dk["ten"]).resolve()
             if f != goc_staging and goc_staging not in f.parents:
                 loi_staging.append(f"{k}: đính kèm {dk['ten']} trỏ ra ngoài staging")
@@ -894,19 +908,27 @@ def main(goc):
               "PLANNING.md", "BANG_DIEU_KHIEN.md", "X0_INDEX.md"]
     vang = [t for t in SO_LOI if not (so / t).is_file()]
     bao("0. sổ lõi và view tồn tại trên đĩa", not vang,
-        f"vắng {vang}: khôi phục là mức C, ưu tiên version history của kho mây,"
-        f" NHATKY làm trục sự thật, cấm gõ lại sổ từ trí nhớ")
+        f"vắng {vang}: SỔ mất thì khôi phục là mức C (version history kho mây,"
+        f" NHATKY làm trục sự thật, cấm gõ lại từ trí nhớ); riêng hai VIEW"
+        f" BANG_DIEU_KHIEN, X0_INDEX chỉ cần sinh lại, mức A")
 
     # 0b. Conflicted copy của file sổ do đồng bộ mây: chứa lượt ghi bị kẹt,
     #     phải hòa giải theo X5 mục 3 rồi chuyển _lich_su, không được để im.
-    xung = sorted(f.name for f in so.glob("*")
+    xung = sorted(f.name for vung in (so.glob("*"), goc.glob("*.md"))
+                  for f in vung
                   if f.is_file() and ("conflicted" in f.name.lower()
                                       or "xung đột" in f.name.lower()))
-    bao("0b. không bản conflicted copy của sổ trong _so", not xung,
+    bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
-    x0s = sorted(goc.glob("X0_CAUHINH_*.md"))
+    def loc_x0(cac):
+        return [q for q in sorted(cac) if "TEMPLATE" not in q.name
+                and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()]
+    x0s = loc_x0(goc.glob("X0_CAUHINH_*.md"))
+    bao("0c. đúng MỘT bản X0 đang chạy (không tính _TEMPLATE, conflicted)",
+        len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ không tự"
+        f" chọn, gộp về một bản rồi rà lại")
     instrs = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))
     yc = re.search(r"instruction_yeu_cau:\s*(v\d+)", doc(x0s[0])) if x0s else None
     iv = re.search(r"INSTRUCTION · WORKOPS · (v\d+)", doc(instrs[0])) if instrs else None
@@ -918,6 +940,14 @@ def main(goc):
     chua_cai = bool(rev and rev.group(1) == "0")
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào")
+    else:
+        co_nk = [q for q in so.glob("NHATKY_*.md") if "conflicted" not in q.name.lower()]
+        bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
+            "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
+            " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại")
+    if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
+        bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
+            "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
 
     bdk_nd = doc(so / "BANG_DIEU_KHIEN.md")
     if bdk_nd:

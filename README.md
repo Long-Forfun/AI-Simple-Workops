@@ -12,6 +12,11 @@ WORKOPS lúc nào cũng được, không mất gì, không bị nhốt.
 
 ## Cài đặt: bốn bước (bước 3 tùy chọn)
 
+Cowork là loại phiên làm việc của Claude ĐỌC GHI ĐƯỢC file trên máy bạn
+(claude.ai/code hoặc app Claude cho máy tính). Việc cài đặt làm trên MÁY
+TÍNH, không làm được từ điện thoại. Trong ví dụ dưới, <gốc> là thư mục gốc
+công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công ty.
+
 ```
 1  Đưa bộ về thành <gốc>\00_Index\ của công ty:
 
@@ -25,15 +30,17 @@ WORKOPS lúc nào cũng được, không mất gì, không bị nhốt.
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
-   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad, Ctrl+A, Ctrl+C).
+   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad; máy Mac dùng TextEdit; Ctrl+A, Ctrl+C).
    Không sửa chữ nào.
 
 3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0
-   tới X5 và X9 vào tài liệu của Project để phiên CHAT có luật mà đọc.
-   Chỉ dùng Cowork thì bỏ qua.
+   tới X5, X9, và X3E nếu bật profile EMAIL, vào tài liệu của Project để
+   phiên CHAT có luật mà đọc. Chỉ dùng Cowork thì bỏ qua.
 
-4  Mở phiên Cowork, gắn folder <gốc> vào phiên. QUAN TRỌNG: gắn folder GỐC
-   (thư mục CHỨA 00_Index), không phải chính 00_Index. Gõ: "cài đặt".
+4  Mở phiên Cowork trên máy tính (claude.ai/code, hoặc app Claude chọn chế
+   độ Cowork), bấm nút gắn thư mục và chọn folder <gốc>. QUAN TRỌNG: gắn
+   folder GỐC (thư mục CHỨA 00_Index), không phải chính 00_Index. Gõ:
+   "cài đặt".
    AI hỏi BỐN câu (mã và tên công ty · kho ở đâu · dự án đầu tiên · chọn
    profile, không rõ thì trả lời LITE), rồi tự làm phần còn lại: đổi tên
    file theo mã, điền X0, dựng cây folder, chạy thử. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
@@ -49,8 +56,10 @@ người. Vài câu tắt đáng nhớ:
 ```
 điểm danh   xem bàn làm việc: việc quá hạn, chờ ai, mail đọng
 quét mail   xử thư trong phiên, ra bảng chờ duyệt      (khi bật EMAIL)
-rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa
+rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa;
+            xem bảng xong muốn sửa mục nào thì nói, AI trình cách rồi làm
 chốt sổ     kết phiên an toàn, vét các lượt ghi dở
+đồng bộ quan sát   (nâng cao) cho AI tự ghi vai bản mới, bản cũ sau khi quét
 ```
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.

@@ -26,6 +26,7 @@ BANG_DIEU_KHIEN, không bằng trí nhớ. Phát hiện hai bộ cùng đọc m�
 
 ```
 CHẶNG 1  đọc, phân loại, rút dữ kiện, lập danh sách file cần tải, ghi _INBOX
+         (tọa độ ở X0 C1 @DUONG.INBOX)
 CHẶNG 2  chỉ phiên chạm được kho: tải về đúng folder, đổi tên chuẩn, ghi sổ,
          chuyển _da_nap
 ```
@@ -77,4 +78,6 @@ hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 
 Không bật EMAIL: bỏ qua, mail đi qua bốn cửa như file thường. Bật EMAIL: đọc
-X3E_EMAIL_<MÃ>.md, luật đầy đủ của pipeline mail nằm trọn ở đó.
+X3E_EMAIL_<MÃ>.md, luật đầy đủ của pipeline mail nằm trọn ở đó; khi đó mail
+KHÔNG đi qua _INBOX và event_id (chống trùng bằng khóa và registry của X3E),
+X3 chỉ còn áp mục 4 xếp chỗ và mục 5 bảng chờ duyệt cho mail.

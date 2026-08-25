@@ -17,8 +17,9 @@ không đọc, không hỏi.
 
 ```
 @PROFILE   CORE luôn bật: việc, tài liệu, quyết định, mức A B C, ghi sổ
-  [ ] REGULATED   mức nguồn A-D, phạm vi chi tiết, phát hành chính thức, hồ sơ
-                  nhà nước (kích hoạt C5 C7 chi tiết, X2 đầy đủ)
+  [ ] REGULATED   nguồn chỉ định, phạm vi chi tiết, phát hành chính thức, hồ
+                  sơ nhà nước (thang mức nguồn A-D là CORE theo C7; REGULATED
+                  kích hoạt C5 và phần chi tiết C7, X2 đầy đủ)
   [ ] PARALLEL    kho nhiều cửa, nhiều phiên cùng ghi (luật cửa ở C1, kiểm trùng
                   mã ở X5 mục 3 bước 2)
   [ ] AUTOMATED   tác vụ hẹn giờ, giám sát (C9, X3 nhịp, luật phiên không
@@ -58,7 +59,9 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 ```
 
 Cột "Ở đâu" của sổ TAILIEU chỉ nhận: "Kho <đường dẫn tương đối từ gốc kho>" ·
-"Project <đường dẫn doc>" · "Drive <ID folder>". Ngoài ba dạng đó là cấm.
+"Project <đường dẫn doc>" · "Drive <ID folder>" · "Repo <mã PM> <đường dẫn
+trong repo>@<commit hay tag>" (chỉ cho dòng thuộc dự án @DUAN.PHANMEM, ô
+sha256 bỏ trống vì repo tự giữ lịch sử). Ngoài bốn dạng đó là cấm.
 Trỏ tới MỘT FILE thì ghi tới tận tên file; trỏ tới cả BỘ HỒ SƠ thì ghi đường dẫn
 thư mục kết thúc bằng dấu \ và bỏ trống ô sha256 (bộ quan sát chỉ đối chiếu sha
 cho dòng trỏ file).
@@ -77,7 +80,21 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
-  commit hay PR; deploy môi trường CHẠY THẬT là việc mức C (X5 mục 1)
+  commit hay PR. MỨC cho thao tác repo: sửa code trên nhánh trong việc đã
+  mở là A · deploy dev, staging là A của dự án đó · deploy môi trường CHẠY
+  THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy thật, migration dữ liệu
+  chạy thật, force-push hay xóa lịch sử là C (X5 mục 1); danh mục "cấu trúc
+  folder hàng loạt là C" KHÔNG áp cho bên trong repo. Một phần mềm nhiều
+  repo: mỗi repo một vế trên cùng dòng. Đặc tả, tài liệu sống cùng code nằm
+  trong repo, TAILIEU trỏ dạng "Repo" theo C1.
+  SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
+  bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng
+  phần mềm (vault, secret manager). Lộ secret: VIEC mức gấp, thu hồi
+  trước, ghi sau. Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu
+  đó coi là đầu ra có phạm vi theo C5, không kéo về kho tùy tiện.
+  Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
+  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn. Mục nào
+  chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
@@ -186,6 +203,9 @@ Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
 mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo <tên nguồn> <bản, ngày>". Mức
 tối thiểu áp cho mọi dữ kiện KHÔNG có nguồn chỉ định.
 
+Xác nhận BẰNG CHỮ của người dùng ngay trong phiên, khi người dùng là bên có
+thẩm quyền của dữ kiện đó: ghi mức B, nguồn "xác nhận trong phiên <ngày>";
+chỉ lời KỂ về bên thứ ba ("đối tác nói...") mới là D.
 Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file kèm cờ CHƯA
 ĐỌC ĐƯỢC, CẤM rút dữ kiện từ đó cho tới khi có bản đọc được hay người dùng
 đọc tay và xác nhận từng số. Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
@@ -228,8 +248,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  COMMITTED và xác minh, mặc định 30 ngày
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
                  định 50 MB; vượt trần xử theo X3E mục 2
-@NHIP.BANGIAO    <người dùng thay người cũ: đổi TAIKHOAN, TENGOI là mức B;
-                 luồng CHỜ TÔI đang mở điểm danh lại một lượt, hoặc "chưa có">
+@NHIP.BANGIAO    <tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
+                 Thủ tục bàn giao là LUẬT, ở X3E mục 2 khối BÀN GIAO
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
                  quét (file status máy sinh); digest đọc giờ quét THẬT từ
                  đây, không lấy giờ chạy báo cáo>. Schema tối thiểu BẮT BUỘC:
@@ -295,8 +315,11 @@ X1  đọc C1 (ba dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (l
     tên) · C8 (ký tự, số, động từ)
 X2  đọc C5 · C6 · C7 · C8 · C10
 X3  đọc C7 (mức nguồn khi rút dữ kiện) · C9
+X3E đọc C9 (@NHIP.HOPTHU, TAIKHOAN, TENGOI, DEMSTAGING, TRANDINHKEM,
+    TRANGTHAI, DAUGUI, BANGIAO; chỉ khi bật EMAIL)
 X4  đọc C9 (các ngưỡng rà)
-X5  đọc C0 · C1 (danh sách cửa cho mã G) · C2 · C3 · C4 · C13
+X5  đọc C0 · C1 (danh sách cửa cho mã G, @DUONG.PROJECT) · C2 · C3 · C4 ·
+    C11 (ngoại lệ siết chặt) · C12 (dòng nhắc của bảng) · C13
 ```
 
 Rev hiện tại: **0, chưa cài đặt**.

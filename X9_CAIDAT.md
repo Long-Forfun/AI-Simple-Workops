@@ -100,8 +100,9 @@ Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy �
 
 Công ty đã có đống file trước khi cài: KHÔNG đi từng mục _INBOX. Chạy
 kiem_van_hanh lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
-bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành, file
-cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
+bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành (căn
+cứ nhận diện: lời người dùng hay dấu vết _SIGNED, _NOP; KHÔNG suy từ tên
+suông), file cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
 khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới

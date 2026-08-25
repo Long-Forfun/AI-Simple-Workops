@@ -39,15 +39,15 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
-INSTRUCTION 8.000 ký tự · X0 14.500 · X5 16.000 · X3 4.500 · X3E 12.000 (chỉ
-nạp khi bật EMAIL) · X9 6.500 · X4
-4.200 · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
+INSTRUCTION 8.000 ký tự · X0 16.000 (đọc theo mục, thuế là X0_INDEX) · X5
+16.000 · X3 4.500 · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4 5.500
+(chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
 là FAIL.
 
 ## Ghi chú phiên CHAT
 
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
-X5, X9 qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
+X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ (~16.500 token cộng INSTRUCTION); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 

@@ -27,9 +27,9 @@ lệch thì dừng. X0 `rev 0`: chế độ CÀI ĐẶT theo X9; khi rev 0, đi�
 số thiếu của CÙNG việc vào MỘT lượt hỏi, update ngược X0, rồi làm tiếp.
 
 Khối luật gắn nhãn profile (REGULATED, PARALLEL, AUTOMATED, EMAIL) chỉ áp khi X0
-C0 bật profile đó; không bật thì bỏ qua khối, không đọc. Một mục có thể phục vụ
-nhiều profile (X0 C9 dùng cho AUTOMATED và EMAIL): bật MỘT trong các profile đó
-là phải đọc mục ấy.
+C0 bật profile đó; không bật thì bỏ qua khối, không đọc. Một mục có thể trộn: các
+NGƯỠNG CORE trong X0 C9 mọi profile đều đọc khi X3, X4 trỏ tới; dòng gắn nhãn
+(AUTOMATED, EMAIL) chỉ đọc khi bật profile đó.
 
 # 2. MỞ PHIÊN
 

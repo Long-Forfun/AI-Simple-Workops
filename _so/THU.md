@@ -5,8 +5,8 @@ so: THU
 ```
 
 Một dòng một LUỒNG mail, mã #L-<NNN>; luồng nhận diện bằng Conversation-ID.
-Chống nạp trùng bằng REGISTRY `_so\_thu_da_nap.json` (máy sinh, giữ TẬP mọi
-Message-ID đã nạp; Message-ID cuối ở đây chỉ để tra nhanh), theo X3E.
+Chống nạp trùng bằng REGISTRY `_so\_thu_da_nap.json` (máy sinh, giữ TẬP mọi KHÓA
+đã nạp (Message-ID hay fallback FB-); Message-ID cuối ở đây chỉ để tra nhanh), theo X3E.
 Trạng thái: CHỜ TÔI · CHỜ ĐỐI TÁC · THEO DÕI · ĐÃ ĐÓNG · BỎ QUA.
 Người dùng nói "không cần theo luồng này" một lần: chuyển BỎ QUA, ghi lý do, KHÔNG
 bao giờ nhắc lại trừ khi có mail mới mang cam kết hay số liệu.
