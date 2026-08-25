@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
-# @NHIP.HOPTHU_CU, tổng 69 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
+# XÓA PHÁP LÝ phải sạch, tổng 73 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -103,6 +104,8 @@ def do_route(docs):
                    "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md",
                    "X9_CAIDAT.md"]) + len(docs["INSTRUCTION"])
     return {
+        "thêm mục 1b": t(_muc(x5, "1b", 2)),
+        "thêm X5 mục 3": t(_muc(x5, 3, 4)),
         "CHAT không EMAIL": t(tong_bo),
         "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
@@ -442,6 +445,40 @@ def main(goc):
         r = chay_email(nk=p_hut + "\n" + C("<a@x>") + "\n", reg=["<a@x>"])
         ca.append(("PREPARED thiếu payload phục hồi bị bắt (dù đã COMMITTED)",
                    r.get(TEN_12H) is False))
+        # BA HÀNH VI v26/v27 của bộ lọc bản sao (ghim máy, hội đồng vòng 7)
+        import kiem_van_hanh as _kv26
+        ca.append(("khuôn bản sao đồng bộ bị nhận diện, tên thường không oan",
+                   all(_kv26.la_file_tam(t) for t in
+                       ["BC (1).docx", "HD copy.xlsx", "HD copy 2.xlsx",
+                        "BC - Copy.docx", "PL(bản sao).pdf"])
+                   and not any(_kv26.la_file_tam(t) for t in
+                               ["copy_of_process.md", "BC_copyright.docx",
+                                "BC_v01.docx"])))
+        ca.append(("loc_ban_chinh chọn đúng bản chính theo tên chuẩn",
+                   [q.name for q in _kv26.loc_ban_chinh(
+                       [Path("NHATKY_2026Q3.md"),
+                        Path("NHATKY_2026Q3-DESKTOP-A1B2.md"),
+                        Path("NHATKY_2026Q3 (1).md"),
+                        Path("NHATKY_TEMPLATE.md")],
+                       r"NHATKY_\d{4}Q[1-4]\.md")] == ["NHATKY_2026Q3.md"]))
+        ca.append(("tên X0 chuẩn 3-4 ký tự, có dấu hay 5 ký tự bị loại",
+                   [q.name for q in _kv26.loc_ban_chinh(
+                       [Path("X0_CAUHINH_ABC.md"), Path("X0_CAUHINH_ĐT.md"),
+                        Path("X0_CAUHINH_ABCDE.md"), Path("X0_CAUHINH_TEMPLATE.md")],
+                       r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")] == ["X0_CAUHINH_ABC.md"]))
+        # KHO SAU XÓA PHÁP LÝ đúng luật phải SẠCH: đính kèm tombstone de_ngoai
+        # "đã xóa theo Q-", staging đã dọn có manifest, dòng sổ giữ mã (12h/12j/
+        # 12k/12l đều phải xanh) - lớp lỗi ba vòng cùng họ, có lưới hồi quy riêng
+        pay_xoa = dict(PAY, dinh_kem=[{"ten": "CV.pdf", "de_ngoai": True,
+                                       "ly_do": "đã xóa theo Q-20260825-01"}])
+        don_xoa = {"<a@x>": {"purged_at": "2026-08-25", "eml_final_path": "x",
+                             "attachment_final_paths": [], "sha256": EML_SHA}}
+        r = chay_email(nk=P("<a@x>", pay=pay_xoa) + "\n" + C("<a@x>") + "\n",
+                       reg=["<a@x>"], files={"_so/VIEC.md": "| V-001 | viec |\n"},
+                       idx=IDX_SACH, don=don_xoa)
+        ca.append(("kho sau XÓA PHÁP LÝ đúng luật phải sạch (12h, 12j, 12k, 12l)",
+                   all(r.get(t) is not False
+                       for t in (TEN_12H, TEN_12J, TEN_12K, TEN_12L))))
         # HỘP CŨ hợp lệ: nhật ký mang hộp lịch sử, X0 khai @NHIP.HOPTHU_CU
         # -> 12e phải PASS (fixture dương cho vá đổi hộp thư vòng 28)
         THU_MUC_CU = _hl.sha256(b"<cu@x>").hexdigest()

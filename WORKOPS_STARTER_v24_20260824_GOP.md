@@ -71,6 +71,42 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 31: vá theo hội đồng vòng 7 (20260825, điểm vòng 7: 91,2/100)
+
+Điểm vòng 7: THÔNG MINH 8,5 · VẬN HÀNH 9,0 · KHÔNG SAI 9,0 · TOKEN 9,1 ·
+KHÔNG MISS 9,5 · ĐƠN GIẢN 9,6. Giám khảo THÔNG MINH tuyên bố "hệ đã hội tụ:
+lỗi còn lại là lỗi KHÂU, không còn lỗi THIẾT KẾ"; ĐƠN GIẢN tuyên bố bão hòa.
+Vá:
+
+1. XÓA PHÁP LÝ khớp trọn lưới máy (VỪA cuối, hai giám khảo cùng chỉ): dòng
+   TAILIEU, THU là ĐÍCH INDEX thì giữ khung và mã dòng, chỉ trung hòa ô dữ
+   liệu (12k, 12l tự khớp); dòng NHATKY mất dấu Ghi lần thì ô "Chạm sổ nào"
+   thay "không, đã xóa theo Q-<mã>" (đi lối "không" sẵn của phép 3c); VIEC,
+   DUKIEN, PLANNING, staging + manifest lý do Q, cache quan sát đều có cách
+   xử; fixture 73 "kho sau XÓA PHÁP LÝ đúng luật phải sạch" ghim hồi quy.
+2. kiem_van_hanh v27: loc_ban_chinh lên tầng module, ba hành vi bộ lọc bản
+   sao được fixture ghim (73 ca); regex mã X0 khớp luật 3-4 ký tự A-Z 0-9
+   (luật ghi rõ KHÔNG dấu ở X0 C1 và X9 câu 1, hết cáo buộc oan mã có dấu);
+   0c nhánh "tên không đúng chuẩn: đổi tên file"; tự vệ tham số vế ba (gốc
+   kho không tồn tại: bỏ qua quan sát, KHÔNG ghi đè cache mốc ổn định).
+3. Giới hạn nói ra ở nơi người dùng đọc (KHÔNG MISS: "ghi nhận đúng nhưng
+   sai chỗ"): kênh chat Zalo chưa có pipeline (README Ngày thường + X0 C9);
+   bộ mặc định MỘT người vận hành toàn quyền chốt C (X0 C6); giá của khuôn
+   bản sao khai tại luật tên file C4 (" (n)", "(bản sao)" bị máy coi là bản
+   sao đồng bộ).
+4. README thêm mục "CÔNG TY CÓ PHẦN MỀM": khai rõ PHẠM VI TỔ CHỨC từng phần
+   mềm (repo, thành phần, môi trường, nơi chạy thật, nơi giữ secret) ngay từ
+   phiên cài đặt để các vận hành liên quan chính xác; trỏ X9 mục 1 câu 3, X0
+   C2 @DUAN.PHANMEM, X5 mục 1b, X2 phát hành build.
+5. Máy giữ thêm hai số con của BENCHMARK (mục 1b ~421, X5 mục 3 ~1058) qua
+   phép 2c; số mục 3 cập nhật (~950 đã trôi 11%). Trần X0, X5 GIỮ NGUYÊN
+   theo quy ước nâng-trần-kèm-bù: mọi phần thêm vòng này được bù bằng cắt
+   chữ tương đương ngay trong hai file đó (X0 15.993/16.000, X5
+   16.996/17.000 - lần thử lửa đầu của quy ước, đạt).
+
+Watchlist trần: X0 99,9% · X5 99,9% · X3E ~92% · X9 ~92%. Hai file trụ đã
+kín trần thật sự: vòng sau muốn thêm chữ vào X0 hay X5 là phải cắt trước.
+
 ## Vòng 30: vá theo hội đồng vòng 6 (20260825, điểm vòng 6: 89/100)
 
 Điểm vòng 6: VẬN HÀNH 8,5 · THÔNG MINH 8,5 · KHÔNG SAI 8,5 · TOKEN 9,0 ·
@@ -1038,7 +1074,7 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1628 (thêm X5 mục 3 ~950 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1628 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
 | SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5449 + khối (không phần mềm ~5028, trừ mục 1b) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2532 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3681) + THU theo khối | ~6213 + khối | |
@@ -1254,15 +1290,15 @@ Kho là MỘT bản dữ liệu duy nhất. Một kho có thể có nhiều cử
 giữ bản cuối" giữa các cửa của cùng một kho.
 
 ```
-@CTY.MA          <điền, 3-4 ký tự viết hoa>
+@CTY.MA          <điền, 3-4 ký tự A-Z hay số, KHÔNG dấu tiếng Việt>
 @CTY.TEN         <điền>
 @CTY.VAITRO      <điền, công ty đóng vai gì trong công việc chính>
 
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <đường dẫn gốc trên máy 1> · thiết bị <tên>
                  <thêm CUA2... nếu kho mây có nhiều máy cùng vào>
-                 Kho Ổ MÁY ĐƠN: backup máy sinh nằm CÙNG Ổ, hỏng phần cứng
-                 là mất cả hai; phải có sao lưu định kỳ ra thiết bị khác
+                 Kho Ổ MÁY ĐƠN: backup nằm cùng ổ, hỏng phần cứng là mất
+                 cả hai; phải sao lưu định kỳ ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
 @KHO.CU          <kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
@@ -1302,8 +1338,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   theo C1. Mức từng thao tác repo, SECRET, dữ liệu khách trong dump và log,
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
-  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret giữ
-  ở GitHub Actions secrets. Mục nào
+  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
+  GitHub Actions. Mục nào
   chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
 ```
 
@@ -1340,7 +1376,8 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 @TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL <thêm bớt khi cài>
 ```
 
-Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi. Nội bộ DoiTac là
+Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
+và khuôn " (n)", "(bản sao)": máy coi là bản sao đồng bộ, loại khỏi quan sát. Nội bộ DoiTac là
 NA. Bản ký thêm `_SIGNED`, bất biến. Trạng thái ở TAILIEU, không vào tên file.
 Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức C, phải có QUYETDINH.
 
@@ -1377,6 +1414,8 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
 ```
 
+Bộ mặc định MỘT người vận hành toàn quyền chốt mức C; nhiều người dùng
+chung tự quy ước ai chốt - hệ ghi vết theo cửa, phiên, không phân quyền.
 Vai chỉ đổi khi có văn bản ký mới. Cách gọi trong hội thoại không làm đổi vai.
 Gỡ một lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã", chỉ gỡ khi dữ kiện
 gốc đổi trạng thái.
@@ -1452,6 +1491,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
+                 Quét tự động chỉ có cho EMAIL; chat (Zalo...) dán tay vào
+                 phiên: tin nhắn chưa xác nhận là nguồn D, ảnh như nguồn scan
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>
@@ -2298,24 +2339,27 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
 
-XÓA THEO YÊU CẦU PHÁP LÝ (mức C, QUYETDINH ghi căn cứ; là ngoại lệ DUY NHẤT
-của X1 mục 5 "cờ GỐC KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã>): quét
+XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 5 "cờ GỐC
+KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
 đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
 · _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
 con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
 CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
-giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng
-TAILIEU, THU trỏ file đã xóa thì XÓA DÒNG ngay trong plan C này, hai sổ đó
-không phải chỉ-thêm; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
+giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
+mất hết dấu "Ghi lần": ô "Chạm sổ nào" thay "không, đã xóa theo Q-<mã>".
+Dòng TAILIEU, THU trỏ file đã xóa: KHÔNG là đích index _thu_ap_dung thì XÓA
+DÒNG trong plan C này; ĐANG là đích index (mail đã COMMITTED) thì GIỮ khung
+và mã dòng, thay ô dữ liệu bằng "[đã xóa theo Q-<mã>]" (12k, 12l đối chiếu
+mã còn đứng). VIEC, DUKIEN, PLANNING: xóa dòng hay trung hòa, liên kết trỏ
+mã đã xóa thay cùng cách. Staging liên quan: XÓA, ghi manifest dọn lý do
+Q-<mã>; cache _quan_sat_truoc.json: xóa, tự dựng lại; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
 cờ de_ngoai lý do "đã xóa theo Q-<mã>" (phép 12j tự nhận, không báo oan);
-backup cũ còn dữ liệu thì xóa cả bản backup; nhắc người dùng thay bản
-BANG_DIEU_KHIEN, X0_INDEX đã tải lên Project; bản ĐÃ GỬI ra ngoài không xóa
-được, ghi nhận vào QUYETDINH.
+backup cũ còn dữ liệu thì xóa cả bản backup; nhắc thay bản đã tải lên
+Project; bản ĐÃ GỬI ra ngoài không xóa được, ghi nhận QUYETDINH.
 
 COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
 _thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\
-tối đa một lần mỗi ngày, trước lượt ghi đầu tiên của ngày, giữ 7 bản gần
-nhất (mức A, không vào sổ).
+một lần mỗi ngày trước lượt ghi đầu, giữ 7 bản (mức A, không vào sổ).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.
@@ -2365,7 +2409,7 @@ trị ban đầu KHÔNG coi là sửa nhóm khóa C11: không plan, không QUYET
 chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
 
 ```
-1  Mã công ty (3-4 ký tự viết hoa) và tên đầy đủ? Công ty đóng vai gì trong công
+1  Mã công ty (3-4 ký tự A-Z hay số, không dấu) và tên đầy đủ? Công ty đóng vai gì trong công
    việc chính?
 2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
    thì khai các cửa)
@@ -2477,7 +2521,8 @@ FILE: kiem_tra_bo.py
 #!/usr/bin/env python3
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
-# @NHIP.HOPTHU_CU, tổng 69 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
+# XÓA PHÁP LÝ phải sạch, tổng 73 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -2579,6 +2624,8 @@ def do_route(docs):
                    "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md",
                    "X9_CAIDAT.md"]) + len(docs["INSTRUCTION"])
     return {
+        "thêm mục 1b": t(_muc(x5, "1b", 2)),
+        "thêm X5 mục 3": t(_muc(x5, 3, 4)),
         "CHAT không EMAIL": t(tong_bo),
         "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
@@ -2918,6 +2965,40 @@ def main(goc):
         r = chay_email(nk=p_hut + "\n" + C("<a@x>") + "\n", reg=["<a@x>"])
         ca.append(("PREPARED thiếu payload phục hồi bị bắt (dù đã COMMITTED)",
                    r.get(TEN_12H) is False))
+        # BA HÀNH VI v26/v27 của bộ lọc bản sao (ghim máy, hội đồng vòng 7)
+        import kiem_van_hanh as _kv26
+        ca.append(("khuôn bản sao đồng bộ bị nhận diện, tên thường không oan",
+                   all(_kv26.la_file_tam(t) for t in
+                       ["BC (1).docx", "HD copy.xlsx", "HD copy 2.xlsx",
+                        "BC - Copy.docx", "PL(bản sao).pdf"])
+                   and not any(_kv26.la_file_tam(t) for t in
+                               ["copy_of_process.md", "BC_copyright.docx",
+                                "BC_v01.docx"])))
+        ca.append(("loc_ban_chinh chọn đúng bản chính theo tên chuẩn",
+                   [q.name for q in _kv26.loc_ban_chinh(
+                       [Path("NHATKY_2026Q3.md"),
+                        Path("NHATKY_2026Q3-DESKTOP-A1B2.md"),
+                        Path("NHATKY_2026Q3 (1).md"),
+                        Path("NHATKY_TEMPLATE.md")],
+                       r"NHATKY_\d{4}Q[1-4]\.md")] == ["NHATKY_2026Q3.md"]))
+        ca.append(("tên X0 chuẩn 3-4 ký tự, có dấu hay 5 ký tự bị loại",
+                   [q.name for q in _kv26.loc_ban_chinh(
+                       [Path("X0_CAUHINH_ABC.md"), Path("X0_CAUHINH_ĐT.md"),
+                        Path("X0_CAUHINH_ABCDE.md"), Path("X0_CAUHINH_TEMPLATE.md")],
+                       r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")] == ["X0_CAUHINH_ABC.md"]))
+        # KHO SAU XÓA PHÁP LÝ đúng luật phải SẠCH: đính kèm tombstone de_ngoai
+        # "đã xóa theo Q-", staging đã dọn có manifest, dòng sổ giữ mã (12h/12j/
+        # 12k/12l đều phải xanh) - lớp lỗi ba vòng cùng họ, có lưới hồi quy riêng
+        pay_xoa = dict(PAY, dinh_kem=[{"ten": "CV.pdf", "de_ngoai": True,
+                                       "ly_do": "đã xóa theo Q-20260825-01"}])
+        don_xoa = {"<a@x>": {"purged_at": "2026-08-25", "eml_final_path": "x",
+                             "attachment_final_paths": [], "sha256": EML_SHA}}
+        r = chay_email(nk=P("<a@x>", pay=pay_xoa) + "\n" + C("<a@x>") + "\n",
+                       reg=["<a@x>"], files={"_so/VIEC.md": "| V-001 | viec |\n"},
+                       idx=IDX_SACH, don=don_xoa)
+        ca.append(("kho sau XÓA PHÁP LÝ đúng luật phải sạch (12h, 12j, 12k, 12l)",
+                   all(r.get(t) is not False
+                       for t in (TEN_12H, TEN_12J, TEN_12K, TEN_12L))))
         # HỘP CŨ hợp lệ: nhật ký mang hộp lịch sử, X0 khai @NHIP.HOPTHU_CU
         # -> 12e phải PASS (fixture dương cho vá đổi hộp thư vòng 28)
         THU_MUC_CU = _hl.sha256(b"<cu@x>").hexdigest()
@@ -3359,7 +3440,14 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v26 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v27 · 20260825
+# v27, theo hội đồng vòng 7: loc_ban_chinh lên tầng module để fixture ghim
+# được ba hành vi v26 · regex tên chuẩn X0 khớp luật (mã 3-4 ký tự A-Z 0-9,
+# không dấu) và 0c có nhánh "tên không đúng chuẩn: đổi tên file" thay vì
+# cáo buộc "mất cấu hình" oan · tự vệ tham số vế ba: gốc kho không tồn tại
+# (ổ ngoài chưa cắm) thì bỏ qua quan sát, KHÔNG ghi đè cache mốc ổn định ·
+# XÓA PHÁP LÝ khớp lưới: dòng sổ tombstone "[đã xóa theo Q-" vẫn giữ mã nên
+# 12l tự khớp, fixture 70 ghim "kho sau xóa đúng luật phải sạch".
 # v26, theo hội đồng vòng 6: nhận dạng bản sao đồng bộ về MỘT nguồn cho cả
 # ba tầng - MAU_TAM (quan sát kho) học thêm khuôn " (1)", " copy", " copy 2"
 # của Drive và macOS nên bản sao file nghiệp vụ hết được ĐỀ XUẤT vào sổ mức
@@ -3622,6 +3710,20 @@ def watermark(ma):
 
 def la_file_tam(ten):
     return bool(MAU_TAM.search(ten))
+
+
+def loc_ban_chinh(cac, mau=None):
+    """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay file
+    cấu hình: loại _TEMPLATE, conflicted, mọi khuôn bản sao đồng bộ; mau
+    (regex fullmatch) là TÊN CHUẨN - có mau thì chỉ nhận đúng tên chuẩn, nên
+    khuôn conflict lạ (OneDrive -<TênMáy>...) cũng không lọt. Tầng module để
+    fixture ghim được hành vi (hội đồng vòng 7)."""
+    ket = [q for q in sorted(cac) if "TEMPLATE" not in q.name
+           and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
+           and not la_file_tam(q.name)]
+    if mau:
+        ket = [q for q in ket if re.fullmatch(mau, q.name)]
+    return ket
 
 
 def chuan_hoa_ho(ten):
@@ -4380,31 +4482,28 @@ def main(goc):
                    and not re.fullmatch(r"NHATKY_\d{4}Q[1-4]\.md", f.name))
     xung += sorted(f.name for f in goc.glob("X0_CAUHINH_*.md")
                    if "TEMPLATE" not in f.name
-                   and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{2,6}\.md", f.name))
+                   and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name))
     xung = sorted(set(xung))
     bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
-    def loc_ban_chinh(cac, mau=None):
-        """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay
-        file cấu hình: loại _TEMPLATE, conflicted, mọi khuôn bản sao đồng bộ;
-        mau (regex fullmatch) là TÊN CHUẨN - có mau thì chỉ nhận đúng tên chuẩn,
-        nên khuôn conflict lạ (OneDrive -<TênMáy>...) cũng không lọt (v26)."""
-        ket = [q for q in sorted(cac) if "TEMPLATE" not in q.name
-               and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
-               and not la_file_tam(q.name)]
-        if mau:
-            ket = [q for q in ket if re.fullmatch(mau, q.name)]
-        return ket
-    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{2,6}\.md")
+    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
     if not x0s and co_template:
         print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
               " chạy \"cài đặt\" theo X9 trước")
     elif not x0s:
-        bao("0c. có bản X0 đang chạy", False,
-            "không thấy X0_CAUHINH nào: mất file cấu hình, khôi phục mức C")
+        ung_vien_tho = [q.name for q in goc.glob("X0_CAUHINH_*.md")
+                        if "TEMPLATE" not in q.name]
+        if ung_vien_tho:
+            bao("0c. có bản X0 đang chạy", False,
+                f"thấy {ung_vien_tho[:3]} nhưng tên KHÔNG đúng chuẩn"
+                f" X0_CAUHINH_<MÃ 3-4 ký tự A-Z 0-9, không dấu>.md:"
+                f" đổi tên file (mức B), không phải mất cấu hình")
+        else:
+            bao("0c. có bản X0 đang chạy", False,
+                "không thấy X0_CAUHINH nào: mất file cấu hình, khôi phục mức C")
     else:
         bao("0c. đúng MỘT bản X0 đang chạy (không tính _TEMPLATE, conflicted)",
             len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ"
@@ -4568,7 +4667,12 @@ def main(goc):
         args_thuong, loc_ho = [], None
     if len(args_thuong) > 1:
         kho_arg = Path(args_thuong[1])
-        if kho_arg.resolve() == goc.resolve():
+        if not kho_arg.is_dir():
+            # ổ ngoài chưa cắm hay gõ sai: không quan sát, KHÔNG ghi đè cache
+            # mốc ổn định bằng tập rỗng (hội đồng vòng 7, tự vệ vế ba)
+            print(f"  BỎ QUA  9-11: gốc kho {kho_arg} không tồn tại hay chưa gắn;"
+                  f" cache mốc ổn định giữ nguyên")
+        elif kho_arg.resolve() == goc.resolve():
             # dán trùng đường 00_Index vào cả hai tham số: dừng sớm thay vì
             # phun "file khai Kho đã mất" oan (hội đồng vòng 6, tự vệ vế hai)
             print(f"  BỎ QUA  9-11: tham số <gốc kho> trùng với 00_Index;"

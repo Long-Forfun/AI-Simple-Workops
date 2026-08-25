@@ -28,7 +28,7 @@ trị ban đầu KHÔNG coi là sửa nhóm khóa C11: không plan, không QUYET
 chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
 
 ```
-1  Mã công ty (3-4 ký tự viết hoa) và tên đầy đủ? Công ty đóng vai gì trong công
+1  Mã công ty (3-4 ký tự A-Z hay số, không dấu) và tên đầy đủ? Công ty đóng vai gì trong công
    việc chính?
 2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
    thì khai các cửa)

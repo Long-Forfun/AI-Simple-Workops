@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v26 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v27 · 20260825
+# v27, theo hội đồng vòng 7: loc_ban_chinh lên tầng module để fixture ghim
+# được ba hành vi v26 · regex tên chuẩn X0 khớp luật (mã 3-4 ký tự A-Z 0-9,
+# không dấu) và 0c có nhánh "tên không đúng chuẩn: đổi tên file" thay vì
+# cáo buộc "mất cấu hình" oan · tự vệ tham số vế ba: gốc kho không tồn tại
+# (ổ ngoài chưa cắm) thì bỏ qua quan sát, KHÔNG ghi đè cache mốc ổn định ·
+# XÓA PHÁP LÝ khớp lưới: dòng sổ tombstone "[đã xóa theo Q-" vẫn giữ mã nên
+# 12l tự khớp, fixture 70 ghim "kho sau xóa đúng luật phải sạch".
 # v26, theo hội đồng vòng 6: nhận dạng bản sao đồng bộ về MỘT nguồn cho cả
 # ba tầng - MAU_TAM (quan sát kho) học thêm khuôn " (1)", " copy", " copy 2"
 # của Drive và macOS nên bản sao file nghiệp vụ hết được ĐỀ XUẤT vào sổ mức
@@ -262,6 +269,20 @@ def watermark(ma):
 
 def la_file_tam(ten):
     return bool(MAU_TAM.search(ten))
+
+
+def loc_ban_chinh(cac, mau=None):
+    """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay file
+    cấu hình: loại _TEMPLATE, conflicted, mọi khuôn bản sao đồng bộ; mau
+    (regex fullmatch) là TÊN CHUẨN - có mau thì chỉ nhận đúng tên chuẩn, nên
+    khuôn conflict lạ (OneDrive -<TênMáy>...) cũng không lọt. Tầng module để
+    fixture ghim được hành vi (hội đồng vòng 7)."""
+    ket = [q for q in sorted(cac) if "TEMPLATE" not in q.name
+           and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
+           and not la_file_tam(q.name)]
+    if mau:
+        ket = [q for q in ket if re.fullmatch(mau, q.name)]
+    return ket
 
 
 def chuan_hoa_ho(ten):
@@ -1020,31 +1041,28 @@ def main(goc):
                    and not re.fullmatch(r"NHATKY_\d{4}Q[1-4]\.md", f.name))
     xung += sorted(f.name for f in goc.glob("X0_CAUHINH_*.md")
                    if "TEMPLATE" not in f.name
-                   and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{2,6}\.md", f.name))
+                   and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name))
     xung = sorted(set(xung))
     bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
         f"{xung[:3]}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
-    def loc_ban_chinh(cac, mau=None):
-        """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay
-        file cấu hình: loại _TEMPLATE, conflicted, mọi khuôn bản sao đồng bộ;
-        mau (regex fullmatch) là TÊN CHUẨN - có mau thì chỉ nhận đúng tên chuẩn,
-        nên khuôn conflict lạ (OneDrive -<TênMáy>...) cũng không lọt (v26)."""
-        ket = [q for q in sorted(cac) if "TEMPLATE" not in q.name
-               and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()
-               and not la_file_tam(q.name)]
-        if mau:
-            ket = [q for q in ket if re.fullmatch(mau, q.name)]
-        return ket
-    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{2,6}\.md")
+    x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
     if not x0s and co_template:
         print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
               " chạy \"cài đặt\" theo X9 trước")
     elif not x0s:
-        bao("0c. có bản X0 đang chạy", False,
-            "không thấy X0_CAUHINH nào: mất file cấu hình, khôi phục mức C")
+        ung_vien_tho = [q.name for q in goc.glob("X0_CAUHINH_*.md")
+                        if "TEMPLATE" not in q.name]
+        if ung_vien_tho:
+            bao("0c. có bản X0 đang chạy", False,
+                f"thấy {ung_vien_tho[:3]} nhưng tên KHÔNG đúng chuẩn"
+                f" X0_CAUHINH_<MÃ 3-4 ký tự A-Z 0-9, không dấu>.md:"
+                f" đổi tên file (mức B), không phải mất cấu hình")
+        else:
+            bao("0c. có bản X0 đang chạy", False,
+                "không thấy X0_CAUHINH nào: mất file cấu hình, khôi phục mức C")
     else:
         bao("0c. đúng MỘT bản X0 đang chạy (không tính _TEMPLATE, conflicted)",
             len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ"
@@ -1208,7 +1226,12 @@ def main(goc):
         args_thuong, loc_ho = [], None
     if len(args_thuong) > 1:
         kho_arg = Path(args_thuong[1])
-        if kho_arg.resolve() == goc.resolve():
+        if not kho_arg.is_dir():
+            # ổ ngoài chưa cắm hay gõ sai: không quan sát, KHÔNG ghi đè cache
+            # mốc ổn định bằng tập rỗng (hội đồng vòng 7, tự vệ vế ba)
+            print(f"  BỎ QUA  9-11: gốc kho {kho_arg} không tồn tại hay chưa gắn;"
+                  f" cache mốc ổn định giữ nguyên")
+        elif kho_arg.resolve() == goc.resolve():
             # dán trùng đường 00_Index vào cả hai tham số: dừng sớm thay vì
             # phun "file khai Kho đã mất" oan (hội đồng vòng 6, tự vệ vế hai)
             print(f"  BỎ QUA  9-11: tham số <gốc kho> trùng với 00_Index;"

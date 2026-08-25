@@ -4,6 +4,42 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 31: vá theo hội đồng vòng 7 (20260825, điểm vòng 7: 91,2/100)
+
+Điểm vòng 7: THÔNG MINH 8,5 · VẬN HÀNH 9,0 · KHÔNG SAI 9,0 · TOKEN 9,1 ·
+KHÔNG MISS 9,5 · ĐƠN GIẢN 9,6. Giám khảo THÔNG MINH tuyên bố "hệ đã hội tụ:
+lỗi còn lại là lỗi KHÂU, không còn lỗi THIẾT KẾ"; ĐƠN GIẢN tuyên bố bão hòa.
+Vá:
+
+1. XÓA PHÁP LÝ khớp trọn lưới máy (VỪA cuối, hai giám khảo cùng chỉ): dòng
+   TAILIEU, THU là ĐÍCH INDEX thì giữ khung và mã dòng, chỉ trung hòa ô dữ
+   liệu (12k, 12l tự khớp); dòng NHATKY mất dấu Ghi lần thì ô "Chạm sổ nào"
+   thay "không, đã xóa theo Q-<mã>" (đi lối "không" sẵn của phép 3c); VIEC,
+   DUKIEN, PLANNING, staging + manifest lý do Q, cache quan sát đều có cách
+   xử; fixture 73 "kho sau XÓA PHÁP LÝ đúng luật phải sạch" ghim hồi quy.
+2. kiem_van_hanh v27: loc_ban_chinh lên tầng module, ba hành vi bộ lọc bản
+   sao được fixture ghim (73 ca); regex mã X0 khớp luật 3-4 ký tự A-Z 0-9
+   (luật ghi rõ KHÔNG dấu ở X0 C1 và X9 câu 1, hết cáo buộc oan mã có dấu);
+   0c nhánh "tên không đúng chuẩn: đổi tên file"; tự vệ tham số vế ba (gốc
+   kho không tồn tại: bỏ qua quan sát, KHÔNG ghi đè cache mốc ổn định).
+3. Giới hạn nói ra ở nơi người dùng đọc (KHÔNG MISS: "ghi nhận đúng nhưng
+   sai chỗ"): kênh chat Zalo chưa có pipeline (README Ngày thường + X0 C9);
+   bộ mặc định MỘT người vận hành toàn quyền chốt C (X0 C6); giá của khuôn
+   bản sao khai tại luật tên file C4 (" (n)", "(bản sao)" bị máy coi là bản
+   sao đồng bộ).
+4. README thêm mục "CÔNG TY CÓ PHẦN MỀM": khai rõ PHẠM VI TỔ CHỨC từng phần
+   mềm (repo, thành phần, môi trường, nơi chạy thật, nơi giữ secret) ngay từ
+   phiên cài đặt để các vận hành liên quan chính xác; trỏ X9 mục 1 câu 3, X0
+   C2 @DUAN.PHANMEM, X5 mục 1b, X2 phát hành build.
+5. Máy giữ thêm hai số con của BENCHMARK (mục 1b ~421, X5 mục 3 ~1058) qua
+   phép 2c; số mục 3 cập nhật (~950 đã trôi 11%). Trần X0, X5 GIỮ NGUYÊN
+   theo quy ước nâng-trần-kèm-bù: mọi phần thêm vòng này được bù bằng cắt
+   chữ tương đương ngay trong hai file đó (X0 15.993/16.000, X5
+   16.996/17.000 - lần thử lửa đầu của quy ước, đạt).
+
+Watchlist trần: X0 99,9% · X5 99,9% · X3E ~92% · X9 ~92%. Hai file trụ đã
+kín trần thật sự: vòng sau muốn thêm chữ vào X0 hay X5 là phải cắt trước.
+
 ## Vòng 30: vá theo hội đồng vòng 6 (20260825, điểm vòng 6: 89/100)
 
 Điểm vòng 6: VẬN HÀNH 8,5 · THÔNG MINH 8,5 · KHÔNG SAI 8,5 · TOKEN 9,0 ·

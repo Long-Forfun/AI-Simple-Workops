@@ -66,6 +66,10 @@ chốt sổ     kết phiên an toàn, vét các lượt ghi dở
             biết file nào là bản mới nhất, bản nào đã cũ
 ```
 
+Kênh chat (Zalo, Messenger) chưa có pipeline quét tự động như mail: nội
+dung chat cứ dán vào phiên, AI ghi nhận theo luật nguồn (tin nhắn chưa xác
+nhận tính là nguồn miệng).
+
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
 Chỉ vậy. Mã số, rev, trace, mức nguồn là việc của AI, bạn không cần hiểu.
 
@@ -86,6 +90,25 @@ nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
 X0 tới X5, AI route tới đúng mục đúng lúc.
+
+## Công ty có phần mềm
+
+Bộ xử được trọn vòng vận hành phần mềm, với điều kiện KHAI RÕ PHẠM VI TỔ
+CHỨC của từng phần mềm ngay từ đầu - AI hỏi ở phiên cài đặt (X9 mục 1 câu
+3), giá trị nằm ở X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
+
+```
+repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở đâu)
+· nơi chạy thật · nơi giữ secret
+```
+
+Khai đủ thì các vận hành liên quan mới chính xác: code ở repo là nguồn sự
+thật (không chép vào kho, không qua _INBOX) · mức duyệt từng thao tác repo
+theo bảng ở X5 mục 1b (deploy hay migration chạy thật, merge vào nhánh có
+CI/CD, rollback, force-push đều là việc RỦI RO cần plan; dev, staging là
+việc nhẹ) · secret không vào kho, sổ hay phiên · dump, log mang dữ liệu
+khách coi là đầu ra có phạm vi · phát hành bản build có bảng kiểm riêng
+(X2). Mục nào chưa rõ cứ trả lời "chưa rõ, hỏi đội kỹ thuật".
 
 ## Trong repo có gì
 

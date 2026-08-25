@@ -41,15 +41,15 @@ Kho là MỘT bản dữ liệu duy nhất. Một kho có thể có nhiều cử
 giữ bản cuối" giữa các cửa của cùng một kho.
 
 ```
-@CTY.MA          <điền, 3-4 ký tự viết hoa>
+@CTY.MA          <điền, 3-4 ký tự A-Z hay số, KHÔNG dấu tiếng Việt>
 @CTY.TEN         <điền>
 @CTY.VAITRO      <điền, công ty đóng vai gì trong công việc chính>
 
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <đường dẫn gốc trên máy 1> · thiết bị <tên>
                  <thêm CUA2... nếu kho mây có nhiều máy cùng vào>
-                 Kho Ổ MÁY ĐƠN: backup máy sinh nằm CÙNG Ổ, hỏng phần cứng
-                 là mất cả hai; phải có sao lưu định kỳ ra thiết bị khác
+                 Kho Ổ MÁY ĐƠN: backup nằm cùng ổ, hỏng phần cứng là mất
+                 cả hai; phải sao lưu định kỳ ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
 @KHO.CU          <kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
@@ -89,8 +89,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   theo C1. Mức từng thao tác repo, SECRET, dữ liệu khách trong dump và log,
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
-  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret giữ
-  ở GitHub Actions secrets. Mục nào
+  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
+  GitHub Actions. Mục nào
   chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
 ```
 
@@ -127,7 +127,8 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 @TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL <thêm bớt khi cài>
 ```
 
-Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi. Nội bộ DoiTac là
+Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
+và khuôn " (n)", "(bản sao)": máy coi là bản sao đồng bộ, loại khỏi quan sát. Nội bộ DoiTac là
 NA. Bản ký thêm `_SIGNED`, bất biến. Trạng thái ở TAILIEU, không vào tên file.
 Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức C, phải có QUYETDINH.
 
@@ -164,6 +165,8 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
 ```
 
+Bộ mặc định MỘT người vận hành toàn quyền chốt mức C; nhiều người dùng
+chung tự quy ước ai chốt - hệ ghi vết theo cửa, phiên, không phân quyền.
 Vai chỉ đổi khi có văn bản ký mới. Cách gọi trong hội thoại không làm đổi vai.
 Gỡ một lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã", chỉ gỡ khi dữ kiện
 gốc đổi trạng thái.
@@ -239,6 +242,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
+                 Quét tự động chỉ có cho EMAIL; chat (Zalo...) dán tay vào
+                 phiên: tin nhắn chưa xác nhận là nguồn D, ảnh như nguồn scan
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>

@@ -260,24 +260,27 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
 
-XÓA THEO YÊU CẦU PHÁP LÝ (mức C, QUYETDINH ghi căn cứ; là ngoại lệ DUY NHẤT
-của X1 mục 5 "cờ GỐC KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã>): quét
+XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 5 "cờ GỐC
+KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
 đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
 · _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
 con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
 CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
-giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng
-TAILIEU, THU trỏ file đã xóa thì XÓA DÒNG ngay trong plan C này, hai sổ đó
-không phải chỉ-thêm; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
+giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
+mất hết dấu "Ghi lần": ô "Chạm sổ nào" thay "không, đã xóa theo Q-<mã>".
+Dòng TAILIEU, THU trỏ file đã xóa: KHÔNG là đích index _thu_ap_dung thì XÓA
+DÒNG trong plan C này; ĐANG là đích index (mail đã COMMITTED) thì GIỮ khung
+và mã dòng, thay ô dữ liệu bằng "[đã xóa theo Q-<mã>]" (12k, 12l đối chiếu
+mã còn đứng). VIEC, DUKIEN, PLANNING: xóa dòng hay trung hòa, liên kết trỏ
+mã đã xóa thay cùng cách. Staging liên quan: XÓA, ghi manifest dọn lý do
+Q-<mã>; cache _quan_sat_truoc.json: xóa, tự dựng lại; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
 cờ de_ngoai lý do "đã xóa theo Q-<mã>" (phép 12j tự nhận, không báo oan);
-backup cũ còn dữ liệu thì xóa cả bản backup; nhắc người dùng thay bản
-BANG_DIEU_KHIEN, X0_INDEX đã tải lên Project; bản ĐÃ GỬI ra ngoài không xóa
-được, ghi nhận vào QUYETDINH.
+backup cũ còn dữ liệu thì xóa cả bản backup; nhắc thay bản đã tải lên
+Project; bản ĐÃ GỬI ra ngoài không xóa được, ghi nhận QUYETDINH.
 
 COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
 _thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\
-tối đa một lần mỗi ngày, trước lượt ghi đầu tiên của ngày, giữ 7 bản gần
-nhất (mức A, không vào sổ).
+một lần mỗi ngày trước lượt ghi đầu, giữ 7 bản (mức A, không vào sổ).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.
