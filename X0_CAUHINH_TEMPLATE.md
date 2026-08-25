@@ -18,8 +18,9 @@ không đọc, không hỏi.
 ```
 @PROFILE   CORE luôn bật: việc, tài liệu, quyết định, mức A B C, ghi sổ
   [ ] REGULATED   nguồn chỉ định, phạm vi chi tiết, phát hành chính thức, hồ
-                  sơ nhà nước (thang mức nguồn A-D là CORE theo C7; REGULATED
-                  kích hoạt C5 và phần chi tiết C7, X2 đầy đủ)
+                  sơ nhà nước (thang mức nguồn A-D là CORE theo C7; tập phạm vi
+                  tối thiểu của C5 là CORE; REGULATED kích hoạt phần CHI TIẾT
+                  của C5, C7 và X2 đầy đủ)
   [ ] PARALLEL    kho nhiều cửa, nhiều phiên cùng ghi (luật cửa ở C1, kiểm trùng
                   mã ở X5 mục 3 bước 2)
   [ ] AUTOMATED   tác vụ hẹn giờ, giám sát (C9, X3 nhịp, luật phiên không
@@ -83,14 +84,17 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   commit hay PR. MỨC cho thao tác repo: sửa code trên nhánh trong việc đã
   mở là A · deploy dev, staging là A của dự án đó · deploy môi trường CHẠY
   THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy thật, migration dữ liệu
-  chạy thật, force-push hay xóa lịch sử là C (X5 mục 1); danh mục "cấu trúc
-  folder hàng loạt là C" KHÔNG áp cho bên trong repo. Một phần mềm nhiều
+  chạy thật, force-push hay xóa lịch sử là C (X5 mục 1); ROLLBACK môi trường
+  chạy thật là C; xóa nhánh ĐÃ merge là A, CHƯA merge (mất code) là C; danh
+  mục "cấu trúc folder hàng loạt là C" KHÔNG áp cho bên trong repo. Một phần mềm nhiều
   repo: mỗi repo một vế trên cùng dòng. Đặc tả, tài liệu sống cùng code nằm
   trong repo, TAILIEU trỏ dạng "Repo" theo C1.
   SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
   bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng
-  phần mềm (vault, secret manager). Lộ secret: VIEC mức gấp, thu hồi
-  trước, ghi sau. Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu
+  phần mềm (vault, secret manager). Lộ secret RA NGOÀI công ty: VIEC mức
+  gấp, thu hồi trước, ghi sau. Người dùng TỰ dán secret vào phiên: nhắc một
+  câu về rủi ro rồi xử tiếp việc chính; sổ chỉ mô tả LOẠI secret và hệ liên
+  quan, CẤM chép giá trị secret vào bất kỳ sổ hay file nào của kho. Phần mềm giữ dữ liệu khách hàng: dump, log mang dữ liệu
   đó coi là đầu ra có phạm vi theo C5, không kéo về kho tùy tiện.
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn. Mục nào
@@ -140,6 +144,8 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @PHAMVI.TAP      tập đóng, đầu ra mang đúng một giá trị
   <MÃ PHẠM VI>   <cho loại tài liệu nào, gửi ai>
   NOI_BO         trong công ty                              luôn có
+  RA_NGOAI       mọi đầu ra rời công ty khi chưa khai phạm vi chi tiết
+                 (LITE dùng ngay giá trị này, khỏi dừng hỏi)   luôn có
 
 @PHAMVI.CAM      <điền: phạm vi nào cấm từ nào. Trúng một từ là dừng>
 @PHAMVI.BATBUOC  <điền: phạm vi nào bắt buộc khai gì, hậu quả nếu thiếu>
@@ -203,13 +209,16 @@ Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
 mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo <tên nguồn> <bản, ngày>". Mức
 tối thiểu áp cho mọi dữ kiện KHÔNG có nguồn chỉ định.
 
-Xác nhận BẰNG CHỮ của người dùng ngay trong phiên, khi người dùng là bên có
-thẩm quyền của dữ kiện đó: ghi mức B, nguồn "xác nhận trong phiên <ngày>";
-chỉ lời KỂ về bên thứ ba ("đối tác nói...") mới là D.
+Xác nhận BẰNG CHỮ của người dùng ngay trong phiên: ghi mức B, nguồn "xác
+nhận trong phiên <ngày>". Phép thử thẩm quyền: người dùng chỉ có thẩm quyền
+với dữ kiện thuộc vai của CHÍNH công ty mình theo C6; dữ kiện thuộc bên khác,
+dù diễn đạt kiểu gì, tối đa là D. NGOẠI LỆ: VAI và TỶ LỆ các bên không đi
+đường này, chỉ đổi theo văn bản ký (C6, luật cốt lõi 2).
 Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file kèm cờ CHƯA
 ĐỌC ĐƯỢC, CẤM rút dữ kiện từ đó cho tới khi có bản đọc được hay người dùng
 đọc tay và xác nhận từng số. Số đo kèm đơn vị hoặc loại số đo. Hai nguồn cãi nhau: DUKIEN ghi MÂU THUẪN, cấm tự
-chọn. Bản mới thay bản cũ chỉ khi có mail hoặc biên bản xác nhận (tức từ mức B).
+chọn. Bản mới thay bản cũ chỉ khi có mail, biên bản, hay xác nhận trong phiên của
+bên có thẩm quyền (tức từ mức B).
 
 # C8. Thuật ngữ và hình thức
 
@@ -249,7 +258,9 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
                  định 50 MB; vượt trần xử theo X3E mục 2
 @NHIP.BANGIAO    <tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
-                 Thủ tục bàn giao là LUẬT, ở X3E mục 2 khối BÀN GIAO
+                 Thủ tục chung (mức B): đổi tham số người dùng, rà một lượt
+                 việc đang mở và plan treo sang người mới; phần rà luồng THƯ
+                 khi bật EMAIL theo X3E mục 2 khối BÀN GIAO
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
                  quét (file status máy sinh); digest đọc giờ quét THẬT từ
                  đây, không lấy giờ chạy báo cáo>. Schema tối thiểu BẮT BUỘC:
@@ -311,13 +322,13 @@ tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 Để soát tay khi nghi lệch. Không phải bản chép, chỉ là mục lục.
 
 ```
-X1  đọc C1 (ba dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
+X1  đọc C1 (bốn dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
     tên) · C8 (ký tự, số, động từ)
 X2  đọc C5 · C6 · C7 · C8 · C10
-X3  đọc C7 (mức nguồn khi rút dữ kiện) · C9
+X3  đọc C1 (@DUONG.INBOX) · C7 (mức nguồn khi rút dữ kiện) · C9
 X3E đọc C9 (@NHIP.HOPTHU, TAIKHOAN, TENGOI, DEMSTAGING, TRANDINHKEM,
     TRANGTHAI, DAUGUI, BANGIAO; chỉ khi bật EMAIL)
-X4  đọc C9 (các ngưỡng rà)
+X4  đọc C1 (@DUONG.INBOX) · C9 (các ngưỡng rà)
 X5  đọc C0 · C1 (danh sách cửa cho mã G, @DUONG.PROJECT) · C2 · C3 · C4 ·
     C11 (ngoại lệ siết chặt) · C12 (dòng nhắc của bảng) · C13
 ```

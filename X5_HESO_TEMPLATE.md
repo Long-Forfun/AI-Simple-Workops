@@ -101,7 +101,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    một cửa thì luôn là CUA1): hai phiên khác cửa không thể trùng mã. Số NN đọc
    NHATKY ngay trước khi cấp; sang quý chưa có file thì tạo NHATKY_<năm>Q<quý>
    mới từ template trong cùng lượt (mức A), NN đọc ở file của quý mang ngày
-   cấp mã. Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
+   cấp mã; lượt tạo file quý mới ĐỒNG THỜI nhắc chạy vòng quý của X4 cho quý
+   vừa đóng. Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
    của NHATKY ghi ĐỊNH DANH LƯỢT = <CỬA>.<giờ phút>.<hậu tố ngẫu nhiên 3-4 ký
    tự>; cặp (mã G, định danh lượt) dùng để HÒA GIẢI XUNG ĐỘT, không phải khóa
    nguyên tử; mã G chỉ là số hiển thị

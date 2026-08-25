@@ -42,7 +42,8 @@ EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
 27  một khóa (Message-ID hay fallback) đứng cuối ở hai luồng THU
 28  nhật ký có mail thuộc hộp thư khác giá trị khai @NHIP.HOPTHU (so chính xác),
     hoặc có bằng chứng EMAIL chạy mà X0 CHƯA khai @NHIP.HOPTHU
-29  staging vắng khi lượt chưa COMMITTED hay không có manifest dọn hợp lệ;
+29  (mục mang cờ de_ngoai để ngoài staging theo X3E mục 2, không tính)
+    staging vắng khi lượt chưa COMMITTED hay không có manifest dọn hợp lệ;
     staging còn nhưng thiếu .eml hay body, file rỗng, sai sha256; đính kèm
     khai trong payload thiếu file, sai sha256, sai byte, tên thoát đường dẫn
 29b thư mục staging không có khóa nào trong nhật ký (mồ côi): báo, người

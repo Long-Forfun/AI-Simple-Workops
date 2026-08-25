@@ -57,6 +57,11 @@ do người dùng vừa đưa trong phiên KHÔNG tính là số liệu nghiệp
 dòng DUKIEN, không thoát thường lệ; số kỹ thuật, tiền, tỷ lệ, mốc cam kết
 luôn tính là số liệu nghiệp vụ.
 
+Phát hành PHẦN MỀM cho khách: bảng kiểm chạy trên BỘ TÀI LIỆU PHÁT HÀNH đi
+kèm (release note, hướng dẫn, phiên bản); gói build ghi TAILIEU kèm sha256 và
+tag repo (@DUAN.PHANMEM), dòng 1-2 áp cho số liệu trong tài liệu đó, không áp
+lên binary.
+
 # 3. Phát hiện tài liệu đã gửi bị sai
 
 Dừng ngay · ghi VIEC mức gấp: sai gì, bản nào, gửi ai ngày nào · trình phương án cho

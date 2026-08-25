@@ -137,7 +137,14 @@ INLINE      "[xem trả lời bên dưới từng mục]") vẫn tính là PHẦ
 QUÁ LỚN     staging hay kho đồng bộ; trong payload PREPARED mục đó khai cờ
             de_ngoai kèm lý do (phép kiểm 12j bỏ qua, không báo thiếu oan);
             ghi dòng TAILIEU trỏ nguồn (link, mã thư) kèm sha256 nếu lấy
-            được, mở VIEC "tải tay" cho người dùng; mail vẫn COMMITTED
+            được, mở VIEC "tải tay" cho người dùng; mail vẫn COMMITTED.
+            Đính kèm nhận diện là DỮ LIỆU KHÁCH HÀNG hay dữ liệu cá nhân
+            theo C5: xử cùng cách (de_ngoai kèm lý do, KHÔNG kéo vào staging
+            hay kho đồng bộ), mở VIEC xếp chỗ theo phạm vi
+MAIL MÁY    thư từ no-reply, bot, CI/CD, alert giám sát: không cấp luồng
+            mới cho từng thư, không xét CHỜ TÔI, gom MỘT dòng cuối digest
+            (đếm theo nguồn); địa chỉ bot của CHÍNH công ty không tính là
+            "thư của mình" dù nằm cùng tên miền
 BÀN GIAO    người dùng mới thay người cũ (giá trị khai @NHIP.BANGIAO, X0
             C9): đổi @NHIP.TAIKHOAN, TENGOI là mức B; mọi luồng CHỜ TÔI
             và CHỜ ĐỐI TÁC đang mở rà lại MỘT lượt (thư chào đích danh

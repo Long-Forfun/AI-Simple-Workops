@@ -30,7 +30,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
-   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad; máy Mac dùng TextEdit; Ctrl+A, Ctrl+C).
+   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad, bấm Ctrl+A rồi Ctrl+C; máy Mac dùng TextEdit,
+   phím là Cmd+A, Cmd+C).
    Không sửa chữ nào.
 
 3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0
@@ -59,7 +60,8 @@ quét mail   xử thư trong phiên, ra bảng chờ duyệt      (khi bật EMA
 rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa;
             xem bảng xong muốn sửa mục nào thì nói, AI trình cách rồi làm
 chốt sổ     kết phiên an toàn, vét các lượt ghi dở
-đồng bộ quan sát   (nâng cao) cho AI tự ghi vai bản mới, bản cũ sau khi quét
+đồng bộ quan sát   (nâng cao) sau khi quét kho, cho AI tự cập nhật sổ để
+            biết file nào là bản mới nhất, bản nào đã cũ
 ```
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.

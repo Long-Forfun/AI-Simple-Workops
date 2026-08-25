@@ -1,7 +1,8 @@
 # BỘ KHỞI TẠO WORKOPS · v24 · 20260824 · đọc file này trước
 
-Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9 mục 3b). Bốn bước: người dùng làm 1
-và 2, bước 3 chỉ cần khi dùng phiên CHAT, AI làm bước 4. Từ mở phiên đầu tới
+Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9 mục 3b). Bốn bước: người dùng làm 1,
+2 và mở phiên ở bước 4; phần còn lại của bước 4 AI tự làm; bước 3 chỉ cần
+khi dùng phiên CHAT. Từ mở phiên đầu tới
 làm việc được: ba câu bắt buộc, một câu profile.
 
 ```

@@ -4,6 +4,50 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Hai mươi ba vòng, mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 27: vá theo hội đồng vòng 3 (20260825, điểm vòng 3: 80/100)
+
+Điểm vòng 3: VẬN HÀNH 7,5 · THÔNG MINH 7,5 · KHÔNG SAI 7,5 · KHÔNG MISS 8,0 ·
+TOKEN 8,5 · ĐƠN GIẢN 9,0. Ba giám khảo chạy thật và cùng bắt hai lỗi CAO do
+vòng 26 sinh: de_ngoai bị schema 12h đánh hỏng, và "ba dạng" chưa thành "bốn
+dạng" ở ba đầu luật. Vá:
+
+1. kiem_van_hanh v23: glob NHATKY loại _TEMPLATE (template nằm trong _so theo
+   cài chuẩn che phép 0d, xóa trục sự thật vẫn "hệ sạch" — kịch bản đinh của
+   giám khảo vận hành) · kiem_payload miễn sha256/bytes cho đính kèm de_ngoai
+   (đòi ten + ly_do), máy hết đá luật X3E; hai fixture mới (de_ngoai hợp lệ
+   phải sạch, thiếu ly_do phải lệch), bộ fixture lên 68 ca · 12d và 12j2 xử
+   nhật ký RỖNG như nhật ký vắng (hết lách qua nhánh "GIỮ registry"), khóa
+   staging lấy từ cả registry · 0c phân biệt "chưa cài, chỉ thấy template"
+   (bỏ qua êm — hết 3 LỆCH oan trên bộ mới clone) với "mất X0" và "nhiều
+   ứng viên" · 12e loại cả bản conflicted.
+2. BENCHMARK thành lời thật: bỏ tuyên bố "sinh lại tự động" treo; thêm phép
+   2c so SỐ route với số đo thật (dung sai 10%, đo bằng cùng quy tắc mục),
+   chế độ --sinh-benchmark in số mới; toàn bộ bảng route cập nhật theo số đo
+   20260825; dòng CHAT tách hai con số (không EMAIL ~15.800, có EMAIL ~19.100).
+3. "Bốn dạng" đồng bộ ba đầu: X1 mục 5, C14 hàng X1, header TAILIEU (kèm chú
+   dạng Repo chỉ cho dự án @DUAN.PHANMEM).
+4. Khép các khe phán đoán vòng 3: rollback môi trường chạy thật = C, xóa
+   nhánh đã merge = A chưa merge = C (C2) · phép thử thẩm quyền cho xác nhận
+   trong phiên + ngoại lệ VAI, TỶ LỆ chỉ theo văn bản ký (C7) · người dùng
+   TỰ dán secret: nhắc một câu rồi làm tiếp, cấm chép giá trị vào sổ; lộ RA
+   NGOÀI mới là VIEC mức gấp (C2) · thủ tục bàn giao CHUNG là mức B ở C9
+   (CORE), phần thư mới nằm X3E · C5 có RA_NGOAI mặc định, LITE khỏi dừng
+   hỏi phạm vi (gỡ vênh C0 "kích hoạt C5" với X2) · trigger vòng quý đặt
+   ngay tại điểm tạo NHATKY quý mới trong X5.
+5. Phần mềm nốt hai lỗ vòng 3: phát hành PHẦN MỀM chạy bảng kiểm trên BỘ TÀI
+   LIỆU PHÁT HÀNH, build vào TAILIEU kèm sha256 và tag repo (X2) · đính kèm
+   là dữ liệu khách hay dữ liệu cá nhân xử như de_ngoai, không kéo vào kho
+   đồng bộ; MAIL MÁY (no-reply, bot, CI/CD) không cấp luồng, gom một dòng
+   digest, bot công ty không tính "thư của mình" (X3E mục 2).
+6. UX vòng 3: phím Mac là Cmd không phải Ctrl · DOC_TRUOC hết câu "AI làm
+   bước 4" nói quá · "đồng bộ quan sát" tả bằng tiếng người · C14 hàng X3,
+   X4 thêm C1; X4 rà 29 chú de_ngoai.
+
+Watchlist trần cho vòng sau: X0 ~15,3k/16.000 · X9 ~5,9k/6.500 · X3E
+~10,3k/12.000. Chưa vá, ghi nhận: nghiệm thu source thuê ngoài vào 99_Goc ·
+con trỏ Repo@commit chết chưa có phép dò máy · lối khẩn cho truyền thông sự
+cố production.
+
 ## Vòng 26: vá theo hội đồng vòng 2 (20260825, điểm vòng 2: 77,5/100)
 
 Hội đồng chấm lại sau vòng 24-25: VẬN HÀNH 7,0 (tụt vì bản vá backup tự sinh

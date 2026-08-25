@@ -1,8 +1,8 @@
 # BENCHMARK_TOKEN · STARTER v24 · 20260824
 
-Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt), SINH LẠI TỰ ĐỘNG
-mỗi lần đóng gói từ kích thước file THẬT của đúng bản này, version lấy theo
-DOC_TRUOC (phép kiểm 2b giữ khớp). Đây là BENCHMARK TĨNH; cột "phiên thật" để
+Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt). Version khớp
+DOC_TRUOC (phép kiểm 2b); các số route được MÁY GIỮ KHỚP file thật bằng phép
+kiểm 2c (dung sai 10%), số mới lấy bằng `python kiem_tra_bo.py . --sinh-benchmark`. Đây là BENCHMARK TĨNH; cột "phiên thật" để
 trống, điền dần từ log phiên chạy thật, chưa có số đó thì không tuyên bố kết quả
 runtime.
 
@@ -10,15 +10,15 @@ runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | 1830 |
+| INSTRUCTION dán trong Project | 4148 | 1884 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
-| CỘNG | ~6969 | ~2159 |
+| CỘNG | ~6969 | ~2213 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
 4.200 ký tự cộng INSTRUCTION) xấp xỉ 4.000 token, vẫn thấp hơn trước tối ưu.
-Nền tảng nào kéo CẢ X5 (hiện ~4687 token) thay vì đúng mục thì mỗi thao tác đổi
+Nền tảng nào kéo CẢ X5 (hiện ~4765 token) thay vì đúng mục thì mỗi thao tác đổi
 trạng thái tốn thêm phần chênh; luật đọc theo mục của X5 mục 5 áp cho cả X3, X5.
 
 ## Chi phí context theo loại yêu cầu (ngoài thuế, chưa tính tài liệu nghiệp vụ)
@@ -29,13 +29,13 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1471 | |
-| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~4687 + khối | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (~1003) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2361 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3050) + THU theo khối | ~5400 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1215 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~2863 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~2863 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1577 (thêm X5 mục 3 ~950 khi ghi sổ) | |
+| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~4765 + khối | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2481 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3278) + THU theo khối | ~5759 + khối | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1461 | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3052 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3052 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
@@ -48,7 +48,7 @@ là FAIL.
 
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
-là cả bộ (~16.500 token cộng INSTRUCTION); CHAT vì thế chỉ nên dùng cho HOI,
+là cả bộ: không EMAIL ~15.800 token, có EMAIL (kèm X3E) ~19.100; CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
 ## Ghi chú profile

@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v22 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v23 · 20260825
+# v23, theo hội đồng vòng 3 (giám khảo dựng kho giả lập chạy thật): glob
+# NHATKY loại _TEMPLATE (template nằm trong _so theo cài chuẩn che phép 0d,
+# xóa trục sự thật vẫn "hệ sạch") · kiem_payload miễn sha256/bytes cho đính
+# kèm mang cờ de_ngoai (chỉ đòi ten + ly_do), máy hết đá luật X3E mục 2 ·
+# 12d và 12j2 xử cả nhật ký RỖNG (file còn, 0 sự kiện) như nhật ký vắng:
+# GIỮ registry, staging không bị gọi mồ côi oan · 0c phân biệt "chưa cài,
+# chỉ thấy template" (bỏ qua êm) với "mất X0" và "nhiều ứng viên" · 12e
+# loại cả bản conflicted khỏi nguồn đọc cấu hình.
 # v22, theo hội đồng vòng 2 (chạy thật 4 kịch bản đứt gãy): chọn X0 TẤT ĐỊNH,
 # loại _TEMPLATE và conflicted khỏi glob (sau git pull template rev 0 đứng
 # trước bản mã theo bảng chữ, hệ đang chạy bị báo "chưa cài" oan) · 0d đòi
@@ -570,8 +578,14 @@ def kiem_payload(p, khoa=""):
         loi.append("dinh_kem phải là danh sách")
     else:
         for d in dk:
-            if (not isinstance(d, dict) or not isinstance(d.get("ten"), str)
-                    or not isinstance(d.get("sha256"), str)
+            if not isinstance(d, dict) or not isinstance(d.get("ten"), str):
+                loi.append("đính kèm thiếu ten")
+            elif d.get("de_ngoai"):
+                # vượt @NHIP.TRANDINHKEM hay dữ liệu nhạy: để ngoài staging theo
+                # X3E mục 2, chỉ đòi lý do; sha256/bytes miễn vì file không kéo về
+                if not (isinstance(d.get("ly_do"), str) and d["ly_do"].strip()):
+                    loi.append(f"đính kèm de_ngoai {d['ten']!r} thiếu ly_do")
+            elif (not isinstance(d.get("sha256"), str)
                     or not isinstance(d.get("bytes"), int)):
                 loi.append("đính kèm thiếu ten, sha256 hay bytes")
             elif ("/" in d["ten"] or "\\" in d["ten"] or d["ten"] in (".", "..")
@@ -742,9 +756,9 @@ def kiem_email(goc, so):
     reg, reg_ok = doc_registry(doc(reg_p))
     chi_tiet_12d = ((f"dạng sai (phải là danh sách chuỗi khóa); " if not reg_ok else "")
                     + f"thiếu {sorted(committed - reg)[:3]}, thừa {sorted(reg - committed)[:3]};"
-                    + (" nhật ký MẤT: xem 12a, GIỮ NGUYÊN registry làm rào chống nạp"
-                       " trùng, KHÔNG phải chặn oan, cấm xóa"
-                       if not nk_p.is_file() and reg
+                    + (" nhật ký MẤT hay RỖNG: xem 12a, GIỮ NGUYÊN registry làm rào"
+                       " chống nạp trùng, KHÔNG phải chặn oan, cấm xóa"
+                       if not luot and reg
                        else " thừa nghĩa là registry chặn mail chưa từng nạp"))
     ket.append(("12d. registry là DANH SÁCH CHUỖI và BẰNG ĐÚNG tập khóa COMMITTED",
                 reg_ok and reg == committed, chi_tiet_12d))
@@ -752,7 +766,8 @@ def kiem_email(goc, so):
     # 12e. hộp thư so CHÍNH XÁC sau chuẩn hóa, không substring. EMAIL đã chạy
     #      mà X0 chưa khai @NHIP.HOPTHU là LỆCH cấu hình, không phải BỎ QUA
     x0nd = "".join(doc(q) for q in sorted(goc.glob("X0_CAUHINH_*.md"))
-                   if "TEMPLATE" not in q.name)
+                   if "TEMPLATE" not in q.name and "conflicted" not in q.name.lower()
+                   and "xung đột" not in q.name.lower())
     m = re.search(r"@NHIP\.HOPTHU(?:\s*\(EMAIL\))?\s+(\S+@\S+)", x0nd)
     if m:
         hop_khai = m.group(1).strip().lower()
@@ -830,7 +845,11 @@ def kiem_email(goc, so):
     # 12j2. staging MỒ CÔI: thư mục không có khóa nào trong nhật ký (crash giữa
     #       lưu staging và append PREPARED, X3E mục 2); báo, người duyệt mới xóa.
     if goc_staging.is_dir():
-        co_khoa = {hashlib.sha256(k.encode("utf-8")).hexdigest() for k in luot}
+        # khóa lấy từ CẢ nhật ký lẫn registry: nhật ký mất hay rỗng thì staging
+        # của mail đã nạp không bị gọi mồ côi oan rồi bị xúi xóa
+        reg_mc, _ = doc_registry(doc(reg_p))
+        co_khoa = {hashlib.sha256(k.encode("utf-8")).hexdigest()
+                   for k in set(luot) | set(reg_mc)}
         mo_coi = sorted(d.name for d in goc_staging.iterdir()
                         if d.is_dir() and d.name not in co_khoa)
         if mo_coi:
@@ -926,22 +945,34 @@ def main(goc):
         return [q for q in sorted(cac) if "TEMPLATE" not in q.name
                 and "conflicted" not in q.name.lower() and "xung đột" not in q.name.lower()]
     x0s = loc_x0(goc.glob("X0_CAUHINH_*.md"))
-    bao("0c. đúng MỘT bản X0 đang chạy (không tính _TEMPLATE, conflicted)",
-        len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ không tự"
-        f" chọn, gộp về một bản rồi rà lại")
+    co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
+    if not x0s and co_template:
+        print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
+              " chạy \"cài đặt\" theo X9 trước")
+    elif not x0s:
+        bao("0c. có bản X0 đang chạy", False,
+            "không thấy X0_CAUHINH nào: mất file cấu hình, khôi phục mức C")
+    else:
+        bao("0c. đúng MỘT bản X0 đang chạy (không tính _TEMPLATE, conflicted)",
+            len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ"
+            f" không tự chọn, gộp về một bản rồi rà lại")
     instrs = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))
     yc = re.search(r"instruction_yeu_cau:\s*(v\d+)", doc(x0s[0])) if x0s else None
     iv = re.search(r"INSTRUCTION · WORKOPS · (v\d+)", doc(instrs[0])) if instrs else None
-    bao("1. instruction_yeu_cau khớp bản INSTRUCTION",
-        bool(yc and iv and yc.group(1) == iv.group(1)),
-        f"X0={yc and yc.group(1)} INSTR={iv and iv.group(1)}")
+    if not x0s and co_template:
+        print("  BỎ QUA  1: chưa cài đặt, chưa có X0 để so instruction_yeu_cau")
+    else:
+        bao("1. instruction_yeu_cau khớp bản INSTRUCTION",
+            bool(yc and iv and yc.group(1) == iv.group(1)),
+            f"X0={yc and yc.group(1)} INSTR={iv and iv.group(1)}")
 
     rev = re.search(r"rev (\d+)", doc(x0s[0])) if x0s else None
-    chua_cai = bool(rev and rev.group(1) == "0")
+    chua_cai = bool(rev and rev.group(1) == "0") or (not x0s and co_template)
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào")
     else:
-        co_nk = [q for q in so.glob("NHATKY_*.md") if "conflicted" not in q.name.lower()]
+        co_nk = [q for q in so.glob("NHATKY_*.md")
+                 if "TEMPLATE" not in q.name and "conflicted" not in q.name.lower()]
         bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
             "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
             " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại")
@@ -973,7 +1004,8 @@ def main(goc):
             print("  BỎ QUA  2. chưa có X0_INDEX")
 
     nk = "".join(doc(p) for p in sorted(so.glob("NHATKY_*.md"))
-                if "conflicted" not in p.name.lower() and "xung đột" not in p.name.lower())
+                if "TEMPLATE" not in p.name and "conflicted" not in p.name.lower()
+                and "xung đột" not in p.name.lower())
     hang_nk = dong_bang(nk)
     ma_cot_dau = [re.sub(r"\*", "", h[0]).strip() for h in hang_nk if h]
     ma_g = [m for m in ma_cot_dau if re.fullmatch(MAU_G, m)]

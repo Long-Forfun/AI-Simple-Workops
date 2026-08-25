@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v20 · 20260824
-# v20: thêm hai fixture, tổng 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# v21 bộ kiểm: thêm hai fixture de_ngoai, tổng 68 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -74,6 +74,38 @@ KY_TU_CAM = ["—", "–", "→", "←", "≈"] + [chr(c) for c in range(0x20)
              if chr(c) not in "\n\t\r"]  # em/en-dash, mũi tên, xấp xỉ, control char
 # control char: hội đồng vòng 2 bắt được backspace 0x08 lọt vào đường dẫn
 # backup của X5 do escape bị nuốt khi soạn; dò cả dải để lớp lỗi này tuyệt chủng
+def _muc(nd, tu, den=None):
+    """Ký tự của đoạn từ heading '# tu.' tới trước '# den.' (hết file nếu None)."""
+    m = re.search(rf"^# {tu}\. .*$", nd, re.M)
+    if not m:
+        return 0
+    dau = m.start()
+    if den is not None:
+        m2 = re.search(rf"^# {den}\. ", nd, re.M)
+        if m2:
+            return len(nd[dau:m2.start()])
+    return len(nd[dau:])
+
+
+def do_route(docs):
+    """Đo lại các con số route của BENCHMARK từ file thật (token = ký tự / 3).
+    Trả dict nhãn dòng -> token. Phép 2c so, --sinh-benchmark in ra."""
+    x1, x2 = docs["X1_CAM_TEMPLATE.md"], docs["X2_PHATHANH_TEMPLATE.md"]
+    x3, x3e = docs["X3_CUAVAO_TEMPLATE.md"], docs["X3E_EMAIL_TEMPLATE.md"]
+    x4, x5 = docs["X4_RASOAT_TEMPLATE.md"], docs["X5_HESO_TEMPLATE.md"]
+    x5m1 = _muc(x5, 1, 2)
+    x1m34 = _muc(x1, 3, 5)
+    t = lambda n: round(n / 3)
+    return {
+        "NOI_BO mức A": t(x5m1 + x1m34),
+        "CUA_VAO thường": t(_muc(x3, 1, 6) + x5m1),
+        "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)),
+        "RA_SOAT": t(len(x4)),
+        "SOAN_RA thường lệ": t(len(x1) + len(x2) + x5m1),
+        "SUA_FILE nội bộ": t(len(x5)),
+    }
+
+
 TRANG_THAI_HOP_LE = {
     "VIEC": "MỚI ĐANG LÀM CHỜ ĐỐI TÁC CHỜ DUYỆT TREO XONG HỦY",
     "DUKIEN": "CHƯA KIỂM ĐÃ KIỂM MÂU THUẪN ĐÃ THAY HẾT HẠN",
@@ -115,6 +147,26 @@ def main(goc):
     m_dt = re.search(r"INSTRUCTION_WORKOPS_(v\d+)\.md", docs["DOC_TRUOC.md"])
     m_bo = re.search(r"BỘ KHỞI TẠO WORKOPS · (v\d+)", docs["DOC_TRUOC.md"])
     m_bm = re.search(r"BENCHMARK_TOKEN · STARTER (v\d+)", docs["BENCHMARK_TOKEN.md"])
+    # 2c. các con số route trong BENCHMARK phải khớp file thật (dung sai 10%);
+    #     hội đồng vòng 2-3: lời tự nhận "sinh từ kích thước thật" phải được máy giữ
+    do = do_route(docs)
+    bm = docs["BENCHMARK_TOKEN.md"]
+    lech_bm = []
+    for nhan, gia_tri in do.items():
+        m_rt = re.search(re.escape(nhan) + r"([^\n]*)", bm)
+        cac_so = [int(x) for x in re.findall(r"~(\d+)", m_rt.group(1))] if m_rt else []
+        if not cac_so:
+            lech_bm.append(f"{nhan}: không thấy dòng trong BENCHMARK")
+        elif abs(max(cac_so) - gia_tri) > 0.10 * gia_tri:
+            # tổng của dòng là số LỚN NHẤT (các số nhỏ hơn là thành phần)
+            lech_bm.append(f"{nhan}: BENCHMARK ~{max(cac_so)}, đo thật ~{gia_tri}")
+    kiem("2c. số route BENCHMARK khớp số đo thật (dung sai 10%)", not lech_bm,
+         str(lech_bm) + " ; chạy --sinh-benchmark để lấy số mới")
+    if "--sinh-benchmark" in sys.argv:
+        print("  SỐ ĐO route hiện tại (dán vào BENCHMARK):")
+        for nhan, gia_tri in do.items():
+            print(f"    {nhan}: ~{gia_tri}")
+
     kiem("2b. version BENCHMARK khớp version bộ ở DOC_TRUOC",
          bool(m_bo and m_bm and m_bo.group(1) == m_bm.group(1)),
          f"DOC_TRUOC={m_bo and m_bo.group(1)} BENCHMARK={m_bm and m_bm.group(1)}")
@@ -382,6 +434,20 @@ def main(goc):
         r = chay_email(nk=p_hut + "\n" + C("<a@x>") + "\n", reg=["<a@x>"])
         ca.append(("PREPARED thiếu payload phục hồi bị bắt (dù đã COMMITTED)",
                    r.get(TEN_12H) is False))
+        # đính kèm de_ngoai HỢP LỆ (ten + ly_do, không sha256): 12h phải PASS
+        # và 12j không đòi file trong staging (X3E mục 2); chạy ngược trên v22
+        # thì 12h FAIL oan - fixture này giữ cho máy khỏi đá luật lần nữa
+        pay_dn = dict(PAY, dinh_kem=[{"ten": "video.mp4", "de_ngoai": True,
+                                      "ly_do": "vượt trần 50MB"}])
+        r = chay_email(nk=P("<a@x>", pay=pay_dn) + "\n" + C("<a@x>") + "\n",
+                       reg=["<a@x>"], files=FILES_SACH, idx=IDX_SACH)
+        ca.append(("đính kèm de_ngoai hợp lệ không bị 12h/12j báo oan",
+                   r.get(TEN_12H) is not False and r.get(TEN_12J) is not False))
+        # de_ngoai THIẾU ly_do: phải LỆCH schema
+        pay_dn2 = dict(PAY, dinh_kem=[{"ten": "video.mp4", "de_ngoai": True}])
+        r = chay_email(nk=P("<a@x>", pay=pay_dn2) + "\n" + C("<a@x>") + "\n",
+                       reg=["<a@x>"], files=FILES_SACH, idx=IDX_SACH)
+        ca.append(("đính kèm de_ngoai thiếu ly_do bị bắt", r.get(TEN_12H) is False))
         # COMMITTED không có PREPARED (mồ côi): bị bắt
         r = chay_email(nk=C("<a@x>") + "\n", reg=["<a@x>"])
         ca.append(("COMMITTED mồ côi bị bắt", r.get(TEN_12G) is False))
