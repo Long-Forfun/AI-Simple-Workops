@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v30 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v31 · 20260826
+# v31, theo hội đồng vòng 10: nhãn "tiền tố gây nghi" TẤT ĐỊNH (chọn tiền tố
+# DÀI nhất qua sorted, hết dao động theo hash seed) · 12l siết miễn-hash về
+# đúng khuôn "[đã xóa theo Q-" và thông điệp lệch gợi kiểm tombstone sai
+# khuôn · tự vệ tham số ĐẦU: đường dẫn không tồn tại hay flag lạ là LỖI CÁCH
+# DÙNG exit 2, hết 4 LỆCH "khôi phục mức C" oan trên thư mục ma.
 # v30, theo hội đồng vòng 9: heuristic cùng-tiền-tố lên tầng module
 # (loc_nghi_ban_sao) để fixture ghim; cảnh báo NGHI nêu đích danh file tiền
 # tố và có lối ra cho file thật (so nội dung theo X5 mục 4, không phải mục
@@ -296,7 +301,7 @@ def loc_nghi_ban_sao(de_xuat, tat_ca_stem):
     for rel in de_xuat:
         tm2, stem = str(Path(rel).parent), Path(rel).stem
         goc_nghi = None
-        for goc_stem in tat_ca_stem.get(tm2, ()):
+        for goc_stem in sorted(tat_ca_stem.get(tm2, ()), key=len, reverse=True):
             duoi = stem[len(goc_stem):]
             if (goc_stem and stem != goc_stem and stem.startswith(goc_stem)
                     and re.fullmatch(r"-[A-Za-z0-9][A-Za-z0-9-]{3,}", duoi)
@@ -1054,13 +1059,15 @@ def kiem_email(goc, so):
             if not hang:
                 loi_dong.append(f"{kk}: mã dòng {v['dong']} không là Ô nào trong {v['so']}")
             elif (isinstance(v.get("hash"), str) and v["hash"]
-                  and not any("đã xóa theo Q-" in "|".join(r) for r in hang)
+                  and not any("[đã xóa theo Q-" in "|".join(r) for r in hang)
                   and not any(
                     hashlib.sha256(("|".join(r)).encode("utf-8")).hexdigest() == v["hash"]
                     for r in hang)):
                 # dòng tombstone xóa pháp lý (X5 mục 7b) được miễn so hash:
                 # nội dung đã trung hòa có chủ đích, mã dòng vẫn đứng
-                loi_dong.append(f"{kk}: hash nội dung dòng không khớp")
+                loi_dong.append(f"{kk}: hash nội dung dòng không khớp (nếu là dòng"
+                                f" xóa pháp lý: kiểm tombstone đúng khuôn"
+                                f" [đã xóa theo Q-<mã>])")
     ket.append(("12l. index trỏ tới mã dòng có thật trong sổ đích (so đúng ô)",
                 not loi_dong, "; ".join(loi_dong[:3])))
 
@@ -1341,6 +1348,12 @@ if __name__ == "__main__":
         print(CACH_CHAY)
         sys.exit(2)
     if not _thuong:
+        print(CACH_CHAY)
+        sys.exit(2)
+    if _thuong[0].startswith("--") or not Path(_thuong[0]).is_dir():
+        # thư mục ma hay flag lạ ở vị trí đầu: LỖI CÁCH DÙNG, không phun
+        # "khôi phục mức C" oan trên thư mục không tồn tại (hội đồng vòng 10)
+        print(f"LỖI CÁCH DÙNG: '{_thuong[0]}' không phải thư mục 00_Index tồn tại")
         print(CACH_CHAY)
         sys.exit(2)
     main(_thuong[0])

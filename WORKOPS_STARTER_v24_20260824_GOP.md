@@ -93,8 +93,41 @@ và ĐỀU vá được, vá luôn:
 Bảng route dán lại từ --sinh-benchmark trong cùng commit (quy ước vòng 8).
 Watchlist trần: X0 ~15,99k/16.000 · X5 16,996/17.000 · X3E ~11,1k/12.000 ·
 X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai đã
+[ĐÍNH CHÍNH vòng 35: câu "KHÔNG" này khai sót - mốc chống dán lặp chat
+của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 35: khâu theo hội đồng vòng 10 (96/100)
+
+Điểm vòng 10: ĐƠN GIẢN 9,8 · KHÔNG MISS 9,7 · VẬN HÀNH 9,7 · TOKEN 9,6 ·
+KHÔNG SAI 9,4 · THÔNG MINH 9,4. Mọi phát hiện đều THẤP trừ một khoản quản
+trị đích đáng: vòng 33 khai "backlog rỗng" trong khi mốc chống dán lặp chat
+còn treo - vòng này vá món đó VÀ đính chính lời khai cũ ngay trong GHICHU.
+
+1. CHAT 5b khâu kín: CHỐNG DÁN LẶP bằng mốc "đã nạp tới tin <giờ> <người
+   gửi>" ghi vào VIEC/bảng chờ, lượt sau chỉ xử tin SAU mốc; event_id tin
+   chat <YYYYMMDD-HHMM>-chat (ngày theo ngữ cảnh phiên); không tách được
+   khuôn giờ-tên thì cả khối là MỘT mục nguồn D; luật ghim vào phép 12.
+2. kiem_van_hanh v31: nhãn "tiền tố gây nghi" TẤT ĐỊNH (sorted, chọn dài
+   nhất - 3 giám khảo cùng bắt dao động theo hash seed) + fixture đa-tiền-
+   tố; 12l siết miễn-hash về đúng khuôn "[đã xóa theo Q-" và thông điệp
+   lệch gợi kiểm tombstone; tự vệ tham số ĐẦU (thư mục ma, flag lạ = LỖI
+   CÁCH DÙNG exit 2, hết 4 LỆCH oan).
+3. Gate 7b về chuẩn hai-lưới như 1c (phép 12 ghim heading + vế gate; 47
+   luật); phép 10 phủ cả tham chiếu "X9 mục n"; phép 1d loại dòng "!" và
+   đuôi sau khoảng trắng (hết khe tự phá); hồi quy C4 dấu ":" dính nghĩa
+   sửa lại (kèm khai ngưỡng hậu tố ~5 ký tự cho khớp máy); X5 header nhắc
+   cả gate 7b; header kiem_tra_bo đếm đúng 76 ca; CỘNG ~2214 khớp máy;
+   trần X0 nâng chủ động 16.500 theo quy ước (headroom 99,8% là nợ đã
+   được giám khảo ĐƠN GIẢN đòi xử trước khi phát nổ); bảng route dán lại
+   từ máy đo trong cùng commit.
+
+Watchlist trần: X0 ~15,99k/16.500 (96,9%) · X5 17,16k/17.500 (98,1%) · X3
+~4,49k/4.500 (99,8% - ứng viên nâng-kèm-gate vòng sau nếu 5b cần thêm) ·
+X3E ~92,8%. Khuyến nghị chiến lược của hội đồng (ĐƠN GIẢN vòng 10): bộ đã
+bão hòa điểm đọc-tĩnh; nguồn phát hiện kế tiếp là PILOT vận hành thật 2-4
+tuần trên kho công ty thật, đo số lần AI hỏi thừa và ghi sai thực tế.
 
 ## Vòng 34: vá theo hội đồng vòng 9 (94,8/100)
 
@@ -1147,7 +1180,7 @@ runtime.
 | INSTRUCTION dán trong Project | 4148 | ~1884 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
-| CỘNG | ~6969 | ~2213 |
+| CỘNG | ~6969 | ~2214 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
@@ -1165,16 +1198,16 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1643 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5221 + khối (không phần mềm trừ thêm mục 1b ~421) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5b + X5 mục 1 + VIEC, TAILIEU theo khối | ~2765 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6270 + khối | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5231 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5b + X5 mục 1 + VIEC, TAILIEU theo khối | ~2840 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6345 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3406 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3406 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
-INSTRUCTION 8.000 ký tự · X0 16.000 (đọc theo mục, thuế là X0_INDEX) · X5
+INSTRUCTION 8.000 ký tự · X0 16.500 (đọc theo mục, thuế là X0_INDEX) · X5
 17.500 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 4.500 · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4 5.500
 (chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
 là FAIL.
@@ -1184,8 +1217,8 @@ là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ:
-CHAT không EMAIL ~19763 token
-CHAT có EMAIL (kèm X3E) ~23475 token
+CHAT không EMAIL ~19854 token
+CHAT có EMAIL (kèm X3E) ~23566 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -1467,7 +1500,8 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 
 Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
 và khuôn " (n)", "(bản sao)"; tên hậu tố "-<chữ/số>" cạnh file cùng tiền
-tố cũng bị máy NGHI bản sao (khuôn OneDrive): Nội bộ DoiTac là
+tố cũng bị máy NGHI bản sao (khuôn OneDrive, hậu tố từ ~5 ký
+tự). Nội bộ: DoiTac là
 NA. Bản ký thêm `_SIGNED`, bất biến. Trạng thái ở TAILIEU, không vào tên file.
 Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức C, phải có QUYETDINH.
 
@@ -1897,13 +1931,17 @@ hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 # 5b. Chat dán tay (Zalo, Messenger...)
 
 Kênh chat chưa có pipeline quét; xử BÁN THỦ CÔNG qua cửa "người dùng đưa
-trực tiếp": người dùng dán CẢ ĐOẠN chat (hay file export) vào phiên, AI tự
-tách từng tin theo khuôn "giờ - tên người gửi" của app, rồi xử mỗi tin như
-một mục đến ở chặng 1: rút việc, dữ kiện (mức nguồn D "tin nhắn chưa xác
-nhận", nâng lên B khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi "phien-chat".
-Ảnh chụp màn hình chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi
-không rút được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); cần theo
-dõi chờ phản hồi chat thì mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.
+trực tiếp": người dùng dán CẢ ĐOẠN chat (hay export) vào phiên, AI tách
+từng tin theo khuôn "giờ - tên người gửi", xử mỗi tin như một mục đến ở
+chặng 1: rút việc, dữ kiện (nguồn D "tin nhắn chưa xác nhận", nâng lên B
+khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi
+"phien-chat". CHỐNG DÁN LẶP: cuối lượt ghi mốc "đã nạp tới tin <giờ>
+<người gửi>" vào ghi chú dòng VIEC hay bảng chờ; lượt dán sau chỉ xử tin
+SAU mốc. event_id tin chat: <YYYYMMDD-HHMM>-chat (ngày theo ngữ cảnh
+phiên). Không tách được khuôn giờ-tên: cả khối là MỘT mục nguồn D. Ảnh
+chụp chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi không rút
+được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); theo dõi chờ phản
+hồi chat: mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.
 
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 
@@ -2186,7 +2224,8 @@ FILE: X5_HESO_TEMPLATE.md
 
 ```
 X5 · MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ · <MÃ> · v21 · <YYYYMMDD>
-Mục 1 đọc trước MỌI việc đổi trạng thái; mục 1b CHỈ khi dự án phần mềm.
+Mục 1 đọc trước MỌI việc đổi trạng thái; mục 1b CHỈ khi dự án phần mềm,
+7b CHỈ khi có Q-xóa pháp lý.
 Các mục sau đọc khi SUA_FILE hoặc sắp ghi sổ (mục 3). Dự án, folder, tên file đọc từ X0 C2 C3 C4; mức nâng ở X0 C13.
 ```
 
@@ -2346,7 +2385,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
 ```
 
 NHATKY chỉ-thêm với HAI ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục 7b. Thấy bản "conflicted copy" của MỘT SỔ trong
+dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục
+7b. Thấy bản "conflicted copy" của MỘT SỔ trong
 _so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
 bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
 ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
@@ -2632,7 +2672,7 @@ FILE: kiem_tra_bo.py
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch, tổng 73 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, tổng 76 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -2691,7 +2731,7 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
-    "X0_CAUHINH_TEMPLATE.md": 16000,  # đọc theo mục; thuế thường trực là X0_INDEX
+    "X0_CAUHINH_TEMPLATE.md": 16500,  # đọc theo mục, thuế là X0_INDEX; nâng chủ động vòng 35 theo quy ước
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
@@ -2778,7 +2818,10 @@ def main(goc):
     #     bị track là "git pull" của công ty đang chạy sẽ kẹt vì cache local bẩn
     #     (hội đồng vòng 8). Kiểm qua .gitignore - tất định, không phụ thuộc git.
     gi_nd = (goc / ".gitignore").read_text(encoding="utf-8") if (goc / ".gitignore").is_file() else ""
-    gi = "\n".join(l for l in gi_nd.splitlines() if not l.lstrip().startswith("#"))
+    gi = "\n".join(l.split(" ")[0] for l in gi_nd.splitlines()
+                   if not l.lstrip().startswith(("#", "!")))
+    # loại dòng comment, dòng negation "!" và đuôi sau khoảng trắng: các khe
+    # tự phá mà so chuỗi thô nhận nhầm (hội đồng vòng 10)
     thieu_gi = [m for m in ["_quan_sat_truoc.json", "_thu_"] if m not in gi]
     kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
          not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
@@ -3124,6 +3167,12 @@ def main(goc):
                                   **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-20260825-01] |\n"}))
         ca.append(("12l miễn so hash cho dòng tombstone xóa pháp lý",
                    r.get(TEN_12L) is not False))
+        # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
+        giu10, nghi10 = _kv26.loc_nghi_ban_sao(
+            ["01_A/BC-KH-PHULUC-2026.docx"],
+            {"01_A": {"BC", "BC-KH", "BC-KH-PHULUC-2026"}})
+        ca.append(("đa tiền tố: nhãn tất định, chọn tiền tố dài nhất",
+                   nghi10 == [("01_A/BC-KH-PHULUC-2026.docx", "BC-KH")]))
         # KHO SAU XÓA PHÁP LÝ đúng luật phải SẠCH: đính kèm tombstone de_ngoai
         # "đã xóa theo Q-", staging đã dọn có manifest, dòng sổ giữ mã (12h/12j/
         # 12k/12l đều phải xanh) - lớp lỗi ba vòng cùng họ, có lưới hồi quy riêng
@@ -3524,8 +3573,10 @@ def main(goc):
         ("hộp thư cũ sau đổi domain có chỗ khai", "@NHIP.HOPTHU_CU" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("chat dán tay đi cửa người dùng đưa trực tiếp, không cấp luồng THU", "dán CẢ ĐOẠN" in docs["X3_CUAVAO_TEMPLATE.md"] and "KHÔNG cấp mã luồng THU" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("phục hồi sự cố tách mục 1c có gate chỉ đọc khi rà lệch", "# 1c." in docs["X3E_EMAIL_TEMPLATE.md"] and "CHỈ đọc khi rà 24-31" in docs["X3E_EMAIL_TEMPLATE.md"]),
+        ("xóa pháp lý tách mục 7b có gate chỉ đọc khi có Q", "# 7b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi có Q-" in docs["X5_HESO_TEMPLATE.md"]),
+        ("chat dán lặp có mốc đã-nạp-tới, lượt sau chỉ xử tin sau mốc", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (45 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (47 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
@@ -3533,10 +3584,11 @@ def main(goc):
               "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md"]:
         muc_cua["X" + k[1]] = set(re.findall(r"^# (\d+[a-z]?)\.", docs[k], re.M))
     muc_cua["X3E"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["X3E_EMAIL_TEMPLATE.md"], re.M))
+    muc_cua["X9"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["X9_CAIDAT.md"], re.M))
     muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["INSTRUCTION"], re.M))
     sai_ref = []
     for ten, nd in docs.items():
-        for dich, n in re.findall(r"(X[1-5]E?|INSTRUCTION) mục (\d+[a-z]?)", nd):
+        for dich, n in re.findall(r"(X[1-5]E?|X9|INSTRUCTION) mục (\d+[a-z]?)", nd):
             if n not in muc_cua.get(dich, set()):
                 sai_ref.append((ten, f"{dich} mục {n}"))
     kiem("10. tham chiếu chéo tới mục có thật", not sai_ref, str(sorted(set(sai_ref))))
@@ -3580,7 +3632,12 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v30 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v31 · 20260826
+# v31, theo hội đồng vòng 10: nhãn "tiền tố gây nghi" TẤT ĐỊNH (chọn tiền tố
+# DÀI nhất qua sorted, hết dao động theo hash seed) · 12l siết miễn-hash về
+# đúng khuôn "[đã xóa theo Q-" và thông điệp lệch gợi kiểm tombstone sai
+# khuôn · tự vệ tham số ĐẦU: đường dẫn không tồn tại hay flag lạ là LỖI CÁCH
+# DÙNG exit 2, hết 4 LỆCH "khôi phục mức C" oan trên thư mục ma.
 # v30, theo hội đồng vòng 9: heuristic cùng-tiền-tố lên tầng module
 # (loc_nghi_ban_sao) để fixture ghim; cảnh báo NGHI nêu đích danh file tiền
 # tố và có lối ra cho file thật (so nội dung theo X5 mục 4, không phải mục
@@ -3877,7 +3934,7 @@ def loc_nghi_ban_sao(de_xuat, tat_ca_stem):
     for rel in de_xuat:
         tm2, stem = str(Path(rel).parent), Path(rel).stem
         goc_nghi = None
-        for goc_stem in tat_ca_stem.get(tm2, ()):
+        for goc_stem in sorted(tat_ca_stem.get(tm2, ()), key=len, reverse=True):
             duoi = stem[len(goc_stem):]
             if (goc_stem and stem != goc_stem and stem.startswith(goc_stem)
                     and re.fullmatch(r"-[A-Za-z0-9][A-Za-z0-9-]{3,}", duoi)
@@ -4635,13 +4692,15 @@ def kiem_email(goc, so):
             if not hang:
                 loi_dong.append(f"{kk}: mã dòng {v['dong']} không là Ô nào trong {v['so']}")
             elif (isinstance(v.get("hash"), str) and v["hash"]
-                  and not any("đã xóa theo Q-" in "|".join(r) for r in hang)
+                  and not any("[đã xóa theo Q-" in "|".join(r) for r in hang)
                   and not any(
                     hashlib.sha256(("|".join(r)).encode("utf-8")).hexdigest() == v["hash"]
                     for r in hang)):
                 # dòng tombstone xóa pháp lý (X5 mục 7b) được miễn so hash:
                 # nội dung đã trung hòa có chủ đích, mã dòng vẫn đứng
-                loi_dong.append(f"{kk}: hash nội dung dòng không khớp")
+                loi_dong.append(f"{kk}: hash nội dung dòng không khớp (nếu là dòng"
+                                f" xóa pháp lý: kiểm tombstone đúng khuôn"
+                                f" [đã xóa theo Q-<mã>])")
     ket.append(("12l. index trỏ tới mã dòng có thật trong sổ đích (so đúng ô)",
                 not loi_dong, "; ".join(loi_dong[:3])))
 
@@ -4922,6 +4981,12 @@ if __name__ == "__main__":
         print(CACH_CHAY)
         sys.exit(2)
     if not _thuong:
+        print(CACH_CHAY)
+        sys.exit(2)
+    if _thuong[0].startswith("--") or not Path(_thuong[0]).is_dir():
+        # thư mục ma hay flag lạ ở vị trí đầu: LỖI CÁCH DÙNG, không phun
+        # "khôi phục mức C" oan trên thư mục không tồn tại (hội đồng vòng 10)
+        print(f"LỖI CÁCH DÙNG: '{_thuong[0]}' không phải thư mục 00_Index tồn tại")
         print(CACH_CHAY)
         sys.exit(2)
     main(_thuong[0])

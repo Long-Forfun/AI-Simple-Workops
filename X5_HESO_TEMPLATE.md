@@ -1,6 +1,7 @@
 ```
 X5 · MỨC TÁC ĐỘNG, VÒNG ĐỜI, HỆ SỔ · <MÃ> · v21 · <YYYYMMDD>
-Mục 1 đọc trước MỌI việc đổi trạng thái; mục 1b CHỈ khi dự án phần mềm.
+Mục 1 đọc trước MỌI việc đổi trạng thái; mục 1b CHỈ khi dự án phần mềm,
+7b CHỈ khi có Q-xóa pháp lý.
 Các mục sau đọc khi SUA_FILE hoặc sắp ghi sổ (mục 3). Dự án, folder, tên file đọc từ X0 C2 C3 C4; mức nâng ở X0 C13.
 ```
 
@@ -160,7 +161,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
 ```
 
 NHATKY chỉ-thêm với HAI ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục 7b. Thấy bản "conflicted copy" của MỘT SỔ trong
+dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục
+7b. Thấy bản "conflicted copy" của MỘT SỔ trong
 _so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
 bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
 ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết

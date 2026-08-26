@@ -26,8 +26,41 @@ và ĐỀU vá được, vá luôn:
 Bảng route dán lại từ --sinh-benchmark trong cùng commit (quy ước vòng 8).
 Watchlist trần: X0 ~15,99k/16.000 · X5 16,996/17.000 · X3E ~11,1k/12.000 ·
 X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai đã
+[ĐÍNH CHÍNH vòng 35: câu "KHÔNG" này khai sót - mốc chống dán lặp chat
+của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 35: khâu theo hội đồng vòng 10 (96/100)
+
+Điểm vòng 10: ĐƠN GIẢN 9,8 · KHÔNG MISS 9,7 · VẬN HÀNH 9,7 · TOKEN 9,6 ·
+KHÔNG SAI 9,4 · THÔNG MINH 9,4. Mọi phát hiện đều THẤP trừ một khoản quản
+trị đích đáng: vòng 33 khai "backlog rỗng" trong khi mốc chống dán lặp chat
+còn treo - vòng này vá món đó VÀ đính chính lời khai cũ ngay trong GHICHU.
+
+1. CHAT 5b khâu kín: CHỐNG DÁN LẶP bằng mốc "đã nạp tới tin <giờ> <người
+   gửi>" ghi vào VIEC/bảng chờ, lượt sau chỉ xử tin SAU mốc; event_id tin
+   chat <YYYYMMDD-HHMM>-chat (ngày theo ngữ cảnh phiên); không tách được
+   khuôn giờ-tên thì cả khối là MỘT mục nguồn D; luật ghim vào phép 12.
+2. kiem_van_hanh v31: nhãn "tiền tố gây nghi" TẤT ĐỊNH (sorted, chọn dài
+   nhất - 3 giám khảo cùng bắt dao động theo hash seed) + fixture đa-tiền-
+   tố; 12l siết miễn-hash về đúng khuôn "[đã xóa theo Q-" và thông điệp
+   lệch gợi kiểm tombstone; tự vệ tham số ĐẦU (thư mục ma, flag lạ = LỖI
+   CÁCH DÙNG exit 2, hết 4 LỆCH oan).
+3. Gate 7b về chuẩn hai-lưới như 1c (phép 12 ghim heading + vế gate; 47
+   luật); phép 10 phủ cả tham chiếu "X9 mục n"; phép 1d loại dòng "!" và
+   đuôi sau khoảng trắng (hết khe tự phá); hồi quy C4 dấu ":" dính nghĩa
+   sửa lại (kèm khai ngưỡng hậu tố ~5 ký tự cho khớp máy); X5 header nhắc
+   cả gate 7b; header kiem_tra_bo đếm đúng 76 ca; CỘNG ~2214 khớp máy;
+   trần X0 nâng chủ động 16.500 theo quy ước (headroom 99,8% là nợ đã
+   được giám khảo ĐƠN GIẢN đòi xử trước khi phát nổ); bảng route dán lại
+   từ máy đo trong cùng commit.
+
+Watchlist trần: X0 ~15,99k/16.500 (96,9%) · X5 17,16k/17.500 (98,1%) · X3
+~4,49k/4.500 (99,8% - ứng viên nâng-kèm-gate vòng sau nếu 5b cần thêm) ·
+X3E ~92,8%. Khuyến nghị chiến lược của hội đồng (ĐƠN GIẢN vòng 10): bộ đã
+bão hòa điểm đọc-tĩnh; nguồn phát hiện kế tiếp là PILOT vận hành thật 2-4
+tuần trên kho công ty thật, đo số lần AI hỏi thừa và ghi sai thực tế.
 
 ## Vòng 34: vá theo hội đồng vòng 9 (94,8/100)
 

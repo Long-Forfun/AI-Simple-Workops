@@ -78,13 +78,17 @@ hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 # 5b. Chat dán tay (Zalo, Messenger...)
 
 Kênh chat chưa có pipeline quét; xử BÁN THỦ CÔNG qua cửa "người dùng đưa
-trực tiếp": người dùng dán CẢ ĐOẠN chat (hay file export) vào phiên, AI tự
-tách từng tin theo khuôn "giờ - tên người gửi" của app, rồi xử mỗi tin như
-một mục đến ở chặng 1: rút việc, dữ kiện (mức nguồn D "tin nhắn chưa xác
-nhận", nâng lên B khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi "phien-chat".
-Ảnh chụp màn hình chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi
-không rút được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); cần theo
-dõi chờ phản hồi chat thì mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.
+trực tiếp": người dùng dán CẢ ĐOẠN chat (hay export) vào phiên, AI tách
+từng tin theo khuôn "giờ - tên người gửi", xử mỗi tin như một mục đến ở
+chặng 1: rút việc, dữ kiện (nguồn D "tin nhắn chưa xác nhận", nâng lên B
+khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi
+"phien-chat". CHỐNG DÁN LẶP: cuối lượt ghi mốc "đã nạp tới tin <giờ>
+<người gửi>" vào ghi chú dòng VIEC hay bảng chờ; lượt dán sau chỉ xử tin
+SAU mốc. event_id tin chat: <YYYYMMDD-HHMM>-chat (ngày theo ngữ cảnh
+phiên). Không tách được khuôn giờ-tên: cả khối là MỘT mục nguồn D. Ảnh
+chụp chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi không rút
+được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); theo dõi chờ phản
+hồi chat: mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.
 
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 

@@ -2,7 +2,7 @@
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch, tổng 73 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, tổng 76 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -61,7 +61,7 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
-    "X0_CAUHINH_TEMPLATE.md": 16000,  # đọc theo mục; thuế thường trực là X0_INDEX
+    "X0_CAUHINH_TEMPLATE.md": 16500,  # đọc theo mục, thuế là X0_INDEX; nâng chủ động vòng 35 theo quy ước
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
@@ -148,7 +148,10 @@ def main(goc):
     #     bị track là "git pull" của công ty đang chạy sẽ kẹt vì cache local bẩn
     #     (hội đồng vòng 8). Kiểm qua .gitignore - tất định, không phụ thuộc git.
     gi_nd = (goc / ".gitignore").read_text(encoding="utf-8") if (goc / ".gitignore").is_file() else ""
-    gi = "\n".join(l for l in gi_nd.splitlines() if not l.lstrip().startswith("#"))
+    gi = "\n".join(l.split(" ")[0] for l in gi_nd.splitlines()
+                   if not l.lstrip().startswith(("#", "!")))
+    # loại dòng comment, dòng negation "!" và đuôi sau khoảng trắng: các khe
+    # tự phá mà so chuỗi thô nhận nhầm (hội đồng vòng 10)
     thieu_gi = [m for m in ["_quan_sat_truoc.json", "_thu_"] if m not in gi]
     kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
          not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
@@ -494,6 +497,12 @@ def main(goc):
                                   **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-20260825-01] |\n"}))
         ca.append(("12l miễn so hash cho dòng tombstone xóa pháp lý",
                    r.get(TEN_12L) is not False))
+        # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
+        giu10, nghi10 = _kv26.loc_nghi_ban_sao(
+            ["01_A/BC-KH-PHULUC-2026.docx"],
+            {"01_A": {"BC", "BC-KH", "BC-KH-PHULUC-2026"}})
+        ca.append(("đa tiền tố: nhãn tất định, chọn tiền tố dài nhất",
+                   nghi10 == [("01_A/BC-KH-PHULUC-2026.docx", "BC-KH")]))
         # KHO SAU XÓA PHÁP LÝ đúng luật phải SẠCH: đính kèm tombstone de_ngoai
         # "đã xóa theo Q-", staging đã dọn có manifest, dòng sổ giữ mã (12h/12j/
         # 12k/12l đều phải xanh) - lớp lỗi ba vòng cùng họ, có lưới hồi quy riêng
@@ -894,8 +903,10 @@ def main(goc):
         ("hộp thư cũ sau đổi domain có chỗ khai", "@NHIP.HOPTHU_CU" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("chat dán tay đi cửa người dùng đưa trực tiếp, không cấp luồng THU", "dán CẢ ĐOẠN" in docs["X3_CUAVAO_TEMPLATE.md"] and "KHÔNG cấp mã luồng THU" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("phục hồi sự cố tách mục 1c có gate chỉ đọc khi rà lệch", "# 1c." in docs["X3E_EMAIL_TEMPLATE.md"] and "CHỈ đọc khi rà 24-31" in docs["X3E_EMAIL_TEMPLATE.md"]),
+        ("xóa pháp lý tách mục 7b có gate chỉ đọc khi có Q", "# 7b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi có Q-" in docs["X5_HESO_TEMPLATE.md"]),
+        ("chat dán lặp có mốc đã-nạp-tới, lượt sau chỉ xử tin sau mốc", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (45 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (47 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
@@ -903,10 +914,11 @@ def main(goc):
               "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md"]:
         muc_cua["X" + k[1]] = set(re.findall(r"^# (\d+[a-z]?)\.", docs[k], re.M))
     muc_cua["X3E"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["X3E_EMAIL_TEMPLATE.md"], re.M))
+    muc_cua["X9"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["X9_CAIDAT.md"], re.M))
     muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["INSTRUCTION"], re.M))
     sai_ref = []
     for ten, nd in docs.items():
-        for dich, n in re.findall(r"(X[1-5]E?|INSTRUCTION) mục (\d+[a-z]?)", nd):
+        for dich, n in re.findall(r"(X[1-5]E?|X9|INSTRUCTION) mục (\d+[a-z]?)", nd):
             if n not in muc_cua.get(dich, set()):
                 sai_ref.append((ten, f"{dich} mục {n}"))
     kiem("10. tham chiếu chéo tới mục có thật", not sai_ref, str(sorted(set(sai_ref))))
