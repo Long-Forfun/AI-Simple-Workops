@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v31 · 20260826
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v32 · 20260826
+# v32, theo hội đồng vòng 11: 12l miễn-hash đòi khuôn TRỌN "[đã xóa theo
+# Q-<mã>]" (có ngoặc đóng, chuỗi lửng hết được miễn oan) VÀ mã Q phải có
+# dòng trong QUYETDINH.md (tombstone mang Q ma bị bắt) · tự vệ vế SÁU: thư
+# mục đầu tồn tại nhưng không có dấu vết cài đặt nào (_so, X0, INSTRUCTION)
+# là LỖI CÁCH DÙNG exit 2, hết 4 LỆCH "khôi phục mức C" oan.
 # v31, theo hội đồng vòng 10: nhãn "tiền tố gây nghi" TẤT ĐỊNH (chọn tiền tố
 # DÀI nhất qua sorted, hết dao động theo hash seed) · 12l siết miễn-hash về
 # đúng khuôn "[đã xóa theo Q-" và thông điệp lệch gợi kiểm tombstone sai
@@ -1059,7 +1064,11 @@ def kiem_email(goc, so):
             if not hang:
                 loi_dong.append(f"{kk}: mã dòng {v['dong']} không là Ô nào trong {v['so']}")
             elif (isinstance(v.get("hash"), str) and v["hash"]
-                  and not any("[đã xóa theo Q-" in "|".join(r) for r in hang)
+                  and not any(
+                      (m9 := re.search(r"\[đã xóa theo (Q-[A-Za-z0-9-]+)\]",
+                                       "|".join(r)))
+                      and m9.group(1) in doc(so / "QUYETDINH.md")
+                      for r in hang)
                   and not any(
                     hashlib.sha256(("|".join(r)).encode("utf-8")).hexdigest() == v["hash"]
                     for r in hang)):
@@ -1348,6 +1357,18 @@ if __name__ == "__main__":
         print(CACH_CHAY)
         sys.exit(2)
     if not _thuong:
+        print(CACH_CHAY)
+        sys.exit(2)
+    _g = Path(_thuong[0])
+    if (not _thuong[0].startswith("--") and _g.is_dir()
+            and not (_g / "_so").is_dir()
+            and not list(_g.glob("X0_CAUHINH_*.md"))
+            and not list(_g.glob("INSTRUCTION_WORKOPS_*.md"))
+            and not (_g / "00_Index").is_dir()):
+        # thư mục tồn tại nhưng KHÔNG dấu vết cài đặt nào: gõ nhầm đường,
+        # đừng phun "khôi phục mức C" oan (tự vệ vế sáu, hội đồng vòng 11)
+        print(f"LỖI CÁCH DÙNG: '{_thuong[0]}' không có _so, X0 hay INSTRUCTION -"
+              f" có phải gõ nhầm đường 00_Index?")
         print(CACH_CHAY)
         sys.exit(2)
     if _thuong[0].startswith("--") or not Path(_thuong[0]).is_dir():

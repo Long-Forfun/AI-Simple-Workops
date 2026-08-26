@@ -2,7 +2,7 @@
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, tổng 76 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, tổng 78 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -64,7 +64,7 @@ NGAN_SACH = {
     "X0_CAUHINH_TEMPLATE.md": 16500,  # đọc theo mục, thuế là X0_INDEX; nâng chủ động vòng 35 theo quy ước
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
-    "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
+    "X3_CUAVAO_TEMPLATE.md": 5000,   # mục 6 tách X3E; 5b gate khi dán chat, nâng vòng 36 theo quy ước
     "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
     "X5_HESO_TEMPLATE.md": 17500,  # mục 1b và 7b đều gate, phần nâng không thành thuế chung
@@ -109,13 +109,18 @@ def do_route(docs):
         "CHAT không EMAIL": t(tong_bo),
         "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
-        "CUA_VAO thường": t(_muc(x3, 1, 6) + x5m1),
-        "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)
+        "CUA_VAO thường": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1),
+        # 5b gate: chỉ đọc khi dán chat, không phải thuế mọi lượt cửa vào
+        "CUA_VAO mail": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1 + len(x3e)
                          - _muc(x3e, '1c', 2)),  # 1c gate: chỉ đọc khi rà lệch
         "RA_SOAT": t(len(x4)),
         "SOAN_RA thường lệ": t(len(x1) + len(x2) + x5m1),
         "SUA_FILE nội bộ": t(len(x5) - _muc(x5, '7b')),  # 7b gate: chỉ đọc khi có Q-
         "INSTRUCTION dán trong Project": t(len(docs["INSTRUCTION"])),
+        "| CỘNG | ~6969 |": (len(docs["INSTRUCTION"]) + len(docs["_so/X0_INDEX.md"])
+                             + len(docs["_so/BANG_DIEU_KHIEN.md"])) // 3,
+        # nhãn kèm cột lịch sử ~6969 để phần so chỉ còn số hiện tại; dùng // khớp
+        # đúng phép làm tròn của dòng thuế thường trực phép 9
     }
 
 
@@ -152,7 +157,10 @@ def main(goc):
                    if not l.lstrip().startswith(("#", "!")))
     # loại dòng comment, dòng negation "!" và đuôi sau khoảng trắng: các khe
     # tự phá mà so chuỗi thô nhận nhầm (hội đồng vòng 10)
-    thieu_gi = [m for m in ["_quan_sat_truoc.json", "_thu_"] if m not in gi]
+    seg_ok = any(seg.startswith("_thu_") for l in gi.splitlines()
+                 for seg in l.split("/"))
+    thieu_gi = ([] if "_quan_sat_truoc.json" in gi else ["_quan_sat_truoc.json"]) \
+               + ([] if seg_ok else ["_thu_"])
     kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
          not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
     kiem("1b. đúng một file INSTRUCTION", len(instr) == 1, f"thấy {len(instr)}")
@@ -494,9 +502,28 @@ def main(goc):
         r = chay_email(nk=P("<a@x>") + "\n" + C("<a@x>") + "\n", reg=["<a@x>"],
                        idx=idx_hash,
                        files=dict(FILES_SACH,
-                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-20260825-01] |\n"}))
+                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-20260825-01] |\n",
+                                     "_so/QUYETDINH.md": "| Q-20260825-01 | xóa CV |\n"}))
         ca.append(("12l miễn so hash cho dòng tombstone xóa pháp lý",
                    r.get(TEN_12L) is not False))
+        # 12l KHUÔN TRỌN (v32): chuỗi lửng "[đã xóa theo Q-x" không ngoặc đóng
+        # KHÔNG được miễn hash; và Q ma (không có trong QUYETDINH) cũng KHÔNG
+        r = chay_email(nk=P("<a@x>") + "\n" + C("<a@x>") + "\n", reg=["<a@x>"],
+                       idx={"<a@x>|op1": {"so": "VIEC", "dong": "V-001",
+                                          "hash": "0" * 64}},
+                       files=dict(FILES_SACH,
+                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-x |\n",
+                                     "_so/QUYETDINH.md": "| Q-20260826-01 | x |\n"}))
+        ca.append(("12l khuôn lửng không ngoặc đóng không được miễn hash",
+                   r.get(TEN_12L) is False))
+        r = chay_email(nk=P("<a@x>") + "\n" + C("<a@x>") + "\n", reg=["<a@x>"],
+                       idx={"<a@x>|op1": {"so": "VIEC", "dong": "V-001",
+                                          "hash": "0" * 64}},
+                       files=dict(FILES_SACH,
+                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-MA-KHONG-CO] |\n",
+                                     "_so/QUYETDINH.md": "| Q-20260826-01 | x |\n"}))
+        ca.append(("12l tombstone mang Q ma không có trong QUYETDINH bị bắt",
+                   r.get(TEN_12L) is False))
         # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
         giu10, nghi10 = _kv26.loc_nghi_ban_sao(
             ["01_A/BC-KH-PHULUC-2026.docx"],
@@ -905,8 +932,10 @@ def main(goc):
         ("phục hồi sự cố tách mục 1c có gate chỉ đọc khi rà lệch", "# 1c." in docs["X3E_EMAIL_TEMPLATE.md"] and "CHỈ đọc khi rà 24-31" in docs["X3E_EMAIL_TEMPLATE.md"]),
         ("xóa pháp lý tách mục 7b có gate chỉ đọc khi có Q", "# 7b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi có Q-" in docs["X5_HESO_TEMPLATE.md"]),
         ("chat dán lặp có mốc đã-nạp-tới, lượt sau chỉ xử tin sau mốc", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("chat 5b có gate chỉ đọc khi dán, không phải thuế mọi lượt", "# 5b." in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ đọc khi người dùng dán chat" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("event_id tin chat có số thứ tự trong khối, hết đụng cùng phút", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (47 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (49 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}

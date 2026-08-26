@@ -128,9 +128,8 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 
 Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
 và khuôn " (n)", "(bản sao)"; tên hậu tố "-<chữ/số>" cạnh file cùng tiền
-tố cũng bị máy NGHI bản sao (khuôn OneDrive, hậu tố từ ~5 ký
-tự). Nội bộ: DoiTac là
-NA. Bản ký thêm `_SIGNED`, bất biến. Trạng thái ở TAILIEU, không vào tên file.
+tố cũng bị máy NGHI bản sao (khuôn OneDrive, hậu tố từ ~5 ký tự).
+Nội bộ: DoiTac là NA. Bản ký thêm `_SIGNED`, bất biến. Trạng thái ở TAILIEU, không vào tên file.
 Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức C, phải có QUYETDINH.
 
 # C5. Phạm vi

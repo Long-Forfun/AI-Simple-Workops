@@ -50,8 +50,8 @@ can_tai:    [{tu, den, co: GOC}]
 Ghi `_INBOX` hỏng: in nguyên khối cho người dùng dán tay, báo "chưa ghi được", cấm
 im lặng.
 
-Chặng 2: trùng `event_id` thì bỏ qua · đổi tên chuẩn ngay lúc tải, tên gốc vào ghi
-chú TAILIEU · file gốc ngoài: bất biến, cờ GỐC, tính sha256 và byte ngay lúc nhận ·
+Chặng 2: trùng `event_id` thì bỏ qua · đổi tên chuẩn ngay lúc tải, tên gốc vào ô "Căn
+cứ trạng thái" của dòng TAILIEU · file gốc ngoài: bất biến, cờ GỐC, tính sha256 và byte ngay lúc nhận ·
 mail là căn cứ dữ kiện thì lưu .eml hoặc .pdf vào `04_Trao_doi\` TRƯỚC rồi DUKIEN mới
 trỏ tới · số đổi thì DUKIEN dòng cũ ghi thay bởi · chuyển `_INBOX` sang `_da_nap\` ·
 cập nhật bộ đếm. Tải hụt: KHÔNG chuyển `_da_nap`, ghi VIEC kèm lý do.
@@ -75,20 +75,22 @@ Mục đã đủ nguồn và thuần nội bộ: nạp luôn theo mức A, báo 
 phạm vi ra ngoài, hoặc mở việc lớn: đưa vào bảng, duyệt rồi mới ghi. Chưa duyệt mà
 hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 
-# 5b. Chat dán tay (Zalo, Messenger...)
+# 5b. Chat dán tay (CHỈ đọc khi người dùng dán chat hay export)
 
 Kênh chat chưa có pipeline quét; xử BÁN THỦ CÔNG qua cửa "người dùng đưa
 trực tiếp": người dùng dán CẢ ĐOẠN chat (hay export) vào phiên, AI tách
 từng tin theo khuôn "giờ - tên người gửi", xử mỗi tin như một mục đến ở
 chặng 1: rút việc, dữ kiện (nguồn D "tin nhắn chưa xác nhận", nâng lên B
 khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi
-"phien-chat". CHỐNG DÁN LẶP: cuối lượt ghi mốc "đã nạp tới tin <giờ>
-<người gửi>" vào ghi chú dòng VIEC hay bảng chờ; lượt dán sau chỉ xử tin
-SAU mốc. event_id tin chat: <YYYYMMDD-HHMM>-chat (ngày theo ngữ cảnh
-phiên). Không tách được khuôn giờ-tên: cả khối là MỘT mục nguồn D. Ảnh
-chụp chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi không rút
-được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); theo dõi chờ phản
-hồi chat: mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.
+"phien-chat". event_id tin chat: <YYYYMMDD-HHMM>-chat-<NN> (NN là số thứ
+tự tin trong khối dán; ngày lấy theo header ngày trong đoạn dán, thiếu
+mới rơi về ngày phiên). CHỐNG DÁN LẶP: cuối lượt ghi mốc "đã nạp tới tin
+<giờ> <người gửi>" vào ô "Bước tiếp theo" của dòng VIEC theo dõi chat
+(chưa có thì mở, mức A); SAU mốc nghĩa là sau VỊ TRÍ tin mốc trong khối
+dán, khối không chứa tin mốc thì so theo giờ. Không tách được khuôn
+giờ-tên: cả khối là MỘT mục nguồn D. Ảnh chụp chat xử như nguồn scan theo
+X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi không rút được chữ). KHÔNG cấp mã luồng THU
+(THU chỉ cho EMAIL); theo dõi chờ phản hồi chat: dòng VIEC "CHỜ ĐỐI TÁC".
 
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 

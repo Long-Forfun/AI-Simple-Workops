@@ -31,6 +31,40 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 36: vá theo hội đồng vòng 11 (96/100, plateau xác nhận)
+
+Điểm vòng 11: KHÔNG MISS 9,8 · ĐƠN GIẢN 9,8 · TOKEN 9,7 · KHÔNG SAI 9,5 ·
+THÔNG MINH 9,5 · VẬN HÀNH 9,3 (trừ đúng: defect VỪA event_id là do vòng 35
+sinh). BỐN giám khảo độc lập cùng bắt một defect - hội tụ chưa từng có. CẢ
+SÁU giám khảo cùng kết luận: điểm đọc-tĩnh đã bão hòa quanh 96, các vòng
+sau chỉ dao động quanh nhiễu; nguồn phát hiện duy nhất còn lại là PILOT
+vận hành thật 2-4 tuần. Vá:
+
+1. event_id tin chat: <YYYYMMDD-HHMM>-chat-<NN> (NN thứ tự tin trong khối
+   dán - hai tin cùng phút hết trùng khóa, chặng 2 hết nuốt tin im lặng);
+   ngày lấy theo header ngày trong đoạn dán, thiếu mới rơi về ngày phiên;
+   mốc chống dán lặp về MỘT nhà (ô "Bước tiếp theo" của dòng VIEC theo dõi
+   chat - cột có thật, bền phiên); "SAU mốc" chốt nghĩa theo VỊ TRÍ trong
+   khối. Luật ghim phép 12 (49 luật).
+2. Mục 5b lên GATE "CHỈ đọc khi người dùng dán chat hay export" (tiền lệ
+   gate thứ tư): route CUA_VAO thường về ~2554 (LITE không dán chat khỏi
+   trả thuế 5b); trần X3 nâng 5.000 KÈM GATE theo quy ước - thoát cảnh
+   99,8% mà không thành thuế chung.
+3. kiem_van_hanh v32: 12l đòi khuôn TRỌN "[đã xóa theo Q-<mã>]" (chuỗi
+   lửng hết được miễn oan) VÀ mã Q phải có dòng trong QUYETDINH (Q ma bị
+   bắt) - hai fixture mới, bộ 78 ca; tự vệ vế SÁU (thư mục tồn tại nhưng
+   không dấu vết cài đặt = LỖI CÁCH DÙNG exit 2).
+4. Khâu chữ: CỘNG thuế thường trực vào lưới 2c (khớp phép làm tròn của
+   phép 9 - hết nit 1 token); số LITE cập nhật; cột ma cuối "ghi chú
+   TAILIEU" về ô "Căn cứ trạng thái" có thật; C4 rewrap; 1d khớp _thu_
+   theo path segment.
+
+Watchlist trần: X3 ~4,7k/5.000 (94%) · X5 17,16k/17.500 (98,1%) · X0
+~15,99k/16.500 (96,9%) · X3E 92,8%. Trạng thái sau 12 vòng chấm - 36 vòng
+vá: bốn gate token (1b, 7b, 1c, 5b), 78 fixture, 49 luật ghim, 12 số
+BENCHMARK máy giữ. Hội đồng khuyến nghị nhất trí: bước kế tiếp là PILOT
+thật, điền cột "phiên thật" của BENCHMARK.
+
 ## Vòng 35: khâu theo hội đồng vòng 10 (96/100)
 
 Điểm vòng 10: ĐƠN GIẢN 9,8 · KHÔNG MISS 9,7 · VẬN HÀNH 9,7 · TOKEN 9,6 ·

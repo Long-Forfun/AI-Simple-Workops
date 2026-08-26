@@ -32,8 +32,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | BAN | không | 0 | |
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1643 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
 | SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5231 + khối (không phần mềm trừ thêm mục 1b ~421) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5b + X5 mục 1 + VIEC, TAILIEU theo khối | ~2840 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6345 + khối | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2554 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6059 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3406 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3406 + khối | |
@@ -41,7 +41,7 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
 INSTRUCTION 8.000 ký tự · X0 16.500 (đọc theo mục, thuế là X0_INDEX) · X5
-17.500 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 4.500 · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4 5.500
+17.500 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.000 (mục 5b gate khi dán chat) · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4 5.500
 (chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
 là FAIL.
 
@@ -50,8 +50,8 @@ là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ:
-CHAT không EMAIL ~19854 token
-CHAT có EMAIL (kèm X3E) ~23566 token
+CHAT không EMAIL ~19927 token
+CHAT có EMAIL (kèm X3E) ~23639 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -59,4 +59,5 @@ BAN, soạn nháp, không phải phiên ghi sổ chính.
 
 Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED, EMAIL
 nên X0 ngắn hơn đáng kể; X3E và sổ THU chỉ được nạp khi bật EMAIL, không
-tăng thuế của bộ lõi; CUA_VAO thường của LITE nay chỉ đọc X3 ~3.4k ký tự.
+tăng thuế của bộ lõi; CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 (~3.0k ký tự, mục 5b gate
+riêng khi dán chat).
