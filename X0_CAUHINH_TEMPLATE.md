@@ -242,8 +242,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
-                 Quét tự động chỉ có cho EMAIL; chat (Zalo...) dán tay vào
-                 phiên: tin nhắn chưa xác nhận là nguồn D, ảnh như nguồn scan
+                 Quét tự động chỉ có cho EMAIL; chat (Zalo...) đi lối bán
+                 thủ công X3 mục 5b: dán cả đoạn, AI tách tin, nguồn D
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>

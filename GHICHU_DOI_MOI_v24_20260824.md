@@ -4,6 +4,31 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 33: dọn backlog tự khai (ba mục hành-động-được cuối)
+
+Không chờ vòng chấm mới: ba mục backlog mà các giám khảo còn trừ điểm thật
+và ĐỀU vá được, vá luôn:
+
+1. CHAT DÁN TAY thành luật (X3 mục 5b): kênh Zalo, Messenger đi lối bán thủ
+   công qua cửa "người dùng đưa trực tiếp" - dán cả đoạn chat hay export, AI
+   tách từng tin theo khuôn giờ-tên, xử như mục đến ở chặng 1 (nguồn D, nâng
+   B khi có xác nhận văn bản), ảnh chat như nguồn scan, không cấp luồng THU,
+   theo dõi bằng VIEC. Vùng TRỐNG tần suất cao nhất với thị trường VN thành
+   MỘT PHẦN có đường chính thức; README và X0 C9 trỏ về mục 5b.
+2. X3E tách mục 1c PHỤC HỒI SỰ CỐ, gate "chỉ đọc khi rà 24-31 báo lệch" -
+   cùng khuôn gate đã chứng minh ở X5 mục 1b; route CUA_VAO mail trong
+   BENCHMARK và phép 2c đo trừ mục 1c.
+3. kiem_van_hanh v29: heuristic bản sao CÙNG TIỀN TỐ cho file nghiệp vụ
+   (khuôn OneDrive -<TênMáy>): ứng viên đề xuất _INBOX mà cùng thư mục có
+   file làm tiền tố tên nó, đuôi -XXXX không phải vN, chuyển sang cảnh báo
+   NGHI BẢN SAO thay vì mời vào sổ mức A.
+
+Bảng route dán lại từ --sinh-benchmark trong cùng commit (quy ước vòng 8).
+Watchlist trần: X0 ~15,99k/16.000 · X5 16,996/17.000 · X3E ~11,1k/12.000 ·
+X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai đã
+dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
+user-facing (không pipeline chat tự động, không phân quyền).
+
 ## Vòng 32: vá theo hội đồng vòng 8 (đợt chốt)
 
 Vòng 8 về 4/6 giám khảo (hai giám khảo đứt giữa chừng vì giới hạn phiên):

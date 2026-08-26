@@ -66,9 +66,9 @@ chốt sổ     kết phiên an toàn, vét các lượt ghi dở
             biết file nào là bản mới nhất, bản nào đã cũ
 ```
 
-Kênh chat (Zalo, Messenger) chưa có pipeline quét tự động như mail: nội
-dung chat cứ dán vào phiên, AI ghi nhận theo luật nguồn (tin nhắn chưa xác
-nhận tính là nguồn miệng).
+Kênh chat (Zalo, Messenger) chưa có pipeline quét tự động như mail, nhưng
+có lối bán thủ công: dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
+như thư đến (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
 Chỉ vậy. Mã số, rev, trace, mức nguồn là việc của AI, bạn không cần hiểu.

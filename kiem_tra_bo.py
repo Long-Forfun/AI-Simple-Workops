@@ -110,7 +110,8 @@ def do_route(docs):
         "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
         "CUA_VAO thường": t(_muc(x3, 1, 6) + x5m1),
-        "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)),
+        "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)
+                         - _muc(x3e, '1c', 2)),  # 1c gate: chỉ đọc khi rà lệch
         "RA_SOAT": t(len(x4)),
         "SOAN_RA thường lệ": t(len(x1) + len(x2) + x5m1),
         "SUA_FILE nội bộ": t(len(x5)),

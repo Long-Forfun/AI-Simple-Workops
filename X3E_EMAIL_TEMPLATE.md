@@ -62,15 +62,8 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
                không phải mang thêm cột khóa máy
             3  append COMMITTED khi mọi thao tác và đính kèm đã đủ
             4  registry CHỈ dựng từ các sự kiện COMMITTED
-            Chết giữa chừng: PREPARED không có COMMITTED là lượt DỞ DANG, phục
-            hồi bằng cách chạy lại bước 2 từ payload và staging, cấm đọc lại
-            hộp thư. COMMITTED không có PREPARED, hay đứng trước PREPARED, là
-            nhật ký hỏng, rà ngay. Mất registry: dựng lại từ COMMITTED. Mất
-            index: dựng lại bằng cách đối chiếu thao tác trong payload với sổ.
-            Mất CẢ nhật ký lẫn registry: lần quét đầu chỉ xuất danh sách
-            ỨNG VIÊN chờ duyệt, không tự nạp. Mất RIÊNG nhật ký khi
-            registry còn: GIỮ NGUYÊN registry làm rào chống nạp trùng,
-            CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH.
+            Chết giữa chừng hay mất file máy sinh: thủ tục phục hồi ở mục
+            1c, CHỈ đọc khi rà 24-31 của X4 báo lệch.
             DỌN STAGING là việc mức A, tự làm khi đủ BỐN điều: mail đã
             COMMITTED · file đích và sha256 đã xác minh · .eml cần làm bằng
             chứng đã chuyển sang 04_Trao_doi hay vùng lưu chính · đã qua thời
@@ -126,6 +119,19 @@ GỬI KÈM FILE thư mình gửi đi có đính kèm bản làm việc: file đ�
 AN TOÀN     token và bí mật của kênh báo (Telegram...) để NGOÀI kho đồng bộ,
             script đọc từ chỗ hệ điều hành giữ bí mật; digest sinh lỗi thì tuyệt
             đối không gửi lại bản cũ, báo lỗi thay vì báo DONE
+```
+
+# 1c. Phục hồi sự cố (CHỈ đọc khi rà 24-31 của X4 báo lệch)
+
+```
+Chết giữa chừng: PREPARED không có COMMITTED là lượt DỞ DANG, phục hồi
+bằng cách chạy lại bước 2 từ payload và staging, cấm đọc lại hộp thư.
+COMMITTED không có PREPARED, hay đứng trước PREPARED, là nhật ký hỏng, rà
+ngay. Mất registry: dựng lại từ COMMITTED. Mất index: dựng lại bằng đối
+chiếu thao tác trong payload với sổ. Mất CẢ nhật ký lẫn registry: lần quét
+đầu chỉ xuất danh sách ỨNG VIÊN chờ duyệt, không tự nạp. Mất RIÊNG nhật ký
+khi registry còn: GIỮ NGUYÊN registry làm rào chống nạp trùng, CẤM dựng
+lại từ tập COMMITTED rỗng, ghi QUYETDINH.
 ```
 
 # 2. Luật bổ sung

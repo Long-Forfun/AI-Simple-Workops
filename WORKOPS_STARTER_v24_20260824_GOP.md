@@ -71,6 +71,31 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 33: dọn backlog tự khai (ba mục hành-động-được cuối)
+
+Không chờ vòng chấm mới: ba mục backlog mà các giám khảo còn trừ điểm thật
+và ĐỀU vá được, vá luôn:
+
+1. CHAT DÁN TAY thành luật (X3 mục 5b): kênh Zalo, Messenger đi lối bán thủ
+   công qua cửa "người dùng đưa trực tiếp" - dán cả đoạn chat hay export, AI
+   tách từng tin theo khuôn giờ-tên, xử như mục đến ở chặng 1 (nguồn D, nâng
+   B khi có xác nhận văn bản), ảnh chat như nguồn scan, không cấp luồng THU,
+   theo dõi bằng VIEC. Vùng TRỐNG tần suất cao nhất với thị trường VN thành
+   MỘT PHẦN có đường chính thức; README và X0 C9 trỏ về mục 5b.
+2. X3E tách mục 1c PHỤC HỒI SỰ CỐ, gate "chỉ đọc khi rà 24-31 báo lệch" -
+   cùng khuôn gate đã chứng minh ở X5 mục 1b; route CUA_VAO mail trong
+   BENCHMARK và phép 2c đo trừ mục 1c.
+3. kiem_van_hanh v29: heuristic bản sao CÙNG TIỀN TỐ cho file nghiệp vụ
+   (khuôn OneDrive -<TênMáy>): ứng viên đề xuất _INBOX mà cùng thư mục có
+   file làm tiền tố tên nó, đuôi -XXXX không phải vN, chuyển sang cảnh báo
+   NGHI BẢN SAO thay vì mời vào sổ mức A.
+
+Bảng route dán lại từ --sinh-benchmark trong cùng commit (quy ước vòng 8).
+Watchlist trần: X0 ~15,99k/16.000 · X5 16,996/17.000 · X3E ~11,1k/12.000 ·
+X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai đã
+dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
+user-facing (không pipeline chat tự động, không phân quyền).
+
 ## Vòng 32: vá theo hội đồng vòng 8 (đợt chốt)
 
 Vòng 8 về 4/6 giám khảo (hai giám khảo đứt giữa chừng vì giới hạn phiên):
@@ -1108,8 +1133,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | BAN | không | 0 | |
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1642 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
 | SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5665 + khối (không phần mềm ~5244, trừ mục 1b) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2546 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3684) + THU theo khối | ~6230 + khối | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5b + X5 mục 1 + VIEC, TAILIEU theo khối | ~2756 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6261 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3405 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3405 + khối | |
@@ -1126,8 +1151,8 @@ là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ:
-CHAT không EMAIL ~19472 token
-CHAT có EMAIL (kèm X3E) ~23155 token
+CHAT không EMAIL ~19678 token
+CHAT có EMAIL (kèm X3E) ~23390 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -1523,8 +1548,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
-                 Quét tự động chỉ có cho EMAIL; chat (Zalo...) dán tay vào
-                 phiên: tin nhắn chưa xác nhận là nguồn D, ảnh như nguồn scan
+                 Quét tự động chỉ có cho EMAIL; chat (Zalo...) đi lối bán
+                 thủ công X3 mục 5b: dán cả đoạn, AI tách tin, nguồn D
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>
@@ -1836,6 +1861,17 @@ Mục đã đủ nguồn và thuần nội bộ: nạp luôn theo mức A, báo 
 phạm vi ra ngoài, hoặc mở việc lớn: đưa vào bảng, duyệt rồi mới ghi. Chưa duyệt mà
 hết phiên: ghi VIEC hạn phiên sau, cấm chết theo phiên.
 
+# 5b. Chat dán tay (Zalo, Messenger...)
+
+Kênh chat chưa có pipeline quét; xử BÁN THỦ CÔNG qua cửa "người dùng đưa
+trực tiếp": người dùng dán CẢ ĐOẠN chat (hay file export) vào phiên, AI tự
+tách từng tin theo khuôn "giờ - tên người gửi" của app, rồi xử mỗi tin như
+một mục đến ở chặng 1: rút việc, dữ kiện (mức nguồn D "tin nhắn chưa xác
+nhận", nâng từ B khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5.
+Ảnh chụp màn hình chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi
+không rút được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); cần theo
+dõi chờ phản hồi chat thì mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.
+
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 
 Không bật EMAIL: bỏ qua, mail đi qua bốn cửa như file thường. Bật EMAIL: đọc
@@ -1911,15 +1947,8 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
                không phải mang thêm cột khóa máy
             3  append COMMITTED khi mọi thao tác và đính kèm đã đủ
             4  registry CHỈ dựng từ các sự kiện COMMITTED
-            Chết giữa chừng: PREPARED không có COMMITTED là lượt DỞ DANG, phục
-            hồi bằng cách chạy lại bước 2 từ payload và staging, cấm đọc lại
-            hộp thư. COMMITTED không có PREPARED, hay đứng trước PREPARED, là
-            nhật ký hỏng, rà ngay. Mất registry: dựng lại từ COMMITTED. Mất
-            index: dựng lại bằng cách đối chiếu thao tác trong payload với sổ.
-            Mất CẢ nhật ký lẫn registry: lần quét đầu chỉ xuất danh sách
-            ỨNG VIÊN chờ duyệt, không tự nạp. Mất RIÊNG nhật ký khi
-            registry còn: GIỮ NGUYÊN registry làm rào chống nạp trùng,
-            CẤM dựng lại từ tập COMMITTED rỗng, ghi QUYETDINH.
+            Chết giữa chừng hay mất file máy sinh: thủ tục phục hồi ở mục
+            1c, CHỈ đọc khi rà 24-31 của X4 báo lệch.
             DỌN STAGING là việc mức A, tự làm khi đủ BỐN điều: mail đã
             COMMITTED · file đích và sha256 đã xác minh · .eml cần làm bằng
             chứng đã chuyển sang 04_Trao_doi hay vùng lưu chính · đã qua thời
@@ -1975,6 +2004,19 @@ GỬI KÈM FILE thư mình gửi đi có đính kèm bản làm việc: file đ�
 AN TOÀN     token và bí mật của kênh báo (Telegram...) để NGOÀI kho đồng bộ,
             script đọc từ chỗ hệ điều hành giữ bí mật; digest sinh lỗi thì tuyệt
             đối không gửi lại bản cũ, báo lỗi thay vì báo DONE
+```
+
+# 1c. Phục hồi sự cố (CHỈ đọc khi rà 24-31 của X4 báo lệch)
+
+```
+Chết giữa chừng: PREPARED không có COMMITTED là lượt DỞ DANG, phục hồi
+bằng cách chạy lại bước 2 từ payload và staging, cấm đọc lại hộp thư.
+COMMITTED không có PREPARED, hay đứng trước PREPARED, là nhật ký hỏng, rà
+ngay. Mất registry: dựng lại từ COMMITTED. Mất index: dựng lại bằng đối
+chiếu thao tác trong payload với sổ. Mất CẢ nhật ký lẫn registry: lần quét
+đầu chỉ xuất danh sách ỨNG VIÊN chờ duyệt, không tự nạp. Mất RIÊNG nhật ký
+khi registry còn: GIỮ NGUYÊN registry làm rào chống nạp trùng, CẤM dựng
+lại từ tập COMMITTED rỗng, ghi QUYETDINH.
 ```
 
 # 2. Luật bổ sung
@@ -2662,7 +2704,8 @@ def do_route(docs):
         "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
         "CUA_VAO thường": t(_muc(x3, 1, 6) + x5m1),
-        "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)),
+        "CUA_VAO mail": t(_muc(x3, 1, 6) + x5m1 + len(x3e)
+                         - _muc(x3e, '1c', 2)),  # 1c gate: chỉ đọc khi rà lệch
         "RA_SOAT": t(len(x4)),
         "SOAN_RA thường lệ": t(len(x1) + len(x2) + x5m1),
         "SUA_FILE nội bộ": t(len(x5)),
@@ -3479,7 +3522,11 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v28 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v29 · 20260825
+# v29: heuristic bản sao CÙNG TIỀN TỐ cho file nghiệp vụ (khuôn OneDrive
+# -<TênMáy>): ứng viên đề xuất _INBOX mà cùng thư mục có file làm tiền tố
+# tên nó, đuôi -XXXX không phải vN, thì chuyển sang cảnh báo NGHI BẢN SAO
+# thay vì mời vào sổ mức A - khép nốt lỗ vòng 6 tự khai.
 # v28, theo hội đồng vòng 8: tự vệ tham số vế BỐN - kho tồn tại nhưng quét
 # ra 0 file trong khi cache đang giữ >0 mục (mây chưa đồng bộ, ổ rỗng) thì
 # cảnh báo và GIỮ cache, hết ghi đè mốc ổn định bằng tập rỗng · 0b chỉ flag
@@ -4077,6 +4124,30 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         for it in kq["items"]:
             if it["ten"] in kq["hien_hanh"] and not da_vao_so(it["rel"], so_files, so_dirs):
                 de_xuat.append(it["rel"])
+    # heuristic bản sao CÙNG TIỀN TỐ (khuôn OneDrive -<TênMáy> trên file nghiệp
+    # vụ): ứng viên mà cùng thư mục có file khác làm TIỀN TỐ của tên nó, phần
+    # đuôi dạng -XXXX không phải vN, thì nghi bản sao - cảnh báo thay vì mời vào
+    # sổ mức A (hội đồng vòng 6-8)
+    tat_ca_stem = {}
+    for (tm2, _), kq2 in nhom.items():
+        for it2 in kq2["items"]:
+            tat_ca_stem.setdefault(tm2, set()).add(Path(it2["ten"]).stem)
+    nghi_ban_sao = []
+    for rel in list(de_xuat):
+        tm2, stem = str(Path(rel).parent), Path(rel).stem
+        for goc_stem in tat_ca_stem.get(tm2, ()):
+            duoi = stem[len(goc_stem):]
+            if (goc_stem and stem != goc_stem and stem.startswith(goc_stem)
+                    and re.fullmatch(r"-[A-Za-z0-9][A-Za-z0-9-]{3,}", duoi)
+                    and not re.fullmatch(r"-v\d+", duoi, re.I)):
+                nghi_ban_sao.append(rel)
+                de_xuat.remove(rel)
+                break
+    if nghi_ban_sao:
+        print("        NGHI BẢN SAO ĐỒNG BỘ (không mời vào sổ; hòa giải theo"
+              " X5 mục 3 rồi chuyển _lich_su nếu đúng):")
+        for d in nghi_ban_sao[:10]:
+            print(f"          - {d}")
     bao("11. không họ tài liệu nào cùng vN mà khác nội dung (XUNG ĐỘT)" + pv, not xung_dot,
         str(xung_dot[:3]))
     if lan_dau:

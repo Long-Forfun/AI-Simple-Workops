@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v28 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v29 · 20260825
+# v29: heuristic bản sao CÙNG TIỀN TỐ cho file nghiệp vụ (khuôn OneDrive
+# -<TênMáy>): ứng viên đề xuất _INBOX mà cùng thư mục có file làm tiền tố
+# tên nó, đuôi -XXXX không phải vN, thì chuyển sang cảnh báo NGHI BẢN SAO
+# thay vì mời vào sổ mức A - khép nốt lỗ vòng 6 tự khai.
 # v28, theo hội đồng vòng 8: tự vệ tham số vế BỐN - kho tồn tại nhưng quét
 # ra 0 file trong khi cache đang giữ >0 mục (mây chưa đồng bộ, ổ rỗng) thì
 # cảnh báo và GIỮ cache, hết ghi đè mốc ổn định bằng tập rỗng · 0b chỉ flag
@@ -597,6 +601,30 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         for it in kq["items"]:
             if it["ten"] in kq["hien_hanh"] and not da_vao_so(it["rel"], so_files, so_dirs):
                 de_xuat.append(it["rel"])
+    # heuristic bản sao CÙNG TIỀN TỐ (khuôn OneDrive -<TênMáy> trên file nghiệp
+    # vụ): ứng viên mà cùng thư mục có file khác làm TIỀN TỐ của tên nó, phần
+    # đuôi dạng -XXXX không phải vN, thì nghi bản sao - cảnh báo thay vì mời vào
+    # sổ mức A (hội đồng vòng 6-8)
+    tat_ca_stem = {}
+    for (tm2, _), kq2 in nhom.items():
+        for it2 in kq2["items"]:
+            tat_ca_stem.setdefault(tm2, set()).add(Path(it2["ten"]).stem)
+    nghi_ban_sao = []
+    for rel in list(de_xuat):
+        tm2, stem = str(Path(rel).parent), Path(rel).stem
+        for goc_stem in tat_ca_stem.get(tm2, ()):
+            duoi = stem[len(goc_stem):]
+            if (goc_stem and stem != goc_stem and stem.startswith(goc_stem)
+                    and re.fullmatch(r"-[A-Za-z0-9][A-Za-z0-9-]{3,}", duoi)
+                    and not re.fullmatch(r"-v\d+", duoi, re.I)):
+                nghi_ban_sao.append(rel)
+                de_xuat.remove(rel)
+                break
+    if nghi_ban_sao:
+        print("        NGHI BẢN SAO ĐỒNG BỘ (không mời vào sổ; hòa giải theo"
+              " X5 mục 3 rồi chuyển _lich_su nếu đúng):")
+        for d in nghi_ban_sao[:10]:
+            print(f"          - {d}")
     bao("11. không họ tài liệu nào cùng vN mà khác nội dung (XUNG ĐỘT)" + pv, not xung_dot,
         str(xung_dot[:3]))
     if lan_dau:

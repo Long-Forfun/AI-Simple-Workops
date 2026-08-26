@@ -32,8 +32,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | BAN | không | 0 | |
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1642 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
 | SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5665 + khối (không phần mềm ~5244, trừ mục 1b) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2546 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3684) + THU theo khối | ~6230 + khối | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5b + X5 mục 1 + VIEC, TAILIEU theo khối | ~2756 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6261 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3405 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3405 + khối | |
@@ -50,8 +50,8 @@ là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ:
-CHAT không EMAIL ~19472 token
-CHAT có EMAIL (kèm X3E) ~23155 token
+CHAT không EMAIL ~19678 token
+CHAT có EMAIL (kèm X3E) ~23390 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
