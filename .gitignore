@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 .venv/
+# file máy sinh của kiem_van_hanh và pipeline EMAIL: không đóng gói,
+# không commit - tracked là git pull của công ty đang chạy sẽ kẹt
+_so/_quan_sat_truoc.json
+_so/_thu_*.json
+_so/_thu_*.ndjson
+_so/_thu_staging/

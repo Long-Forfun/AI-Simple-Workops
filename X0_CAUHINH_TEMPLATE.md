@@ -90,8 +90,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
-  GitHub Actions. Mục nào
-  chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
+  GitHub Actions. Mục nào chưa rõ: trả lời "chưa rõ, hỏi đội kỹ
+  thuật", AI ghi <chưa điền> vào C12
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự

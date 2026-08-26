@@ -142,6 +142,13 @@ def main(goc):
     instr = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))
     ghichu = sorted(goc.glob("GHICHU_DOI_MOI_v*.md"))
     kiem("1. đủ file bắt buộc, gồm benchmark và hai script", not thieu, f"thiếu {thieu}")
+    # 1d. File MÁY SINH không được đóng gói/commit: cache quan sát và bộ _thu_*
+    #     bị track là "git pull" của công ty đang chạy sẽ kẹt vì cache local bẩn
+    #     (hội đồng vòng 8). Kiểm qua .gitignore - tất định, không phụ thuộc git.
+    gi = (goc / ".gitignore").read_text(encoding="utf-8") if (goc / ".gitignore").is_file() else ""
+    thieu_gi = [m for m in ["_quan_sat_truoc.json", "_thu_"] if m not in gi]
+    kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
+         not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
     kiem("1b. đúng một file INSTRUCTION", len(instr) == 1, f"thấy {len(instr)}")
     kiem("1c. đúng một file GHICHU_DOI_MOI_v*", len(ghichu) == 1, f"thấy {len(ghichu)}")
     if thieu or not instr or not ghichu:

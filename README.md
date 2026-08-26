@@ -1,8 +1,8 @@
 # WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
 
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
-Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM cũng dùng được (code ở
-repo, secret không vào kho, deploy có mức duyệt). Bên trong: luật thường
+Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM cũng dùng được (xem
+mục "Công ty có phần mềm" bên dưới). Bên trong: luật thường
 trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
 là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
 thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
@@ -102,13 +102,13 @@ repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở
 · nơi chạy thật · nơi giữ secret
 ```
 
-Khai đủ thì các vận hành liên quan mới chính xác: code ở repo là nguồn sự
-thật (không chép vào kho, không qua _INBOX) · mức duyệt từng thao tác repo
-theo bảng ở X5 mục 1b (deploy hay migration chạy thật, merge vào nhánh có
-CI/CD, rollback, force-push đều là việc RỦI RO cần plan; dev, staging là
-việc nhẹ) · secret không vào kho, sổ hay phiên · dump, log mang dữ liệu
-khách coi là đầu ra có phạm vi · phát hành bản build có bảng kiểm riêng
-(X2). Mục nào chưa rõ cứ trả lời "chưa rõ, hỏi đội kỹ thuật".
+Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
+của code (không chép vào kho), secret không vào kho hay sổ, và mọi thao
+tác chạm môi trường CHẠY THẬT đều là việc rủi ro cần bạn duyệt - việc trên
+dev, staging là việc nhẹ AI tự làm. Chi tiết mức duyệt từng thao tác: X5
+mục 1b; phát hành bản build có bảng kiểm riêng (X2); dump, log mang dữ
+liệu khách có phạm vi riêng. Mục nào chưa rõ cứ trả lời "chưa rõ, hỏi
+đội kỹ thuật".
 
 ## Trong repo có gì
 

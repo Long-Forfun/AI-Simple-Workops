@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v27 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v28 · 20260825
+# v28, theo hội đồng vòng 8: tự vệ tham số vế BỐN - kho tồn tại nhưng quét
+# ra 0 file trong khi cache đang giữ >0 mục (mây chưa đồng bộ, ổ rỗng) thì
+# cảnh báo và GIỮ cache, hết ghi đè mốc ổn định bằng tập rỗng · 0b chỉ flag
+# bản X0 tên lạ khi BẢN CHUẨN cũng tồn tại (bản lạc); không có bản chuẩn
+# thì nhường 0c xử "đổi tên", hết hai thông điệp trái chiều · nhánh 0c
+# "chưa cài" chỉ kích hoạt khi TEMPLATE là file X0 duy nhất.
 # v27, theo hội đồng vòng 7: loc_ban_chinh lên tầng module để fixture ghim
 # được ba hành vi v26 · regex tên chuẩn X0 khớp luật (mã 3-4 ký tự A-Z 0-9,
 # không dấu) và 0c có nhánh "tên không đúng chuẩn: đổi tên file" thay vì
@@ -537,6 +543,14 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         ghi_cache(cache, luc_kho, gop)
         print(f"        chế độ --ho{pv}: {len(moi)} file cùng họ, cache thay đúng họ này")
     else:
+        if not moi and truoc:
+            # kho tồn tại nhưng quét ra 0 file trong khi cache đang giữ mục:
+            # nghi mây chưa đồng bộ hay sai đường - cảnh báo, GIỮ cache
+            bao("9-11. kho quan sát có file", False,
+                f"quét ra 0 file nghiệp vụ trong khi lần trước thấy"
+                f" {len(truoc)}: kho chưa đồng bộ, ổ rỗng hay sai đường?"
+                f" cache mốc ổn định giữ nguyên")
+            return
         ghi_cache(cache, bay_gio, moi)
 
     hang = dong_bang(doc(so / "TAILIEU.md"))
@@ -1039,8 +1053,12 @@ def main(goc):
                    if f.name not in {x.split("/")[-1] for x in xung}
                    and "TEMPLATE" not in f.name
                    and not re.fullmatch(r"NHATKY_\d{4}Q[1-4]\.md", f.name))
+    co_x0_chuan = any(re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name)
+                      for f in goc.glob("X0_CAUHINH_*.md"))
+    # bản X0 tên lạ CHỈ là "bản lạc" khi bản chuẩn cũng tồn tại; không có
+    # bản chuẩn thì đó là bản duy nhất đặt sai tên - nhường 0c khuyên đổi tên
     xung += sorted(f.name for f in goc.glob("X0_CAUHINH_*.md")
-                   if "TEMPLATE" not in f.name
+                   if "TEMPLATE" not in f.name and co_x0_chuan
                    and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name))
     xung = sorted(set(xung))
     bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
@@ -1049,12 +1067,12 @@ def main(goc):
 
     x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
-    if not x0s and co_template:
+    ung_vien_tho = [q.name for q in goc.glob("X0_CAUHINH_*.md")
+                    if "TEMPLATE" not in q.name]
+    if not x0s and co_template and not ung_vien_tho:
         print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
               " chạy \"cài đặt\" theo X9 trước")
     elif not x0s:
-        ung_vien_tho = [q.name for q in goc.glob("X0_CAUHINH_*.md")
-                        if "TEMPLATE" not in q.name]
         if ung_vien_tho:
             bao("0c. có bản X0 đang chạy", False,
                 f"thấy {ung_vien_tho[:3]} nhưng tên KHÔNG đúng chuẩn"

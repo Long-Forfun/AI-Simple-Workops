@@ -19,7 +19,7 @@ Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh V
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
 4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.884) xấp xỉ 4.084
 token, vẫn thấp hơn trước tối ưu.
-Nền tảng nào kéo CẢ X5 (hiện ~5449 token) thay vì đúng mục thì mỗi thao tác đổi
+Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng mục thì mỗi thao tác đổi
 trạng thái tốn thêm phần chênh; luật đọc theo mục của X5 mục 5 áp cho cả X3, X5.
 
 ## Chi phí context theo loại yêu cầu (ngoài thuế, chưa tính tài liệu nghiệp vụ)
@@ -30,13 +30,13 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1628 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5449 + khối (không phần mềm ~5028, trừ mục 1b) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2532 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3681) + THU theo khối | ~6213 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1642 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5665 + khối (không phần mềm ~5244, trừ mục 1b) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2546 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3684) + THU theo khối | ~6230 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3390 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3390 + khối | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3405 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3405 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
@@ -50,8 +50,8 @@ là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ:
-CHAT không EMAIL ~19046 token
-CHAT có EMAIL (kèm X3E) ~22727 token
+CHAT không EMAIL ~19472 token
+CHAT có EMAIL (kèm X3E) ~23155 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 

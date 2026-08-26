@@ -4,6 +4,38 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 32: vá theo hội đồng vòng 8 (đợt chốt)
+
+Vòng 8 về 4/6 giám khảo (hai giám khảo đứt giữa chừng vì giới hạn phiên):
+VẬN HÀNH 9,0 · TOKEN 9,2 · KHÔNG MISS 9,6 · ĐƠN GIẢN 9,6; giám khảo KHÔNG
+SAI kịp ghi nhận một phát hiện trước khi đứt (X9 thiếu vế secret - trùng
+với hai giám khảo khác). Vá:
+
+1. FILE MÁY SINH HẾT BỊ ĐÓNG GÓI (VỪA của vòng 8, chứng minh bằng clone
+   thật): _so/_quan_sat_truoc.json từng bị commit vào bộ mẫu khiến git pull
+   - đường nâng cấp duy nhất được tài liệu hóa - abort vì cache local bẩn.
+   Gỡ khỏi index, .gitignore che cả họ (_quan_sat_truoc, _thu_*, staging),
+   phép 1d mới của kiem_tra_bo giữ vĩnh viễn qua .gitignore (tất định,
+   không phụ thuộc git).
+2. kiem_van_hanh v28: tự vệ tham số vế BỐN (kho tồn tại nhưng quét 0 file
+   trong khi cache >0 mục: cảnh báo, GIỮ cache - hết ghi đè mốc ổn định
+   bằng tập rỗng); 0b chỉ flag bản X0 tên lạ khi BẢN CHUẨN cũng tồn tại,
+   không có bản chuẩn thì nhường 0c khuyên "đổi tên" - hết hai thông điệp
+   trái chiều; nhánh 0c "chưa cài" chỉ khi TEMPLATE là file X0 duy nhất.
+3. X9 mục 1 câu 3 thêm vế "nơi giữ secret" (3 giám khảo cùng chỉ - khớp
+   trọn ba đầu README, X0 C2, X9); ví dụ X0 C2 hết ngắt dòng giữa câu
+   (net 0 ký tự, X0 giữ 15.993/16.000); README mục phần mềm: đoạn hai tách
+   thành câu tiếng người + con trỏ X5 mục 1b (bớt chuỗi jargon git), intro
+   trỏ xuống mục; GHICHU vòng 31 sửa câu "bù tương đương" thành "bù MỘT
+   PHẦN, kín headroom" cho khớp diff thật (giám khảo TOKEN đối chiếu git);
+   BENCHMARK: đoạn văn hết lặp số SUA_FILE (thành tham chiếu bảng), toàn
+   bộ bảng route dán lại từ --sinh-benchmark (xóa trôi 2-4%).
+
+Watchlist trần: X0 15.993/16.000 (99,9%) · X5 16.996/17.000 (99,9%) · X3E
+~92% · X9 ~92,5%. Backlog tự khai giữ nguyên: pipeline chat bán thủ công
+(vùng TRỐNG tần suất cao nhất còn lại với thị trường VN) · heuristic
+cùng-tiền-tố OneDrive cho file nghiệp vụ · gate phục hồi X3E khi chạm ~95%.
+
 ## Vòng 31: vá theo hội đồng vòng 7 (20260825, điểm vòng 7: 91,2/100)
 
 Điểm vòng 7: THÔNG MINH 8,5 · VẬN HÀNH 9,0 · KHÔNG SAI 9,0 · TOKEN 9,1 ·
@@ -33,9 +65,9 @@ Vá:
    C2 @DUAN.PHANMEM, X5 mục 1b, X2 phát hành build.
 5. Máy giữ thêm hai số con của BENCHMARK (mục 1b ~421, X5 mục 3 ~1058) qua
    phép 2c; số mục 3 cập nhật (~950 đã trôi 11%). Trần X0, X5 GIỮ NGUYÊN
-   theo quy ước nâng-trần-kèm-bù: mọi phần thêm vòng này được bù bằng cắt
-   chữ tương đương ngay trong hai file đó (X0 15.993/16.000, X5
-   16.996/17.000 - lần thử lửa đầu của quy ước, đạt).
+   theo quy ước nâng-trần-kèm-bù: phần thêm được bù MỘT PHẦN bằng cắt chữ
+   trong hai file đó, phần còn lại ăn hết headroom (X0 15.993/16.000, X5
+   16.996/17.000 - thử lửa một phần; bài kiểm net-zero còn ở phía trước).
 
 Watchlist trần: X0 99,9% · X5 99,9% · X3E ~92% · X9 ~92%. Hai file trụ đã
 kín trần thật sự: vòng sau muốn thêm chữ vào X0 hay X5 là phải cắt trước.

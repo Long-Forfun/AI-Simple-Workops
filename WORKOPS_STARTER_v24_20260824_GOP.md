@@ -71,6 +71,38 @@ File này cho người đánh giá. Không phải luật, không cần copy vào
 Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một lượt team agent
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
+## Vòng 32: vá theo hội đồng vòng 8 (đợt chốt)
+
+Vòng 8 về 4/6 giám khảo (hai giám khảo đứt giữa chừng vì giới hạn phiên):
+VẬN HÀNH 9,0 · TOKEN 9,2 · KHÔNG MISS 9,6 · ĐƠN GIẢN 9,6; giám khảo KHÔNG
+SAI kịp ghi nhận một phát hiện trước khi đứt (X9 thiếu vế secret - trùng
+với hai giám khảo khác). Vá:
+
+1. FILE MÁY SINH HẾT BỊ ĐÓNG GÓI (VỪA của vòng 8, chứng minh bằng clone
+   thật): _so/_quan_sat_truoc.json từng bị commit vào bộ mẫu khiến git pull
+   - đường nâng cấp duy nhất được tài liệu hóa - abort vì cache local bẩn.
+   Gỡ khỏi index, .gitignore che cả họ (_quan_sat_truoc, _thu_*, staging),
+   phép 1d mới của kiem_tra_bo giữ vĩnh viễn qua .gitignore (tất định,
+   không phụ thuộc git).
+2. kiem_van_hanh v28: tự vệ tham số vế BỐN (kho tồn tại nhưng quét 0 file
+   trong khi cache >0 mục: cảnh báo, GIỮ cache - hết ghi đè mốc ổn định
+   bằng tập rỗng); 0b chỉ flag bản X0 tên lạ khi BẢN CHUẨN cũng tồn tại,
+   không có bản chuẩn thì nhường 0c khuyên "đổi tên" - hết hai thông điệp
+   trái chiều; nhánh 0c "chưa cài" chỉ khi TEMPLATE là file X0 duy nhất.
+3. X9 mục 1 câu 3 thêm vế "nơi giữ secret" (3 giám khảo cùng chỉ - khớp
+   trọn ba đầu README, X0 C2, X9); ví dụ X0 C2 hết ngắt dòng giữa câu
+   (net 0 ký tự, X0 giữ 15.993/16.000); README mục phần mềm: đoạn hai tách
+   thành câu tiếng người + con trỏ X5 mục 1b (bớt chuỗi jargon git), intro
+   trỏ xuống mục; GHICHU vòng 31 sửa câu "bù tương đương" thành "bù MỘT
+   PHẦN, kín headroom" cho khớp diff thật (giám khảo TOKEN đối chiếu git);
+   BENCHMARK: đoạn văn hết lặp số SUA_FILE (thành tham chiếu bảng), toàn
+   bộ bảng route dán lại từ --sinh-benchmark (xóa trôi 2-4%).
+
+Watchlist trần: X0 15.993/16.000 (99,9%) · X5 16.996/17.000 (99,9%) · X3E
+~92% · X9 ~92,5%. Backlog tự khai giữ nguyên: pipeline chat bán thủ công
+(vùng TRỐNG tần suất cao nhất còn lại với thị trường VN) · heuristic
+cùng-tiền-tố OneDrive cho file nghiệp vụ · gate phục hồi X3E khi chạm ~95%.
+
 ## Vòng 31: vá theo hội đồng vòng 7 (20260825, điểm vòng 7: 91,2/100)
 
 Điểm vòng 7: THÔNG MINH 8,5 · VẬN HÀNH 9,0 · KHÔNG SAI 9,0 · TOKEN 9,1 ·
@@ -100,9 +132,9 @@ Vá:
    C2 @DUAN.PHANMEM, X5 mục 1b, X2 phát hành build.
 5. Máy giữ thêm hai số con của BENCHMARK (mục 1b ~421, X5 mục 3 ~1058) qua
    phép 2c; số mục 3 cập nhật (~950 đã trôi 11%). Trần X0, X5 GIỮ NGUYÊN
-   theo quy ước nâng-trần-kèm-bù: mọi phần thêm vòng này được bù bằng cắt
-   chữ tương đương ngay trong hai file đó (X0 15.993/16.000, X5
-   16.996/17.000 - lần thử lửa đầu của quy ước, đạt).
+   theo quy ước nâng-trần-kèm-bù: phần thêm được bù MỘT PHẦN bằng cắt chữ
+   trong hai file đó, phần còn lại ăn hết headroom (X0 15.993/16.000, X5
+   16.996/17.000 - thử lửa một phần; bài kiểm net-zero còn ở phía trước).
 
 Watchlist trần: X0 99,9% · X5 99,9% · X3E ~92% · X9 ~92%. Hai file trụ đã
 kín trần thật sự: vòng sau muốn thêm chữ vào X0 hay X5 là phải cắt trước.
@@ -1063,7 +1095,7 @@ Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh V
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
 4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.884) xấp xỉ 4.084
 token, vẫn thấp hơn trước tối ưu.
-Nền tảng nào kéo CẢ X5 (hiện ~5449 token) thay vì đúng mục thì mỗi thao tác đổi
+Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng mục thì mỗi thao tác đổi
 trạng thái tốn thêm phần chênh; luật đọc theo mục của X5 mục 5 áp cho cả X3, X5.
 
 ## Chi phí context theo loại yêu cầu (ngoài thuế, chưa tính tài liệu nghiệp vụ)
@@ -1074,13 +1106,13 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1628 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5449 + khối (không phần mềm ~5028, trừ mục 1b) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2532 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3681) + THU theo khối | ~6213 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1642 (thêm X5 mục 3 ~1058 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 + TAILIEU theo khối | ~5665 + khối (không phần mềm ~5244, trừ mục 1b) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 + X5 mục 1 + VIEC, TAILIEU theo khối | ~2546 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E (~3684) + THU theo khối | ~6230 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3390 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3390 + khối | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3405 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3405 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
@@ -1094,8 +1126,8 @@ là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
 X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
 là cả bộ:
-CHAT không EMAIL ~19046 token
-CHAT có EMAIL (kèm X3E) ~22727 token
+CHAT không EMAIL ~19472 token
+CHAT có EMAIL (kèm X3E) ~23155 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -1339,8 +1371,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
-  GitHub Actions. Mục nào
-  chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật", AI ghi <chưa điền> vào C12
+  GitHub Actions. Mục nào chưa rõ: trả lời "chưa rõ, hỏi đội kỹ
+  thuật", AI ghi <chưa điền> vào C12
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
@@ -2415,7 +2447,7 @@ chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
    thì khai các cửa)
 3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
    là PHẦN MỀM thì hỏi thêm phạm vi tổ chức theo X0 C2 @DUAN.PHANMEM: repo,
-   thành phần, môi trường, nơi chạy thật)
+   thành phần, môi trường, nơi chạy thật, nơi giữ secret)
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:
@@ -2662,6 +2694,13 @@ def main(goc):
     instr = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))
     ghichu = sorted(goc.glob("GHICHU_DOI_MOI_v*.md"))
     kiem("1. đủ file bắt buộc, gồm benchmark và hai script", not thieu, f"thiếu {thieu}")
+    # 1d. File MÁY SINH không được đóng gói/commit: cache quan sát và bộ _thu_*
+    #     bị track là "git pull" của công ty đang chạy sẽ kẹt vì cache local bẩn
+    #     (hội đồng vòng 8). Kiểm qua .gitignore - tất định, không phụ thuộc git.
+    gi = (goc / ".gitignore").read_text(encoding="utf-8") if (goc / ".gitignore").is_file() else ""
+    thieu_gi = [m for m in ["_quan_sat_truoc.json", "_thu_"] if m not in gi]
+    kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
+         not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
     kiem("1b. đúng một file INSTRUCTION", len(instr) == 1, f"thấy {len(instr)}")
     kiem("1c. đúng một file GHICHU_DOI_MOI_v*", len(ghichu) == 1, f"thấy {len(ghichu)}")
     if thieu or not instr or not ghichu:
@@ -3440,7 +3479,13 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v27 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v28 · 20260825
+# v28, theo hội đồng vòng 8: tự vệ tham số vế BỐN - kho tồn tại nhưng quét
+# ra 0 file trong khi cache đang giữ >0 mục (mây chưa đồng bộ, ổ rỗng) thì
+# cảnh báo và GIỮ cache, hết ghi đè mốc ổn định bằng tập rỗng · 0b chỉ flag
+# bản X0 tên lạ khi BẢN CHUẨN cũng tồn tại (bản lạc); không có bản chuẩn
+# thì nhường 0c xử "đổi tên", hết hai thông điệp trái chiều · nhánh 0c
+# "chưa cài" chỉ kích hoạt khi TEMPLATE là file X0 duy nhất.
 # v27, theo hội đồng vòng 7: loc_ban_chinh lên tầng module để fixture ghim
 # được ba hành vi v26 · regex tên chuẩn X0 khớp luật (mã 3-4 ký tự A-Z 0-9,
 # không dấu) và 0c có nhánh "tên không đúng chuẩn: đổi tên file" thay vì
@@ -3978,6 +4023,14 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         ghi_cache(cache, luc_kho, gop)
         print(f"        chế độ --ho{pv}: {len(moi)} file cùng họ, cache thay đúng họ này")
     else:
+        if not moi and truoc:
+            # kho tồn tại nhưng quét ra 0 file trong khi cache đang giữ mục:
+            # nghi mây chưa đồng bộ hay sai đường - cảnh báo, GIỮ cache
+            bao("9-11. kho quan sát có file", False,
+                f"quét ra 0 file nghiệp vụ trong khi lần trước thấy"
+                f" {len(truoc)}: kho chưa đồng bộ, ổ rỗng hay sai đường?"
+                f" cache mốc ổn định giữ nguyên")
+            return
         ghi_cache(cache, bay_gio, moi)
 
     hang = dong_bang(doc(so / "TAILIEU.md"))
@@ -4480,8 +4533,12 @@ def main(goc):
                    if f.name not in {x.split("/")[-1] for x in xung}
                    and "TEMPLATE" not in f.name
                    and not re.fullmatch(r"NHATKY_\d{4}Q[1-4]\.md", f.name))
+    co_x0_chuan = any(re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name)
+                      for f in goc.glob("X0_CAUHINH_*.md"))
+    # bản X0 tên lạ CHỈ là "bản lạc" khi bản chuẩn cũng tồn tại; không có
+    # bản chuẩn thì đó là bản duy nhất đặt sai tên - nhường 0c khuyên đổi tên
     xung += sorted(f.name for f in goc.glob("X0_CAUHINH_*.md")
-                   if "TEMPLATE" not in f.name
+                   if "TEMPLATE" not in f.name and co_x0_chuan
                    and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name))
     xung = sorted(set(xung))
     bao("0b. không bản conflicted copy của sổ trong _so hay bộ X ở 00_Index", not xung,
@@ -4490,12 +4547,12 @@ def main(goc):
 
     x0s = loc_ban_chinh(goc.glob("X0_CAUHINH_*.md"), r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")
     co_template = any("TEMPLATE" in q.name for q in goc.glob("X0_CAUHINH_*.md"))
-    if not x0s and co_template:
+    ung_vien_tho = [q.name for q in goc.glob("X0_CAUHINH_*.md")
+                    if "TEMPLATE" not in q.name]
+    if not x0s and co_template and not ung_vien_tho:
         print("  BỎ QUA  0c: chỉ thấy X0_CAUHINH_TEMPLATE, hệ chưa cài đặt;"
               " chạy \"cài đặt\" theo X9 trước")
     elif not x0s:
-        ung_vien_tho = [q.name for q in goc.glob("X0_CAUHINH_*.md")
-                        if "TEMPLATE" not in q.name]
         if ung_vien_tho:
             bao("0c. có bản X0 đang chạy", False,
                 f"thấy {ung_vien_tho[:3]} nhưng tên KHÔNG đúng chuẩn"

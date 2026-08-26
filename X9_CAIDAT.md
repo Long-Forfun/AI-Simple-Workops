@@ -34,7 +34,7 @@ chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
    thì khai các cửa)
 3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
    là PHẦN MỀM thì hỏi thêm phạm vi tổ chức theo X0 C2 @DUAN.PHANMEM: repo,
-   thành phần, môi trường, nơi chạy thật)
+   thành phần, môi trường, nơi chạy thật, nơi giữ secret)
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:
