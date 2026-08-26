@@ -31,41 +31,6 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
-## Vòng 37: khâu theo hội đồng vòng 12 (96,8/100)
-
-Điểm vòng 12: KHÔNG MISS 9,9 · ĐƠN GIẢN 9,9 · TOKEN 9,8 · VẬN HÀNH 9,6 ·
-KHÔNG SAI 9,5 · THÔNG MINH 9,4. Mọi phát hiện đều THẤP, hội tụ về một rổ
-việc nhỏ trên chính đường nối vòng 36; plateau đọc-tĩnh giữ nguyên. Vá:
-
-1. 12l so mã Q ĐÚNG Ô (kiem_van_hanh v33): BỐN giám khảo cùng chứng minh
-   bằng chạy thật rằng vế "Q phải có dòng trong QUYETDINH" mới chỉ là so
-   chuỗi con toàn văn - Q là TIỀN TỐ của mã thật (Q-2026 ăn theo
-   Q-20260826-01) và Q chỉ được nhắc trong ghi chú của dòng khác ("cân
-   nhắc, không ban hành") đều được miễn hash oan. Nay so đúng Ô qua
-   dong_bang; hai fixture ghim đúng hai ca lọt, bộ 80 ca.
-2. X3 5b khâu bốn khe chat còn lại: mốc chống dán lặp thêm NGÀY (chat
-   nhiều ngày hết mù ngày); nhánh khối-không-chứa-tin-mốc chốt biên "tin
-   CÙNG phút mốc coi như ĐÃ NẠP, nghi sót thì dán lại cả khối chứa tin
-   mốc"; chặng 2 gặp trùng event_id tin chat thì SO NỘI DUNG trước khi bỏ
-   qua (khử đụng khóa xuyên khối cùng phút-cùng-NN); từ hai kênh chat trở
-   lên mỗi kênh một dòng VIEC + mã kênh -chat-<kênh>-<NN>; ngày lấy theo
-   header GẦN NHẤT phía trên (export nhiều ngày); header X3 nhắc gate 5b
-   theo đúng quy ước header X5. Luật ghim 934/936 ghim thêm "Bước tiếp
-   theo", "VỊ TRÍ", "SO NỘI DUNG".
-3. Số LITE vào lưới 2c: nhãn thứ 13 "CUA_VAO thường của LITE" ~1025 token
-   máy đo - hết số tay đứng ngoài lưới trong BENCHMARK.
-4. Nâng trần theo quy ước: X3 5.500 (phần tăng nằm TRỌN trong 5b gated,
-   route thường không đổi ~2554) · X5 18.000 chủ động (headroom 98,1% là
-   nợ được giám khảo ĐƠN GIẢN đòi xử trước khi phát nổ). BENCHMARK rewrap
-   các dòng gãy giữa câu; số CHAT dán lại từ máy trong cùng commit.
-
-Watchlist trần: X3 ~5,09k/5.500 (92,5%) · X5 17,16k/18.000 (95,3%) · X0
-96,9% · X3E 92,8%. Trạng thái sau 12 vòng chấm - 37 vòng vá: bốn gate
-token, 80 fixture, 49 luật ghim, 13 số BENCHMARK máy giữ. Hội đồng nhất
-trí 6/6: nguồn phát hiện còn lại là PILOT vận hành thật 2-4 tuần, điền
-cột "phiên thật" của BENCHMARK; điểm đọc-tĩnh 96,8 đã sát trần phương
-pháp.
-
 ## Vòng 36: vá theo hội đồng vòng 11 (96/100, plateau xác nhận)
 
 Điểm vòng 11: KHÔNG MISS 9,8 · ĐƠN GIẢN 9,8 · TOKEN 9,7 · KHÔNG SAI 9,5 ·

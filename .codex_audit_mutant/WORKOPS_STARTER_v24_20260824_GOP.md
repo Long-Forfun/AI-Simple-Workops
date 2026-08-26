@@ -98,41 +98,6 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
-## Vòng 37: khâu theo hội đồng vòng 12 (96,8/100)
-
-Điểm vòng 12: KHÔNG MISS 9,9 · ĐƠN GIẢN 9,9 · TOKEN 9,8 · VẬN HÀNH 9,6 ·
-KHÔNG SAI 9,5 · THÔNG MINH 9,4. Mọi phát hiện đều THẤP, hội tụ về một rổ
-việc nhỏ trên chính đường nối vòng 36; plateau đọc-tĩnh giữ nguyên. Vá:
-
-1. 12l so mã Q ĐÚNG Ô (kiem_van_hanh v33): BỐN giám khảo cùng chứng minh
-   bằng chạy thật rằng vế "Q phải có dòng trong QUYETDINH" mới chỉ là so
-   chuỗi con toàn văn - Q là TIỀN TỐ của mã thật (Q-2026 ăn theo
-   Q-20260826-01) và Q chỉ được nhắc trong ghi chú của dòng khác ("cân
-   nhắc, không ban hành") đều được miễn hash oan. Nay so đúng Ô qua
-   dong_bang; hai fixture ghim đúng hai ca lọt, bộ 80 ca.
-2. X3 5b khâu bốn khe chat còn lại: mốc chống dán lặp thêm NGÀY (chat
-   nhiều ngày hết mù ngày); nhánh khối-không-chứa-tin-mốc chốt biên "tin
-   CÙNG phút mốc coi như ĐÃ NẠP, nghi sót thì dán lại cả khối chứa tin
-   mốc"; chặng 2 gặp trùng event_id tin chat thì SO NỘI DUNG trước khi bỏ
-   qua (khử đụng khóa xuyên khối cùng phút-cùng-NN); từ hai kênh chat trở
-   lên mỗi kênh một dòng VIEC + mã kênh -chat-<kênh>-<NN>; ngày lấy theo
-   header GẦN NHẤT phía trên (export nhiều ngày); header X3 nhắc gate 5b
-   theo đúng quy ước header X5. Luật ghim 934/936 ghim thêm "Bước tiếp
-   theo", "VỊ TRÍ", "SO NỘI DUNG".
-3. Số LITE vào lưới 2c: nhãn thứ 13 "CUA_VAO thường của LITE" ~1025 token
-   máy đo - hết số tay đứng ngoài lưới trong BENCHMARK.
-4. Nâng trần theo quy ước: X3 5.500 (phần tăng nằm TRỌN trong 5b gated,
-   route thường không đổi ~2554) · X5 18.000 chủ động (headroom 98,1% là
-   nợ được giám khảo ĐƠN GIẢN đòi xử trước khi phát nổ). BENCHMARK rewrap
-   các dòng gãy giữa câu; số CHAT dán lại từ máy trong cùng commit.
-
-Watchlist trần: X3 ~5,09k/5.500 (92,5%) · X5 17,16k/18.000 (95,3%) · X0
-96,9% · X3E 92,8%. Trạng thái sau 12 vòng chấm - 37 vòng vá: bốn gate
-token, 80 fixture, 49 luật ghim, 13 số BENCHMARK máy giữ. Hội đồng nhất
-trí 6/6: nguồn phát hiện còn lại là PILOT vận hành thật 2-4 tuần, điền
-cột "phiên thật" của BENCHMARK; điểm đọc-tĩnh 96,8 đã sát trần phương
-pháp.
-
 ## Vòng 36: vá theo hội đồng vòng 11 (96/100, plateau xác nhận)
 
 Điểm vòng 11: KHÔNG MISS 9,8 · ĐƠN GIẢN 9,8 · TOKEN 9,7 · KHÔNG SAI 9,5 ·
@@ -1238,10 +1203,9 @@ FILE: BENCHMARK_TOKEN.md
 
 Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt). Version khớp
 DOC_TRUOC (phép kiểm 2b); các số route được MÁY GIỮ KHỚP file thật bằng phép
-kiểm 2c (dung sai 10%), số mới lấy bằng lệnh
-`python kiem_tra_bo.py . --sinh-benchmark`. Đây là BENCHMARK TĨNH; cột
-"phiên thật" để trống, điền dần từ log phiên chạy thật, chưa có số đó thì
-không tuyên bố kết quả runtime.
+kiểm 2c (dung sai 10%), số mới lấy bằng `python kiem_tra_bo.py . --sinh-benchmark`. Đây là BENCHMARK TĨNH; cột "phiên thật" để
+trống, điền dần từ log phiên chạy thật, chưa có số đó thì không tuyên bố kết quả
+runtime.
 
 ## Thuế thường trực mỗi phiên
 
@@ -1256,9 +1220,8 @@ Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh V
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
 4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.884) xấp xỉ 4.084
 token, vẫn thấp hơn trước tối ưu.
-Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
-mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
-của X5 mục 5 áp cho cả X3, X5.
+Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng mục thì mỗi thao tác đổi
+trạng thái tốn thêm phần chênh; luật đọc theo mục của X5 mục 5 áp cho cả X3, X5.
 
 ## Chi phí context theo loại yêu cầu (ngoài thuế, chưa tính tài liệu nghiệp vụ)
 
@@ -1279,27 +1242,26 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
 INSTRUCTION 8.000 ký tự · X0 16.500 (đọc theo mục, thuế là X0_INDEX) · X5
-18.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
-gate khi dán chat) · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4
-5.500 (chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 ·
-BANG_DIEU_KHIEN 1.400. Vượt trần là FAIL.
+17.500 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.000 (mục 5b gate khi dán chat) · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4 5.500
+(chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400. Vượt trần
+là FAIL.
 
 ## Ghi chú phiên CHAT
 
-Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0
-tới X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy
-hồi theo cơ chế riêng, xấu nhất là cả bộ:
-CHAT không EMAIL ~20052 token
-CHAT có EMAIL (kèm X3E) ~23764 token
+Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0 tới
+X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy hồi theo cơ chế riêng, xấu nhất
+là cả bộ:
+CHAT không EMAIL ~19927 token
+CHAT có EMAIL (kèm X3E) ~23639 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
 ## Ghi chú profile
 
-Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED,
-EMAIL nên X0 ngắn hơn đáng kể; X3E và sổ THU chỉ được nạp khi bật EMAIL,
-không tăng thuế của bộ lõi.
-CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 ~1025 token (mục 5b gate khi dán chat).
+Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED, EMAIL
+nên X0 ngắn hơn đáng kể; X3E và sổ THU chỉ được nạp khi bật EMAIL, không
+tăng thuế của bộ lõi; CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 (~3.0k ký tự, mục 5b gate
+riêng khi dán chat).
 
 ════════════════════════════════════════
 FILE: INSTRUCTION_WORKOPS_v11.md
@@ -1927,7 +1889,6 @@ FILE: X3_CUAVAO_TEMPLATE.md
 X3 · CỬA VÀO · <MÃ> · v15 · <YYYYMMDD>
 Đọc khi CUA_VAO: mail, file đến, người dùng đưa trực tiếp. Nhịp và bộ thực thi đọc
 từ X0 C9. Nạp mục có nguồn rõ vào sổ là mức A; dữ kiện có phạm vi ra ngoài là mức B.
-Mục 5b CHỈ đọc khi dán chat hay export.
 ```
 
 # 1. Bốn cửa, không cửa nào bỏ qua sổ
@@ -2009,19 +1970,14 @@ từng tin theo khuôn "giờ - tên người gửi", xử mỗi tin như một 
 chặng 1: rút việc, dữ kiện (nguồn D "tin nhắn chưa xác nhận", nâng lên B
 khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi
 "phien-chat". event_id tin chat: <YYYYMMDD-HHMM>-chat-<NN> (NN là số thứ
-tự tin trong khối dán; ngày theo header ngày GẦN NHẤT phía trên tin trong
-đoạn dán, thiếu mới rơi về ngày phiên); công ty theo dõi TỪ HAI kênh chat
-trở lên: mỗi kênh MỘT dòng VIEC riêng, event_id thêm mã kênh
--chat-<kênh>-<NN>. CHỐNG DÁN LẶP: cuối lượt ghi mốc "đã nạp tới tin
-<ngày> <giờ> <người gửi>" vào ô "Bước tiếp theo" của dòng VIEC theo dõi
-chat (chưa có thì mở, mức A); SAU mốc nghĩa là sau VỊ TRÍ tin mốc trong
-khối dán; khối không chứa tin mốc: so theo ngày rồi giờ, tin CÙNG phút
-mốc coi như ĐÃ NẠP, nghi sót thì dán lại cả khối chứa tin mốc; chặng 2
-gặp trùng event_id tin chat thì SO NỘI DUNG trước khi bỏ qua, khác nội
-dung là tin mới: cấp NN kế tiếp. Không tách được khuôn giờ-tên: cả khối
-là MỘT mục nguồn D. Ảnh chụp chat xử như nguồn scan theo X0 C7 (cờ CHƯA
-ĐỌC ĐƯỢC khi không rút được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho
-EMAIL); theo dõi chờ phản hồi chat: dòng VIEC "CHỜ ĐỐI TÁC".
+tự tin trong khối dán; ngày lấy theo header ngày trong đoạn dán, thiếu
+mới rơi về ngày phiên). CHỐNG DÁN LẶP: cuối lượt ghi mốc "đã nạp tới tin
+<giờ> <người gửi>" vào ô "Bước tiếp theo" của dòng VIEC theo dõi chat
+(chưa có thì mở, mức A); SAU mốc nghĩa là sau VỊ TRÍ tin mốc trong khối
+dán, khối không chứa tin mốc thì so theo giờ. Không tách được khuôn
+giờ-tên: cả khối là MỘT mục nguồn D. Ảnh chụp chat xử như nguồn scan theo
+X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi không rút được chữ). KHÔNG cấp mã luồng THU
+(THU chỉ cho EMAIL); theo dõi chờ phản hồi chat: dòng VIEC "CHỜ ĐỐI TÁC".
 
 # 6. Mail là kênh nghiệp vụ chính (profile EMAIL)
 
@@ -2752,7 +2708,7 @@ FILE: kiem_tra_bo.py
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, tổng 80 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, tổng 78 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -2814,10 +2770,10 @@ NGAN_SACH = {
     "X0_CAUHINH_TEMPLATE.md": 16500,  # đọc theo mục, thuế là X0_INDEX; nâng chủ động vòng 35 theo quy ước
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
-    "X3_CUAVAO_TEMPLATE.md": 5500,   # 5b gate khi dán chat; nâng vòng 37: phần tăng nằm trọn trong 5b gated
+    "X3_CUAVAO_TEMPLATE.md": 5000,   # mục 6 tách X3E; 5b gate khi dán chat, nâng vòng 36 theo quy ước
     "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
-    "X5_HESO_TEMPLATE.md": 18000,  # mục 1b và 7b đều gate; nâng chủ động vòng 37 theo quy ước (headroom 98,1% là nợ)
+    "X5_HESO_TEMPLATE.md": 17500,  # mục 1b và 7b đều gate, phần nâng không thành thuế chung
     "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
@@ -2860,8 +2816,6 @@ def do_route(docs):
         "CHAT có EMAIL": t(tong_bo + len(x3e)),
         "NOI_BO mức A": t(x5m1 + x1m34),
         "CUA_VAO thường": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1),
-        "CUA_VAO thường của LITE": t(_muc(x3, 1, '5b')),
-        # LITE không EMAIL: chỉ X3 mục 1 tới 5; 5b vẫn gate riêng khi dán chat
         # 5b gate: chỉ đọc khi dán chat, không phải thuế mọi lượt cửa vào
         "CUA_VAO mail": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1 + len(x3e)
                          - _muc(x3e, '1c', 2)),  # 1c gate: chỉ đọc khi rà lệch
@@ -3276,25 +3230,6 @@ def main(goc):
                                      "_so/QUYETDINH.md": "| Q-20260826-01 | x |\n"}))
         ca.append(("12l tombstone mang Q ma không có trong QUYETDINH bị bắt",
                    r.get(TEN_12L) is False))
-        # 12l SO MÃ Q ĐÚNG Ô (v33, hội đồng vòng 12): substring toàn văn từng
-        # cho hai ca này lọt - Q là TIỀN TỐ của mã thật, và Q chỉ được nhắc
-        # trong Ô GHI CHÚ của dòng quyết định khác ("cân nhắc, không ban hành")
-        r = chay_email(nk=P("<a@x>") + "\n" + C("<a@x>") + "\n", reg=["<a@x>"],
-                       idx={"<a@x>|op1": {"so": "VIEC", "dong": "V-001",
-                                          "hash": "0" * 64}},
-                       files=dict(FILES_SACH,
-                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-2026] |\n",
-                                     "_so/QUYETDINH.md": "| Q-20260826-01 | x |\n"}))
-        ca.append(("12l Q tiền tố của mã thật không được miễn hash",
-                   r.get(TEN_12L) is False))
-        r = chay_email(nk=P("<a@x>") + "\n" + C("<a@x>") + "\n", reg=["<a@x>"],
-                       idx={"<a@x>|op1": {"so": "VIEC", "dong": "V-001",
-                                          "hash": "0" * 64}},
-                       files=dict(FILES_SACH,
-                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-77] |\n",
-                                     "_so/QUYETDINH.md": "| Q-20260826-01 | cân nhắc Q-77, không ban hành |\n"}))
-        ca.append(("12l Q chỉ nằm trong ghi chú dòng khác không được miễn hash",
-                   r.get(TEN_12L) is False))
         # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
         giu10, nghi10 = _kv26.loc_nghi_ban_sao(
             ["01_A/BC-KH-PHULUC-2026.docx"],
@@ -3702,9 +3637,9 @@ def main(goc):
         ("chat dán tay đi cửa người dùng đưa trực tiếp, không cấp luồng THU", "dán CẢ ĐOẠN" in docs["X3_CUAVAO_TEMPLATE.md"] and "KHÔNG cấp mã luồng THU" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("phục hồi sự cố tách mục 1c có gate chỉ đọc khi rà lệch", "# 1c." in docs["X3E_EMAIL_TEMPLATE.md"] and "CHỈ đọc khi rà 24-31" in docs["X3E_EMAIL_TEMPLATE.md"]),
         ("xóa pháp lý tách mục 7b có gate chỉ đọc khi có Q", "# 7b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi có Q-" in docs["X5_HESO_TEMPLATE.md"]),
-        ("chat dán lặp có mốc đã-nạp-tới ghi ô Bước tiếp theo, sau mốc theo vị trí", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"] and "Bước tiếp theo" in docs["X3_CUAVAO_TEMPLATE.md"] and "VỊ TRÍ" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("chat dán lặp có mốc đã-nạp-tới, lượt sau chỉ xử tin sau mốc", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("chat 5b có gate chỉ đọc khi dán, không phải thuế mọi lượt", "# 5b." in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ đọc khi người dùng dán chat" in docs["X3_CUAVAO_TEMPLATE.md"]),
-        ("event_id tin chat có số thứ tự trong khối, trùng khóa thì so nội dung", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"] and "SO NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("event_id tin chat có số thứ tự trong khối, hết đụng cùng phút", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"]),
     ] if not dk]
     kiem("12. luật nghiệp vụ then chốt có mặt (49 luật)", not thieu_luat, str(thieu_luat))
 
@@ -3762,10 +3697,7 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v33 · 20260826
-# v33, theo hội đồng vòng 12: 12l so mã Q của tombstone ĐÚNG Ô trong
-# QUYETDINH (qua dong_bang, hết so chuỗi con toàn văn) - Q là tiền tố của
-# mã thật, hay Q chỉ được nhắc trong ghi chú của dòng khác, hết miễn oan.
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v32 · 20260826
 # v32, theo hội đồng vòng 11: 12l miễn-hash đòi khuôn TRỌN "[đã xóa theo
 # Q-<mã>]" (có ngoặc đóng, chuỗi lửng hết được miễn oan) VÀ mã Q phải có
 # dòng trong QUYETDINH.md (tombstone mang Q ma bị bắt) · tự vệ vế SÁU: thư
@@ -4833,9 +4765,7 @@ def kiem_email(goc, so):
                   and not any(
                       (m9 := re.search(r"\[đã xóa theo (Q-[A-Za-z0-9-]+)\]",
                                        "|".join(r)))
-                      and any(m9.group(1) == o.strip()
-                              for rq in dong_bang(doc(so / "QUYETDINH.md"))
-                              for o in rq)
+                      and m9.group(1) in doc(so / "QUYETDINH.md")
                       for r in hang)
                   and not any(
                     hashlib.sha256(("|".join(r)).encode("utf-8")).hexdigest() == v["hash"]
