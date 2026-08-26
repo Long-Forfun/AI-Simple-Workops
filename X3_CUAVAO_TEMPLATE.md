@@ -81,7 +81,7 @@ Kênh chat chưa có pipeline quét; xử BÁN THỦ CÔNG qua cửa "người d
 trực tiếp": người dùng dán CẢ ĐOẠN chat (hay file export) vào phiên, AI tự
 tách từng tin theo khuôn "giờ - tên người gửi" của app, rồi xử mỗi tin như
 một mục đến ở chặng 1: rút việc, dữ kiện (mức nguồn D "tin nhắn chưa xác
-nhận", nâng từ B khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5.
+nhận", nâng lên B khi có xác nhận văn bản), đề xuất qua bảng chờ duyệt mục 5, ô Mã thư ghi "phien-chat".
 Ảnh chụp màn hình chat xử như nguồn scan theo X0 C7 (cờ CHƯA ĐỌC ĐƯỢC khi
 không rút được chữ). KHÔNG cấp mã luồng THU (THU chỉ cho EMAIL); cần theo
 dõi chờ phản hồi chat thì mở dòng VIEC "CHỜ ĐỐI TÁC" như thường.

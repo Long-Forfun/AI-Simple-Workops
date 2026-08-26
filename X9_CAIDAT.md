@@ -114,7 +114,8 @@ mang mã, áp phần LUẬT sang bản mã bằng MỘT plan mức C, QUYETDINH 
 X0 đã điền giữ nguyên giá trị, chỉ đối chiếu schema mục. instruction_yeu_cau
 tăng: NHẮC người dùng dán lại INSTRUCTION vào Project instructions TRƯỚC khi
 làm việc tiếp. File _TEMPLATE để nguyên trong 00_Index, không tính là "hai
-bản bộ X" của rà 18.
+bản bộ X" của rà 18. Pull báo local changes ở _quan_sat_truoc.json hay
+_thu_*: file máy sinh, xóa đi rồi pull lại, không mất gì.
 
 # 4. Luật hỏi lại, áp mãi mãi về sau
 

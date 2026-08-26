@@ -29,6 +29,39 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 34: vá theo hội đồng vòng 9 (94,8/100)
+
+Điểm vòng 9 (thang hiệu chỉnh: chỉ trừ defect có hành động sửa; đánh đổi
+được giám khảo công nhận đúng thì không trừ): ĐƠN GIẢN 9,7 · KHÔNG MISS 9,7
+· VẬN HÀNH 9,5 · TOKEN 9,5 · THÔNG MINH 9,3 · KHÔNG SAI 9,2. Không còn
+phát hiện CAO; các giám khảo đồng thanh "lỗi còn lại là lỗi KHÂU, không còn
+lỗi THIẾT KẾ". Vá trọn 16 mục hội tụ:
+
+1. MÁY GIỮ LỜI VÒNG 33 (VỪA duy nhất): heuristic cùng-tiền-tố lên tầng
+   module (loc_nghi_ban_sao) + 2 fixture ghim (ca dương -DESKTOP kèm tên
+   tiền tố, ca âm -v02); phép 12 ghim 2 luật mới (45 luật: chat 5b, gate
+   1c); phép 10 phủ hậu tố chữ (mục 5b, 1b, 1c, 7b được kiểm thật, hết mù
+   "\d+"); fixture 12l-tombstone-hash. Bộ fixture lên 75 ca.
+2. X5 tách mục 7b "Xóa theo yêu cầu pháp lý" GATE "chỉ đọc khi có Q-<mã>"
+   (tiền lệ gate thứ ba): SUA_FILE ~5665 xuống ~5221; sáu tham chiếu mục 7
+   đổi 7b (X1, X5 x3, QUYETDINH, NHATKY template); trần X5 17.500 kèm gate.
+   12l MIỄN so hash cho dòng tombstone (xóa đúng luật hết lệch oan ở index
+   có ô hash); X5 7b khai vế "máy miễn hash".
+3. Khâu chữ vòng 9: "nâng lên B" (4 giám khảo cùng bắt) · ô Mã thư của tin
+   chat = "phien-chat" · X5 mục 4 trỏ đích danh X3E mục 1c · README "xử
+   như mục đến ở cửa vào" (hết liên tưởng pipeline mail) · C4 khai giá
+   khuôn cùng-tiền-tố (kèm cắt bù X0: nén ghi chú ổ đơn) · X9 mục 3c thêm
+   câu gỡ kẹt pull một-lần cho bản cài cũ · thông điệp NGHI BẢN SAO nêu
+   đích danh tiền tố + lối ra file thật + trỏ đúng X5 mục 4 · BỎ QUA phép
+   1, 2-8 hết nói "chưa cài" khi X0 chỉ sai tên · tự vệ vế bốn nói lối đặt
+   lại quan sát · phép 1d lọc dòng comment · 2c giữ thêm số INSTRUCTION
+   (~1884), bảng route dán lại từ máy đo. kiem_van_hanh lên v30.
+
+Watchlist trần: X5 17,13k/17.500 · X0 15,97k/16.000 · X3E ~92,8% · X3
+~94,9%. Quy ước bổ sung: vN ở header các template đứng yên trong cùng bản
+phát hành bộ, chỉ nhích khi đóng gói bản mới - nâng cấp đi lối diff nội
+dung theo X9 mục 3c.
+
 ## Vòng 32: vá theo hội đồng vòng 8 (đợt chốt)
 
 Vòng 8 về 4/6 giám khảo (hai giám khảo đứt giữa chừng vì giới hạn phiên):

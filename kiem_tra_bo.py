@@ -67,7 +67,7 @@ NGAN_SACH = {
     "X3_CUAVAO_TEMPLATE.md": 4500,   # mục 6 đã tách sang X3E
     "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
-    "X5_HESO_TEMPLATE.md": 17000,  # mục 1b gate theo dự án phần mềm, không phải thuế chung
+    "X5_HESO_TEMPLATE.md": 17500,  # mục 1b và 7b đều gate, phần nâng không thành thuế chung
     "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
@@ -114,7 +114,8 @@ def do_route(docs):
                          - _muc(x3e, '1c', 2)),  # 1c gate: chỉ đọc khi rà lệch
         "RA_SOAT": t(len(x4)),
         "SOAN_RA thường lệ": t(len(x1) + len(x2) + x5m1),
-        "SUA_FILE nội bộ": t(len(x5)),
+        "SUA_FILE nội bộ": t(len(x5) - _muc(x5, '7b')),  # 7b gate: chỉ đọc khi có Q-
+        "INSTRUCTION dán trong Project": t(len(docs["INSTRUCTION"])),
     }
 
 
@@ -146,7 +147,8 @@ def main(goc):
     # 1d. File MÁY SINH không được đóng gói/commit: cache quan sát và bộ _thu_*
     #     bị track là "git pull" của công ty đang chạy sẽ kẹt vì cache local bẩn
     #     (hội đồng vòng 8). Kiểm qua .gitignore - tất định, không phụ thuộc git.
-    gi = (goc / ".gitignore").read_text(encoding="utf-8") if (goc / ".gitignore").is_file() else ""
+    gi_nd = (goc / ".gitignore").read_text(encoding="utf-8") if (goc / ".gitignore").is_file() else ""
+    gi = "\n".join(l for l in gi_nd.splitlines() if not l.lstrip().startswith("#"))
     thieu_gi = [m for m in ["_quan_sat_truoc.json", "_thu_"] if m not in gi]
     kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
          not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
@@ -474,6 +476,24 @@ def main(goc):
                        [Path("X0_CAUHINH_ABC.md"), Path("X0_CAUHINH_ĐT.md"),
                         Path("X0_CAUHINH_ABCDE.md"), Path("X0_CAUHINH_TEMPLATE.md")],
                        r"X0_CAUHINH_[A-Z0-9]{3,4}\.md")] == ["X0_CAUHINH_ABC.md"]))
+        # HEURISTIC CÙNG TIỀN TỐ (ghim v29/v30, hội đồng vòng 9): ca dương
+        # -DESKTOP-XXXX bị nghi kèm tên tiền tố; ca âm -v02 vẫn được đề xuất
+        stem_map = {"01_A": {"BC", "BC-DESKTOP-A1B2", "BC-v02"}}
+        giu9, nghi9 = _kv26.loc_nghi_ban_sao(
+            ["01_A/BC-DESKTOP-A1B2.docx", "01_A/BC-v02.docx"], stem_map)
+        ca.append(("cùng-tiền-tố: bản OneDrive bị nghi kèm tiền tố, -v02 không oan",
+                   giu9 == ["01_A/BC-v02.docx"]
+                   and [(r, g) for r, g in nghi9] == [("01_A/BC-DESKTOP-A1B2.docx", "BC")]))
+        # 12l MIỄN SO HASH cho dòng tombstone "[đã xóa theo Q-": index mang ô
+        # hash của dòng gốc, dòng đã trung hòa đúng luật 7b thì không lệch oan
+        idx_hash = {"<a@x>|op1": {"so": "VIEC", "dong": "V-001",
+                                  "hash": "0" * 64}}
+        r = chay_email(nk=P("<a@x>") + "\n" + C("<a@x>") + "\n", reg=["<a@x>"],
+                       idx=idx_hash,
+                       files=dict(FILES_SACH,
+                                  **{"_so/VIEC.md": "| V-001 | [đã xóa theo Q-20260825-01] |\n"}))
+        ca.append(("12l miễn so hash cho dòng tombstone xóa pháp lý",
+                   r.get(TEN_12L) is not False))
         # KHO SAU XÓA PHÁP LÝ đúng luật phải SẠCH: đính kèm tombstone de_ngoai
         # "đã xóa theo Q-", staging đã dọn có manifest, dòng sổ giữ mã (12h/12j/
         # 12k/12l đều phải xanh) - lớp lỗi ba vòng cùng họ, có lưới hồi quy riêng
@@ -872,19 +892,21 @@ def main(goc):
         ("xóa theo yêu cầu pháp lý có thủ tục xuyên tầng", "XÓA THEO YÊU CẦU PHÁP LÝ" in docs["X5_HESO_TEMPLATE.md"]),
         ("RA_NGOAI là phạm vi bao trùm có luật quan hệ", "BAO TRÙM" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("hộp thư cũ sau đổi domain có chỗ khai", "@NHIP.HOPTHU_CU" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("chat dán tay đi cửa người dùng đưa trực tiếp, không cấp luồng THU", "dán CẢ ĐOẠN" in docs["X3_CUAVAO_TEMPLATE.md"] and "KHÔNG cấp mã luồng THU" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("phục hồi sự cố tách mục 1c có gate chỉ đọc khi rà lệch", "# 1c." in docs["X3E_EMAIL_TEMPLATE.md"] and "CHỈ đọc khi rà 24-31" in docs["X3E_EMAIL_TEMPLATE.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (43 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (45 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
     for k in ["X1_CAM_TEMPLATE.md", "X2_PHATHANH_TEMPLATE.md", "X3_CUAVAO_TEMPLATE.md",
               "X4_RASOAT_TEMPLATE.md", "X5_HESO_TEMPLATE.md"]:
-        muc_cua["X" + k[1]] = set(re.findall(r"^# (\d+)\.", docs[k], re.M))
-    muc_cua["X3E"] = set(re.findall(r"^# (\d+)\.", docs["X3E_EMAIL_TEMPLATE.md"], re.M))
-    muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+)\.", docs["INSTRUCTION"], re.M))
+        muc_cua["X" + k[1]] = set(re.findall(r"^# (\d+[a-z]?)\.", docs[k], re.M))
+    muc_cua["X3E"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["X3E_EMAIL_TEMPLATE.md"], re.M))
+    muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["INSTRUCTION"], re.M))
     sai_ref = []
     for ten, nd in docs.items():
-        for dich, n in re.findall(r"(X[1-5]E?|INSTRUCTION) mục (\d+)", nd):
+        for dich, n in re.findall(r"(X[1-5]E?|INSTRUCTION) mục (\d+[a-z]?)", nd):
             if n not in muc_cua.get(dich, set()):
                 sai_ref.append((ten, f"{dich} mục {n}"))
     kiem("10. tham chiếu chéo tới mục có thật", not sai_ref, str(sorted(set(sai_ref))))

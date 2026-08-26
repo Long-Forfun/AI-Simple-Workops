@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v29 · 20260825
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v30 · 20260825
+# v30, theo hội đồng vòng 9: heuristic cùng-tiền-tố lên tầng module
+# (loc_nghi_ban_sao) để fixture ghim; cảnh báo NGHI nêu đích danh file tiền
+# tố và có lối ra cho file thật (so nội dung theo X5 mục 4, không phải mục
+# 3); 12l miễn so hash cho dòng tombstone "[đã xóa theo Q-" (xóa pháp lý
+# đúng luật hết lệch oan ở index có ô hash); thông điệp BỎ QUA phép 1, 2-8
+# hết nói "chưa cài đặt" khi thật ra X0 chỉ sai tên; tự vệ vế bốn nói thêm
+# lối đặt lại quan sát khi kho rỗng có chủ đích.
 # v29: heuristic bản sao CÙNG TIỀN TỐ cho file nghiệp vụ (khuôn OneDrive
 # -<TênMáy>): ứng viên đề xuất _INBOX mà cùng thư mục có file làm tiền tố
 # tên nó, đuôi -XXXX không phải vN, thì chuyển sang cảnh báo NGHI BẢN SAO
@@ -281,6 +288,25 @@ def la_file_tam(ten):
     return bool(MAU_TAM.search(ten))
 
 
+def loc_nghi_ban_sao(de_xuat, tat_ca_stem):
+    """Heuristic bản sao CÙNG TIỀN TỐ (khuôn OneDrive -<TênMáy>): ứng viên mà
+    cùng thư mục có file khác làm TIỀN TỐ tên nó, đuôi -XXXX không phải vN.
+    Trả (de_xuat_giữ, [(rel, tiền_tố_gây_nghi)]). Tầng module để fixture ghim."""
+    giu, nghi = [], []
+    for rel in de_xuat:
+        tm2, stem = str(Path(rel).parent), Path(rel).stem
+        goc_nghi = None
+        for goc_stem in tat_ca_stem.get(tm2, ()):
+            duoi = stem[len(goc_stem):]
+            if (goc_stem and stem != goc_stem and stem.startswith(goc_stem)
+                    and re.fullmatch(r"-[A-Za-z0-9][A-Za-z0-9-]{3,}", duoi)
+                    and not re.fullmatch(r"-v\d+", duoi, re.I)):
+                goc_nghi = goc_stem
+                break
+        (nghi.append((rel, goc_nghi)) if goc_nghi else giu.append(rel))
+    return giu, nghi
+
+
 def loc_ban_chinh(cac, mau=None):
     """Bộ lọc DÙNG CHUNG cho mọi phép chọn bản đang chạy của một sổ hay file
     cấu hình: loại _TEMPLATE, conflicted, mọi khuôn bản sao đồng bộ; mau
@@ -553,7 +579,8 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
             bao("9-11. kho quan sát có file", False,
                 f"quét ra 0 file nghiệp vụ trong khi lần trước thấy"
                 f" {len(truoc)}: kho chưa đồng bộ, ổ rỗng hay sai đường?"
-                f" cache mốc ổn định giữ nguyên")
+                f" cache mốc ổn định giữ nguyên; kho thật sự đã rỗng có chủ"
+                f" đích thì xóa _quan_sat_truoc.json để đặt lại quan sát")
             return
         ghi_cache(cache, bay_gio, moi)
 
@@ -609,22 +636,13 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     for (tm2, _), kq2 in nhom.items():
         for it2 in kq2["items"]:
             tat_ca_stem.setdefault(tm2, set()).add(Path(it2["ten"]).stem)
-    nghi_ban_sao = []
-    for rel in list(de_xuat):
-        tm2, stem = str(Path(rel).parent), Path(rel).stem
-        for goc_stem in tat_ca_stem.get(tm2, ()):
-            duoi = stem[len(goc_stem):]
-            if (goc_stem and stem != goc_stem and stem.startswith(goc_stem)
-                    and re.fullmatch(r"-[A-Za-z0-9][A-Za-z0-9-]{3,}", duoi)
-                    and not re.fullmatch(r"-v\d+", duoi, re.I)):
-                nghi_ban_sao.append(rel)
-                de_xuat.remove(rel)
-                break
+    de_xuat, nghi_ban_sao = loc_nghi_ban_sao(de_xuat, tat_ca_stem)
     if nghi_ban_sao:
-        print("        NGHI BẢN SAO ĐỒNG BỘ (không mời vào sổ; hòa giải theo"
-              " X5 mục 3 rồi chuyển _lich_su nếu đúng):")
-        for d in nghi_ban_sao[:10]:
-            print(f"          - {d}")
+        print("        NGHI BẢN SAO ĐỒNG BỘ (không mời vào sổ mức A): đúng bản"
+              " sao thì so nội dung theo SUY BẢN HIỆN HÀNH (X5 mục 4) rồi chuyển"
+              " _lich_su; là FILE THẬT khác nội dung thì cứ ghi TAILIEU như thường:")
+        for d, goc_ng in nghi_ban_sao[:10]:
+            print(f"          - {d} (tiền tố gây nghi: {goc_ng})")
     bao("11. không họ tài liệu nào cùng vN mà khác nội dung (XUNG ĐỘT)" + pv, not xung_dot,
         str(xung_dot[:3]))
     if lan_dau:
@@ -1035,9 +1053,13 @@ def kiem_email(goc, so):
             hang = [r for r in o_cua[v["so"]] if v["dong"] in [o.strip() for o in r]]
             if not hang:
                 loi_dong.append(f"{kk}: mã dòng {v['dong']} không là Ô nào trong {v['so']}")
-            elif isinstance(v.get("hash"), str) and v["hash"] and not any(
+            elif (isinstance(v.get("hash"), str) and v["hash"]
+                  and not any("đã xóa theo Q-" in "|".join(r) for r in hang)
+                  and not any(
                     hashlib.sha256(("|".join(r)).encode("utf-8")).hexdigest() == v["hash"]
-                    for r in hang):
+                    for r in hang)):
+                # dòng tombstone xóa pháp lý (X5 mục 7b) được miễn so hash:
+                # nội dung đã trung hòa có chủ đích, mã dòng vẫn đứng
                 loi_dong.append(f"{kk}: hash nội dung dòng không khớp")
     ket.append(("12l. index trỏ tới mã dòng có thật trong sổ đích (so đúng ô)",
                 not loi_dong, "; ".join(loi_dong[:3])))
@@ -1117,7 +1139,8 @@ def main(goc):
     yc = re.search(r"instruction_yeu_cau:\s*(v\d+)", doc(x0s[0])) if x0s else None
     iv = re.search(r"INSTRUCTION · WORKOPS · (v\d+)", doc(instrs[0])) if instrs else None
     if not x0s and co_template:
-        print("  BỎ QUA  1: chưa cài đặt, chưa có X0 để so instruction_yeu_cau")
+        print("  BỎ QUA  1: " + ("X0 tên chưa chuẩn, đổi tên theo 0c rồi chạy lại"
+              if ung_vien_tho else "chưa cài đặt, chưa có X0 để so instruction_yeu_cau"))
     else:
         bao("1. instruction_yeu_cau khớp bản INSTRUCTION",
             bool(yc and iv and yc.group(1) == iv.group(1)),
@@ -1127,7 +1150,8 @@ def main(goc):
     rev = re.search(r"rev (\d+)", doc(x0s[0])) if x0s else None
     chua_cai = bool(rev and rev.group(1) == "0") or (not x0s and co_template)
     if chua_cai:
-        print("  BỎ QUA  2, 3, 4, 8: X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào")
+        print("  BỎ QUA  2, 3, 4, 8: " + ("X0 tên chưa chuẩn (xem 0c), chưa đọc được rev"
+              if not x0s and ung_vien_tho else "X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào"))
     else:
         co_nk = loc_ban_chinh(so.glob("NHATKY_*.md"), r"NHATKY_\d{4}Q[1-4]\.md")
         chi_conflict = (not co_nk and any(

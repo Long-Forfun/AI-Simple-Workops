@@ -14,7 +14,7 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    nhất theo X0 C11: chỉ THÊM lệnh hay từ cấm để siết chặt là B; gỡ, nới vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
-   PHÁP LÝ: thủ tục riêng ở mục 7) · deploy môi trường CHẠY THẬT
+   PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
    của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
@@ -160,7 +160,7 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
 ```
 
 NHATKY chỉ-thêm với HAI ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục 7. Thấy bản "conflicted copy" của MỘT SỔ trong
+dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục 7b. Thấy bản "conflicted copy" của MỘT SỔ trong
 _so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
 bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
 ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
@@ -181,7 +181,7 @@ TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN 
               nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH
               hay ĐÃ THAY) · thay bởi · ghi lần. Không xóa, không sửa NỘI DUNG
-              (ngoại lệ duy nhất: XÓA PHÁP LÝ mục 7);
+              (ngoại lệ duy nhất: XÓA PHÁP LÝ mục 7b);
               dòng cũ chỉ được cập nhật hai ô quản trị Trạng thái và Thay bởi
 NHATKY_<quý>  mã ghi · ngày · phiên · mức · làm gì · chạm sổ nào · file ra
               · trạng thái · chờ ai
@@ -195,7 +195,7 @@ _quan_sat_truoc.json  cache máy sinh của bộ quan sát (giữ luật ổn đ
               quét), không phải sổ, không sửa tay, mất thì tự dựng lại
 _thu_*            (profile EMAIL) năm file và vùng máy sinh của pipeline mail
               (registry, nhật ký sự kiện, index, staging, manifest dọn): vai
-              trò, schema và luật phục hồi TẤT CẢ nằm ở X3E; mất riêng nhật
+              trò và schema ở X3E, thủ tục phục hồi ở X3E mục 1c; mất riêng nhật
               ký khi registry còn: GIỮ registry, cấm dựng lại từ tập rỗng
 _quan_sat_bo.txt  danh sách đường dẫn công ty muốn loại khỏi bộ quan sát (một
               dòng một mục), người dùng sửa tay được, mặc định không có
@@ -260,24 +260,6 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 
 # 7. Ngưỡng lưu trữ và chuyển đổi
 
-XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 5 "cờ GỐC
-KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
-đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
-· _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
-con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
-CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
-giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
-mất hết dấu "Ghi lần": ô "Chạm sổ nào" thay "không, đã xóa theo Q-<mã>".
-Dòng TAILIEU, THU trỏ file đã xóa: KHÔNG là đích index _thu_ap_dung thì XÓA
-DÒNG trong plan C này; ĐANG là đích index (mail đã COMMITTED) thì GIỮ khung
-và mã dòng, thay ô dữ liệu bằng "[đã xóa theo Q-<mã>]" (12k, 12l đối chiếu
-mã còn đứng). VIEC, DUKIEN, PLANNING: xóa dòng hay trung hòa, liên kết trỏ
-mã đã xóa thay cùng cách. Staging liên quan: XÓA, ghi manifest dọn lý do
-Q-<mã>; cache _quan_sat_truoc.json: xóa, tự dựng lại; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
-cờ de_ngoai lý do "đã xóa theo Q-<mã>" (phép 12j tự nhận, không báo oan);
-backup cũ còn dữ liệu thì xóa cả bản backup; nhắc thay bản đã tải lên
-Project; bản ĐÃ GỬI ra ngoài không xóa được, ghi nhận QUYETDINH.
-
 COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
 _thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\
 một lần mỗi ngày trước lượt ghi đầu, giữ 7 bản (mức A, không vào sổ).
@@ -295,3 +277,23 @@ tiết hóa bằng một plan mức C khi chạm ngưỡng thật:
    _so\_lich_su\ trước lượt ghi có đổi cấu trúc
 5  BANG_DIEU_KHIEN sinh từ nguồn sự thật mới, cách đọc của người dùng không đổi
 ```
+
+# 7b. Xóa theo yêu cầu pháp lý (CHỈ đọc khi có Q-<mã> yêu cầu xóa)
+
+XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 5 "cờ GỐC
+KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
+đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
+· _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
+con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
+CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
+giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
+mất hết dấu "Ghi lần": ô "Chạm sổ nào" thay "không, đã xóa theo Q-<mã>".
+Dòng TAILIEU, THU trỏ file đã xóa: KHÔNG là đích index _thu_ap_dung thì XÓA
+DÒNG trong plan C này; ĐANG là đích index (mail đã COMMITTED) thì GIỮ khung
+và mã dòng, thay ô dữ liệu bằng "[đã xóa theo Q-<mã>]" (12k, 12l đối chiếu
+mã còn đứng; mục index có ô hash: máy miễn so hash cho dòng tombstone). VIEC, DUKIEN, PLANNING: xóa dòng hay trung hòa, liên kết trỏ
+mã đã xóa thay cùng cách. Staging liên quan: XÓA, ghi manifest dọn lý do
+Q-<mã>; cache _quan_sat_truoc.json: xóa, tự dựng lại; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng
+cờ de_ngoai lý do "đã xóa theo Q-<mã>" (phép 12j tự nhận, không báo oan);
+backup cũ còn dữ liệu thì xóa cả bản backup; nhắc thay bản đã tải lên
+Project; bản ĐÃ GỬI ra ngoài không xóa được, ghi nhận QUYETDINH.

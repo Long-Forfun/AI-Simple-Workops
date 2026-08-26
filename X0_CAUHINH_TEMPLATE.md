@@ -48,8 +48,7 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <đường dẫn gốc trên máy 1> · thiết bị <tên>
                  <thêm CUA2... nếu kho mây có nhiều máy cùng vào>
-                 Kho Ổ MÁY ĐƠN: backup nằm cùng ổ, hỏng phần cứng là mất
-                 cả hai; phải sao lưu định kỳ ra thiết bị khác
+                 Kho Ổ MÁY ĐƠN: backup cùng ổ, phải sao lưu ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
 @KHO.CU          <kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
@@ -128,7 +127,8 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 ```
 
 Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
-và khuôn " (n)", "(bản sao)": máy coi là bản sao đồng bộ, loại khỏi quan sát. Nội bộ DoiTac là
+và khuôn " (n)", "(bản sao)"; tên hậu tố "-<chữ/số>" cạnh file cùng tiền
+tố cũng bị máy NGHI bản sao (khuôn OneDrive): Nội bộ DoiTac là
 NA. Bản ký thêm `_SIGNED`, bất biến. Trạng thái ở TAILIEU, không vào tên file.
 Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức C, phải có QUYETDINH.
 
