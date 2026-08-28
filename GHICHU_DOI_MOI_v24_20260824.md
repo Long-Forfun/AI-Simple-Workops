@@ -9,6 +9,27 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 73: phép 0r - vòng đời _inbox sang _da_nap (backlog j)
+
+X3 chặng 2 dặn: nạp xong CHUYỂN _INBOX sang _da_nap, tên gốc vào ô Căn cứ
+trạng thái; tải hụt thì KHÔNG chuyển và ghi VIEC. Hai lỗ của lời dặn đó chưa
+từng có máy giữ:
+
+· File nằm CẢ _inbox lẫn _da_nap - bản CHÉP sót thay vì CHUYỂN. Phiên sau
+  thấy file còn trong _inbox thì nạp LẠI, dòng sổ nhân đôi, và phép 7 sẽ tố
+  mã trùng ở đúng chỗ người dùng không hiểu vì sao.
+
+· File trong _da_nap mà tên không để lại DẤU VẾT ở bất kỳ sổ nào (sáu sổ +
+  NHATKY các quý + _lich_su): "đã nạp" khi ấy là lời khai suông - thứ đúng
+  chiến dịch này đi diệt, lần này ở tầng dữ liệu thay vì tầng luật.
+
+Ba ca ghim: hai I3 (mỗi lỗ một ca) + một I2 (file đã nạp có tên gốc ở Căn cứ
+trạng thái TAILIEU - đúng khuôn X3 - không được kêu). Trả chỗ nhãn mới bằng
+cắt thông điệp 0j, 1a; trần đầu ra GIỮ NGUYÊN. I2 29, I3 66(nt)/65.
+
+BACKLOG còn: (a) hash nội dung QUYETDINH (đổi schema) · (c) khuôn bản sao ·
+(e) sổ CSV. Đang chờ: hội đồng 23 (MISS, VẬN HÀNH) và rubric vòng chấm 02.
+
 ## Vòng 72: lần chấm RUBRIC CỐ ĐỊNH đầu tiên - 95/100, vá cả ba khoản trừ
 
 Từ vòng này có HAI thước tách bạch: điểm đối kháng /10 (la bàn tìm lỗi, chĩa

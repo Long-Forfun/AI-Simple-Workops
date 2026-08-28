@@ -1295,6 +1295,32 @@ def phep_fuzz(goc, phu_them=()):
     thu("file MẪU .example và .sample khai cấu hình (X5 mục 1b cho phép)",
         _ca_lanh_mau, False)
 
+    def _ca_0r_hai_noi(k, i, so, G, sua):
+        """Cùng tên ở cả _inbox lẫn _da_nap: bản chép sót, phiên sau nạp lại."""
+        _ghi(so / "_inbox" / "bao_gia_x.pdf", "x")
+        _ghi(so / "_inbox" / "_da_nap" / "bao_gia_x.pdf", "x")
+
+    thu3("file nằm cả _inbox lẫn _da_nap (chép sót)", _ca_0r_hai_noi, "0r.")
+
+    thu3("file _da_nap không sổ nào mang tên gốc (nạp mồ côi)",
+         lambda k, i, so, G, sua: _ghi(so / "_inbox" / "_da_nap"
+                                       / "hd_thue_vp.pdf", "x"), "0r.")
+
+    def _ca_0r_dung(k, i, so, G, sua):
+        """ĐÚNG LUẬT: file đã nạp, tên gốc nằm ở ô Căn cứ trạng thái TAILIEU
+        đúng như X3 chặng 2 dặn - 0r không được kêu."""
+        _ghi(so / "_inbox" / "_da_nap" / "bctc_2025.pdf", "x")
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "bctc.pdf", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-089 | Bao cao tai chinh | v01 | 2026-08-20 |"
+               " Kho 03_Phap_ly/bctc.pdf | HIỆN HÀNH | NHÁP | 2026-08-20 |"
+               " ten goc bctc_2025.pdf | noi bo | | | | " + G + " |" + NL)
+
+    thu("file _da_nap có tên gốc ở Căn cứ trạng thái (không được kêu)",
+        _ca_0r_dung, False)
+
     def _ca_7g_khong_dau(k, i, so, G, sua):
         """Khai nhánh tự deploy, rồi ghi lượt GỘP KHÔNG DẤU vào đúng nhánh đó
         ở mức B. Động từ "gop nhanh" đã nằm trong _dv từ vòng 19; neo nhánh
@@ -1424,9 +1450,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 64 if _os_dem.name == "nt" else 63   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 28, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 28,"
+    _i3_mong = 66 if _os_dem.name == "nt" else 65   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 29, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 29,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 

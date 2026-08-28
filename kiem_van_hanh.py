@@ -224,7 +224,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
-           "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.",
+           "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.", "0r.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -2018,9 +2018,9 @@ def main(goc):
                     if re.search(r"_v(\d+)\.md", q.name) else 0, reverse=True)
     if len(instrs) > 1:
         bao("1a. đúng MỘT INSTRUCTION trong 00_Index", False,
-            f"{[q.name for q in instrs][:4]}: nâng cấp theo X9 mục 3c dặn XÓA bản"
-            f" v* cũ, chỉ giữ MỘT. Hai bản thì phép 1 so nhầm bản và AI có thể nạp"
-            f" nhầm luật; ở đây đang lấy bản v lớn nhất để so")
+            f"{[q.name for q in instrs][:4]}: X9 mục 3c dặn XÓA bản v* cũ, chỉ"
+            f" giữ MỘT - hai bản thì phép 1 so nhầm và AI nạp nhầm luật; đang"
+            f" lấy bản v lớn nhất để so")
     yc = re.search(r"instruction_yeu_cau:\s*(v\d+)", doc(x0s[0])) if x0s else None
     iv = re.search(r"INSTRUCTION · WORKOPS · (v\d+)", doc(instrs[0])) if instrs else None
     if not x0s and co_template:
@@ -2188,10 +2188,10 @@ def main(goc):
                   and not (f.is_file() and _ls_ok.fullmatch(f.name)))
     if _la:
         bao("0j. không file lạ trong 00_Index", False,
-            f"{_liet(_la[:5])}: 00_Index là vùng luật, bị loại khỏi quan sát nghiệp vụ"
-            f" nên file ở đây KHÔNG BAO GIỜ được đề xuất vào TAILIEU. Tài liệu"
-            f" thì chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ thì khai"
-            f" vào _so\\_quan_sat_bo.txt và để NGOÀI 00_Index")
+            f"{_liet(_la[:5])}: 00_Index là vùng luật, bị loại khỏi quan sát nên"
+            f" file ở đây KHÔNG BAO GIỜ được đề xuất vào TAILIEU. Tài liệu thì"
+            f" chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ khai vào"
+            f" _so\\_quan_sat_bo.txt, để NGOÀI 00_Index")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
@@ -2324,6 +2324,34 @@ def main(goc):
             f" trọn vào file này, mốc sai làm bộ công nhận HIỆN HÀNH một file"
             f" có thể đang ghi dở. Xóa {_cache_p.name} để đặt lại quan sát"
             f" (mất hai lượt chờ, không mất dữ liệu nào)")
+
+    # 0r. Vòng đời _inbox -> _da_nap (X3 chặng 2): nạp xong phải CHUYỂN, tên
+    #     gốc phải để lại dấu ở sổ. File nằm CẢ HAI nơi là bản chép sót -
+    #     phiên sau nạp LẠI và dòng sổ nhân đôi; file _da_nap không dấu vết
+    #     sổ nào là "đã nạp" bằng lời khai suông (backlog j, vòng 22).
+    _ib0r = so / "_inbox"
+    _dn0r = _ib0r / "_da_nap"
+    _loi0r = []
+    if _dn0r.is_dir():
+        _hai_noi = [f.name for f in _ib0r.glob("*")
+                    if f.is_file() and (_dn0r / f.name).is_file()]
+        if _hai_noi:
+            _loi0r.append(f"nằm CẢ hai nơi: {_liet(_hai_noi[:3])} (chép sót -"
+                          f" phiên sau nạp LẠI, dòng sổ nhân đôi; xóa bản"
+                          f" _inbox)")
+        _van0r = "|".join(
+            [doc(so / t) for t in ("TAILIEU.md", "DUKIEN.md", "VIEC.md",
+                                   "THU.md", "QUYETDINH.md")]
+            + [doc(f) for f in sorted(so.glob("NHATKY_*.md"))]
+            + [doc(f) for f in sorted((so / "_lich_su").glob("*.md"))])
+        _mo_coi = [f.name for f in sorted(_dn0r.glob("*"))
+                   if f.is_file() and f.name not in _van0r]
+        if _mo_coi:
+            _loi0r.append(f"nạp MỒ CÔI: {_liet(_mo_coi[:3])} - không sổ nào"
+                          f" mang tên gốc (X3 chặng 2 bắt ghi vào Căn cứ"
+                          f" trạng thái); dựng lại lượt nạp")
+    bao("0r. _inbox sang _da_nap sạch vòng đời", not _loi0r,
+        "; ".join(_loi0r) + ". Mức A")
 
     # 0p. Sổ lõi còn KHUNG, không chỉ còn TÊN. Đồng bộ mây hay một lượt AI
     #     ghi đè để lại file 0 byte thì phép 0 vẫn PASS vì nó chỉ hỏi
