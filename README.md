@@ -39,9 +39,11 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    Ctrl+C; máy Mac dùng TextEdit, phím là Cmd+A, Cmd+C).
    Không sửa chữ nào.
 
-3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0
-   tới X5, X9, và X3E nếu bật profile EMAIL, vào tài liệu của Project để
-   phiên CHAT có luật mà đọc. Chỉ dùng Cowork thì bỏ qua.
+3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0,
+   X1, X2, X5 - và X3E nếu bật profile EMAIL - vào tài liệu của Project để
+   phiên CHAT có luật mà đọc. ĐỪNG đưa X9 (chỉ đọc một lần lúc cài) và X4
+   (chỉ đọc khi rà file): hai file đó ăn thêm gần một phần năm bộ nhớ mỗi
+   phiên chat mà không dùng tới. Chỉ dùng Cowork thì bỏ qua cả bước này.
 
 4  Mở phiên Cowork trên máy tính (claude.ai/code, hoặc app Claude chọn chế
    độ Cowork), bấm nút gắn thư mục và chọn folder <gốc>. QUAN TRỌNG: gắn
@@ -69,7 +71,7 @@ chốt sổ     kết phiên an toàn, vét các lượt ghi dở
             biết file nào là bản mới nhất, bản nào đã cũ
 ```
 
-Kênh chat (Zalo, Messenger) chưa có pipeline quét tự động như mail, nhưng
+Kênh chat (Zalo, Messenger) chưa có lối quét tự động như mail, nhưng
 có lối bán thủ công: dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
 như mục đến ở cửa vào (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
 
@@ -98,7 +100,7 @@ khỏi thư mục làm việc. Lỡ chạy `git stash` rồi thấy sổ trống
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
-X0 tới X5, AI route tới đúng mục đúng lúc.
+X0 tới X5, AI tự tìm tới đúng mục đúng lúc.
 
 ## Công ty có phần mềm
 
@@ -112,7 +114,7 @@ repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở
 ```
 
 Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch và nêu đích danh trường còn
-thiếu, nên không ai quên được. Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
+thiếu, và báo cả khi công ty làm phần mềm mà chưa khai dòng nào. Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
 của code (không chép vào kho), secret không vào kho hay sổ, và mọi thao
 tác chạm môi trường CHẠY THẬT đều là việc rủi ro cần bạn duyệt - việc trên
 dev, staging là việc nhẹ AI tự làm. Chi tiết mức duyệt từng thao tác: X5

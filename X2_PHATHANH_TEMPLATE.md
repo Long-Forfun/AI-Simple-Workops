@@ -65,7 +65,8 @@ DUKIEN ghi bù trong cùng phiên, mức nguồn B, nguồn "vận hành sự c�
 Phát hành PHẦN MỀM cho khách: bảng kiểm chạy trên BỘ TÀI LIỆU PHÁT HÀNH đi
 kèm (release note, hướng dẫn, phiên bản); gói build ghi TAILIEU: nằm trong kho
 thì "Ở đâu" dạng Kho kèm sha256; chỉ tồn tại trong repo thì dạng Repo trỏ tag
-release, ô sha256 bỏ trống theo C1, sha256 của gói ghi vào ghi chú dòng đó.
+release, ô sha256 bỏ trống theo C1, sha256 của gói ghi vào ô "Căn cứ trạng thái" của chính dòng đó, dạng
+"sha256 gói <giá trị>".
 Dòng 1-2 áp cho số liệu trong tài liệu đi kèm, không áp lên binary.
 
 # 3. Phát hiện tài liệu đã gửi bị sai

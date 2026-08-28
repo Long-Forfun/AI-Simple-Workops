@@ -17,7 +17,11 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
    PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
-   của phần mềm (X0 C2 @DUAN.PHANMEM)
+   của phần mềm (X0 C2 @DUAN.PHANMEM); MẶC ĐỊNH ĐÓNG: mọi thao tác KHÁC
+   chạm môi trường CHẠY THẬT hay dữ liệu của nó cũng là C - chạy lệnh sửa dữ
+   liệu trực tiếp trên CSDL, restore, lấy dump hay log mang dữ liệu khách,
+   xoay hay thu hồi secret, đổi feature flag, cấp hay thu quyền truy cập.
+   Không dòng nào khớp thì lấy C, không lấy A
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA
@@ -27,6 +31,9 @@ A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
    MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4
 ```
+
+GẤP không phải một mức: là việc mức B mở NGAY trong lượt phát hiện, hạn trong
+ngày, lên đầu bàn làm việc; hành động khắc phục vẫn lấy mức theo danh mục.
 
 Vòng đời theo mức:
 

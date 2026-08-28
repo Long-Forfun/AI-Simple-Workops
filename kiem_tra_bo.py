@@ -71,9 +71,11 @@ NGAN_SACH = {
     "X5_HESO_TEMPLATE.md": 20000,  # mục 1b và 7b đều gate; nâng vòng 43 theo quy ước (headroom 98,1% là nợ)
     "X9_CAIDAT.md": 8500,  # gate: đọc MỘT LẦN mỗi công ty, KHÔNG nạp vào CHAT, ngoài mọi route
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
-    "WORKOPS_STARTER_v24_20260824_GOP.md": 400000,  # bản gộp để đánh giá, KHÔNG nạp vào phiên nào
+    "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
+    # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
     "kiem_tra_bo.py": 110000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
-    "kiem_van_hanh.py": 104000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT
+    "kiem_van_hanh.py": 115000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là proxy
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
@@ -161,7 +163,7 @@ loi = []
 DA_KIEM = []
 PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
                  "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.",
-                 "13c.", "14.", "14b."]
+                 "13c.", "13d.", "14.", "14b.", "14c."]
 # phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
 
 
@@ -245,6 +247,11 @@ def _kho_song(goc, td):
     # theo X5 mục 5 chỉ đúng luật với việc XONG hay HỦY (hội đồng vòng 15b)
     for t in ["DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md", "THU.md"]:
         _ghi(so / t, (so / t).read_text(encoding="utf-8").replace("<MÃ>", "FUZ"))
+    _ghi(idx / "_moc_ghi.txt", G + NL)
+    # X5 mục 3 bước 6 BẮT nối mã G vào neo ngoài _so. Thiếu nó thì vế I2 của
+    # phép 13 đang khẳng định một kho THIẾU NEO là "đúng luật", nhánh PASS của
+    # 0k chưa từng được quan sát, và trần 13b/13c đo trên đầu ra mang sẵn một
+    # dòng LƯU Ý không đáng có (hội đồng vòng 16).
     _ghi(so / "X0_INDEX.md", "# X0_INDEX · FUZ" + NL * 2 + "```yaml" + NL
          + "may_sinh: true · sinh_boi: " + G + " · x0_rev: 1 · instruction: v11"
          + NL + "```" + NL)
@@ -400,6 +407,30 @@ def phep_fuzz(goc):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    thu3("xóa trọn mục C12 khỏi X0 (tắt luôn phép canh chính mục đó)",
+         lambda k, i, so, G, sua: _ghi(i / "X0_CAUHINH_FUZ.md",
+             (lambda t: t[:t.index("# C12.")] + t[t.index("# C13."):])(
+                 (i / "X0_CAUHINH_FUZ.md").read_text(encoding="utf-8"))), "0i2.")
+    thu3("neo _moc_ghi.txt biến mất khi kho đã có lượt ghi",
+         lambda k, i, so, G, sua: (i / "_moc_ghi.txt").unlink(), "0k2.")
+    thu3("ô Mức của NHATKY gõ thường, lách trọn kỷ luật mức C",
+         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md", "| A | mo viec",
+                                      "| a | mo viec"), "3g.")
+    thu3("dòng TAILIEU dạng Repo khi C2 chưa khai phần mềm nào",
+         lambda k, i, so, G, sua: _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip() + NL
+             + "| DA1 | T-009 | Dac ta API | v01 | 2026-08-28 |"
+               " Repo ORD docs/api.md@v2.4.1 | HIỆN HÀNH | ĐÃ PHÁT HÀNH |"
+               " 2026-08-28 | x | x | | | | " + G + " |" + NL), "7d2.")
+    thu3("file secret nằm trong kho đồng bộ (X5 mục 1b)",
+         lambda k, i, so, G, sua: (k / "01_Phap_ly").mkdir(exist_ok=True)
+             or _ghi(k / "01_Phap_ly" / "prod.env", "DB_PASSWORD=x" + NL), "7e2.")
+    thu3("secret lọt vào ô của sổ (X5 mục 1b)",
+         lambda k, i, so, G, sua: _ghi(so / "DUKIEN.md",
+             (so / "DUKIEN.md").read_text(encoding="utf-8").rstrip() + NL
+             + "| DA1 | D-009 | Chuoi ket noi | postgres://u:p%40ss@db.x.vn:5432/d"
+               " | 2026-08-28 | NOI_BO | x | A | ĐÃ KIỂM | 2026-12-31 | "
+             + G + " |" + NL), "7e.")
     thu3("dự án phần mềm khai thiếu trường phạm vi tổ chức",
          lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md",
              "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:",
@@ -424,9 +455,9 @@ def phep_fuzz(goc):
 
     # CA MỒI chỉ canh vế I1. Ghim SỐ CA thì tắt I2, tắt I3, hay bỏ bớt ca đều
     # đỏ - hội đồng vòng 15b tắt được cả I2 lẫn I3 mà bộ vẫn in "sạch".
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 13):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 19):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 4,"
-                    f" I3 13 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 19 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -435,10 +466,23 @@ def phep_fuzz(goc):
     #      14b đỏ NGAY LƯỢT VÁ ĐÓ - quy tắc mà ba vòng liền tự viết rồi không
     #      thi hành, nay thành MÁY chứ không còn là lời dặn (vòng 15b).
     import kiem_van_hanh as K14
-    MIEN_TRU = ["0.", "0b.", "0c.", "0e.", "0f.", "1.", "1b.", "1c.", "2.",
-                "3a.", "3b.", "4.", "5.", "6.", "7.", "9.", "10a.", "10b.",
-                "10c.", "11."]  # phải RỖNG DẦN: mỗi mục là một phép chưa ai canh
+    MIEN_TRU = ["0.", "0c.", "0e.", "0f.", "1.", "1b.", "1c.",
+                "3a.", "3b.", "6.", "7.", "9.", "10a.", "10b.", "10c.", "11."]
+    # phải RỖNG DẦN: mỗi mục là một phép chưa ai canh. Vòng 16 bỏ "4." và "5."
+    # vì phép 13 ĐÃ bắt được chúng - miễn trừ thừa là mất cảnh báo nếu ca canh
+    # chúng hỏng về sau.
     _ho = [pp for pp in K14.PHEP_VH if pp not in phu and pp not in MIEN_TRU]
+    # 14c. Danh bạ PHEP_VH là dữ liệu CHÉP TAY: vòng 45 đẻ ra 7d2 rồi quên
+    #      khai, nên 14b mù đúng phép mới nhất và quy tắc vòng 44 bị phá ngay
+    #      vòng sau. Đối chiếu danh bạ với NGUỒN thì lớp lỗi đó hết đường.
+    _nguon_vh = Path(K14.__file__).read_text(encoding="utf-8")
+    _ten_bao = {m.group(1) for m in re.finditer(
+        r'bao\(\s*[fr]?["\']([0-9][A-Za-z0-9]*\.)\s', _nguon_vh)}
+    kiem("14c. danh bạ PHEP_VH khai đủ mọi phép bao() có trong kiem_van_hanh",
+         _ten_bao == set(K14.PHEP_VH),
+         f"nguồn có mà danh bạ thiếu: {sorted(_ten_bao - set(K14.PHEP_VH))};"
+         f" danh bạ có mà nguồn không: {sorted(set(K14.PHEP_VH) - _ten_bao)}."
+         f" Danh bạ chép tay không có lưới thì 14b mù đúng phép mới nhất")
     kiem("14b. mọi phép của kiem_van_hanh đều có ca ép trạng thái ở phép 13",
          not _ho, f"phép {_ho} không có ca nào: xóa trọn phép đó thì bộ vẫn in"
          f" 'hệ sạch'. Thêm một ca I1, I2 hay I3 cho nó, hay khai vào MIEN_TRU"
@@ -466,9 +510,18 @@ def phep_fuzz(goc):
         finally:
             sys.argv = argv
         n_ra = len(buf.getvalue())
-    kiem("13b. bảng kết quả kiem_van_hanh trong trần đầu ra 2.400 ký tự",
-         n_ra <= 2400, f"{n_ra} ký tự ~{n_ra // 3} token: đầu ra này DÁN VÀO"
+    kiem("13b. bảng kết quả kiem_van_hanh trong trần đầu ra 2.700 ký tự",
+         n_ra <= 2700, f"{n_ra} ký tự ~{n_ra // 3} token: đầu ra này DÁN VÀO"
          f" phiên RA_SOAT, là context thật của người dùng")
+
+    # 13d. Số token đầu ra khai ở BENCHMARK nằm NGOÀI lưới 2c (2c chỉ soi dòng
+    #      chứa nhãn, số này ở dòng sau nhãn RA_SOAT) nên stale 22 phần trăm
+    #      suốt ba vòng dù vòng 15 đã gọi tên đích danh (hội đồng vòng 16).
+    _m_ra = re.search(r"đo được ~(\d+)\s*\n?\s*token trên kho lành",
+                      (goc / "BENCHMARK_TOKEN.md").read_text(encoding="utf-8"))
+    kiem("13d. token đầu ra khai ở BENCHMARK khớp số đo",
+         bool(_m_ra) and abs(int(_m_ra.group(1)) - n_ra // 3) <= 0.02 * (n_ra // 3),
+         f"BENCHMARK ~{_m_ra and _m_ra.group(1)}, đo thật ~{n_ra // 3}")
 
     # 13c. Trần trên kho TOÀN PASS là ca DỄ NHẤT; RA_SOAT chỉ chạy khi kho CÓ
     #      vấn đề. Hội đồng vòng 15b: kho 8 lệch cho 3.832 ký tự, vượt 60%.
@@ -479,6 +532,11 @@ def phep_fuzz(goc):
                     idx / "INSTRUCTION_WORKOPS_v9.md")
         _ghi(so / "VIEC.md", (so / "VIEC.md").read_text(encoding="utf-8")
              + "| DA1 | V-DA1-009 | dan tay | x | toi | | 2026-12-31 | MỚI | | |" + NL)
+        # kho CẬN XẤU, không phải ảnh chụp 3 lệch: hội đồng vòng 16 đo kho 8
+        # lệch cho 4.640 ký tự, vượt trần cũ 4.400
+        (so / "NHATKY_2026Q3.md").unlink()
+        _sua(idx / "X0_CAUHINH_FUZ.md", "rev 1 · 20260828", "rev 0 · 20260828")
+        (kho / ".git").mkdir(exist_ok=True)
         buf2, argv = _io3.StringIO(), sys.argv
         try:
             sys.argv = ["kvh", str(idx), str(kho)]
@@ -490,8 +548,8 @@ def phep_fuzz(goc):
         finally:
             sys.argv = argv
         n_lech = len(buf2.getvalue())
-    kiem("13c. bảng kiem_van_hanh trên kho ĐANG LỆCH trong trần 4.400 ký tự",
-         n_lech <= 4400, f"{n_lech} ký tự ~{n_lech // 3} token: đây mới là ca"
+    kiem("13c. bảng kiem_van_hanh trên kho CẬN XẤU trong trần 5.200 ký tự",
+         n_lech <= 5200, f"{n_lech} ký tự ~{n_lech // 3} token: đây mới là ca"
          f" người dùng THẬT SỰ dán vào phiên RA_SOAT")
 
 
@@ -547,7 +605,11 @@ def main(goc):
     else:
         cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {".gitignore", "_so/_quan_sat_bo.txt"}
     thua = []
+    import kiem_van_hanh as _kvj
     for f in (goc.rglob("*") if cho_phep is not None else []):
+        if _kvj._la_lien_ket(f):
+            continue  # junction tự trỏ làm rglob sinh gần 6.000 mục, sâu
+            # 11 tầng, chỉ dừng bằng MAX_PATH (hội đồng vòng 16)
         rel = str(f.relative_to(goc)).replace("\\", "/")
         if not f.is_file() or da_khai_bo(rel):
             continue
@@ -595,7 +657,10 @@ def main(goc):
             lech_bm.append(f"{nhan}: không thấy dòng trong BENCHMARK")
         # dòng CỘNG là thuế thường trực, tính bằng // nên khớp TUYỆT ĐỐI được:
         # dung sai 10% ở đó là 232 token trôi mà máy im (đo được +81 vòng 40-42)
-        nguong = 0 if "CỘNG" in nhan else (0.02 if gia_tri > 5000 else 0.10)
+        # Dung sai cũ 10%/2% cho 168 token trôi im trên một route 1.684: vòng
+        # 43 phình X5 và X4 rồi chỉ dán lại MỘT số, năm số kia stale ba vòng
+        # liền mà 2c vẫn PASS. Siết 2%/0,5%: sửa mục nào là buộc dán lại.
+        nguong = 0 if "CỘNG" in nhan else (0.005 if gia_tri > 5000 else 0.02)
         for _so in cac_max:
             if abs(_so - gia_tri) > nguong * gia_tri:
                 lech_bm.append(f"{nhan}: BENCHMARK ~{_so}, đo thật ~{gia_tri}")
@@ -663,9 +728,22 @@ def main(goc):
     # 9. Ngân sách token: file vượt budget là FAIL (enforce bằng máy, không bằng cảm giác)
     vuot_ns = []
     for ten, tran in NGAN_SACH.items():
-        nd = (docs["INSTRUCTION"] if ten == "INSTRUCTION"
-              else docs.get(ten) or kem.get(ten, ""))
-        if nd and len(nd) > tran:
+        if ten == "INSTRUCTION":
+            nd = docs["INSTRUCTION"]
+        elif ten in docs or ten in kem:
+            nd = docs.get(ten) or kem.get(ten, "")
+        else:
+            # Khóa KHÔNG nằm trong docs lẫn kem (bản gộp _GOP): nhánh cũ rơi vào
+            # nd="" rồi `if nd` chặn luôn, nên trần 400.000 của bản gộp là trần
+            # GIẢ - chưa từng được đo. Hội đồng vòng 16 bơm 1.000.000 ký tự rác
+            # vào bản gộp mà bộ vẫn in "sạch, đóng gói được". Một cái trần không
+            # đo được là một cái trần KHÔNG TỒN TẠI.
+            _p9 = goc / ten
+            if not _p9.is_file():
+                vuot_ns.append((ten, -1, tran))
+                continue
+            nd = _p9.read_text(encoding="utf-8")
+        if len(nd) > tran:
             vuot_ns.append((ten, len(nd), tran))
     # 9b. Bảng trần khai ở BENCHMARK phải khớp NGAN_SACH: vòng 13 phạt 9/13 số
     #     route stale; không giữ thì lớp lỗi đó chỉ dời sang bảng trần.
@@ -690,6 +768,10 @@ def main(goc):
         if khai != tran:
             lech_tran.append(f"{TEN_BM[ten]}: BENCHMARK {khai}, NGAN_SACH {tran}")
     kiem("9b. bảng trần ở BENCHMARK khớp NGAN_SACH", not lech_tran, str(lech_tran))
+    # GHICHU bị phép 8 ĐÒI có trong bản gộp nhưng chưa từng có trần: động cơ
+    # phình thứ hai của bản gộp, không ai quản (hội đồng vòng 16)
+    if len(kem[ghichu[0].name]) > 115000:
+        vuot_ns.append((ghichu[0].name, len(kem[ghichu[0].name]), 115000))
     kiem("9. mọi file trong ngân sách context", not vuot_ns,
          "; ".join(f"{t} {c} ký tự / trần {tr}" for t, c, tr in vuot_ns))
     print(f"        thuế thường trực (INSTRUCTION + X0_INDEX + BANG_DIEU_KHIEN mẫu): "
@@ -1470,6 +1552,7 @@ def main(goc):
         ("điền lần đầu mục CHƯA TỪNG có giá trị là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục CHƯA TỪNG mang giá trị" in docs["X0_CAUHINH_TEMPLATE.md"] and "CHỐT CHỐNG LÁCH" in docs["X0_CAUHINH_TEMPLATE.md"] and all("CHƯA TỪNG" in docs[k] for k in ("X5_HESO_TEMPLATE.md", "INSTRUCTION"))),
         ("mức của ĐIỀN LẦN ĐẦU khớp nhau ở cả ba nơi khai, không nơi nào nói A", all("CHƯA TỪNG" in d and re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,260}?(?:mức B|, là\s*\n?\s*B)", d) and not re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,60}?mức A", d) for d in [docs["X0_CAUHINH_TEMPLATE.md"], docs["X5_HESO_TEMPLATE.md"], docs["INSTRUCTION"]])),
         ("số ngoại lệ C11 khai đúng bằng số ngoại lệ liệt kê", ("BA ngoại lệ" in docs["X0_CAUHINH_TEMPLATE.md"]) == (len(re.findall(r"\((\d)\) ", docs["X0_CAUHINH_TEMPLATE.md"].split("# C11.")[1].split("# C12.")[0])) == 3)),
+        ("README bước 3 nạp CHAT khớp BENCHMARK: không X9, không X4", "ĐỪNG đưa X9" in docs["README.md"] and "X0 tới X5, X9" not in docs["README.md"]),
         ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
         ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
         ("CHỐT CHỐNG LÁCH giữ nguyên vế khóa C11 và C12, không bị đảo ngược", "Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa" in docs["X0_CAUHINH_TEMPLATE.md"] and not re.search(r"C11 và C12 (KHÔNG|không) thuộc nhóm khóa", docs["X0_CAUHINH_TEMPLATE.md"])),
@@ -1487,11 +1570,11 @@ def main(goc):
     ]
     thieu_luat = [t for t, dk in _luat if not dk]
     kiem(f"12. luật nghiệp vụ then chốt có mặt ({len(_luat)} luật)",
-         not thieu_luat and len(_luat) == 73,
-         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 73: bớt"
+         not thieu_luat and len(_luat) == 74,
+         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 74: bớt"
                             f" luật là bớt lưới không ai hay; đổi số thì sửa"
                             f" con số này trong CÙNG lượt vá"
-                            if len(_luat) != 73 else ""))
+                            if len(_luat) != 74 else ""))
 
     phep_fuzz(goc)
 
@@ -1524,7 +1607,12 @@ def main(goc):
                      if t != "INSTRUCTION" and nd.strip() and nd.strip() not in nd_gop]
         if docs["INSTRUCTION"].strip() not in nd_gop:
             thieu_gop.append(instr[0].name)
-        thieu_gop += [t for t, nd in kem.items() if nd.strip() and nd.strip() not in nd_gop]
+        # hai script KHÔNG nhúng nữa (49,8% bản gộp, không ai đọc ở đây):
+        # chỉ đòi CON TRỎ. GHICHU và mọi file LUẬT vẫn phải nguyên văn.
+        thieu_gop += [t for t, nd in kem.items()
+                      if nd.strip() and not t.endswith(".py")
+                      and nd.strip() not in nd_gop]
+        thieu_gop += [t for t in kem if t.endswith(".py") and t not in nd_gop]
         kiem("8. bản gộp _GOP chứa nguyên văn mọi file", not thieu_gop, f"lệch {thieu_gop}")
     elif "--skip-gop" in sys.argv:
         print("  BỎ QUA  8. theo cờ --skip-gop (không được dùng khi đóng gói phát hành)")

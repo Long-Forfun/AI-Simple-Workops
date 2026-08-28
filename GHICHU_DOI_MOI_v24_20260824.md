@@ -31,6 +31,86 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 46: hội đồng vòng 16 - trần giả, secret không lưới, junction no-op
+
+Điểm vòng 16 (sáu lăng kính, chấm sau ba vòng vá 43-45): TOKEN 9,1 · ĐƠN GIẢN
+9,0 · VẬN HÀNH 7,8 (vòng 15: 6,5, bước nhảy lớn nhất chiến dịch) · KHÔNG SAI
+chưa về · KHÔNG MISS 7,6 · THÔNG MINH 7,6. Chỉ số đo được đều tiến: tỉ lệ trạng
+thái mất dấu mã G đi im 4,1 xuống 1,9 phần trăm (389 ca, 55 họ); mutation score
+ở MỨC PHÉP của kiem_van_hanh 0/36 lên 19/38; xóa hẳn một phép của kiem_tra_bo
+bị bắt 22/24; tất định ĐẠT 8/8 trục (sáu PYTHONHASHSEED, bốn locale kể cả bẫy
+chữ I của tr_TR, NFC/NFD, mười lượt giống nhau từng byte).
+
+BỐN DEFECT NẶNG, cả bốn đều là LỜI KHAI VƯỢT CÁI MÁY LÀM:
+1. TRẦN BẢN GỘP LÀ TRẦN GIẢ (TOKEN và ĐƠN GIẢN cùng bắt). Khai ở NGAN_SACH,
+   soi gương sang BENCHMARK, phép 9b kiểm hai bản khai KHỚP NHAU - nhưng không
+   ai đối chiếu với FILE. Bản gộp không nằm trong docs lẫn kem nên phép 9 rơi
+   vào nd="" rồi `if nd` chặn luôn. Bơm 1.000.000 ký tự rác vào bản gộp mà bộ
+   vẫn in "sạch, đóng gói được". Nó đã vượt trần từ vòng 44. Vá: phép 9 đọc
+   THẲNG từ đĩa cho mọi khóa ngoài docs/kem, thiếu file cũng là LỆCH; và gỡ hai
+   script khỏi bản gộp (49,8 phần trăm mà không ai đọc chúng ở đó) - 409.287
+   xuống 205.410, trần hạ 400.000 xuống 260.000. Backlog (d) ĐÓNG.
+2. LUẬT SECRET KHÔNG CÓ LƯỚI NÀO (VẬN HÀNH, pilot công ty phần mềm thật). Cắm
+   chuỗi kết nối prod vào DUKIEN và prod.env vào kho: cả hai "hệ sạch", và bộ
+   quan sát còn MỜI prod.env vào sổ mức A. X5 mục 1b cấm secret ở kho, ở sổ, ở
+   _INBOX - máy làm đủ ba việc bị cấm rồi báo sạch. Mỉa mai nhất: chính vòng 45
+   lấy hậu quả đó làm LÝ DO dựng 7d. Vá: phép 7e (secret trong ô sổ) và 7e2
+   (file secret trong kho, soi THẲNG kho chứ không chờ file thành ứng viên).
+3. CHỐT CHẶN JUNCTION CỦA VÒNG 44 LÀ NO-OP (THÔNG MINH và KHÔNG MISS cùng bắt).
+   Path.is_symlink() trả FALSE cho junction Windows (reparse tag MOUNT_POINT),
+   nên chốt chặn chưa bao giờ bắn đúng trên nền tảng mà lỗi được báo: junction
+   tự trỏ đẻ 39 đường dẫn ma, đệ quy chỉ dừng bằng MAX_PATH. Vá: đọc thẳng cờ
+   FILE_ATTRIBUTE_REPARSE_POINT.
+4. Ô "Chạm sổ nào" gõ KHÔNG DẤU làm 3c báo oan VĨNH VIỄN, và chặn luôn lối
+   thoát XÓA PHÁP LÝ của X5 mục 7b - trong khi chính fixture của bộ cũng gõ
+   "khong". Đúng lớp lỗi phạt-người-làm-đúng mà vòng 45 vừa tuyên bố diệt cho
+   7d. Vá: hàm bo_dau dùng cho mọi so khớp tiếng Việt trong ô sổ.
+
+7d SAU KHI BỊ ÉP 10 BIẾN THỂ: chỉ kiểm 4/5 trường (bỏ "thành phần chính"), báo
+oan khi gõ `repo:` hay `repo=`, và IM HOÀN TOÀN khi công ty quên khai hẳn -
+đúng ca nguy hiểm nhất, vì cả chuỗi mức duyệt repo của X5 mục 1b không kích
+hoạt được và deploy chạy thật bị xử như việc nhẹ. Cả ba đã vá; lời khai "cưỡng
+chế NỘI DUNG" hạ xuống đúng thứ máy làm là dò bốn trường TRONG KHỐI khai báo.
+
+X5 MỤC 1b LÀ DANH SÁCH ĐÓNG: lấy dump prod có dữ liệu khách, chạy SQL sửa dữ
+liệu thật, restore, xoay secret, đổi feature flag, cấp quyền prod đều rơi ra
+ngoài bảng và TỤT XUỐNG MỨC A, trong khi README hứa mọi thao tác chạm chạy thật
+đều cần duyệt. Nay bảng có MẶC ĐỊNH ĐÓNG: không dòng nào khớp thì lấy C.
+
+PHÉP MỚI: 7e, 7e2 (secret) · 8d (lane watermark khớp GIÁ TRỊ, 8c chỉ đếm tên) ·
+3g (ô Mức và Trạng thái phải thuộc từ vựng X5 - gõ "c" thay "C" là lách trọn kỷ
+luật mức C, 21/22 ca họ này từng đi im) · 0i2 (mục X0 biến mất là tắt luôn phép
+canh chính mục đó) · 0k2 (neo ngoài _so thành NGHĨA VỤ, trước chỉ là LƯU Ý nên
+kịch bản thảm họa vòng 43 vẫn đi im khi kho chưa từng tạo neo) · 13d (số token
+đầu ra vào lưới) · 14c (DANH BẠ PHEP_VH đối chiếu với chính mã nguồn - vòng 45
+đẻ ra 7d2 rồi quên khai nên 14b mù đúng phép mới nhất, tức quy tắc vòng 44 bị
+phá ngay vòng sau). Phép 7 dùng khuôn mã đúng (Q-DA2-001 từng lọt vì khuôn cũ
+là Q-\d+) và đọc cả _lich_su, cùng 3b.
+
+SỐ LIỆU: dung sai 2c siết 10%/2% xuống 2%/0,5%, việc này lập tức phơi ra 9 số
+route stale từ vòng 43 mà băng dung sai đang che; tất cả đã dán lại. Thuế
+thường trực đứng yên tuyệt đối 2.316 token qua bốn vòng 43-46 dù thêm 13 phép
+kiểm. Bốn gate token còn nguyên.
+
+MIEN_TRU của 14b từ 20 xuống 16 (bốn mục thừa: phép 13 đã canh sẵn).
+
+BACKLOG cập nhật: (d) ĐÓNG. Còn (a) hash QUYETDINH · (b) phép 5 đối chiếu số
+cột với X5 mục 4 · (c) khuôn bản sao · (e) chuyển sổ sang CSV còn CẤM chứ chưa
+có bản rà · (f) MIEN_TRU còn 16 phép chưa ai canh, nguy hiểm nhất là phép 0 (sổ
+lõi tồn tại trên đĩa) - người canh DUY NHẤT của 12 ca mất trọn một sổ · (g)
+loc_ban_chinh tất định nhờ sorted mà không ai ghim · (h) 7c chưa soi PLANNING
+và DUKIEN · (i) MỚI: phép 14 chỉ chứng minh phép ĐÃ CHẠY, không chứng minh nó
+CÒN BẮT ĐƯỢC GÌ - đục ruột một phép cho điều kiện luôn đúng thì 0/24 bị bắt ·
+(j) MỚI: vòng đời _inbox và _da_nap chưa ai canh · (k) MỚI: cache
+_quan_sat_truoc.json giả mạo được để lách luật ổn định hai lượt quét.
+
+Bài học vòng này, thẳng thắn: bốn defect NẶNG đều là LỜI KHAI VƯỢT CÁI MÁY LÀM,
+và ba trong bốn nằm trong bản vá của chính ba vòng liền trước. Hai giám khảo
+độc lập cùng nói một câu đáng ghi: lưới đi từ PHÉP (phép 13, 14, 14b) và lưới
+đi từ TRẠNG THÁI (bộ fuzz) phát hiện hai lớp lỗi khác nhau và KHÔNG thay nhau
+được. Bộ đã có lưới thứ nhất; thứ còn thiếu là một danh mục TRẠNG THÁI HỎNG độc
+lập với danh sách phép hiện hữu. Đó là bản vá đáng giá nhất còn lại.
+
 ## Vòng 45: phạm vi tổ chức phần mềm thành thứ MÁY GIỮ
 
 Yêu cầu nghiệp vụ gốc của người dùng có hai vế: hội đồng chấm tới 99/100, VÀ
