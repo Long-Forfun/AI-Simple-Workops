@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 82 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 83 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,33 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 83: rubric vòng chấm 06 - 95/100, vá cả bốn khoản
+
+Giám khảo chấm bản vòng 51 (32e82aa): 95/100 - trở lại đỉnh của thước
+(95 · 96 · 91 · 93 · 91 · 95). Chiến thuật tự-quét-trước phát huy: seed 47
+"tinh vi" chỉ còn 2 mutant chết thẳng + 5 tương đương, khoản trừ dồn về
+biên và khuôn hiếm. Bốn khoản, vá hết:
+
+1. N1 (nặng nhất): neo bàn giao vế phụ trách C2 - vá của chính vòng 81 -
+   CHẾT TRÊN KHUÔN NHIỀU DÒNG, tức chính khuôn ví dụ của template. Regex
+   một-dòng khớp fixture một-dòng nên "tái đo chết" mà không phủ khuôn
+   thật - fixture phải mô phỏng KHUÔN THẬT chứ không phải khuôn tiện tay.
+   Nay tách C2 thành TỪNG KHỐI entry (như 7d) và tìm trong trọn khối; ca
+   fixture chuyển sang khuôn nhiều dòng; tên người cũ cắt đuôi "cũ/mới"
+   (người điền xuôi khuôn không làm câm cả hai vế).
+2. N4: 8e tự xưng "bộ đếm của bảng khớp sổ" mà mù 2/6 bộ đếm banner X5
+   khai: plan C treo và chờ đối tác quá ngưỡng - đúng lớp lỗi hội đồng
+   vòng 18, hồi đó chỉ vá 4/6. dem_qua_han nay đếm đủ; hai thu3 mỗi bộ
+   đếm một ca.
+3. N2: biên 0m - backup đúng 7 ngày tuổi (đúng nhịp "sao mỗi tuần") phải
+   LÀNH; ca biên ghim, mutant <7 tố oan bị giết.
+4. N3: vế miễn tombstone của 7f - chú thích tự khai từ vòng 19 mà không
+   ca nào giữ. Ca I2 xóa-pháp-lý đầy đủ (Q + tombstone) ghim.
+
+TÁI ĐO: 5/5 mutant CHẾT (N1/N2 <- 11, N3/N4x2 <- 13). Fixture 109 ca.
+BẤT BIẾN I1 7, I2 35, I3 82(nt)/81. NHẬT KÝ RUBRIC: 95 · 96 · 91 · 93 ·
+91 · 95. BACKLOG: (e) sổ CSV (CẤM).
 
 ## Vòng 82: tự quét 12-series - vùng lớn cuối cùng
 

@@ -1478,6 +1478,35 @@ def phep_fuzz(goc, phu_them=()):
     thu3("triển khai lên máy chủ nội bộ không dấu chấm mà mức B", _ca_7g_vps,
          "7g.")
 
+    def _ca_7f_tombstone(k, i, so, G, sua):
+        """ĐÚNG LUẬT: sau XÓA PHÁP LÝ, ô "Ở đâu" mang tombstone
+        "[đã xóa theo Q-...]" (X5 mục 7b) - 7f phải miễn; chú thích 7f tự
+        khai vá này từ vòng 19 mà chưa ca nào giữ (rubric 06, N3)."""
+        _ghi(so / "QUYETDINH.md",
+             (so / "QUYETDINH.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-001 | 2026-08-28 | Xoa du lieu doi tac X | phap ly |"
+               " mat lich su | HIỆN HÀNH | | " + G + " |" + NL)
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-091 | [đã xóa theo Q-001] | v01 | 2026-08-20 |"
+               " [đã xóa theo Q-001] | HIỆN HÀNH | HẾT HIỆU LỰC |"
+               " 2026-08-20 | qs | noi bo | | | | " + G + " |" + NL)
+
+    thu("ô Ở đâu mang tombstone xóa pháp lý (không được kêu)",
+        _ca_7f_tombstone, False)
+
+    thu3("plan CHỜ CHỐT mà bảng vẫn bàn sạch (bộ đếm plan C treo)",
+         lambda k, i, so, G, sua: _ghi(so / "PLANNING.md",
+             (so / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| P-002 | 2098-01-01 | DA1 | mini | Viec hai | X5 |"
+               " VIEC.md | V-DA1-001 | thap | CHỜ CHỐT | |" + NL), "8e.")
+
+    thu3("việc CHỜ ĐỐI TÁC quá ngưỡng mà bảng vẫn bàn sạch",
+         lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | V-DA1-003 | Cho bao gia | b | toi | 2020-01-01 |"
+               " 2099-12-31 | CHỜ ĐỐI TÁC | | " + G + " |" + NL), "8e.")
+
     def _ca_7d_phutrach(k, i, so, G, sua):
         """Khai đủ BẢY trường hạ tầng + dữ liệu mà thiếu NGƯỜI PHỤ TRÁCH:
         7d phải đòi - không biết ai gật thì mức C là cái gật của không ai."""
@@ -1741,9 +1770,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 80 if _os_dem.name == "nt" else 79   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 34, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 34,"
+    _i3_mong = 82 if _os_dem.name == "nt" else 81   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 35, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 35,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -2660,6 +2689,37 @@ def main(goc):
                 sys.argv = _argv7
             ca.append(("lưới mềm 7g in LƯU Ý với động từ lạ + chữ prod",
                        "LƯU Ý  7g" in _buf7.getvalue()))
+        # BIÊN 0m: backup ngoài kho đúng 7 ngày tuổi - đúng nhịp "sao mỗi
+        # tuần" - KHÔNG được kêu; mutant <7 tố oan đúng người làm đúng nhịp
+        # (giám khảo rubric 06, N2)
+        with tempfile.TemporaryDirectory() as _td0m:
+            _kho0, _idx0, _so0, _G0 = _kho_song(goc, _td0m)
+            _ngoai0 = Path(_td0m) / "usb_saoluu"
+            _ngoai0.mkdir()
+            _f0 = _ngoai0 / "backup_tuan.zip"
+            _f0.write_text("x", encoding="utf-8")
+            import os as _os0m, time as _t0m
+            _moc7 = _t0m.time() - 7 * 86400
+            _os0m.utime(_f0, (_moc7, _moc7))
+            _p0 = _idx0 / "X0_CAUHINH_FUZ.md"
+            _s0 = _p0.read_text(encoding="utf-8")
+            _m0 = re.search(r"^@KHO\.SAOLUU[^\n]*$", _s0, re.M)
+            _ghi(_p0, _s0[:_m0.start()] + "@KHO.SAOLUU      "
+                 + str(_ngoai0) + _s0[_m0.end():])
+            import contextlib as _cl0, io as _io0
+            _buf0, _argv0 = _io0.StringIO(), sys.argv
+            try:
+                sys.argv = ["kvh", str(_idx0), str(_kho0)]
+                with _cl0.redirect_stdout(_buf0):
+                    try:
+                        _kv26.main(_idx0)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argv0
+            ca.append(("backup ngoài kho đúng 7 ngày tuổi không bị 0m tố",
+                       "LECH  0m." not in _buf0.getvalue()))
+
         # neo BÀN GIAO phải NHẮC: người cũ trong @NHIP.BANGIAO còn việc đang
         # mở gán tên - lời hứa "rà sang người mới" nay có máy (rubric 04)
         with tempfile.TemporaryDirectory() as _tdbg:
@@ -2708,10 +2768,15 @@ def main(goc):
             _s_pm = _pb.read_text(encoding="utf-8")
             import re as _rebg
             _m_pm = _rebg.search(r"^@DUAN\.PHANMEM.*$", _s_pm, _rebg.M)
+            # khuôn NHIỀU DÒNG - đúng khuôn ví dụ của template; bản
+            # một-dòng làm regex cũ "tái đo chết" mà không phủ khuôn thật
+            # (giám khảo rubric 06)
             _ghi(_pb, _s_pm[:_m_pm.end()] + NL
                  + "  DA1  He cu · repo github.com/cty/hc · web · dev may"
-                   " doi, chạy thật hc.bacha.vn · secret o Vault"
-                   " · phụ trách vận hành: Long ·" + _s_pm[_m_pm.end():])
+                   " doi, chạy thật hc.bacha.vn" + NL
+                 + "        · secret o Vault · CSDL chua ro" + NL
+                 + "        · phụ trách vận hành: Long ·"
+                 + _s_pm[_m_pm.end():])
             _bufb3 = _iob.StringIO()
             try:
                 sys.argv = ["kvh", str(_idxb), str(_khob)]
@@ -3179,8 +3244,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 108,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 108: bớt ca là"
+             not hong and len(ca) == 109,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 109: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

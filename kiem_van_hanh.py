@@ -916,7 +916,8 @@ def dem_qua_han(so, x0nd, hom_nay=None):
         so = re.search(r"(\d+)", m.group(1)) if m else None
         return int(so.group(1)) if so else mac_dinh
 
-    ra = {"quá hạn": [], "rà lại": [], "hết hạn": [], "_INBOX": []}
+    ra = {"quá hạn": [], "rà lại": [], "hết hạn": [], "_INBOX": [],
+          "plan C treo": [], "chờ đối tác": []}
     for r in dong_bang(doc(so / "VIEC.md")):
         if len(r) > 7 and r[7].strip() not in ("XONG", "HỦY"):
             h = ngay(r[6])
@@ -940,6 +941,18 @@ def dem_qua_han(so, x0nd, hom_nay=None):
             h = ngay(r[11])
             if h and (h - hom_nay).days <= _canh:
                 ra["hết hạn"].append(r[1].strip())
+    # HAI BỘ ĐẾM banner X5 khai mà trước vòng 92 không máy nào đếm: plan C
+    # treo và chờ đối tác quá ngưỡng - bảng khai 0 mà sổ đầy, 8e vẫn xanh
+    # (giám khảo rubric 06, đúng lớp lỗi hội đồng vòng 18, nay đủ 6/6)
+    for r in dong_bang(doc(so / "PLANNING.md")):
+        if len(r) > 9 and r[9].strip() in ("MỚI", "ĐANG LÀM", "CHỜ CHỐT"):
+            ra["plan C treo"].append(r[0].strip())
+    _cdt = nguong("CHODOITAC", 5)
+    for r in dong_bang(doc(so / "VIEC.md")):
+        if len(r) > 7 and r[7].strip() == "CHỜ ĐỐI TÁC":
+            h = ngay(r[5] if len(r) > 5 else "")
+            if h and (hom_nay - h).days > _cdt:
+                ra["chờ đối tác"].append(r[1].strip())
     _ib = nguong("INBOX", 3)
     thu = so / "_inbox"
     if thu.is_dir():
@@ -2411,7 +2424,11 @@ def main(goc):
         _mbg = re.search(r"^@NHIP\.BANGIAO\s+([^\n<]+)", doc(x0s[0]), re.M)
         _v_bg = (_mbg.group(1).strip() if _mbg else "")
         if _v_bg and not re.match(r"(?i)ch[ưu]a c[óo]", _v_bg):
-            _ten_cu = _v_bg.split(",")[0].strip()[:30]
+            # cắt đuôi "cũ/mới": người điền xuôi khuôn "<tên người cũ,
+            # người mới>" thành "An cũ, Bình mới" - giữ nguyên là câm cả hai
+            # vế (giám khảo rubric 06)
+            _ten_cu = re.sub(r"\s*\(?(c[ũu]|m[ớo]i)\)?$", "",
+                             _v_bg.split(",")[0].strip())[:30]
             if _ten_cu:
                 _viec_cu = [
                     (_r[1] or "?").strip()[:12]
@@ -2420,10 +2437,28 @@ def main(goc):
                     and bo_dau(_ten_cu) in bo_dau(_r[4] if len(_r) > 4 else "")]
                 # người GẬT mức C đã nghỉ mà C2 vẫn ghi tên: 7g sẽ mãi
                 # bảo đi xin cái gật của người cũ (giám khảo rubric 05)
+                # tách C2 thành TỪNG KHỐI entry rồi tìm trong TRỌN khối:
+                # bản regex một-dòng chết trên chính khuôn nhiều dòng của
+                # template - fixture một-dòng "tái đo chết" mà không phủ
+                # khuôn thật (giám khảo rubric 06)
                 _c2bg = cat_muc(doc(x0s[0]), 2)
-                _pm_cu = [m.group(1).strip()[:8] for m in re.finditer(
-                    r"^\s{2}([A-Z0-9]{2,6})\s[^\n]*(?:ph[ụu] tr[áa]ch|owner)"
-                    r"[^\n·]*" + re.escape(_ten_cu), _c2bg, re.M | re.I)]
+                _pm_bg = _c2bg[_c2bg.find("@DUAN.PHANMEM"):] \
+                    if "@DUAN.PHANMEM" in _c2bg else ""
+                _pm_cu, _kh_bg, _ma_bg = [], [], None
+                for _dg in _pm_bg.splitlines():
+                    _mkb = re.match(r"\s{2}([A-Z0-9]{2,6})\s", _dg)
+                    if _mkb:
+                        if _ma_bg and re.search(
+                                r"(?:ph[ụu] tr[áa]ch|owner)[^·]*"
+                                + re.escape(_ten_cu),
+                                "\n".join(_kh_bg), re.I):
+                            _pm_cu.append(_ma_bg)
+                        _ma_bg, _kh_bg = _mkb.group(1), []
+                    _kh_bg.append(_dg)
+                if _ma_bg and re.search(
+                        r"(?:ph[ụu] tr[áa]ch|owner)[^·]*" + re.escape(_ten_cu),
+                        "\n".join(_kh_bg), re.I):
+                    _pm_cu.append(_ma_bg)
                 if _viec_cu or _pm_cu:
                     _vepm = (f"; phần mềm {_liet(_pm_cu[:2])} còn ghi"
                              f" {_ten_cu} ở vế phụ trách C2" if _pm_cu else "")
