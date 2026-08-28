@@ -222,7 +222,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.", "11b.", "0m.", "0n.", "13m.", "7h.",
+           "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -477,16 +477,38 @@ def dong_bang(nd):
     khối code, không phải bảng - phép 5b báo riêng chỗ đó."""
     lines = [d.strip() if re.match(r"^[ \t]{1,3}\|", d) else d
              for d in nd.splitlines()]
-    headers = set()
+    headers, so_cot = set(), {}
     for i, d in enumerate(lines[:-1]):
         if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
-            headers.add(tuple(o.strip() for o in d.strip("|").split("|")))
-    ket = []
-    for d in lines:
-        if d.startswith("|") and not re.match(r"^\|[\s:|-]+\|$", d):
+            _h = tuple(o.strip() for o in d.strip("|").split("|"))
+            headers.add(_h)
+            so_cot[i] = len(_h)
+    ket, _dang_mo = [], 0
+    for i, d in enumerate(lines):
+        if i in so_cot:                       # dòng header
+            _dang_mo = so_cot[i]
+            continue
+        if not d.strip() or d.lstrip().startswith("#"):
+            _dang_mo = 0                      # ra khỏi thân bảng
+            continue
+        if re.match(r"^\|[\s:|-]+\|$", d):
+            continue                          # dòng kẻ
+        if d.startswith("|"):
             r = [o.strip() for o in d.strip().strip("|").split("|")]
-            if tuple(r) not in headers:
-                ket.append(r)
+        elif _dang_mo:
+            # GFM cho bỏ dấu | ĐẦU và CUỐI ở dòng THÂN. Không nhận thì 11 phép
+            # cùng mù, y hệt lớp thụt lề của vòng 58 - Prettier và
+            # markdownlint --fix đều sinh ra dạng này (hội đồng vòng 20).
+            # ĐÒI ĐÚNG SỐ CỘT: nhận rộng hơn thì rác đứng trước dấu | đầu bị
+            # đọc thành một ô, cả dòng lệch một ô, và 3g tố oan - bản vá chống
+            # báo oan suýt tự đẻ ra báo oan.
+            r = [o.strip() for o in d.strip().strip("|").split("|")]
+            if len(r) != _dang_mo:
+                continue
+        else:
+            continue
+        if tuple(r) not in headers:
+            ket.append(r)
     return ket
 
 
@@ -857,7 +879,14 @@ def quet_secret(kho):
         # lối _thu_staging còn là lối TỰ ĐỘNG, không ai phải làm gì sai (hội
         # đồng vòng 19). Chỉ bỏ đúng FILE CỦA BỘ: chính tài liệu bộ trích
         # `sk_live_...` làm ví dụ nên quét chúng là tự báo oan mình.
-        if BIET_MAT_00.fullmatch(f.name) or f.suffix.lower() == ".py":
+        # miễn theo ĐƯỜNG DẪN, không theo tên: chỉ file CON TRỰC TIẾP của
+        # 00_Index mới là file của bộ. So theo tên thì mọi README.md, mọi
+        # .gitignore, mọi X?_*.md và MỌI .py ở bất kỳ đâu trong kho thành vùng
+        # miễn dịch - mà README của repo và script deploy là hai chỗ secret hay
+        # nằm nhất đời thật (hội đồng vòng 20, lỗi của bản vá vòng 58).
+        _phan = rel.split("/")
+        if len(_phan) == 2 and _phan[0] == "00_Index" and (
+                BIET_MAT_00.fullmatch(f.name) or f.suffix.lower() == ".py"):
             continue
         if MAU_FILE_MAU.search(f.name):
             continue           # file MẪU khai cấu hình là cách làm ĐÚNG
@@ -1126,7 +1155,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     #      không xuất hiện một dòng nào (hội đồng vòng 18: chênh 86 triệu đi
     #      vào DUKIEN mức nguồn A rồi ra hóa đơn).
     _bs_khac, _bs_mo = quet_ban_sao_n(kho)
-    bao("11b. file khuôn \" (n)\" khác nội dung bản gốc",
+    bao("11b. file khuôn \" (n)\" khác bản gốc",
         not _bs_khac,
         f"{_liet([f'{a} (khác {b})' for a, b in _bs_khac[:4]])}: khuôn này là"
         f" thứ Windows và Chrome tự đặt khi tải lại file CÙNG TÊN, nên đây rất"
@@ -1705,7 +1734,7 @@ def main(goc):
                    if "TEMPLATE" not in f.name and co_x0_chuan
                    and not re.fullmatch(r"X0_CAUHINH_[A-Z0-9]{3,4}\.md", f.name))
     xung = sorted(set(xung))
-    bao("0b. không bản conflicted copy của sổ hay bộ X", not xung,
+    bao("0b. không bản conflicted copy", not xung,
         f"{_liet(xung[:3])}: dòng vắng ở bản chính chép sang rồi hòa giải mã"
         f" (X5 mục 3 bước 2), bản conflict chuyển _so/_lich_su")
 
@@ -1782,7 +1811,7 @@ def main(goc):
             print("  BỎ QUA  0d: hệ đã cài nhưng CHƯA ghi lần nào; NHATKY quý sinh"
                   " ở lượt ghi đầu theo X5 mục 3 bước 1, chưa có là đúng")
         else:
-            bao("0d. NHATKY tồn tại khi kho đã ghi", bool(co_nk),
+            bao("0d. NHATKY tồn tại khi đã ghi", bool(co_nk),
                 ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
                  f" chính mức C từ {BAN_CU} TRƯỚC, rồi mới hòa giải theo 0b"
                  if chi_conflict else
@@ -1821,7 +1850,7 @@ def main(goc):
     _moc_p = goc / "_moc_ghi.txt"
     if not chua_cai:
         if not _moc_p.is_file() or not re.search(MAU_G, doc(_moc_p)):
-            bao("0k2. neo ngoài _so tồn tại khi kho đã có lượt ghi",
+            bao("0k2. neo ngoài _so tồn tại khi đã ghi",
                 not dau_vet_ghi,
                 "chưa có 00_Index\\_moc_ghi.txt (hay nó rỗng). Đây là nhân chứng"
                 " DUY NHẤT nằm ngoài _so: thiếu nó thì một lần khôi phục nhầm"
@@ -1966,11 +1995,35 @@ def main(goc):
                                   f" ({_tuonglai[0][:40]}...)")
         except ValueError:
             _loi0n.append("không đọc được JSON")
-        bao("0n. cache quan sát đọc được và không mang mốc tương lai",
+        bao("0n. cache quan sát không mang mốc tương lai",
             not _loi0n, f"{'; '.join(_loi0n[:2])}: luật ổn định hai lượt dựa"
             f" trọn vào file này, mốc sai làm bộ công nhận HIỆN HÀNH một file"
             f" có thể đang ghi dở. Xóa {_cache_p.name} để đặt lại quan sát"
             f" (mất hai lượt chờ, không mất dữ liệu nào)")
+
+    # 0p. Sổ lõi còn KHUNG, không chỉ còn TÊN. Đồng bộ mây hay một lượt AI
+    #     ghi đè để lại file 0 byte thì phép 0 vẫn PASS vì nó chỉ hỏi
+    #     is_file() - rồi phiên sau nối dòng vào file KHÔNG có header và cột
+    #     mất nghĩa vĩnh viễn (hội đồng vòng 20).
+    if not chua_cai:
+        _mat_khung = []
+        for _t0p in SO_CO_GHI_LAN:
+            _p0p = so / _t0p
+            if not _p0p.is_file():
+                continue          # phép 0 lo phần VẮNG
+            _nd0p = doc(_p0p)
+            if not re.search(r"^\|[\s:|-]+\|$", _nd0p, re.M):
+                _mat_khung.append(_t0p)
+        for _t0p, _neo0p in (("BANG_DIEU_KHIEN.md", "may_sinh:"),
+                             ("X0_INDEX.md", "may_sinh:")):
+            _p0p = so / _t0p
+            if _p0p.is_file() and _neo0p not in doc(_p0p):
+                _mat_khung.append(_t0p)
+        bao("0p. sổ lõi còn khung bảng", not _mat_khung,
+            f"{_liet(_mat_khung[:5])}: file còn trên đĩa nhưng mất header bảng"
+            f" hay khối khai - rất có thể bị đồng bộ hay một lượt ghi đè cắt"
+            f" cụt. Lượt sau nối dòng vào file không header là cột mất nghĩa"
+            f" VĨNH VIỄN; khôi phục từ bản cũ, mức C")
 
     idx = doc(so / "X0_INDEX.md")
     if not chua_cai:
@@ -2058,7 +2111,7 @@ def main(goc):
             thieu = sorted(t for t in (can or set()) if ma not in ghi_lan_theo_so.get(t, set()))
             if thieu or (not can and ma not in ghi_lan):
                 khong_dau.append(f"{ma}{' thiếu ở ' + str(thieu) if thieu else ''}")
-        bao("3c. lượt XONG để dấu mã G ở đúng sổ đã khai chạm", not khong_dau,
+        bao("3c. lượt XONG để dấu mã G ở đúng sổ", not khong_dau,
             str(khong_dau[:5]))
 
         # 3f. Mọi DÒNG DỮ LIỆU của sổ phải mang ít nhất một mã G ở ô "Ghi lần":
@@ -2085,7 +2138,7 @@ def main(goc):
                     continue
                 if r and any(o.strip() for o in r) and not re.search(MAU_G, r[-1] or ""):
                     thieu_g_dong.append(f"{t}:{(r[0] or '?').strip()[:20]}")
-        bao("3f. mọi dòng sổ đều mang mã G ở ô Ghi lần", not thieu_g_dong,
+        bao("3f. mọi dòng sổ mang mã G ở ô Ghi lần", not thieu_g_dong,
             f"{_liet(thieu_g_dong[:5])}: dòng vào sổ NGOÀI lượt ghi (sửa tay hay"
             f" dán nhầm); dựng lại lượt ghi theo X5 mục 3. Dòng ĐÃ có mã mà máy"
             f" không thấy thì kiểm số cột trước (phép 5); TUYỆT ĐỐI không gỡ dòng"
@@ -2100,7 +2153,7 @@ def main(goc):
         dau_ngoai = (ghi_lan | set(re.findall(MAU_G, doc(so / "BANG_DIEU_KHIEN.md")))
                      | set(re.findall(MAU_G, doc(so / "X0_INDEX.md"))))
         mo_coi = sorted(dau_ngoai - set(ma_g))
-        bao("3e. mã G ở sổ đều có dòng NHATKY", not mo_coi,
+        bao("3e. mã G ở sổ có dòng NHATKY", not mo_coi,
             f"{_liet(mo_coi[:5])}: sổ hay bảng mang mã mà NHATKY không có dòng nào."
             f" Kiểm _so\\_lich_su\\ TRƯỚC: quý cũ đã tách theo X5 mục 7 là hợp lệ,"
             f" không phải mất sổ. Nếu thật sự mất thì dòng NHATKY hay CẢ FILE QUÝ"
@@ -2184,6 +2237,28 @@ def main(goc):
                     j += 1
     bao("5. schema bảng: mọi dòng cùng số cột",
         not lech, str(lech[:5]))
+
+    # 5b. Dòng thụt SÂU (>=4 dấu cách hay tab) mà trông như dòng bảng: GFM coi
+    #     đó là khối code, nên dong_bang KHÔNG đọc nó - và docstring của
+    #     dong_bang từ vòng 58 hứa "phép 5b báo riêng chỗ đó" mà phép đó chưa
+    #     từng được dựng. Đúng lớp LỜI KHAI VƯỢT CÁI MÁY LÀM mà chiến dịch này
+    #     đi diệt, do chính vòng 58 phạm (hội đồng vòng 20).
+    _thut_sau = []
+    for p in sorted(so.glob("*.md")) + sorted((so / "_lich_su").glob("*.md")):
+        _trong_fence = False
+        for _n, _d in enumerate(doc(p).splitlines(), 1):
+            if _d.lstrip().startswith("```"):
+                _trong_fence = not _trong_fence
+                continue
+            if _trong_fence:
+                continue
+            if re.match(r"^(?: {4,}|\t)", _d) and _d.count("|") >= 2:
+                _thut_sau.append(f"{p.name}:{_n}")
+    bao("5b. không dòng bảng nào bị thụt sâu", not _thut_sau,
+        f"{_liet(_thut_sau[:5])}: thụt từ bốn dấu cách trở lên là KHỐI CODE"
+        f" theo Markdown, nên mọi phép đọc sổ BỎ QUA dòng đó trong khi người và"
+        f" AI vẫn đọc thấy. Kéo dòng về sát lề trái; muốn dán ví dụ bảng thì"
+        f" bọc trong ``` để phép này bỏ qua đúng cách")
 
     vuot = []
     for p in sorted(so.glob("*.md")):
@@ -2443,7 +2518,7 @@ def main(goc):
                     _lo_ib.append(f"{_rel_ib} (giá trị trong ruột file)")
             except OSError:
                 pass
-    bao("7e3. secret không nằm trong _INBOX", not _lo_ib,
+    bao("7e3. secret không ở _INBOX", not _lo_ib,
         f"{_liet(_lo_ib[:5])}: _INBOX vẫn là kho đồng bộ, file nằm đó đã đi ra"
         f" mọi máy của công ty. Xoay khóa TRƯỚC, chuyển ra ngoài kho sau. Mức C")
 
@@ -2472,7 +2547,7 @@ def main(goc):
                         _sot.append(f"{_t7}:{(_r[0] or '?').strip()[:14]}"
                                     f" còn trỏ {_mm}")
                         break
-    bao("7b2. xóa pháp lý lan tới mọi dòng trỏ tài liệu đã xóa",
+    bao("7b2. xóa pháp lý lan tới mọi dòng trỏ nó",
         not _sot, f"{_liet(_sot[:4])}: dòng đó vẫn giữ dữ liệu của khách -"
         f" tên đối tác, tiêu đề luồng, Message-ID, sha256 - trong khi công ty"
         f" đã trả lời là đã xóa. Trung hòa NỐT theo X5 mục 7b, giữ khung dòng"
@@ -2521,7 +2596,7 @@ def main(goc):
             elif _tt == "ĐÃ THAY" and not _co_tb:
                 _cap_qd.append(f"{(_r[0] or '?').strip()} ĐÃ THAY mà ô Thay bởi"
                                f" không trỏ quyết định có thật")
-        bao("13m. QUYETDINH: Trạng thái khớp ô Thay bởi", not _cap_qd,
+        bao("13m. QUYETDINH: Trạng thái khớp Thay bởi", not _cap_qd,
             f"{_liet(_cap_qd[:3])}: hai quyết định cùng HIỆN HÀNH về một việc"
             f" thì phiên sau lấy dòng nào cũng 'đúng sổ'. Đánh ĐÃ THAY cho dòng"
             f" cũ, mức A")

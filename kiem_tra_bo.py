@@ -73,11 +73,11 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 150000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 165000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 155000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 170000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -167,7 +167,7 @@ loi = []
 
 DA_KIEM = []
 PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
-                 "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.", "1f.",
+                 "5.", "5c.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.", "1f.",
                  "13c.", "13d.", "14.", "14b.", "14c.", "14d.", "14e.", "15.", "15b.", "2d.", "9c."]
 # phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
 
@@ -617,6 +617,31 @@ def phep_fuzz(goc, phu_them=()):
              + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
              " x | x | x | x | MỚI | |" + NL), "7c.")
 
+    thu3("dòng bảng thụt SÂU bốn dấu cách (Markdown coi là khối code)",
+         lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "    | DA1 | V-DA1-088 | Viec | b | toi | | 2099-12-31 |"
+               " MỚI | | " + G + " |" + NL), "5b.")
+
+    thu3("dòng thân bảng BỎ dấu | đầu (Prettier, markdownlint --fix)",
+         lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "DA1 | V-DA1-089 | Viec | b | toi | | 2099-12-31 | dang lam |"
+               " |  |" + NL), "3g.")
+
+    thu3("sổ lõi bị cắt còn 0 byte (đồng bộ hay ghi đè cắt cụt)",
+         lambda k, i, so, G, sua: _ghi(so / "TAILIEU.md", ""), "0p.")
+
+    def _ca_d2(k, i, so, G, sua):
+        """secret trong README.md và trong .py NGOÀI 00_Index: miễn trừ theo
+        TÊN FILE làm mọi README, mọi .gitignore và MỌI .py ở bất kỳ đâu thành
+        vùng miễn dịch (hội đồng vòng 20, lỗi của bản vá vòng 58)."""
+        (k / "02_Ky_thuat").mkdir(exist_ok=True)
+        _ghi(k / "02_Ky_thuat" / "README.md",
+             "DB=postgresql://cdv:Pr0dBacha2026x@10.0.0.9:5432/cdv" + NL)
+
+    thu3("secret trong README.md của thư mục nghiệp vụ", _ca_d2, "7e2.")
+
     def _ca_baohanh(k, i, so, G, sua):
         """ĐÚNG LUẬT: dự án đã thanh lý mà nghĩa vụ bảo hành còn chạy - giữ
         việc mở là ĐÚNG SỰ THẬT, chuyển sang HỦY mới là khai sai."""
@@ -949,9 +974,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 38):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 42):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 13,"
-                    f" I3 38 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 42 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -1350,6 +1375,47 @@ def main(goc):
         khai = int(m_t.group(1).replace(".", "")) if m_t else None
         if khai != tran:
             lech_tran.append(f"{TEN_BM[ten]}: BENCHMARK {khai}, NGAN_SACH {tran}")
+    # 5b. SỐ CỘT của sổ mẫu phải khớp schema X5 mục 4. Mọi phép đọc sổ theo
+    #     CHỈ SỐ CỘT đứng trên lời khai đó (3g cột 7 của VIEC, 8e cột 11 của
+    #     TAILIEU, 13m cột 5 và 6 của QUYETDINH, 7c cột 6 của DUKIEN); thêm hay
+    #     bớt một cột ở một trong hai nơi là mọi phép đó đọc lệch một ô mà
+    #     không ai biết - phép 5 chỉ so các dòng VỚI NHAU. Cùng lớp "hai bản
+    #     khai không ai đối chiếu" mà 9b và 14c đã đóng ở chỗ khác. Backlog (b).
+    _x5m4 = docs["X5_HESO_TEMPLATE.md"]
+    _m4 = _x5m4[_x5m4.find("# 4."):_x5m4.find("# 5.")]
+    SO_SCHEMA = {"VIEC.md": "_so/VIEC.md", "DUKIEN.md": "_so/DUKIEN.md",
+                 "TAILIEU.md": "_so/TAILIEU.md",
+                 "QUYETDINH.md": "_so/QUYETDINH.md",
+                 "NHATKY_<quý>": "_so/NHATKY_TEMPLATE.md"}
+    _lech5b = []
+    for _ten5, _tep5 in SO_SCHEMA.items():
+        _i5 = _m4.find(_ten5)
+        if _i5 < 0:
+            _lech5b.append(f"X5 mục 4 không khai {_ten5}")
+            continue
+        # ranh giới khai: mục mới bắt đầu ở CỘT 0, dòng nối thì thụt. Cắt
+        # theo dấu chấm câu thì khai của VIEC chạy sang tận TAILIEU (41 cột).
+        _dong5 = _m4[_i5 + len(_ten5):].splitlines()
+        _khai_d = [_dong5[0]] if _dong5 else []
+        for _d5 in _dong5[1:]:
+            if _d5[:1] not in (" ", "\t") or not _d5.strip():
+                break
+            _khai_d.append(_d5)
+        _khai5 = " ".join(_khai_d)
+        # bỏ phần văn xuôi sau khai cột (QUYETDINH có ". Không xóa..." đi kèm)
+        _khai5 = re.split(r"\.\s", _khai5)[0]
+        _n_khai = len([_c for _c in _khai5.split("·") if _c.strip()])
+        _nd5 = docs.get(_tep5, "")
+        _hdr = next((l for l in _nd5.splitlines() if l.startswith("| ")), "")
+        _n_that = len([_c for _c in _hdr.strip().strip("|").split("|")]) \
+            if _hdr else 0
+        if _n_khai != _n_that:
+            _lech5b.append(f"{_ten5}: X5 mục 4 khai {_n_khai} cột, sổ mẫu có"
+                           f" {_n_that}")
+    kiem("5c. số cột của sổ mẫu khớp schema X5 mục 4", not _lech5b,
+         "; ".join(_lech5b[:4]) + ". Mọi phép đọc sổ theo CHỈ SỐ CỘT đứng trên"
+         " lời khai đó; lệch một cột là chúng đọc lệch một ô mà không ai biết")
+
     kiem("9b. bảng trần ở BENCHMARK khớp NGAN_SACH", not lech_tran, str(lech_tran))
     # 9c. Ngưỡng RUNTIME cũng phải khai ở BENCHMARK và khớp hằng trong mã.
     #     Khuôn y hệt 9b - thứ DUY NHẤT đã chứng minh hiệu lực bằng đột biến:

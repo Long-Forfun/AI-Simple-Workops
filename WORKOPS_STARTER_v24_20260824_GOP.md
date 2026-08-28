@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 61 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 62 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,53 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 62: lời hứa tôi viết mà không dựng, và hai lỗ của chính bản vá cũ
+
+Hội đồng vòng 20: KHÔNG MISS 4,0 (lên từ 3,0). Phần đáng giá nhất của báo cáo
+không phải điểm mà là dòng KIỂM CHỨNG: 21/21 vá vòng 58-59 được xác nhận CÒN
+KÍN, không cái nào lách lại được, và KHÔNG cái nào đẻ ra báo oan - kể cả các ca
+đúng luật khó ("mật khẩu VPN giữ ở 1Password", "ĐÃ GIA HẠN", lượt thứ 101 trong
+ngày, tách 618 dòng sang _lich_su). Quyết định CỐ Ý cho phép 6 không đọc
+_lich_su cũng được xác nhận là đúng.
+
+LỜI KHAI VƯỢT CÁI MÁY LÀM - DO CHÍNH TÔI PHẠM Ở VÒNG 58. Docstring của
+`dong_bang` viết nguyên văn rằng thụt sâu hơn ba dấu cách là khối code và "phép
+5b báo riêng chỗ đó". TÔI CHƯA HỀ DỰNG PHÉP 5b NÀO. Vá vòng 58 vì thế chỉ dịch
+vùng mù từ ">=1 dấu cách" sang ">=4 dấu cách" rồi ghi chú thích như đã bịt -
+đúng lớp lỗi mà cả chiến dịch này đi diệt, và phép 15 không thấy vì nó chỉ soi
+X4. Nay 5b được dựng THẬT, và nó bỏ qua đúng cách khi dòng nằm trong ``` fence.
+
+DÒNG THÂN BẢNG BỎ DẤU `|` ĐẦU - tái phát Y HỆT lớp thụt lề, chỉ đổi ký tự gây
+ra. GFM cho phép bỏ pipe đầu và cuối ở dòng thân; Markdown vẫn render, người vẫn
+đọc thấy, và 11 phép cùng mù trở lại. Prettier, `markdownlint --fix`, bản dán từ
+Word và một lượt AI "gọn lại bảng" đều sinh ra dạng này.
+Bản vá đầu của tôi SUÝT tự đẻ ra báo oan: nhận mọi dòng có đủ số pipe thì dòng
+`x| DA1 |...` mà bộ fuzz dùng để "xóa dòng" bị đọc thành dòng dữ liệu LỆCH MỘT
+Ô, và 3g tố oan ngay một ca ĐÚNG LUẬT của phép 13. Ranh giới tin được là ĐÚNG
+SỐ CỘT của header: dòng mất pipe do Prettier vẫn đủ ô, dòng có rác đứng trước
+thì dôi ra một ô và bị loại. Bàn thử 5/5.
+
+HAI LỖ CỦA CHÍNH BẢN VÁ VÒNG 58:
+- Khi mở quet_secret ra quét cả cây 00_Index, tôi loại file của bộ bằng TÊN
+  (`BIET_MAT_00.fullmatch(f.name) or f.suffix == ".py"`) chứ không bằng ĐƯỜNG
+  DẪN. Hệ quả: mọi README.md, mọi .gitignore, mọi X?_*.md và MỌI file .py ở
+  BẤT KỲ ĐÂU trong kho thành vùng miễn dịch. Giám khảo đặt chuỗi kết nối prod
+  và sk_live_... vào 02_Ky_thuat\README.md, 02_Ky_thuat\deploy_prod.py,
+  99_Goc\.gitignore - tất cả "hệ sạch"; cùng nội dung trong bangiao.txt thì
+  7e2 kêu ngay. README của repo và script deploy là HAI CHỖ secret hay nằm
+  nhất đời thật. Nay chỉ miễn file CON TRỰC TIẾP của 00_Index.
+- Sổ lõi bị cắt còn 0 BYTE mà phép 0 vẫn PASS, vì nó chỉ hỏi is_file(). Phiên
+  sau nối dòng vào file KHÔNG có header là cột mất nghĩa vĩnh viễn. Phép 0p đòi
+  sổ còn KHUNG, không chỉ còn TÊN.
+
+Bàn thử 7/7 cho hai mục trên, gồm hai ca đúng luật (.gitignore thường ở gốc kho,
+README nghiệp vụ không có secret).
+
+BACKLOG còn từ hội đồng vòng 20: 0b và 0j không xuống _lich_su, _inbox,
+_thu_staging · X0_INDEX chỉ đối chiếu x0_rev, còn kho/profile/dự án thì không ·
+X0 khai TRÙNG một @KEY thì "dòng sau đè dòng trước" im lặng · 14e còn lách được
+bằng `[] == []`, `x or True`, `all([])`. Cùng (i), (j), (a), (c), (e) như cũ.
 
 ## Vòng 61: hai lối đi mà luật quên mở
 
@@ -1723,7 +1770,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~811
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~825
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
