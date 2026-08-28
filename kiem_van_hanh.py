@@ -218,7 +218,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.", "11b.", "0m.",
+           "8e.", "11b.", "0m.", "0n.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -1875,6 +1875,39 @@ def main(goc):
                 bao("0m. nơi sao lưu ngoài kho còn được cập nhật", _ngay <= 7,
                     f"{_sl_d}: bản mới nhất cách đây {_ngay} ngày - đây là bản"
                     f" DUY NHẤT sống sót một lượt rollback trọn _so. Sao lại, mức A")
+
+    # 0n. Cache quan sát là chỗ luật ổn định hai lượt đặt trọn niềm tin, mà
+    #     trước vòng 55 không phép nào nhìn nó. Mốc TƯƠNG LAI (đồng hồ máy sai,
+    #     hay một lượt sinh lại cẩu thả) làm mọi file lập tức "đủ ổn định": bộ
+    #     công nhận HIỆN HÀNH một file có thể đang ghi dở rồi đóng sha của nó
+    #     vào TAILIEU làm mốc toàn vẹn. KHÔNG phải rào chống giả mạo có chủ ý -
+    #     ai sửa được cache thì cũng sửa được sổ - mà là lưới cho hai ca THẬT
+    #     hay xảy ra: cache hỏng cấu trúc, và mốc tương lai.
+    _cache_p = so / "_quan_sat_truoc.json"
+    if _cache_p.is_file():
+        import time as _t0n
+        _loi0n = []
+        try:
+            _cn = json.loads(doc(_cache_p) or "{}")
+            _files0n = _cn.get("files") if isinstance(_cn, dict) else None
+            if not isinstance(_files0n, dict):
+                _loi0n.append("không phải object {files: {...}} của bản v2")
+            else:
+                _tuonglai = sorted(
+                    k for k, v in _files0n.items()
+                    if isinstance(v, dict)
+                    and isinstance(v.get("luc"), (int, float))
+                    and v["luc"] > _t0n.time() + 86400)
+                if _tuonglai:
+                    _loi0n.append(f"{len(_tuonglai)} mục mang mốc TƯƠNG LAI"
+                                  f" ({_tuonglai[0][:40]}...)")
+        except ValueError:
+            _loi0n.append("không đọc được JSON")
+        bao("0n. cache quan sát đọc được và không mang mốc tương lai",
+            not _loi0n, f"{'; '.join(_loi0n[:2])}: luật ổn định hai lượt dựa"
+            f" trọn vào file này, mốc sai làm bộ công nhận HIỆN HÀNH một file"
+            f" có thể đang ghi dở. Xóa {_cache_p.name} để đặt lại quan sát"
+            f" (mất hai lượt chờ, không mất dữ liệu nào)")
 
     idx = doc(so / "X0_INDEX.md")
     if not chua_cai:

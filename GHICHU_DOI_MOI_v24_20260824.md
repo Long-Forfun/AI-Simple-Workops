@@ -36,6 +36,30 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 56: cache quan sát vào lưới
+
+Backlog (k). `_so/_quan_sat_truoc.json` là MÁY SINH và giữ mốc "lần đầu thấy
+sha này". Luật ổn định hai lượt dựa TRỌN vào nó, mà trước vòng 56 không phép
+nào nhìn nó: mốc TƯƠNG LAI làm mọi file lập tức "đủ ổn định", tức bộ công nhận
+HIỆN HÀNH một file có thể đang được ghi hay đồng bộ dở, rồi đóng sha đó vào
+TAILIEU làm mốc toàn vẹn.
+
+Phép 0n, và NÓI THẲNG GIỚI HẠN của nó ngay trong chú thích: đây KHÔNG phải rào
+chống giả mạo có chủ ý - ai sửa được cache thì cũng sửa được sổ. Nó bắt hai ca
+THẬT hay xảy ra: cache hỏng cấu trúc (đồng bộ mây cắt ngang, sửa tay nhầm) và
+mốc tương lai (đồng hồ máy sai, hay một lượt sinh lại cẩu thả). Khai đúng tầm
+thì nó vẫn đáng có; khai quá lời thì lại đúng lớp "lời khai vượt cái máy làm"
+mà chiến dịch này đi diệt.
+
+Ca lành của phép này lúc đầu tôi dựng SAI - trỏ một file không có thật nên
+chính bộ quan sát kêu, và ca mất nghĩa. Cache RỖNG mới là hình dạng đúng cho
+kho chưa có file nghiệp vụ nào, tức kho lành của phép 13.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(a) hash QUYETDINH · (b) phép 5 đối chiếu số cột với X5 mục 4 · (c) khuôn bản
+sao · (e) bản rà cho sổ CSV · (g) loc_ban_chinh tất định nhờ sorted mà không ai
+ghim.
+
 ## Vòng 55: liên kết treo ở hai sổ còn lại
 
 Backlog (h). 7c gom mã CÓ THẬT từ cả năm sổ, nhưng chỉ soi ô liên kết của VIEC,

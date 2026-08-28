@@ -617,6 +617,29 @@ def phep_fuzz(goc, phu_them=()):
              + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
              " x | x | x | x | MỚI | |" + NL), "7c.")
 
+    def _ca_0n(k, i, so, G, sua):
+        """Cache mang mốc TƯƠNG LAI: mọi file lập tức "đủ ổn định" nên bộ công
+        nhận HIỆN HÀNH một file có thể đang ghi dở (backlog (k), vòng 55)."""
+        import json as _js0n
+        _ghi(so / "_quan_sat_truoc.json", _js0n.dumps(
+            {"v": 2, "luc": 32503680000,
+             "files": {"01_Phap_ly/x.md": {"sha": "0" * 64,
+                                           "luc": 32503680000}}}))
+
+    thu3("cache quan sát mang mốc tương lai", _ca_0n, "0n.")
+
+    def _ca_0n_lanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: cache máy sinh bình thường, mốc trong quá khứ."""
+        import json as _js0n2
+        import time as _t0n2
+        # files RỖNG là hình dạng ĐÚNG cho kho chưa có file nghiệp vụ nào -
+        # kho lành của phép 13 chính là vậy. Trỏ một file không có thật thì
+        # chính bộ quan sát kêu, và ca mất nghĩa.
+        _ghi(so / "_quan_sat_truoc.json", _js0n2.dumps(
+            {"v": 2, "luc": _t0n2.time() - 600, "files": {}}))
+
+    thu("cache quan sát máy sinh bình thường (không được kêu)", _ca_0n_lanh, False)
+
     def _ca_0m(k, i, so, G, sua):
         """Nơi sao lưu ĐÃ KHAI và có thật, nhưng bỏ bê từ lâu."""
         _tm = k.parent / "saoluu_ngoai_kho"
@@ -832,9 +855,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 8, 33):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 8,"
-                    f" I3 33 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 9, 34):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 9,"
+                    f" I3 34 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
