@@ -116,16 +116,22 @@ khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới
 
+Nâng cấp thì đọc mục 3c CỦA BẢN MỚI vừa tải về, KHÔNG đọc bản trong kho: thủ
+tục nâng cấp có thể đã đổi giữa hai bản.
+
 CẤM `git pull`, `git stash`, `git checkout` ở BẤT KỲ đâu trong bản làm việc git
 chứa kho, kể cả chạy từ thư mục cha: `_so\` là sổ SỐNG, pull dừng vì local
 changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bản làm việc.
 
 Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
 (a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
-thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, kiem_van_hanh.py,
+thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, DOC_TRUOC.md,
+BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, kiem_van_hanh.py,
 kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
-mới thay bản cũ là xong (bản v* cũ của INSTRUCTION xóa đi, chỉ giữ MỘT). Bỏ nhóm
-(b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới không bao giờ tới.
+mới thay bản cũ là xong (bản v* cũ của INSTRUCTION và GHICHU xóa đi, chỉ giữ
+MỘT). Bỏ nhóm (b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới
+không bao giờ tới. DOC_TRUOC.md là MỐC VERSION mà @NHIP.BANMOI đọc: bỏ nó thì
+kho vĩnh viễn tự khai bản cũ và mỗi vòng quý lại nâng cấp lại một lần nữa.
 
 Chép xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
 mang mã: chúng là NGUỒN LUẬT, không phải bộ chạy. AI diff template mới với bản
@@ -143,7 +149,9 @@ Giữa chừng đụng tới tham số còn dấu chưa điền (`<chưa điền
 hay để trống):
   DỪNG việc đang làm ở điểm đó · GOM mọi tham số và dữ kiện còn thiếu CỦA CÙNG
   VIỆC ĐÓ vào MỘT lượt hỏi duy nhất, kèm vì sao cần, không hỏi nhỏ giọt từng câu
-  · trả lời xong update ngược X0 (tăng rev, xóa dòng khỏi C12) · rồi mới làm
+  · trả lời xong update ngược X0 (tăng rev, ĐÁNH DẤU dòng C12 thành `[x] <mục> -
+  điền lần đầu rev <N> ngày <YYYYMMDD>`, KHÔNG xóa dòng, theo X0 C11 ngoại lệ
+  (2)) · rồi mới làm
   tiếp. CẤM đoán, cấm lấy giá trị tạm.
 
 Dữ kiện nghiệp vụ (số, mốc, điều khoản) thiếu thì KHÔNG hỏi để điền vào X0.

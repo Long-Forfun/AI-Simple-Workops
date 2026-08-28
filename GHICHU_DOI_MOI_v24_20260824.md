@@ -31,6 +31,73 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 41: hội đồng vòng 14 - vá chính bản vá vòng 40
+
+Điểm vòng 14: KHÔNG MISS 8,0 · VẬN HÀNH 7,0 · KHÔNG SAI 6,8. Ba giám khảo
+XÁC NHẬN mọi đầu vá vòng 40 chạy thật (0d, 0g, 0h, 3e, 0i, 0j, 1e, phép 8 hai
+chiều đều dựng lại được và đều bắt). Nhưng vòng 40 tái phạm ĐÚNG lớp lỗi nó
+đang chữa: đẻ ra BÁO ĐỘNG GIẢ trên đường đi của mọi công ty. Mutation score
+của vùng vừa vá đo được 52% (12/25 đột biến lọt).
+
+BÁO ĐỘNG GIẢ do vòng 40 sinh, nay đóng:
+1. 0i BẪY VĨNH VIỄN (NẶNG, 3 giám khảo cùng bắt). Phép mới đếm cả dòng ĐỊNH
+   NGHĨA CÚ PHÁP của template (`@DUAN.<MÃ DA>`, `@NGUON.<LOẠI>`), cả văn xuôi
+   mang dấu ngoặc, cả ô ĐÃ điền (`@TEN.PROJECT`), lại bỏ sót C13 mà X9 câu 11
+   hỏi đích danh. Kho cài ĐÚNG X9 bị tố "lách ngoại lệ C11" ngay lệnh rà đầu
+   tiên, và ba lối ra đều hỏng - máy chỉ chấp nhận một C12 mà luật gọi là vi
+   phạm. Nay: X0 khai LUẬT VIẾT DẤU (ô chưa điền dùng đúng một khuôn), template
+   tuân đúng luật đó, và phép quét tách thành hàm dùng chung `muc_con_trong()`
+   để AI cài đặt với rà 0i không thể tính ra hai tập khác nhau. Đo lại: 44 ô
+   trống trên template, kho cài từ zero SẠCH.
+2. 0i mù ô xuống dòng (VỪA-NẶNG). Quét theo DÒNG nên 20/32 khóa tàng hình, gồm
+   cả nhóm khóa và sáu tham số EMAIL. Nay quét theo KHỐI THAM SỐ.
+3. 3c mù `_so\_lich_su\` (NẶNG). X5 mục 5 bắt chuyển việc XONG quá 30 ngày vào
+   lịch sử, phép 6 CƯỠNG BỨC khi sổ vượt 500 dòng - mà 3c không đọc thư mục đó,
+   nên mỗi dòng lưu trữ ĐÚNG LUẬT đẻ một mã lệch không bao giờ dọn được, tích
+   lũy từ ngày thứ 31. 3e cũng mù y hệt với NHATKY quý cũ. Nay cả hai đọc
+   `_lich_su`, và X5 mục 5 nói rõ chuyển lịch sử không được làm mất dấu mã G.
+4. 8b suýt lặp lại lớp lỗi ngay khi vừa viết: bảng "bàn sạch" là dạng RÚT GỌN
+   mà INSTRUCTION mục 2 khai tường minh, đòi đủ sáu bộ đếm ở đó là báo oan. Bắt
+   được ở chính lượt tự kiểm trước khi commit.
+
+LỖ CÒN LẠI, nay đóng: 0g hết chốt theo pha rev 0 (kho vừa clone là lúc .git
+chắc chắn còn) · 0j bắt cả THƯ MỤC lạ · 1a đúng MỘT bản INSTRUCTION, chọn bản
+v lớn nhất · 3c đòi dấu ở ĐÚNG các sổ đã khai chạm, không phải "ít nhất một"
+(X5 hứa "3c lệch mãi" mà thực tế im) · 3f MỚI: mọi dòng sổ phải mang mã G, xóa
+hay dán dòng ngoài lượt ghi hết đi im · 3a xét trọn mọi dòng, không bỏ dòng
+đầu · 7b MỚI: từ vựng sổ phải khai ở X0 (cửa ma sinh lane watermark giả; dự án
+NGỪNG còn việc mở làm việc VÔ HÌNH) · 8b MỚI: bảng đủ bộ đếm · X9 mục 4 hết
+dạy XÓA dòng C12 trong khi C11 cấm · nâng cấp chở thêm DOC_TRUOC, BENCHMARK,
+GHICHU, bản gộp, và đọc mục 3c CỦA BẢN MỚI · DOC_TRUOC mang MỐC VÒNG VÁ nên
+@NHIP.BANMOI mới có gì để so, kèm @NHIP.BANMOI.DAKIEM · 1e hết báo oan
+`_quan_sat_bo.txt` và hết áp lên KHO CÔNG TY.
+
+LƯỚI: 60 lên 67 luật ghim, thêm bảy luật CHỐNG ĐỘT BIẾN mà hội đồng chứng minh
+được là lưới cũ cho qua (nhóm (b) của nâng cấp bị rút còn một file vẫn "sạch";
+thân CHỐT CHỐNG LÁCH bị đảo ngược vẫn "sạch"). Mốc vòng vá ở DOC_TRUOC phải
+khớp vòng mới nhất của GHICHU - lưới tự bắt nếu quên tăng.
+
+Watchlist trần (nâng X0 18.500 lên 20.000 và bản gộp 340k lên 400k, cả hai đều
+có gate đã khai: X0 đọc theo mục, bản gộp không nạp vào phiên nào; X9 7.500 lên
+8.500 vì nay đứng ngoài MỌI route): X5 18.021/19.000 (94,8%) · README
+8.463/9.000 (94,0%) · X3_CUAVAO 92,5% · X3E 92,3% · X9 92,3% · X0 92,4%.
+
+BACKLOG, cập nhật thẳng: (a) QUYETDINH sửa nội dung không ai bắt - nay hẹp hơn
+vì 3f bắt được XÓA dòng, còn SỬA ô thì vẫn hở, cần ô chốt hash · (b) phép 5
+chưa đối chiếu số cột với schema X5 mục 4 - cùng họ với 7b, vá một lượt · (d)
+bản gộp nên tách bản LUẬT thuần ~30k cho người đánh giá · (e) BỘ FUZZ: giám
+khảo KHÔNG MISS đã tự viết và chạy 400 lượt, đo được 14,2% trạng thái mất mã G
+đi im; giám khảo VẬN HÀNH đề nghị thêm vế đối xứng "mọi trạng thái ĐÚNG LUẬT
+không được sinh LỆCH nào" - chính vế đó là thứ vòng 40 và 41 vi phạm hai lần.
+Hai vế này là ưu tiên cao nhất cho vòng sau. Mục (c) khuôn bản sao đã có bản vá
+soạn sẵn, chưa áp.
+
+Bài học vòng này, đắt hơn vòng trước: vòng 40 tự viết "mỗi bản vá phải đi kèm
+lưới của chính nó" rồi KHÔNG làm - và đúng chỗ đó thủng. Một phép kiểm mới
+nguy hiểm ngang một luật mới: nó có thể phạt người dùng vì làm đúng. Từ vòng
+này, phép mới nào cũng phải trả lời được hai câu: bắt được cái sai nào, và
+KHÔNG bắt oan cái đúng nào.
+
 ## Vòng 40: hội đồng vòng 13 chấm PILOT - vá chính bản vá vòng 38
 
 Điểm vòng 13: TOKEN 9,3 · THÔNG MINH 9,0 · ĐƠN GIẢN 8,8 · KHÔNG MISS 8,6 ·

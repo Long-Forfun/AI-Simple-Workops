@@ -4,6 +4,9 @@ instruction_yeu_cau: v11
 TEMPLATE. rev 0 nghĩa là chưa cài đặt. Phiên đầu chạy X9 để điền, xong đặt rev: 1.
 Mọi tham số của công ty nằm ở đây, không ở đâu khác. X1 tới X5 là luật và TRỎ về các
 mục của file này; cần giá trị thì đọc tại đây ngay lúc dùng, không chép đi đâu.
+Ô CHƯA ĐIỀN của X0 viết bằng ĐÚNG MỘT khuôn `<điền: ...>` hay `<chưa điền>` hay
+`<N>`; chỗ nào khác trong X0 dùng dấu ngoặc nhọn thì KHÔNG được mang ba khuôn đó
+(rà 0i đọc theo khuôn này để biết mục nào còn trống).
 Đổi giá trị: sửa đúng mục, tăng rev, ghi ngày cạnh dòng đổi. Thuộc C11 thì thêm
 QUYETDINH và là việc mức C. Mỗi lần tăng rev: sinh lại view `_so\X0_INDEX.md`
 (rev, kho, profile, dự án, vị trí mục, mục còn thiếu) để mở phiên không phải mở
@@ -46,17 +49,17 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 @CTY.VAITRO      <điền, công ty đóng vai gì trong công việc chính>
 
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
-                 CUA1 = <đường dẫn gốc trên máy 1> · thiết bị <tên>
+                 CUA1 = <điền: đường dẫn gốc trên máy 1> · thiết bị <điền: tên>
                  <thêm CUA2... nếu kho mây có nhiều máy cùng vào>
                  Kho Ổ MÁY ĐƠN: backup cùng ổ, phải sao lưu ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
-@KHO.CU          <kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
-@DUONG.SO        <gốc kho>\00_Index\_so\
-@DUONG.INBOX     <gốc kho>\00_Index\_so\_inbox\ · mục đã nạp chuyển
+@KHO.CU          <điền: kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
+@DUONG.SO        <điền: gốc kho>\00_Index\_so\
+@DUONG.INBOX     <điền: gốc kho>\00_Index\_so\_inbox\ · mục đã nạp chuyển
                  vào _da_nap\ con của chính folder này
-@DUONG.LUAT      <gốc kho>\00_Index\
-@DUONG.PROJECT   Claude Project "<tên>", thư viện đọc, không phải sổ
+@DUONG.LUAT      <điền: gốc kho>\00_Index\
+@DUONG.PROJECT   Claude Project "<điền: tên>", thư viện đọc, không phải sổ
 @DUONG.DRIVE     <chưa điền, chỉ khai khi dùng tầng chia sẻ mây riêng>
 ```
 
@@ -90,7 +93,7 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
   GitHub Actions. Mục nào chưa rõ: trả lời "chưa rõ, hỏi đội kỹ
-  thuật", AI ghi <chưa điền> vào C12
+  thuật", AI ghi dấu chưa điền vào C12
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
@@ -120,10 +123,10 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 # C4. Tên file
 
 ```
-@TEN.MAY       <KHOI>_<YYYYMMDD>_<LOAI>_<DoiTac>_<MoTa>_v<NN>.ext
-@TEN.PROJECT   <Ten>_v<N>_<YYYYMMDD>.md
-@TEN.NHAP      bản trung gian chưa chốt: v<NN>-nhap<M>, không vào TAILIEU
-@TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL <thêm bớt khi cài>
+@TEN.MAY       (cú pháp) <KHOI>_<YYYYMMDD>_<LOAI>_<DoiTac>_<MoTa>_v<NN>.ext
+@TEN.PROJECT   Ten_vNN_YYYYMMDD.md
+@TEN.NHAP      (cú pháp) bản trung gian chưa chốt: v<NN>-nhap<M>, không vào TAILIEU
+@TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL, thêm bớt khi cài
 ```
 
 Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
@@ -164,7 +167,7 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
 
-@VANHANH.NGUOI  <tên người vận hành hiện tại, chức danh, cửa hay dùng>
+@VANHANH.NGUOI  <điền: tên người vận hành hiện tại, chức danh, cửa hay dùng>
                 KHÔNG thuộc nhóm khóa: đổi là mức B. Đây là tham số mà
                 @NHIP.BANGIAO đổi khi bàn giao; ô "Ai làm" của VIEC là dữ
                 liệu, không phải tham số.
@@ -180,7 +183,7 @@ gốc đổi trạng thái.
 profile; riêng nguồn chỉ định và phạm vi chi tiết: profile REGULATED)
 
 ```
-@NGUON.<LOẠI>    <loại dữ kiện> lấy từ <tài liệu + bản + ngày>
+@NGUON.LOAI      <điền: loại dữ kiện> lấy từ <điền: tài liệu, bản, ngày>
 @NGUON.CONLAI    chưa khai, mặc định CHƯA KIỂM
 ```
 
@@ -215,7 +218,7 @@ Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
 ```
 
 Đạt cả bốn thì dữ kiện lấy đúng từ nguồn chỉ định được dùng cho phạm vi đã khai dù
-mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo <tên nguồn> <bản, ngày>". Mức
+mức nguồn thấp hơn tối thiểu, đầu ra ghi kèm "theo tên nguồn, bản và ngày". Mức
 tối thiểu áp cho mọi dữ kiện KHÔNG có nguồn chỉ định.
 
 Xác nhận BẰNG CHỮ của người dùng ngay trong phiên: ghi mức B, nguồn "xác
@@ -246,24 +249,26 @@ MUIGIO và @MATHU là CORE, mọi profile đọc khi X3, X4 trỏ tới; dòng g
 AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
-@NHIP.BANMOI     <nơi phát hành bộ (URL repo hay thư mục) và chu kỳ kiểm,
-                 mặc định mỗi quý>. Kho chạy KHÔNG có .git (X9 mục 1) nên
-                 không tự biết có bản mới; người giữ nhịp mở nơi phát hành,
-                 so version với DOC_TRUOC.md trong kho, có bản mới thì nâng
-                 cấp theo X9 mục 3c
+@NHIP.BANMOI     <điền: nơi phát hành bộ (URL repo hay thư mục) và chu kỳ
+                 kiểm, mặc định mỗi quý>. Kho chạy KHÔNG có .git (X9 mục 1)
+                 nên không tự biết có bản mới; người giữ nhịp mở nơi phát
+                 hành, so số VÒNG VÁ ở đó với @NHIP.BANMOI.DAKIEM dưới đây,
+                 mới hơn thì nâng cấp theo X9 mục 3c
+@NHIP.BANMOI.DAKIEM  <điền: YYYYMMDD lần kiểm cuối và số vòng vá của bản
+                 đang chạy; cập nhật ngay sau mỗi lượt kiểm, mức A>
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
                  Quét tự động chỉ có cho EMAIL; chat (Zalo...) đi lối bán
                  thủ công X3 mục 5b: dán cả đoạn, AI tách tin, nguồn D
 @NHIP.HOPTHU     (EMAIL) <điền HỘP THƯ NGHIỆP VỤ của CHÍNH công ty này. Một công ty một
                  hộp thư quét; bộ quét CHỈ đọc hộp này, hộp thư của công ty khác
                  trên cùng máy tuyệt đối không vào pipeline>
-@NHIP.HOPTHU_CU  (EMAIL) <các hộp thư CŨ sau khi đổi domain hay đổi hộp,
+@NHIP.HOPTHU_CU  (EMAIL) <điền: các hộp thư CŨ sau khi đổi domain hay đổi hộp,
                  hoặc "chưa có"; đổi @NHIP.HOPTHU là mức C kèm QUYETDINH,
                  hộp cũ chuyển xuống đây để nhật ký lịch sử không bị đá oan>
 @NHIP.TAIKHOAN   (EMAIL) <điền các địa chỉ NGƯỜI DÙNG dùng để gửi, CỘNG các
                  alias hay hộp nhóm mà thư nhắm tới người dùng vẫn đến (info@,
                  sales@...); dùng nhận diện "thư của mình", "mình ở To" X3E>
-@NHIP.TENGOI     (EMAIL) <tên, cách xưng hô, bí danh của người dùng trong thư
+@NHIP.TENGOI     (EMAIL) <điền: tên, cách xưng hô, bí danh của người dùng trong thư
                  (Long, anh Long, Mr. Long...); bộ email TỰ điền từ tên tài
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
 @NHIP.BOCHINH    <điền: thứ DUY NHẤT đọc mail và sinh dữ liệu thô>
@@ -276,18 +281,18 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  COMMITTED và xác minh, mặc định 30 ngày
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
                  định 50 MB; vượt trần xử theo X3E mục 2
-@NHIP.BANGIAO    <tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
+@NHIP.BANGIAO    <điền: tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
                  Thủ tục chung (mức B): đổi @VANHANH.NGUOI ở C6, rà một lượt
                  việc đang mở và plan treo sang người mới; phần rà luồng THƯ
                  khi bật EMAIL theo X3E mục 2 khối BÀN GIAO
-@NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
+@NHIP.TRANGTHAI  (EMAIL) <điền: nguồn chứa thời điểm quét thành công cuối của bộ
                  quét (file status máy sinh); digest đọc giờ quét THẬT từ
                  đây, không lấy giờ chạy báo cáo>. Schema tối thiểu BẮT BUỘC:
                  {"status": "OK"|"FAILED", "mailbox": "...",
                  "last_success_utc": "...Z"}; CHỈ lần quét thành công mới
                  được cập nhật last_success_utc; file thiếu, sai định dạng
                  hay lần cuối FAILED đều coi là DỮ LIỆU CŨ
-@NHIP.DAUGUI     (EMAIL) <nơi lưu BỀN khóa digest đã gửi thành công (file máy
+@NHIP.DAUGUI     (EMAIL) <điền: nơi lưu BỀN khóa digest đã gửi thành công (file máy
                  sinh cạnh bộ quét); chỉ ghi khóa SAU khi kênh báo xác nhận
                  gửi xong, máy khởi động lại vẫn nhớ để chống gửi lặp>
 @NHIP.MUIGIO     <điền>
@@ -319,7 +324,9 @@ hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục CHƯA TỪNG mang giá trị 
 chưa điền nào của template (`<chưa điền>`, `<điền...>`, `<N>`, hay ô để trống), dù
 đã có dòng ở C12 hay chưa - theo X9 mục 2 và mục 4: mức B, tăng rev, ĐÁNH DẤU dòng
 ở C12 thành `[x] <mục> - điền lần đầu rev <N> ngày <YYYYMMDD>` (KHÔNG xóa dòng: dấu
-này là bằng chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị), KHÔNG plan C
+này là bằng chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị; dòng đã đánh dấu
+`[x]` KHÔNG còn là mục trống với rà 0i, mục chỉ quay lại C12 khi giá trị bị gỡ và
+việc gỡ đó là mức C kèm QUYETDINH), KHÔNG plan C
 không QUYETDINH - đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có
 hiệu lực; ĐỔI một giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm
 hay từ cấm mới vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh
@@ -332,6 +339,8 @@ THÊM mục vào C11 (siết chặt) là mức B; BỚT mục khỏi C11, hay th
 mục đã điền, là mức C kèm QUYETDINH. Dòng `<thêm bớt khi cài đặt>` chỉ có hiệu lực
 ở rev 0. Người dùng vừa trả lời chính câu hỏi đó trong cùng lượt thì lời trả lời LÀ
 câu đồng ý của mức B: ghi thẳng, gộp mọi mục điền cùng lượt vào MỘT dòng báo.
+Ngoại lệ lời-trả-lời-miệng này KHÔNG áp cho C6 phần VAI và TỶ LỆ: theo X9 mục 4,
+vai các bên vẫn cần văn bản ký, chưa có thì ghi CHƯA KIỂM dù mức duyệt đã là B.
 
 # C12. Còn thiếu
 
@@ -348,7 +357,7 @@ INSTRUCTION mục 5 giữ danh mục cứng A B C. Công ty được NÂNG mức
 tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 
 ```
-@MUC.NANG   <ví dụ: "dữ kiện khối tài chính: A nâng lên B" · hoặc "không có">
+@MUC.NANG   <điền: ví dụ "dữ kiện khối tài chính: A nâng lên B", hoặc "không có">
 ```
 
 # C14. Bản đồ tham chiếu, file nào đọc mục nào

@@ -161,7 +161,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    chặn phát hành. Bảng giữ các BỘ ĐẾM cho banner mở phiên: quá hạn, chờ đối
    tác quá ngưỡng, plan C treo, lượt ĐANG GHI còn trong NHATKY lúc sinh, số
    ngày từ lần quét mail cuối, số ngày từ lần kiểm bản mới của bộ theo X0 C9
-   @NHIP.BANMOI; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
+   @NHIP.BANMOI, và MỐC gần nhất (hạn sớm nhất còn hiệu lực) mà banner
+   INSTRUCTION mục 2 in ra; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
    phải đọc lại từ NHATKY trước khi tin. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
    lên tài liệu Project (@DUONG.PROJECT ở X0 C1): nền tảng KHÔNG cho phiên tự
    ghi vào Project; CHAT chỉ đọc được bản người dùng đã tải, luôn kèm nhãn
@@ -259,7 +260,8 @@ do, không XONG.
 không mở cả file. BANG_DIEU_KHIEN và X0_INDEX đọc cả file vì chúng phải ngắn.
 Chuyển `_so\_lich_su\`: việc XONG, HỦY quá 30 ngày · dữ kiện ĐÃ THAY · tài liệu
 đã thay không còn viện dẫn · plan ĐÃ GHI quá 30 ngày. QUYETDINH chia theo năm,
-NHATKY theo quý.
+NHATKY theo quý. Chuyển lịch sử KHÔNG được làm mất dấu mã G: file trong
+`_so\_lich_su\` giữ nguyên ô "Ghi lần", và rà 3c, 3e đọc cả thư mục đó.
 
 # 6. Folder và tên file
 

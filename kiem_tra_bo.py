@@ -62,16 +62,16 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
-    "X0_CAUHINH_TEMPLATE.md": 18500,  # đọc THEO MỤC (thuế thật là X0_INDEX ~228): nâng vòng 40 kèm gate sẵn có
+    "X0_CAUHINH_TEMPLATE.md": 20000,  # đọc THEO MỤC (thuế thật là X0_INDEX ~228): nâng vòng 41, gate sẵn có
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 5500,   # 5b gate khi dán chat; nâng vòng 37: phần tăng nằm trọn trong 5b gated
     "X3E_EMAIL_TEMPLATE.md": 13000,  # gate: chỉ nạp khi bật EMAIL; nâng vòng 40 (headroom còn 5 ký tự)
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
     "X5_HESO_TEMPLATE.md": 19000,  # mục 1b và 7b đều gate; nâng vòng 40 (headroom còn 188 ký tự) (headroom 98,1% là nợ)
-    "X9_CAIDAT.md": 7500,  # gate: đọc MỘT LẦN mỗi công ty, và không nạp vào phiên CHAT
+    "X9_CAIDAT.md": 8500,  # gate: đọc MỘT LẦN mỗi công ty, KHÔNG nạp vào CHAT, ngoài mọi route
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
-    "WORKOPS_STARTER_v24_20260824_GOP.md": 340000,  # bản gộp để đánh giá, không phải bộ chạy
+    "WORKOPS_STARTER_v24_20260824_GOP.md": 400000,  # bản gộp để đánh giá, KHÔNG nạp vào phiên nào
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
@@ -192,9 +192,16 @@ def main(goc):
                 return True
         return False
 
-    cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {".gitignore"}
+    # _quan_sat_bo.txt do CHÍNH lời sửa của 0j bảo người dùng tạo; kho công ty
+    # còn mang bộ X đã đổi tên theo mã - chạy kiem_tra_bo ở đó là chế độ KHO,
+    # không phải bộ mẫu, nên 1e không áp (hội đồng vòng 14).
+    if list(goc.glob("X0_CAUHINH_*.md")) and not (goc / "X0_CAUHINH_TEMPLATE.md").is_file():
+        print("  BỎ QUA  1e: đây là KHO CÔNG TY (bộ X đã mang mã), không phải bộ mẫu")
+        cho_phep = None
+    else:
+        cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {".gitignore", "_so/_quan_sat_bo.txt"}
     thua = []
-    for f in goc.rglob("*"):
+    for f in (goc.rglob("*") if cho_phep is not None else []):
         rel = str(f.relative_to(goc)).replace("\\", "/")
         if not f.is_file() or da_khai_bo(rel):
             continue
@@ -1048,14 +1055,20 @@ def main(goc):
         ("mức của ĐIỀN LẦN ĐẦU khớp nhau ở cả ba nơi khai, không nơi nào nói A", all("CHƯA TỪNG" in d and re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,260}?(?:mức B|, là\s*\n?\s*B)", d) and not re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,60}?mức A", d) for d in [docs["X0_CAUHINH_TEMPLATE.md"], docs["X5_HESO_TEMPLATE.md"], docs["INSTRUCTION"]])),
         ("số ngoại lệ C11 khai đúng bằng số ngoại lệ liệt kê", ("BA ngoại lệ" in docs["X0_CAUHINH_TEMPLATE.md"]) == (len(re.findall(r"\((\d)\) ", docs["X0_CAUHINH_TEMPLATE.md"].split("# C11.")[1].split("# C12.")[0])) == 3)),
         ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
-        ("nâng cấp chở CẢ script và INSTRUCTION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and "kiem_van_hanh.py" in docs["X9_CAIDAT.md"]),
+        ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
+        ("CHỐT CHỐNG LÁCH giữ nguyên vế khóa C11 và C12, không bị đảo ngược", "Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa" in docs["X0_CAUHINH_TEMPLATE.md"] and not re.search(r"C11 và C12 (KHÔNG|không) thuộc nhóm khóa", docs["X0_CAUHINH_TEMPLATE.md"])),
+        ("X9 mục 4 ĐÁNH DẤU dòng C12, không xóa, khớp C11 ngoại lệ 2", "ĐÁNH DẤU dòng C12" in docs["X9_CAIDAT.md"] and "xóa dòng khỏi C12" not in docs["X9_CAIDAT.md"]),
+        ("nâng cấp đọc X9 mục 3c của BẢN MỚI, không đọc bản trong kho", "CỦA BẢN MỚI" in docs["X9_CAIDAT.md"] and "THƯ MỤC BẢN MỚI" in docs["README.md"]),
+        ("mốc vòng vá ở DOC_TRUOC khớp vòng mới nhất của GHICHU", (lambda a, b: bool(a and b and int(a.group(1)) == max(int(x) for x in b)))(re.search(r"vòng vá (\d+)", docs["DOC_TRUOC.md"]), re.findall(r"## Vòng (\d+)", kem[ghichu[0].name]))),
+        ("X0 khai luật viết dấu chưa điền để rà 0i đọc được", "Ô CHƯA ĐIỀN của X0 viết bằng ĐÚNG MỘT khuôn" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("chuyển _lich_su không làm mất dấu mã G", "_lich_su" in docs["X5_HESO_TEMPLATE.md"] and "giữ nguyên ô \"Ghi lần\"" in docs["X5_HESO_TEMPLATE.md"]),
         ("một cửa một phiên ĐANG GHI là luật CORE, không riêng PARALLEL", "MỌI profile, kể cả LITE" in docs["X5_HESO_TEMPLATE.md"]),
         ("ô Ghi lần là danh sách chỉ-thêm, cấm ghi đè mã lượt trước", "CHỈ-THÊM" in docs["X5_HESO_TEMPLATE.md"]),
         ("người vận hành là tham số có thật để bàn giao đổi", "@VANHANH.NGUOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "đổi @VANHANH.NGUOI ở C6" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("có chỗ khai nơi phát hành bộ để biết bản mới sau khi gỡ .git", "@NHIP.BANMOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.BANMOI" in docs["X5_HESO_TEMPLATE.md"]),
         ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git kể cả ở thư mục cha", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "THƯ MỤC CHA" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (60 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (67 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
