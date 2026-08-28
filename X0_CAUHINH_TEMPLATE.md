@@ -387,7 +387,7 @@ tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 Để soát tay khi nghi lệch. Không phải bản chép, chỉ là mục lục.
 
 ```
-X1  đọc C1 (bốn dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
+X1  đọc C1 (năm dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
     tên) · C8 (ký tự, số, động từ)
 X2  đọc C5 · C6 · C7 · C8 · C10
 X3  đọc C1 (@DUONG.INBOX) · C7 (mức nguồn khi rút dữ kiện) · C9

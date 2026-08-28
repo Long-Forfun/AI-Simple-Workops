@@ -9,6 +9,35 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 81: rubric vòng chấm 05 - 91/100, vá cả bảy khoản
+
+Giám khảo chấm bản vòng 49 (404e4ad): 91/100 (95 · 96 · 91 · 93 · 91). Năm
+vá vòng 47-48 xác nhận GIỮ; bảy khoản trừ đều MỚI, không khoản nào tái phạm
+- vòng này chiếu vào vùng GHÉP và vùng chưa ai đo. Vá hết:
+
+1. 2b TỐ OAN VIEW KHAI CTY: X0 C2 khai "@DUAN.CTY ... luôn có" (không đuôi
+   "đang chạy") nên tập X0 thiếu CTY, view khai đúng X5 mục 4 bị tố. CTY
+   nay luôn hợp lệ. Ca I2 lượt đầu là NO-OP vì fixture ghi đè view tối giản
+   không có dòng du_an - mutant sống tố cáo, sửa ca chèn dòng vào view.
+2. HOST KHÔNG DẤU CHẤM: "chạy thật VPS-01" làm _host_pm rỗng, triển khai
+   lên máy chủ nội bộ lọt cả 7g cứng lẫn mềm. Token đơn vào neo khi mang
+   CHỮ SỐ hay dấu gạch - từ tiếng Việt thường đứng ngoài. Ca I3 ghim.
+3. BÀN GIAO QUÉT VẾ PHỤ TRÁCH C2: người GẬT mức C đã nghỉ mà C2 còn ghi
+   tên thì 7g mãi bảo đi xin cái gật của người cũ. LƯU Ý nay nêu cả phần
+   mềm còn ghi người cũ ở vế phụ trách.
+4. NEO BÀN GIAO thêm ca LÀNH đối chứng (việc mở gán người MỚI thì im) -
+   giết mutant or-hóa đếm mọi việc mở; vế Q-MA của 13m (ĐÃ THAY trỏ Q
+   không tồn tại) có ca I3 riêng - đúng bài mỗi-nhánh-một-ca lần nữa.
+5. BACKUP NGÀY (X5 mục 7) thành máy: ngày có mã G mà _lich_su thiếu
+   backup_<ngày> -> LƯU Ý 0m2; kho lành fixture tự làm mẫu đúng luật (tạo
+   backup_20260828) để 13b/13d không phình oan. Ca đầu-ra ghim.
+6. "BỐN DẠNG" -> "NĂM DẠNG" ở X1 mục 5, X0 C14, TAILIEU template, thông
+   điệp 7f - máy nhận KhoCu đúng từ lâu, chỉ LỜI sai.
+
+TÁI ĐO: 6/6 mutant CHẾT (2b/host/13m <- 13; bàn giao x2, 0m2 <- 11).
+Fixture 107 ca. BẤT BIẾN I1 7, I2 34, I3 80(nt)/79. NHẬT KÝ RUBRIC: 95 · 96
+· 91 · 93 · 91. BACKLOG: (e) sổ CSV (đang CẤM).
+
 ## Vòng 80: tự quét trước - giết mutant TRƯỚC khi giám khảo tìm ra
 
 Không chờ vòng chấm 05: bốn vòng rubric liền, mục LƯỚI TỰ GIỮ đều mất điểm

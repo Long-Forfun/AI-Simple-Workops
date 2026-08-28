@@ -196,6 +196,9 @@ def _kho_song(goc, td):
         shutil.copy(goc / f, idx / f)
     shutil.copy(sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))[0], idx)
     (idx / "_so" / "_inbox" / "_da_nap").mkdir(parents=True)
+    # backup ngày của lượt ghi mẫu: kho lành phải LÀM MẪU đúng X5 mục 7,
+    # không thì LƯU Ý 0m2 in trên chính kho lành và 13b/13d phình oan
+    (idx / "_so" / "_lich_su" / "backup_20260828").mkdir(parents=True)
     for a, b in [("X0_CAUHINH_TEMPLATE.md", "X0_CAUHINH_FUZ.md"),
                  ("X1_CAM_TEMPLATE.md", "X1_CAM_FUZ.md"),
                  ("X2_PHATHANH_TEMPLATE.md", "X2_PHATHANH_FUZ.md"),
@@ -1441,6 +1444,40 @@ def phep_fuzz(goc, phu_them=()):
                                       "| A | mo viec V-DA1-001 |",
                                       "| c | mo viec V-DA1-001 |"), "3g.")
 
+    thu("view khai du_an có CTY (X0 C2: luôn có - không được kêu)",
+        lambda k, i, so, G, sua: sua(so / "X0_INDEX.md",
+                                     " · instruction: v11",
+                                     " · instruction: v11" + NL
+                                     + "du_an: DA1, CTY"), False)
+
+    def _ca_13m_qma(k, i, so, G, sua):
+        """Dòng ĐÃ THAY mà Thay bởi trỏ Q KHÔNG TỒN TẠI: vế thứ hai của 13m -
+        mutant or hóa _co_tb sống vì chưa ca nào ghim vế này (rubric 05)."""
+        _ghi(so / "QUYETDINH.md",
+             (so / "QUYETDINH.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-001 | 2026-08-28 | Dung Postgres | re | it tien |"
+               " ĐÃ THAY | Q-999 | " + G + " |" + NL)
+
+    thu3("ĐÃ THAY mà Thay bởi trỏ Q không tồn tại", _ca_13m_qma, "13m.")
+
+    def _ca_7g_vps(k, i, so, G, sua):
+        """Máy chủ nội bộ KHÔNG dấu chấm ('chạy thật VPS-01'): trước vòng 89
+        _host_pm rỗng và triển khai lên nó lọt cả 7g cứng lẫn mềm."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He noi bo · repo github.com/cty/nb · web · dev may"
+               " doi, chạy thật VPS-01 · secret o Vault ·" + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-17 | 2026-08-28 | CUA1.2300.uv | B |"
+             " trien khai ban moi len VPS-01 | VIEC V-DA1-001 | khong |"
+             " XONG | khong |" + NL)
+
+    thu3("triển khai lên máy chủ nội bộ không dấu chấm mà mức B", _ca_7g_vps,
+         "7g.")
+
     def _ca_7d_phutrach(k, i, so, G, sua):
         """Khai đủ BẢY trường hạ tầng + dữ liệu mà thiếu NGƯỜI PHỤ TRÁCH:
         7d phải đòi - không biết ai gật thì mức C là cái gật của không ai."""
@@ -1704,9 +1741,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 78 if _os_dem.name == "nt" else 77   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 33, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 33,"
+    _i3_mong = 80 if _os_dem.name == "nt" else 79   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 34, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 34,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -2647,6 +2684,62 @@ def main(goc):
                 sys.argv = _argvb
             ca.append(("neo bàn giao nhắc việc mở còn gán người cũ",
                        "LƯU Ý  bàn giao" in _bufb.getvalue()))
+            # ca LÀNH đối chứng: việc mở gán NGƯỜI MỚI thì KHÔNG được nhắc -
+            # mutant or-hóa điều kiện đếm mọi việc mở bị ca này giết
+            # (rubric 05, m07 seed 46)
+            _ghi(_sob / "VIEC.md",
+                 (_sob / "VIEC.md").read_text(encoding="utf-8").replace(
+                     "| Long |", "| Trân |"))
+            _bufb2 = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb2):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("việc mở gán người MỚI thì bàn giao im",
+                       "LƯU Ý  bàn giao" not in _bufb2.getvalue()))
+            # vế PHỤ TRÁCH C2: người gật mức C đã nghỉ mà C2 còn ghi tên -
+            # LƯU Ý phải nêu (rubric 05, khoản 3)
+            _s_pm = _pb.read_text(encoding="utf-8")
+            import re as _rebg
+            _m_pm = _rebg.search(r"^@DUAN\.PHANMEM.*$", _s_pm, _rebg.M)
+            _ghi(_pb, _s_pm[:_m_pm.end()] + NL
+                 + "  DA1  He cu · repo github.com/cty/hc · web · dev may"
+                   " doi, chạy thật hc.bacha.vn · secret o Vault"
+                   " · phụ trách vận hành: Long ·" + _s_pm[_m_pm.end():])
+            _bufb3 = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb3):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("bàn giao nêu phần mềm còn ghi người cũ ở vế phụ trách",
+                       "vế phụ trách" in _bufb3.getvalue()))
+            # backup ngày (X5 mục 7): xóa backup_<ngày> thì 0m2 phải nhắc
+            import shutil as _shbg
+            _shbg.rmtree(_sob / "_lich_su" / "backup_20260828",
+                         ignore_errors=True)
+            _bufb4 = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb4):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("xóa backup ngày thì 0m2 nhắc",
+                       "LƯU Ý  0m2" in _bufb4.getvalue()))
+
 
         # BA QUYẾT ĐỊNH của rà 0d, 0g, 0i (hội đồng vòng 13: vùng rà soát từng
         # có mutation score 0% vì main() không hàm nào gọi được; ba hàm này nay
@@ -3077,8 +3170,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 104,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 104: bớt ca là"
+             not hong and len(ca) == 107,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 107: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

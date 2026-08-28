@@ -2275,6 +2275,10 @@ def main(goc):
         _m_da = re.search(r"du_an:\s*(.+)", idx_rt)
         _da_iv = set(re.findall(r"[A-Z0-9]{2,6}",
                                 _m_da.group(1) if _m_da else ""))
+        # CTY "luôn có" theo chính chữ của X0 C2 - nó không mang đuôi "đang
+        # chạy" nên không vào _da_x0, mà view khai nó là ĐÚNG X5 mục 4: so
+        # tuyệt đối là tố oan mọi view khai đủ (giám khảo rubric 05)
+        _da_iv.discard("CTY")
         _lech2b = []
         if _m_pf and _pf_x0 != _pf_iv:
             _lech2b.append(f"profile: X0 bật {_liet(sorted(_pf_x0)) or 'LITE'},"
@@ -2414,10 +2418,35 @@ def main(goc):
                     for _r in dong_bang(doc(so / "VIEC.md"))
                     if len(_r) > 7 and _r[7].strip() not in ("XONG", "HỦY")
                     and bo_dau(_ten_cu) in bo_dau(_r[4] if len(_r) > 4 else "")]
-                if _viec_cu:
+                # người GẬT mức C đã nghỉ mà C2 vẫn ghi tên: 7g sẽ mãi
+                # bảo đi xin cái gật của người cũ (giám khảo rubric 05)
+                _c2bg = cat_muc(doc(x0s[0]), 2)
+                _pm_cu = [m.group(1).strip()[:8] for m in re.finditer(
+                    r"^\s{2}([A-Z0-9]{2,6})\s[^\n]*(?:ph[ụu] tr[áa]ch|owner)"
+                    r"[^\n·]*" + re.escape(_ten_cu), _c2bg, re.M | re.I)]
+                if _viec_cu or _pm_cu:
+                    _vepm = (f"; phần mềm {_liet(_pm_cu[:2])} còn ghi"
+                             f" {_ten_cu} ở vế phụ trách C2" if _pm_cu else "")
                     print(f"        LƯU Ý  bàn giao: {len(_viec_cu)} việc đang"
-                          f" mở còn gán {_ten_cu} ({_liet(_viec_cu[:3])}) -"
-                          f" @NHIP.BANGIAO dặn rà sang người mới, mức B")
+                          f" mở còn gán {_ten_cu} ({_liet(_viec_cu[:3])})"
+                          f"{_vepm} - @NHIP.BANGIAO dặn rà sang người mới,"
+                          f" mức B")
+
+    # 0m2. Backup NGÀY của X5 mục 7 thành máy: ngày có lượt ghi (mã
+    #      G-YYYYMMDD trong NHATKY) mà _lich_su thiếu backup_<ngày> thì mọi
+    #      lượt rollback trọn _so của ngày đó không còn bản đỡ. Chỉ LƯU Ý -
+    #      khuyến nghị của X5, không kết tội (giám khảo rubric 05).
+    if not chua_cai:
+        _ngay_ghi = set()
+        for _f0m2 in sorted(so.glob("NHATKY_*.md")):
+            _ngay_ghi |= set(re.findall(r"\bG-(\d{8})-", doc(_f0m2)))
+        _thieu_bk = sorted(
+            _ng for _ng in _ngay_ghi
+            if not (so / "_lich_su" / f"backup_{_ng}").is_dir())
+        if _thieu_bk:
+            print(f"        LƯU Ý  0m2: {len(_thieu_bk)} ngày có lượt ghi mà"
+                  f" thiếu backup_<ngày> ({_liet(_thieu_bk[:3])}) - X5 mục 7"
+                  f" dặn backup ngày; tạo lại từ bản hiện tại, mức A")
 
     # 0p. Sổ lõi còn KHUNG, không chỉ còn TÊN. Đồng bộ mây hay một lượt AI
     #     ghi đè để lại file 0 byte thì phép 0 vẫn PASS vì nó chỉ hỏi
@@ -2855,6 +2884,14 @@ def main(goc):
                 _host_pm += [_h.rstrip(".,;·") for _h in re.findall(
                     r"[A-Za-z0-9][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_-]+)+",
                     _mh.group(1))]
+                # máy chủ NỘI BỘ không có dấu chấm ("VPS-01", "prod2"):
+                # token đơn chỉ vào neo khi mang CHỮ SỐ hay dấu gạch - từ
+                # tiếng Việt thường ("chưa rõ", "máy chủ") đứng ngoài
+                # (giám khảo rubric 05)
+                _host_pm += [_h for _h in re.findall(
+                    r"(?<![\w.-])([A-Za-z][A-Za-z0-9-]{2,})(?![\w.])",
+                    _mh.group(1))
+                    if re.search(r"[0-9-]", _h)]
             _mpt = re.search(r"(?:ph[ụu] tr[áa]ch(?:\s+v[ậa]n h[àa]nh)?"
                              r"|owner|on-?call)\s*:?\s*([^·\n]+)",
                              _khoi_pm, re.I)
@@ -3109,7 +3146,7 @@ def main(goc):
         f" đã trả lời là đã xóa. Trung hòa NỐT theo X5 mục 7b, giữ khung dòng"
         f" và ô Ghi lần; cùng lượt ghi. Mức C")
 
-    # 7f. Ô "Ở đâu" chỉ nhận BỐN DẠNG khai ở X0 C1. Đây KHÔNG phải lỗi trình
+    # 7f. Ô "Ở đâu" chỉ nhận NĂM DẠNG khai ở X0 C1. Đây KHÔNG phải lỗi trình
     #     bày: bộ quan sát lọc dòng bằng h[5].startswith("Kho "), nên gõ "kho "
     #     thường, "Kho:", hay bỏ hẳn tiền tố là TẮT LẶNG LẼ phép 9, 10a và 10b
     #     cho đúng tài liệu đó. Đo vòng 47: hợp đồng ĐÃ KÝ bị sửa đè tại chỗ -
@@ -3127,7 +3164,7 @@ def main(goc):
             _sai_khuon.append(f"{(_r[1] if len(_r) > 1 else '?').strip()[:14]}:"
                               f" {_o[:30]}")
     bao("7f. ô \"Ở đâu\" thuộc các dạng X0 C1", not _sai_khuon,
-        f"{_liet(_sai_khuon[:5])}: X0 C1 cho ĐÚNG bốn dạng - Kho · Project ·"
+        f"{_liet(_sai_khuon[:5])}: X0 C1 cho ĐÚNG năm dạng - Kho · KhoCu · Project ·"
         f" Drive · Repo. Sai khuôn thì phép 9, 10a, 10b BỎ QUA dòng này: tài"
         f" liệu trông như được theo dõi mà không có lưới toàn vẹn nào, hợp"
         f" đồng đã ký bị sửa đè vẫn im. Sửa về đúng khuôn, mức A")

@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 80 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 81 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,35 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 81: rubric vòng chấm 05 - 91/100, vá cả bảy khoản
+
+Giám khảo chấm bản vòng 49 (404e4ad): 91/100 (95 · 96 · 91 · 93 · 91). Năm
+vá vòng 47-48 xác nhận GIỮ; bảy khoản trừ đều MỚI, không khoản nào tái phạm
+- vòng này chiếu vào vùng GHÉP và vùng chưa ai đo. Vá hết:
+
+1. 2b TỐ OAN VIEW KHAI CTY: X0 C2 khai "@DUAN.CTY ... luôn có" (không đuôi
+   "đang chạy") nên tập X0 thiếu CTY, view khai đúng X5 mục 4 bị tố. CTY
+   nay luôn hợp lệ. Ca I2 lượt đầu là NO-OP vì fixture ghi đè view tối giản
+   không có dòng du_an - mutant sống tố cáo, sửa ca chèn dòng vào view.
+2. HOST KHÔNG DẤU CHẤM: "chạy thật VPS-01" làm _host_pm rỗng, triển khai
+   lên máy chủ nội bộ lọt cả 7g cứng lẫn mềm. Token đơn vào neo khi mang
+   CHỮ SỐ hay dấu gạch - từ tiếng Việt thường đứng ngoài. Ca I3 ghim.
+3. BÀN GIAO QUÉT VẾ PHỤ TRÁCH C2: người GẬT mức C đã nghỉ mà C2 còn ghi
+   tên thì 7g mãi bảo đi xin cái gật của người cũ. LƯU Ý nay nêu cả phần
+   mềm còn ghi người cũ ở vế phụ trách.
+4. NEO BÀN GIAO thêm ca LÀNH đối chứng (việc mở gán người MỚI thì im) -
+   giết mutant or-hóa đếm mọi việc mở; vế Q-MA của 13m (ĐÃ THAY trỏ Q
+   không tồn tại) có ca I3 riêng - đúng bài mỗi-nhánh-một-ca lần nữa.
+5. BACKUP NGÀY (X5 mục 7) thành máy: ngày có mã G mà _lich_su thiếu
+   backup_<ngày> -> LƯU Ý 0m2; kho lành fixture tự làm mẫu đúng luật (tạo
+   backup_20260828) để 13b/13d không phình oan. Ca đầu-ra ghim.
+6. "BỐN DẠNG" -> "NĂM DẠNG" ở X1 mục 5, X0 C14, TAILIEU template, thông
+   điệp 7f - máy nhận KhoCu đúng từ lâu, chỉ LỜI sai.
+
+TÁI ĐO: 6/6 mutant CHẾT (2b/host/13m <- 13; bàn giao x2, 0m2 <- 11).
+Fixture 107 ca. BẤT BIẾN I1 7, I2 34, I3 80(nt)/79. NHẬT KÝ RUBRIC: 95 · 96
+· 91 · 93 · 91. BACKLOG: (e) sổ CSV (đang CẤM).
 
 ## Vòng 80: tự quét trước - giết mutant TRƯỚC khi giám khảo tìm ra
 
@@ -2338,7 +2367,7 @@ tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 Để soát tay khi nghi lệch. Không phải bản chép, chỉ là mục lục.
 
 ```
-X1  đọc C1 (bốn dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
+X1  đọc C1 (năm dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
     tên) · C8 (ký tự, số, động từ)
 X2  đọc C5 · C6 · C7 · C8 · C10
 X3  đọc C1 (@DUONG.INBOX) · C7 (mức nguồn khi rút dữ kiện) · C9
@@ -2390,7 +2419,7 @@ Danh sách tại X0 C8 mục @HINHTHUC.QUANHE. Thay bằng sự kiện kèm ngà
 ```
 Sửa hoặc xóa file đã ký, đã nộp, file gốc bên ngoài (cờ GỐC KHÔNG SỬA;
 ngoại lệ duy nhất: XÓA PHÁP LÝ theo X5 mục 7b, phải có Q-<mã>)
-Ghi cột "Ở đâu" của TAILIEU ngoài bốn dạng khai ở X0 C1
+Ghi cột "Ở đâu" của TAILIEU ngoài năm dạng khai ở X0 C1
 Chép giá trị của X0 sang file khác rồi làm việc trên bản chép (X0_INDEX là view
 máy sinh hợp lệ, nhưng giá trị đưa vào đầu ra phải đọc từ X0 đúng mục)
 Chép nguyên dòng sổ vào BANG_DIEU_KHIEN, hoặc dùng BANG_DIEU_KHIEN làm căn cứ sửa
@@ -3519,7 +3548,7 @@ FILE: _so/TAILIEU.md
 so: TAILIEU
 ```
 
-Cột "Ở đâu" chỉ nhận bốn dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
+Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
 thuộc dự án @DUAN.PHANMEM). Vai phiên bản là quan sát của máy
 (HIỆN HÀNH · CŨ · XUNG ĐỘT · KHÔNG XÁC ĐỊNH), đổi theo bằng chứng quét kho, luật
 SUY BẢN HIỆN HÀNH ở X5 mục 4. Trạng thái nghiệp vụ chỉ đổi khi có căn cứ (mail,

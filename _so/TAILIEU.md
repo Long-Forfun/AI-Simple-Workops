@@ -4,7 +4,7 @@
 so: TAILIEU
 ```
 
-Cột "Ở đâu" chỉ nhận bốn dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
+Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
 thuộc dự án @DUAN.PHANMEM). Vai phiên bản là quan sát của máy
 (HIỆN HÀNH · CŨ · XUNG ĐỘT · KHÔNG XÁC ĐỊNH), đổi theo bằng chứng quét kho, luật
 SUY BẢN HIỆN HÀNH ở X5 mục 4. Trạng thái nghiệp vụ chỉ đổi khi có căn cứ (mail,
