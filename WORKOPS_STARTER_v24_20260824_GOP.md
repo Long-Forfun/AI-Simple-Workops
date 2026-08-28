@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 83 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 84 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,32 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 84: rubric vòng chấm 07 - 96/100 (đỉnh mới), vá hai khoản
+
+Giám khảo chấm bản vòng 52 (9237920): 96/100 - đỉnh mới của thước, cùng mốc
+vòng 02 nhưng trên bộ đã qua bảy lượt soi (95 · 96 · 91 · 93 · 91 · 95 ·
+96). PHẠM VI PHẦN MỀM lần đầu 10/10; cả bốn vá vòng 52 giữ kèm đối chứng
+hai chiều. Hai khoản, vá hết:
+
+1. N1: nhánh ĐẦY-ĐỦ của 8e chỉ so nhãn CÓ MẶT - khuôn banner INSTRUCTION
+   không mang nhãn hết hạn / rà lại / _INBOX nên ba bộ đếm đó VÔ HÌNH đúng
+   ở kho dùng banner chuẩn: chứng thư +20 ngày mà "hệ sạch" - vòng 18 tái
+   hiện lần ba, mỗi lần ở một nhánh khác. Nay: bộ đếm không nhãn mà sổ đếm
+   >0 là LỆCH. Kèm: "MỐC = hạn sớm nhất còn hiệu lực" (X5 m3 b6) thành máy
+   - có hạn ISO tương lai trên dòng sống mà bảng không nêu ngày sớm nhất
+   là LỆCH; ca I2 cũ (hạn kèm ghi chú) cập nhật để người mẫu mực GHI MỐC
+   đúng luật. Ba ca mới ghim cả ba nhánh.
+
+2. N2: trần đọc quet_secret (2 MB văn bản / 256 KB nhị phân) - chú thích
+   tự dẫn "file 300 KB từng lọt (vòng 19)" mà không fixture nào ghim, đảo
+   hai trần là secret trong file bàn giao lọt im. Ca 300 KB văn bản phải
+   BẮT + ca 300 KB nhị phân phải MIỄN (đúng thiết kế trần).
+
+TÁI ĐO: 3/3 mutant CHẾT (M10, 8e-thiếu-nhãn, 8e-mốc <- 13). Trần
+kiem_tra_bo 200k -> 210k (file dev, ràng buộc thật là 14/14b/14c/15 xanh).
+Fixture 109 ca. BẤT BIẾN I1 7, I2 36, I3 85(nt)/84. NHẬT KÝ RUBRIC: 95 ·
+96 · 91 · 93 · 91 · 95 · 96. BACKLOG: (e) sổ CSV (CẤM).
 
 ## Vòng 83: rubric vòng chấm 06 - 95/100, vá cả bốn khoản
 

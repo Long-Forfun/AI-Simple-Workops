@@ -3381,6 +3381,28 @@ def main(goc):
                     if _m8 and int(_m8.group(1)) != len(_v):
                         _loi8e.append(f"{_k}: bảng khai {_m8.group(1)},"
                                       f" sổ đếm {len(_v)} ({_liet(_v[:3])})")
+                    elif not _m8 and _v:
+                        # banner ĐẦY ĐỦ mà thiếu nhãn: chỉ so nhãn CÓ MẶT là
+                        # ba bộ đếm hết hạn / rà lại / _INBOX vô hình - chứng
+                        # thư +20 ngày mà "hệ sạch", vòng 18 tái hiện (giám
+                        # khảo rubric 07)
+                        _loi8e.append(f"bảng không mang nhãn \"{_k}\" mà sổ"
+                                      f" đếm {len(_v)} ({_liet(_v[:3])})")
+            # MỐC = hạn sớm nhất còn hiệu lực (X5 mục 3 bước 6) thành máy:
+            # trước đây là lời hứa không ai đối chiếu (giám khảo rubric 07)
+            import datetime as _dt8e
+            _han_toi = []
+            for _r8 in dong_bang(doc(so / "TAILIEU.md")):
+                if len(_r8) > 11 and "[đã xóa theo Q-" not in "|".join(_r8) \
+                        and (len(_r8) <= 7 or _r8[7].strip().upper()
+                             not in ("HẾT HIỆU LỰC", "ĐÃ GIA HẠN", "ĐÃ THAY",
+                                     "TRẢ HỒ SƠ", "HỦY")):
+                    _m8h = re.search(r"(\d{4}-\d{2}-\d{2})", _r8[11])
+                    if _m8h and _m8h.group(1) >= _dt8e.date.today().isoformat():
+                        _han_toi.append(_m8h.group(1))
+            if _han_toi and min(_han_toi) not in bdk_nd:
+                _loi8e.append(f"mốc: hạn sớm nhất còn hiệu lực là"
+                              f" {min(_han_toi)} mà bảng không nêu")
             bao("8e. bộ đếm của bảng khớp sổ",
                 not _loi8e, f"{'; '.join(_loi8e[:3])}. Bảng là mặt phẳng DUY"
                 f" NHẤT banner mở phiên đọc; khai sai là mọi phiên sau đọc sai."

@@ -74,7 +74,7 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 200000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 210000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
@@ -741,8 +741,10 @@ def phep_fuzz(goc, phu_them=()):
 
     def _ca_iso_kem_chu(k, i, so, G, sua):
         """ĐÚNG LUẬT: ô mang ngày ISO kèm ghi chú - dem_qua_han đọc bằng
-        re.search nên vẫn THẤY ngày; 3h không được tố."""
+        re.search nên vẫn THẤY ngày; 3h không được tố. Người dùng cũng GHI
+        MỐC vào bảng đúng X5 m3 b6 - 8e không được tố."""
         _dong_tl(so, G, k, "2098-01-31 (gia hạn)")
+        sua(so / "BANG_DIEU_KHIEN.md", "mốc: chưa có", "mốc: 2098-01-31")
 
     thu("ô ngày ISO kèm ghi chú chữ (không được kêu)", _ca_iso_kem_chu, False)
 
@@ -1507,6 +1509,58 @@ def phep_fuzz(goc, phu_them=()):
              + "| DA1 | V-DA1-003 | Cho bao gia | b | toi | 2020-01-01 |"
                " 2099-12-31 | CHỜ ĐỐI TÁC | | " + G + " |" + NL), "8e.")
 
+    def _ca_8e_banner_day(k, i, so, G, sua):
+        """Banner ĐẦY ĐỦ đúng khuôn INSTRUCTION (không nhãn hết hạn) + chứng
+        thư đã quá hạn: nhánh đầy-đủ của 8e phải kêu thay vì chỉ so nhãn có
+        mặt (rubric 07, N1)."""
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "ct2.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-092 | Chung thu B | v01 | 2019-01-20 |"
+               " Kho 03_Phap_ly/ct2.md | HIỆN HÀNH | NHÁP | 2019-01-20 | qs |"
+               " noi bo | 2020-01-01 | | | " + G + " |" + NL)
+        sua(so / "BANG_DIEU_KHIEN.md", "bàn sạch · mốc: chưa có",
+            "quá hạn 0 · chờ đối tác 0 · plan C treo 0 · ĐANG GHI 0 · mail 0"
+            " · mốc: chưa có")
+
+    thu3("chứng thư quá hạn sau banner ĐẦY ĐỦ không nhãn hết hạn",
+         _ca_8e_banner_day, "8e.")
+
+    def _ca_8e_moc(k, i, so, G, sua):
+        """Hạn ISO tương lai trên dòng sống mà bảng vẫn 'mốc: chưa có': lời
+        hứa MỐC của X5 m3 b6 nay có máy (rubric 07, N1)."""
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "bh.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-093 | Bao hanh may | v01 | 2026-08-20 |"
+               " Kho 03_Phap_ly/bh.md | HIỆN HÀNH | NHÁP | 2026-08-20 | qs |"
+               " noi bo | 2098-06-30 | | | " + G + " |" + NL)
+
+    thu3("hạn tương lai mà bảng vẫn 'mốc: chưa có'", _ca_8e_moc, "8e.")
+
+    def _ca_7e2_lon(k, i, so, G, sua):
+        """Secret trong file VĂN BẢN 300 KB: trần đọc 2 MB cho văn bản là để
+        bắt đúng ca này (vòng 19) mà chưa fixture nào ghim - đảo trần với
+        256 KB nhị phân là nó lọt im (rubric 07, N2/M10)."""
+        (k / "05_Bao_cao").mkdir(exist_ok=True)
+        _ghi(k / "05_Bao_cao" / "ban_giao_moi_truong.md",
+             ("# ban giao\n" + "x" * 300000 + "\n"
+              "aws_secret_access_key = AKIAIOSFODNN7EXAMPLEKEY\n"))
+
+    thu3("secret trong file văn bản 300 KB", _ca_7e2_lon, "7e2.")
+
+    def _ca_7e2_nhiphan(k, i, so, G, sua):
+        """File NHỊ PHÂN 300 KB chứa chuỗi giống secret: trần 256 KB miễn
+        đọc là ĐÚNG thiết kế - không được kêu."""
+        (k / "05_Bao_cao").mkdir(exist_ok=True)
+        (k / "05_Bao_cao" / "anh_scan.zip").write_bytes(
+            b"\x00" * 300000 + b"aws_secret_access_key=AKIA000000000EXAMPLE")
+
+    thu("file nhị phân 300 KB chứa chuỗi giống secret (không được kêu)",
+        _ca_7e2_nhiphan, False)
+
     def _ca_7d_phutrach(k, i, so, G, sua):
         """Khai đủ BẢY trường hạ tầng + dữ liệu mà thiếu NGƯỜI PHỤ TRÁCH:
         7d phải đòi - không biết ai gật thì mức C là cái gật của không ai."""
@@ -1770,9 +1824,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 82 if _os_dem.name == "nt" else 81   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 35, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 35,"
+    _i3_mong = 85 if _os_dem.name == "nt" else 84   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 36, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 36,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
