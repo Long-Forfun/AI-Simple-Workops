@@ -1486,6 +1486,36 @@ def phep_fuzz(goc, phu_them=()):
     thu3("triển khai lên máy chủ nội bộ không dấu chấm mà mức B", _ca_7g_vps,
          "7g.")
 
+    def _ca_7b_ngung(k, i, so, G, sua):
+        """Dự án NGỪNG (thanh lý hẳn, không bảo hành) mà VIEC còn dòng ĐANG
+        LÀM: vế thứ ba của 7b - chưa ca nào giữ (rubric 09, m10)."""
+        sua(i / "X0_CAUHINH_FUZ.md",
+            "@DUAN.DA1        Du an mot                    đang chạy",
+            "@DUAN.DA1        Du an mot                    đang chạy" + NL
+            + "@DUAN.DA2        Du an hai                    NGỪNG")
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA2 | V-DA2-001 | Viec sot | b | toi | | 2099-12-31 |"
+               " ĐANG LÀM | | " + G + " |" + NL)
+
+    thu3("dự án NGỪNG hẳn mà VIEC còn việc mở", _ca_7b_ngung, "7b.")
+
+    def _ca_7b_baohanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: NGỪNG (bảo hành tới ngày TƯƠNG LAI) thì việc bảo hành
+        được GIỮ MỞ - rà thôi tố tới ngày ấy (X0 C2)."""
+        sua(i / "X0_CAUHINH_FUZ.md",
+            "@DUAN.DA1        Du an mot                    đang chạy",
+            "@DUAN.DA1        Du an mot                    đang chạy" + NL
+            + "@DUAN.DA3        Du an bao hanh"
+              "               NGỪNG (bảo hành tới 2098-12-31)")
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA3 | V-DA3-001 | Bao hanh may | b | toi | | 2098-12-31 |"
+               " ĐANG LÀM | | " + G + " |" + NL)
+
+    thu("NGỪNG bảo hành còn hạn, việc bảo hành mở (không được kêu)",
+        _ca_7b_baohanh, False)
+
     def _ca_7f_tombstone(k, i, so, G, sua):
         """ĐÚNG LUẬT: sau XÓA PHÁP LÝ, ô "Ở đâu" mang tombstone
         "[đã xóa theo Q-...]" (X5 mục 7b) - 7f phải miễn; chú thích 7f tự
@@ -1846,9 +1876,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 88 if _os_dem.name == "nt" else 87   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 36, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 36,"
+    _i3_mong = 89 if _os_dem.name == "nt" else 88   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 37, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 37,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -2578,6 +2608,16 @@ def main(goc):
         r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH, files=FILES_SACH,
                        thu_rows="| #L-001 | L1 | c1 | <a@x> | CHỜ TÔI |\n")
         ca.append(("email bộ sạch PASS hết", all(r.values()) and len(r) >= 11))
+        # staging MẤT .eml dù còn file cùng nội dung khác đuôi (thu.txt): thân
+        # thư gốc là bằng chứng pháp lý, đổi tên là 12j phải đỏ - mutant or-hóa
+        # sống vì chưa ca nào giữ (rubric 09, m03)
+        _files_txt = {k2: v2 for k2, v2 in FILES_SACH.items()
+                      if not k2.endswith("thu.eml")}
+        _files_txt[f"_so/_thu_staging/{THU_MUC_A}/thu.txt"] = "eml"
+        r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH, files=_files_txt,
+                       thu_rows="| #L-001 | L1 | c1 | <a@x> | CHỜ TÔI |\n")
+        ca.append(("staging mất .eml dù còn file khác đuôi bị bắt",
+                   r.get(TEN_12J) is False))
         # đính kèm của mail ĐÃ COMMITTED không để lại dấu nào ở sổ: hợp đồng đã
         # ký số coi như "đã nạp", registry chặn nạp lại -> mất IM LẶNG (vòng 18)
         _f_khong_so = {k: v for k, v in FILES_SACH.items()
@@ -2765,6 +2805,42 @@ def main(goc):
                 sys.argv = _argv7
             ca.append(("lưới mềm 7g in LƯU Ý với động từ lạ + chữ prod",
                        "LƯU Ý  7g" in _buf7.getvalue()))
+        # KHO GIỮA CÀI ĐẶT: X0 đã đổi tên theo mã nhưng còn rev 0, chưa dấu
+        # vết ghi - trạng thái HỢP LỆ giữa lượt cài X9, không phép 0i* nào
+        # được kêu; mutant or-hóa báo oan mà suite xanh (rubric 09, m05)
+        with tempfile.TemporaryDirectory() as _tdgc:
+            _ggc = Path(_tdgc) / "kho"
+            _igc = _ggc / "00_Index"
+            _igc.mkdir(parents=True)
+            import shutil as _shgc
+            for _fgc in FILE_BAT_BUOC + FILE_KEM:
+                (_igc / _fgc).parent.mkdir(parents=True, exist_ok=True)
+                _shgc.copy(goc / _fgc, _igc / _fgc)
+            _shgc.copy(sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))[0], _igc)
+            (_igc / "_so" / "_inbox" / "_da_nap").mkdir(parents=True)
+            for _agc, _bgc in [
+                    ("X0_CAUHINH_TEMPLATE.md", "X0_CAUHINH_GCD.md"),
+                    ("X1_CAM_TEMPLATE.md", "X1_CAM_GCD.md"),
+                    ("X2_PHATHANH_TEMPLATE.md", "X2_PHATHANH_GCD.md"),
+                    ("X3_CUAVAO_TEMPLATE.md", "X3_CUAVAO_GCD.md"),
+                    ("X3E_EMAIL_TEMPLATE.md", "X3E_EMAIL_GCD.md"),
+                    ("X4_RASOAT_TEMPLATE.md", "X4_RASOAT_GCD.md"),
+                    ("X5_HESO_TEMPLATE.md", "X5_HESO_GCD.md")]:
+                (_igc / _agc).rename(_igc / _bgc)
+            import contextlib as _clgc, io as _iogc
+            _bufgc, _argvgc = _iogc.StringIO(), sys.argv
+            try:
+                sys.argv = ["kvh", str(_igc), str(_ggc)]
+                with _clgc.redirect_stdout(_bufgc):
+                    try:
+                        _kv26.main(_igc)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvgc
+            ca.append(("kho giữa cài đặt (rev 0 đã đổi tên) không LECH 0i",
+                       "LECH  0i" not in _bufgc.getvalue()))
+
         # BIÊN 0m: backup ngoài kho đúng 7 ngày tuổi - đúng nhịp "sao mỗi
         # tuần" - KHÔNG được kêu; mutant <7 tố oan đúng người làm đúng nhịp
         # (giám khảo rubric 06, N2)
@@ -3320,8 +3396,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 109,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 109: bớt ca là"
+             not hong and len(ca) == 111,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 111: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

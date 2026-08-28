@@ -188,7 +188,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 85 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 86 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -257,6 +257,33 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 86: rubric vòng chấm 09 - 97/100 (ĐỈNH MỚI), vá ba khoản
+
+Giám khảo chấm bản vòng 55 (d819048): 97/100 - đỉnh mới, +1 so đỉnh 96
+(95 · 96 · 91 · 93 · 91 · 95 · 96 · 96 · 97). Lần đầu SÁU mục tối đa cùng
+lúc, 22/22 ca kịch bản đạt, cả bốn vá vòng 55 giữ kèm đối chứng - và con
+mutant 0j seed-50 chết bởi CHÍNH CA vòng 55 thêm: vá tự chứng minh giá trị.
+Vòng chấm này giám khảo đo mutant bằng exit code đúng bài học vòng 85.
+
+Ba mutant sống (LƯỚI -3), vá hết:
+
+1. m03: 12j MÙ "staging mất .eml khi thân thư đổi tên .txt cùng sha" -
+   thân thư gốc là bằng chứng pháp lý, đổi đuôi là mất nó mà sha vẫn khớp
+   nên không phép nào kêu. Ca email fixture: staging còn file khác đuôi mà
+   vắng .eml -> 12j đỏ.
+
+2. m05: lane 0i BÁO OAN trên kho GIỮA CÀI ĐẶT (X0 đã đổi tên theo mã, còn
+   rev 0, chưa dấu vết ghi - trạng thái hợp lệ giữa lượt cài X9). Ca lành
+   dựng đúng kho giữa-cài: không được có LECH 0i nào.
+
+3. m10: vế "dự án NGỪNG còn việc mở" của 7b chưa ca nào giữ. Thu3 NGỪNG
+   hẳn + việc ĐANG LÀM -> 7b; kèm ca lành NGỪNG-bảo-hành-còn-hạn giữ
+   hai chiều (đúng luật X0 C2: việc bảo hành được GIỮ MỞ).
+
+TÁI ĐO (đếm cả exit code): 3/3 CHẾT (m03/m05 <- 11, m10 <- 13). Fixture
+111 ca. BẤT BIẾN I1 7, I2 37, I3 89(nt)/88. NHẬT KÝ RUBRIC: 95 · 96 · 91 ·
+93 · 91 · 95 · 96 · 96 · 97. BACKLOG: (e) sổ CSV (CẤM).
 
 ## Vòng 85: rubric vòng chấm 08 - 96/100 (giữ đỉnh), vá bốn khoản
 
