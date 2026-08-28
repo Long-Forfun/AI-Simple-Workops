@@ -2877,6 +2877,8 @@ def main(goc):
                r"|đ[ẩa]y b[ảa]n|day ban|đ[ẩa]y l[êe]n|day len"
                r"|tri[ểe]n khai|trien khai|c[ậa]p nh[ậa]t|cap nhat"
                r"|s[ửu]a d[ữu] li[ệe]u|sua du lieu|g[ộo]p nh[áa]nh|gop nhanh"
+               r"|ph[áa]t h[àa]nh|phat hanh|đ[ưu]a b[ảa]n|dua ban"
+               r"|đ[ưu]a l[êe]n|dua len|\bsquash\b|\brelease\b|go[- ]live"
                r"|l[ấa]y b[ảa]n sao|lay ban sao|b[ậa]t c[ờo]|t[ắa]t c[ờo]"
                r"|c[ấa]p quy[ềe]n|cap quyen|thu h[ồo]i quy[ềe]n")
         _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
@@ -2886,7 +2888,8 @@ def main(goc):
         # nhận cả KHÔNG DẤU: danh sách động từ _dv cố ý nhận "gop nhanh"
         # mà neo nhánh lại đòi "gộp" có dấu - kiểu gõ phổ biến nhất lọt mức
         # thấp ở đúng lượt merge vào nhánh tự deploy (giám khảo rubric 01)
-        _neo += [r"(?:merge|g[ộo]p|đ[ẩa]y l[êe]n|day len)[^·]*?(?<![\w.-])"
+        _neo += [r"(?:merge|g[ộo]p|đ[ẩa]y l[êe]n|day len|đ[ưu]a|dua"
+                 r"|\bsquash\b|\brebase\b)[^·]*?(?<![\w.-])"
                  + re.escape(_b) + r"(?![\w.-])"
                  for _b in _nhanh_pm]
         _sx = []

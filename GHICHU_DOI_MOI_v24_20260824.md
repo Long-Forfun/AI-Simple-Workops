@@ -9,6 +9,39 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 74: rubric vòng chấm 02 - 96/100, vá cả ba khoản trừ mới
+
+Giám khảo độc lập chấm lại bản vòng 41 bằng cùng rubric: 96/100 (+1 so vòng
+01; cả ba bản vá vòng 01 xác nhận CHẾT bằng ca chạy thật). Ba khoản trừ mới:
+
+1. LANE THU CỦA 3G CHƯA GHIM: kho lành của fuzz không có dòng THU dữ liệu
+   nên đột biến "đọc cột 8 thành cột 9" sống - lưới đúng mà chưa từng được
+   quan sát HAI CHIỀU ở lane này. Bài học phụ đắt hơn bài học chính: lượt vá
+   đầu tôi nhét dòng THU vào kho lành và MỌI ca fuzz chết - vì dòng THU làm
+   cổng phép 12 coi EMAIL "đã chạy" và đòi nhật ký + registry + @NHIP.HOPTHU.
+   Cổng đúng, chỗ đặt sai. Bản cuối: hai ca tự dựng MÔI TRƯỜNG EMAIL TỐI
+   THIỂU (nhật ký rỗng + registry rỗng + khai hộp thư) - một I3 trạng thái
+   sai từ vựng, một I2 dòng THU hợp lệ không được kêu. Chính ca I2 giết
+   mutant: bản đột biến đọc ô "Chờ từ" rỗng và tố oan THU.
+
+2. kiem_payload LANE METADATA: vá vòng 41 chỉ ghim operation_id sai kiểu,
+   conv_id=123 vẫn để ngỏ. Ca "metadata nguồn sai kiểu bị từ chối" thêm vào
+   cạnh ca schema; fixture 100 -> 101.
+
+3. 7g THIẾU ĐỘNG TỪ: "phat hanh ban 2.1 len <host>", "dua ban v2 len main",
+   "squash branch feature vao main" - ba cách gõ đời thực chạm chạy thật mà
+   lọt mức thấp. Thêm phát hành / đưa bản / đưa lên / squash / release /
+   go-live vào danh sách động từ, và đưa/squash/rebase vào neo nhánh. KHÔNG
+   thêm "ship": tiếng Việt thương mại "ship hàng" quá phổ biến, thêm vào là
+   đổi một lỗ MISS lấy một lớp BÁO OAN. Hai ca I3 phủ cả hai lane neo.
+
+TÁI ĐO cả ba mutant: 3/3 BẮT (3g-THU <- 13, metadata <- 11, 7g <- 13).
+Khuyến nghị m10 (dòng in "LƯU Ý cửa khác" đa cửa) ghi nhận, chưa ghim - là
+dòng nhắc, không phải phép.
+
+BẤT BIẾN I1 7, I2 30, I3 69(nt)/68. NHẬT KÝ RUBRIC: 01 = 95 · 02 = 96 (bản
+vòng 41). BACKLOG: (a) hash QUYETDINH · (c) khuôn bản sao · (e) sổ CSV.
+
 ## Vòng 73: phép 0r - vòng đời _inbox sang _da_nap (backlog j)
 
 X3 chặng 2 dặn: nạp xong CHUYỂN _INBOX sang _da_nap, tên gốc vào ô Căn cứ
