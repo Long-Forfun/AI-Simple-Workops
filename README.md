@@ -111,7 +111,8 @@ repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở
 · nơi chạy thật · nơi giữ secret
 ```
 
-Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
+Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch và nêu đích danh trường còn
+thiếu, nên không ai quên được. Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
 của code (không chép vào kho), secret không vào kho hay sổ, và mọi thao
 tác chạm môi trường CHẠY THẬT đều là việc rủi ro cần bạn duyệt - việc trên
 dev, staging là việc nhẹ AI tự làm. Chi tiết mức duyệt từng thao tác: X5

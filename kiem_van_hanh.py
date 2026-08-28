@@ -216,7 +216,8 @@ MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
 PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0j.", "0k.", "1.", "1a.", "1b.", "1c.", "2.", "3a.", "3b.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
-           "7c.", "8.", "8b.", "8c.", "9.", "10a.", "10b.", "10c.", "11."]
+           "7c.", "7d.", "8.", "8b.", "8c.", "9.", "10a.", "10b.",
+           "10c.", "11."]
 BIET_MAT_SO = re.compile(
     r"(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU|BANG_DIEU_KHIEN|X0_INDEX)\.md"
     r"|NHATKY_(\d{4}Q[1-4]|TEMPLATE)\.md|_thu_.*|_quan_sat_.*|_moc_ghi\.txt")
@@ -1664,6 +1665,60 @@ def main(goc):
         bao("7c. liên kết trong sổ trỏ mã có thật (X4 dòng 12)", not _treo,
             f"{_liet(_treo[:5])}: ô Liên kết, Thay bởi hay Việc liên quan trỏ mã"
             f" không tồn tại ở sổ nào; sửa mã hay gỡ tham chiếu")
+
+    # 7d. PHẠM VI TỔ CHỨC PHẦN MỀM (X0 C2 @DUAN.PHANMEM). Dự án phần mềm
+    #     khai THIẾU trường nào thì mọi vận hành liên quan trường đó chạy mù:
+    #     không biết repo thì code có thể bị chép vào kho; không biết đâu là
+    #     môi trường CHẠY THẬT thì deploy mức C bị hạ nhầm xuống A (X5 mục
+    #     1b); không biết nơi giữ secret thì secret rơi vào sổ hay _INBOX.
+    #     Đây là lý do bộ bắt khai ngay ở phiên cài đặt, X9 mục 1 câu 3.
+    if not chua_cai and x0s:
+        _x0c2 = doc(x0s[0])
+        _c2 = _x0c2[_x0c2.find("# C2."):_x0c2.find("# C3.")]
+        _pm = _c2[_c2.find("@DUAN.PHANMEM"):] if "@DUAN.PHANMEM" in _c2 else ""
+        _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
+        for _i, _dg in enumerate(_dong_pm):
+            _m = re.match(r"^  ([A-Z0-9]{2,6})  +\S", _dg)
+            if not _m:
+                continue
+            _khoi_pm = _dg
+            for _kx in _dong_pm[_i + 1:]:
+                # dòng NỐI của một khai báo thụt SÂU hơn (4 dấu cách trở lên);
+                # dòng định nghĩa cú pháp của template chỉ thụt 2, nên không bị
+                # gom nhầm vào khai báo thật rồi cho đủ từ khóa oan
+                if not re.match(r"^    +\S", _kx):
+                    break
+                _khoi_pm += " " + _kx.strip()
+            _ma_pm.append(_m.group(1))
+            # nhận CẢ bản có dấu lẫn không dấu: người Việt gõ cả hai kiểu, dò
+            # mỗi bản có dấu là phạt oan công ty gõ "chay that" (bàn thử vòng 45)
+            _can_pm = [("repo", r"repo\s+\S"),
+                       ("môi trường (dev, staging hay prod)",
+                        r"dev|staging|prod|môi trường|moi truong"),
+                       ("nơi chạy thật", r"chạy thật|chay that"),
+                       ("nơi giữ secret", r"secret|bí mật|bi mat")]
+            _hut = [_ten for _ten, _mau in _can_pm
+                    if not re.search(_mau, _khoi_pm, re.I)]
+            if _hut:
+                _thieu_pm.append(f"{_m.group(1)} thiếu {'; '.join(_hut)}")
+        bao("7d. dự án phần mềm khai đủ phạm vi tổ chức (X0 C2 @DUAN.PHANMEM)",
+            not _thieu_pm,
+            f"{_liet(_thieu_pm[:3])}. Thiếu trường nào thì vận hành liên quan"
+            f" trường đó chạy mù: không rõ repo thì code có thể bị chép vào kho;"
+            f" không rõ đâu là môi trường CHẠY THẬT thì deploy đáng lẽ mức C bị"
+            f" hạ xuống A (X5 mục 1b); không rõ nơi giữ secret thì secret rơi"
+            f" vào sổ hay _INBOX. Hỏi đội kỹ thuật rồi điền, mức B")
+
+        # dòng TAILIEU dạng "Repo" chỉ hợp lệ khi công ty CÓ khai phần mềm
+        _repo_mo_coi = []
+        for _r in dong_bang(doc(so / "TAILIEU.md")):
+            if len(_r) > 5 and _r[5].strip().startswith("Repo ") and not _ma_pm:
+                _repo_mo_coi.append((_r[1] if len(_r) > 1 else "?").strip())
+        if _repo_mo_coi:
+            bao("7d2. dòng TAILIEU dạng Repo phải thuộc dự án có khai phần mềm",
+                False, f"{_liet(_repo_mo_coi[:3])}: cột \"Ở đâu\" dạng Repo chỉ"
+                f" cho dòng thuộc dự án @DUAN.PHANMEM (X0 C1), mà C2 chưa khai"
+                f" phần mềm nào. Khai phạm vi tổ chức trước, mức B")
 
     # 7b. TỪ VỰNG của sổ phải nằm trong X0: cửa ma (gõ nhầm một ký tự là sinh
     #     một lane watermark mới) và dự án ĐÃ NGỪNG còn việc mở (X0 C2 bắt

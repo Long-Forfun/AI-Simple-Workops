@@ -31,6 +31,47 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 45: phạm vi tổ chức phần mềm thành thứ MÁY GIỮ
+
+Yêu cầu nghiệp vụ gốc của người dùng có hai vế: hội đồng chấm tới 99/100, VÀ
+"công ty có dự án phần mềm cần nắm rõ phạm vi tổ chức các phần mềm để các vận
+hành liên quan nó chính xác hơn". Vế thứ hai đã có mặt từ vòng 24-37 và trải
+đủ năm chặng - README mục riêng, X9 mục 1 câu 3, X0 C2 @DUAN.PHANMEM năm
+trường, X5 mục 1b bảng mức repo, X2 phát hành phần mềm - nhưng RÀ LẠI vòng này
+phát hiện cả chuỗi đó chỉ được giữ bằng MỘT luật ghim yếu. Nghĩa là nó tồn tại
+nhờ lời khai, không nhờ máy. Đúng thứ mà chính bộ này cấm.
+
+1. SÁU LUẬT GHIM giữ trọn chuỗi (phép 12 lên 73 luật): README phải có mục
+   riêng KÈM LÝ DO ("khai đủ thì các vận hành liên quan mới chính xác") · X9
+   phải hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm, kèm nơi
+   giữ secret · X0 C2 phải khai đủ NĂM trường · phải giữ luật "repo là NGUỒN
+   SỰ THẬT của code, code KHÔNG chép vào kho" · X5 mục 1b phải còn gate, bảng
+   mức repo, luật SECRET và dữ liệu khách · X2 phải còn bảng kiểm phát hành
+   phần mềm. Gỡ bất kỳ mắt xích nào là bộ FAIL, không đóng gói được.
+
+2. PHÉP 7d CƯỠNG CHẾ NỘI DUNG, không chỉ sự có mặt của chữ. Dự án phần mềm
+   khai thiếu trường nào thì rà nêu ĐÍCH DANH trường đó, kèm hậu quả vận hành
+   cụ thể: không rõ repo thì code có thể bị chép vào kho; không rõ đâu là môi
+   trường CHẠY THẬT thì deploy đáng lẽ mức C bị hạ nhầm xuống A theo X5 mục
+   1b; không rõ nơi giữ secret thì secret rơi vào sổ hay _INBOX. Kèm 7d2: dòng
+   TAILIEU dùng dạng "Repo" mà công ty chưa khai phần mềm nào là lệch.
+   Đây là chỗ vế thứ hai của yêu cầu chuyển từ TÀI LIỆU sang VẬN HÀNH: trước
+   đây khai thiếu vẫn chạy, nay khai thiếu là rà đỏ.
+
+3. NHẬN CẢ BẢN CÓ DẤU LẪN KHÔNG DẤU. Bàn thử bắt được bản vá đầu tiên của
+   chính vòng này báo oan một công ty khai ĐỦ nhưng gõ "chay that" thay vì
+   "chạy thật" - đúng lớp lỗi phạt-người-làm-đúng, lần này bị chặn TRƯỚC khi
+   commit thay vì sau ba vòng. Nay mọi khuôn nhận cả hai kiểu gõ.
+
+4. Ca I3 cho 7d vào phép 13 trong CÙNG lượt vá, đúng quy tắc vòng 44 vừa dựng
+   thành máy. Phép 14b làm đúng việc của nó hai lần trong vòng này: báo 7d
+   chưa có ca, rồi báo ca đầu tiên tôi viết KHÔNG kích hoạt được phép (khối
+   tiếp nối nuốt nhầm dòng định nghĩa cú pháp nên đủ từ khóa oan).
+
+Trạng thái: 21 phép của kiem_tra_bo, 37 phép của kiem_van_hanh, 91 fixture, 73
+luật ghim, phép 13 với 7 ca I1 + 4 ca I2 + 13 ca I3, phép 14 và 14b điểm danh
+hai chiều.
+
 ## Vòng 44: quy tắc tự viết ba vòng liền, nay thành MÁY
 
 Điểm THÔNG MINH vòng 15b: 7,8/10 (vòng 13: 9,0). Tất định ĐẠT tuyệt đối - ép

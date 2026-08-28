@@ -72,7 +72,7 @@ NGAN_SACH = {
     "X9_CAIDAT.md": 8500,  # gate: đọc MỘT LẦN mỗi công ty, KHÔNG nạp vào CHAT, ngoài mọi route
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 400000,  # bản gộp để đánh giá, KHÔNG nạp vào phiên nào
-    "kiem_tra_bo.py": 100000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
+    "kiem_tra_bo.py": 110000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
     "kiem_van_hanh.py": 104000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
@@ -400,6 +400,11 @@ def phep_fuzz(goc):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    thu3("dự án phần mềm khai thiếu trường phạm vi tổ chức",
+         lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md",
+             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:",
+             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:"
+             + NL + "  APP  Ung dung dat hang · repo git.cty.vn/app · web"), "7d.")
     thu3("lượt mức C trong NHATKY mà không plan nào mang mã đó",
          lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
              (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip() + NL
@@ -419,9 +424,9 @@ def phep_fuzz(goc):
 
     # CA MỒI chỉ canh vế I1. Ghim SỐ CA thì tắt I2, tắt I3, hay bỏ bớt ca đều
     # đỏ - hội đồng vòng 15b tắt được cả I2 lẫn I3 mà bộ vẫn in "sạch".
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 12):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 13):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 4,"
-                    f" I3 12 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 13 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -1440,6 +1445,16 @@ def main(goc):
         ("khóa digest đã gửi lưu bền ở @NHIP.DAUGUI, ghi sau xác nhận", "@NHIP.DAUGUI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.DAUGUI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
         ("mail máy có lối thoát nghiệp vụ, không nuốt hóa đơn bản ký", "THOÁT luật gom" in docs["X3E_EMAIL_TEMPLATE.md"]),
         ("bảng mức thao tác repo tồn tại, rollback chạy thật là C", "ROLLBACK" in docs["X5_HESO_TEMPLATE.md"] and "REPO" in docs["X5_HESO_TEMPLATE.md"]),
+        # PHẠM VI TỔ CHỨC PHẦN MỀM: sáu luật giữ TRỌN chuỗi từ README tới X2.
+        # Đây là yêu cầu nghiệp vụ có thật của người dùng ("công ty có dự án
+        # phần mềm cần nắm rõ phạm vi tổ chức để các vận hành liên quan
+        # chính xác hơn"), nên nó phải do MÁY giữ chứ không do lời khai.
+        ("README có mục riêng cho công ty phần mềm, kèm LÝ DO phải khai", "## Công ty có phần mềm" in docs["README.md"] and "KHAI RÕ PHẠM VI TỔ" in docs["README.md"] and "vận hành liên quan mới chính xác" in docs["README.md"]),
+        ("X9 hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm", "là PHẦN MỀM thì hỏi thêm phạm vi tổ chức" in docs["X9_CAIDAT.md"] and "nơi giữ secret" in docs["X9_CAIDAT.md"]),
+        ("X0 C2 khai đủ NĂM trường phạm vi tổ chức phần mềm", all(t in docs["X0_CAUHINH_TEMPLATE.md"] for t in ["@DUAN.PHANMEM", "repo <URL hay đường dẫn>", "thành phần chính", "môi trường", "nơi chạy thật", "nơi giữ secret"])),
+        ("repo là nguồn sự thật của code, code KHÔNG chép vào kho", "Repo là NGUỒN SỰ THẬT" in docs["X0_CAUHINH_TEMPLATE.md"] and "code KHÔNG chép vào kho" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("X5 mục 1b có gate, bảng mức repo, luật SECRET và dữ liệu khách", "# 1b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi dự án thuộc X0 C2" in docs["X5_HESO_TEMPLATE.md"] and "SECRET" in docs["X5_HESO_TEMPLATE.md"] and "dữ liệu khách" in docs["X5_HESO_TEMPLATE.md"]),
+        ("phát hành phần mềm cho khách có bảng kiểm riêng ở X2", "Phát hành PHẦN MỀM cho khách" in docs["X2_PHATHANH_TEMPLATE.md"] and "release note" in docs["X2_PHATHANH_TEMPLATE.md"]),
         ("ngoại lệ sự cố cho thông báo đang cháy, DUKIEN ghi bù", "NGOẠI LỆ SỰ CỐ" in docs["X2_PHATHANH_TEMPLATE.md"]),
         ("xóa theo yêu cầu pháp lý có thủ tục xuyên tầng", "XÓA THEO YÊU CẦU PHÁP LÝ" in docs["X5_HESO_TEMPLATE.md"]),
         ("RA_NGOAI là phạm vi bao trùm có luật quan hệ", "BAO TRÙM" in docs["X0_CAUHINH_TEMPLATE.md"]),
@@ -1472,11 +1487,11 @@ def main(goc):
     ]
     thieu_luat = [t for t, dk in _luat if not dk]
     kiem(f"12. luật nghiệp vụ then chốt có mặt ({len(_luat)} luật)",
-         not thieu_luat and len(_luat) == 67,
-         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 67: bớt"
+         not thieu_luat and len(_luat) == 73,
+         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 73: bớt"
                             f" luật là bớt lưới không ai hay; đổi số thì sửa"
                             f" con số này trong CÙNG lượt vá"
-                            if len(_luat) != 67 else ""))
+                            if len(_luat) != 73 else ""))
 
     phep_fuzz(goc)
 

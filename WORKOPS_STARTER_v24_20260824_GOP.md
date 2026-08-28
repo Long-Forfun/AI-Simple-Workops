@@ -120,7 +120,8 @@ repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở
 · nơi chạy thật · nơi giữ secret
 ```
 
-Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
+Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch và nêu đích danh trường còn
+thiếu, nên không ai quên được. Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
 của code (không chép vào kho), secret không vào kho hay sổ, và mọi thao
 tác chạm môi trường CHẠY THẬT đều là việc rủi ro cần bạn duyệt - việc trên
 dev, staging là việc nhẹ AI tự làm. Chi tiết mức duyệt từng thao tác: X5
@@ -181,7 +182,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 44 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 45 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -271,6 +272,47 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 45: phạm vi tổ chức phần mềm thành thứ MÁY GIỮ
+
+Yêu cầu nghiệp vụ gốc của người dùng có hai vế: hội đồng chấm tới 99/100, VÀ
+"công ty có dự án phần mềm cần nắm rõ phạm vi tổ chức các phần mềm để các vận
+hành liên quan nó chính xác hơn". Vế thứ hai đã có mặt từ vòng 24-37 và trải
+đủ năm chặng - README mục riêng, X9 mục 1 câu 3, X0 C2 @DUAN.PHANMEM năm
+trường, X5 mục 1b bảng mức repo, X2 phát hành phần mềm - nhưng RÀ LẠI vòng này
+phát hiện cả chuỗi đó chỉ được giữ bằng MỘT luật ghim yếu. Nghĩa là nó tồn tại
+nhờ lời khai, không nhờ máy. Đúng thứ mà chính bộ này cấm.
+
+1. SÁU LUẬT GHIM giữ trọn chuỗi (phép 12 lên 73 luật): README phải có mục
+   riêng KÈM LÝ DO ("khai đủ thì các vận hành liên quan mới chính xác") · X9
+   phải hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm, kèm nơi
+   giữ secret · X0 C2 phải khai đủ NĂM trường · phải giữ luật "repo là NGUỒN
+   SỰ THẬT của code, code KHÔNG chép vào kho" · X5 mục 1b phải còn gate, bảng
+   mức repo, luật SECRET và dữ liệu khách · X2 phải còn bảng kiểm phát hành
+   phần mềm. Gỡ bất kỳ mắt xích nào là bộ FAIL, không đóng gói được.
+
+2. PHÉP 7d CƯỠNG CHẾ NỘI DUNG, không chỉ sự có mặt của chữ. Dự án phần mềm
+   khai thiếu trường nào thì rà nêu ĐÍCH DANH trường đó, kèm hậu quả vận hành
+   cụ thể: không rõ repo thì code có thể bị chép vào kho; không rõ đâu là môi
+   trường CHẠY THẬT thì deploy đáng lẽ mức C bị hạ nhầm xuống A theo X5 mục
+   1b; không rõ nơi giữ secret thì secret rơi vào sổ hay _INBOX. Kèm 7d2: dòng
+   TAILIEU dùng dạng "Repo" mà công ty chưa khai phần mềm nào là lệch.
+   Đây là chỗ vế thứ hai của yêu cầu chuyển từ TÀI LIỆU sang VẬN HÀNH: trước
+   đây khai thiếu vẫn chạy, nay khai thiếu là rà đỏ.
+
+3. NHẬN CẢ BẢN CÓ DẤU LẪN KHÔNG DẤU. Bàn thử bắt được bản vá đầu tiên của
+   chính vòng này báo oan một công ty khai ĐỦ nhưng gõ "chay that" thay vì
+   "chạy thật" - đúng lớp lỗi phạt-người-làm-đúng, lần này bị chặn TRƯỚC khi
+   commit thay vì sau ba vòng. Nay mọi khuôn nhận cả hai kiểu gõ.
+
+4. Ca I3 cho 7d vào phép 13 trong CÙNG lượt vá, đúng quy tắc vòng 44 vừa dựng
+   thành máy. Phép 14b làm đúng việc của nó hai lần trong vòng này: báo 7d
+   chưa có ca, rồi báo ca đầu tiên tôi viết KHÔNG kích hoạt được phép (khối
+   tiếp nối nuốt nhầm dòng định nghĩa cú pháp nên đủ từ khóa oan).
+
+Trạng thái: 21 phép của kiem_tra_bo, 37 phép của kiem_van_hanh, 91 fixture, 73
+luật ghim, phép 13 với 7 ca I1 + 4 ca I2 + 13 ca I3, phép 14 và 14b điểm danh
+hai chiều.
 
 ## Vòng 44: quy tắc tự viết ba vòng liền, nay thành MÁY
 
@@ -3625,7 +3667,7 @@ NGAN_SACH = {
     "X9_CAIDAT.md": 8500,  # gate: đọc MỘT LẦN mỗi công ty, KHÔNG nạp vào CHAT, ngoài mọi route
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 400000,  # bản gộp để đánh giá, KHÔNG nạp vào phiên nào
-    "kiem_tra_bo.py": 100000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
+    "kiem_tra_bo.py": 110000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
     "kiem_van_hanh.py": 104000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
@@ -3953,6 +3995,11 @@ def phep_fuzz(goc):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    thu3("dự án phần mềm khai thiếu trường phạm vi tổ chức",
+         lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md",
+             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:",
+             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:"
+             + NL + "  APP  Ung dung dat hang · repo git.cty.vn/app · web"), "7d.")
     thu3("lượt mức C trong NHATKY mà không plan nào mang mã đó",
          lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
              (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip() + NL
@@ -3972,9 +4019,9 @@ def phep_fuzz(goc):
 
     # CA MỒI chỉ canh vế I1. Ghim SỐ CA thì tắt I2, tắt I3, hay bỏ bớt ca đều
     # đỏ - hội đồng vòng 15b tắt được cả I2 lẫn I3 mà bộ vẫn in "sạch".
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 12):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 13):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 4,"
-                    f" I3 12 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 13 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -4993,6 +5040,16 @@ def main(goc):
         ("khóa digest đã gửi lưu bền ở @NHIP.DAUGUI, ghi sau xác nhận", "@NHIP.DAUGUI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.DAUGUI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
         ("mail máy có lối thoát nghiệp vụ, không nuốt hóa đơn bản ký", "THOÁT luật gom" in docs["X3E_EMAIL_TEMPLATE.md"]),
         ("bảng mức thao tác repo tồn tại, rollback chạy thật là C", "ROLLBACK" in docs["X5_HESO_TEMPLATE.md"] and "REPO" in docs["X5_HESO_TEMPLATE.md"]),
+        # PHẠM VI TỔ CHỨC PHẦN MỀM: sáu luật giữ TRỌN chuỗi từ README tới X2.
+        # Đây là yêu cầu nghiệp vụ có thật của người dùng ("công ty có dự án
+        # phần mềm cần nắm rõ phạm vi tổ chức để các vận hành liên quan
+        # chính xác hơn"), nên nó phải do MÁY giữ chứ không do lời khai.
+        ("README có mục riêng cho công ty phần mềm, kèm LÝ DO phải khai", "## Công ty có phần mềm" in docs["README.md"] and "KHAI RÕ PHẠM VI TỔ" in docs["README.md"] and "vận hành liên quan mới chính xác" in docs["README.md"]),
+        ("X9 hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm", "là PHẦN MỀM thì hỏi thêm phạm vi tổ chức" in docs["X9_CAIDAT.md"] and "nơi giữ secret" in docs["X9_CAIDAT.md"]),
+        ("X0 C2 khai đủ NĂM trường phạm vi tổ chức phần mềm", all(t in docs["X0_CAUHINH_TEMPLATE.md"] for t in ["@DUAN.PHANMEM", "repo <URL hay đường dẫn>", "thành phần chính", "môi trường", "nơi chạy thật", "nơi giữ secret"])),
+        ("repo là nguồn sự thật của code, code KHÔNG chép vào kho", "Repo là NGUỒN SỰ THẬT" in docs["X0_CAUHINH_TEMPLATE.md"] and "code KHÔNG chép vào kho" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("X5 mục 1b có gate, bảng mức repo, luật SECRET và dữ liệu khách", "# 1b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi dự án thuộc X0 C2" in docs["X5_HESO_TEMPLATE.md"] and "SECRET" in docs["X5_HESO_TEMPLATE.md"] and "dữ liệu khách" in docs["X5_HESO_TEMPLATE.md"]),
+        ("phát hành phần mềm cho khách có bảng kiểm riêng ở X2", "Phát hành PHẦN MỀM cho khách" in docs["X2_PHATHANH_TEMPLATE.md"] and "release note" in docs["X2_PHATHANH_TEMPLATE.md"]),
         ("ngoại lệ sự cố cho thông báo đang cháy, DUKIEN ghi bù", "NGOẠI LỆ SỰ CỐ" in docs["X2_PHATHANH_TEMPLATE.md"]),
         ("xóa theo yêu cầu pháp lý có thủ tục xuyên tầng", "XÓA THEO YÊU CẦU PHÁP LÝ" in docs["X5_HESO_TEMPLATE.md"]),
         ("RA_NGOAI là phạm vi bao trùm có luật quan hệ", "BAO TRÙM" in docs["X0_CAUHINH_TEMPLATE.md"]),
@@ -5025,11 +5082,11 @@ def main(goc):
     ]
     thieu_luat = [t for t, dk in _luat if not dk]
     kiem(f"12. luật nghiệp vụ then chốt có mặt ({len(_luat)} luật)",
-         not thieu_luat and len(_luat) == 67,
-         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 67: bớt"
+         not thieu_luat and len(_luat) == 73,
+         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 73: bớt"
                             f" luật là bớt lưới không ai hay; đổi số thì sửa"
                             f" con số này trong CÙNG lượt vá"
-                            if len(_luat) != 67 else ""))
+                            if len(_luat) != 73 else ""))
 
     phep_fuzz(goc)
 
@@ -5315,7 +5372,8 @@ MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
 PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0j.", "0k.", "1.", "1a.", "1b.", "1c.", "2.", "3a.", "3b.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
-           "7c.", "8.", "8b.", "8c.", "9.", "10a.", "10b.", "10c.", "11."]
+           "7c.", "7d.", "8.", "8b.", "8c.", "9.", "10a.", "10b.",
+           "10c.", "11."]
 BIET_MAT_SO = re.compile(
     r"(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU|BANG_DIEU_KHIEN|X0_INDEX)\.md"
     r"|NHATKY_(\d{4}Q[1-4]|TEMPLATE)\.md|_thu_.*|_quan_sat_.*|_moc_ghi\.txt")
@@ -6763,6 +6821,60 @@ def main(goc):
         bao("7c. liên kết trong sổ trỏ mã có thật (X4 dòng 12)", not _treo,
             f"{_liet(_treo[:5])}: ô Liên kết, Thay bởi hay Việc liên quan trỏ mã"
             f" không tồn tại ở sổ nào; sửa mã hay gỡ tham chiếu")
+
+    # 7d. PHẠM VI TỔ CHỨC PHẦN MỀM (X0 C2 @DUAN.PHANMEM). Dự án phần mềm
+    #     khai THIẾU trường nào thì mọi vận hành liên quan trường đó chạy mù:
+    #     không biết repo thì code có thể bị chép vào kho; không biết đâu là
+    #     môi trường CHẠY THẬT thì deploy mức C bị hạ nhầm xuống A (X5 mục
+    #     1b); không biết nơi giữ secret thì secret rơi vào sổ hay _INBOX.
+    #     Đây là lý do bộ bắt khai ngay ở phiên cài đặt, X9 mục 1 câu 3.
+    if not chua_cai and x0s:
+        _x0c2 = doc(x0s[0])
+        _c2 = _x0c2[_x0c2.find("# C2."):_x0c2.find("# C3.")]
+        _pm = _c2[_c2.find("@DUAN.PHANMEM"):] if "@DUAN.PHANMEM" in _c2 else ""
+        _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
+        for _i, _dg in enumerate(_dong_pm):
+            _m = re.match(r"^  ([A-Z0-9]{2,6})  +\S", _dg)
+            if not _m:
+                continue
+            _khoi_pm = _dg
+            for _kx in _dong_pm[_i + 1:]:
+                # dòng NỐI của một khai báo thụt SÂU hơn (4 dấu cách trở lên);
+                # dòng định nghĩa cú pháp của template chỉ thụt 2, nên không bị
+                # gom nhầm vào khai báo thật rồi cho đủ từ khóa oan
+                if not re.match(r"^    +\S", _kx):
+                    break
+                _khoi_pm += " " + _kx.strip()
+            _ma_pm.append(_m.group(1))
+            # nhận CẢ bản có dấu lẫn không dấu: người Việt gõ cả hai kiểu, dò
+            # mỗi bản có dấu là phạt oan công ty gõ "chay that" (bàn thử vòng 45)
+            _can_pm = [("repo", r"repo\s+\S"),
+                       ("môi trường (dev, staging hay prod)",
+                        r"dev|staging|prod|môi trường|moi truong"),
+                       ("nơi chạy thật", r"chạy thật|chay that"),
+                       ("nơi giữ secret", r"secret|bí mật|bi mat")]
+            _hut = [_ten for _ten, _mau in _can_pm
+                    if not re.search(_mau, _khoi_pm, re.I)]
+            if _hut:
+                _thieu_pm.append(f"{_m.group(1)} thiếu {'; '.join(_hut)}")
+        bao("7d. dự án phần mềm khai đủ phạm vi tổ chức (X0 C2 @DUAN.PHANMEM)",
+            not _thieu_pm,
+            f"{_liet(_thieu_pm[:3])}. Thiếu trường nào thì vận hành liên quan"
+            f" trường đó chạy mù: không rõ repo thì code có thể bị chép vào kho;"
+            f" không rõ đâu là môi trường CHẠY THẬT thì deploy đáng lẽ mức C bị"
+            f" hạ xuống A (X5 mục 1b); không rõ nơi giữ secret thì secret rơi"
+            f" vào sổ hay _INBOX. Hỏi đội kỹ thuật rồi điền, mức B")
+
+        # dòng TAILIEU dạng "Repo" chỉ hợp lệ khi công ty CÓ khai phần mềm
+        _repo_mo_coi = []
+        for _r in dong_bang(doc(so / "TAILIEU.md")):
+            if len(_r) > 5 and _r[5].strip().startswith("Repo ") and not _ma_pm:
+                _repo_mo_coi.append((_r[1] if len(_r) > 1 else "?").strip())
+        if _repo_mo_coi:
+            bao("7d2. dòng TAILIEU dạng Repo phải thuộc dự án có khai phần mềm",
+                False, f"{_liet(_repo_mo_coi[:3])}: cột \"Ở đâu\" dạng Repo chỉ"
+                f" cho dòng thuộc dự án @DUAN.PHANMEM (X0 C1), mà C2 chưa khai"
+                f" phần mềm nào. Khai phạm vi tổ chức trước, mức B")
 
     # 7b. TỪ VỰNG của sổ phải nằm trong X0: cửa ma (gõ nhầm một ký tự là sinh
     #     một lane watermark mới) và dự án ĐÃ NGỪNG còn việc mở (X0 C2 bắt
