@@ -1926,6 +1926,19 @@ def main(goc):
                   for f in (so.iterdir() if so.is_dir() else [])
                   if not (f.is_dir() and f.name in ("_lich_su", "_inbox", "_thu_staging"))
                   and not (f.is_file() and BIET_MAT_SO.fullmatch(f.name)))
+    # _lich_su cũng phải soi: file lạ nấp ở đó không ai nhặt, mà đây là chỗ hồ
+    # sơ nằm LÂU NHẤT. CHỈ mở thư mục này - `_inbox` theo định nghĩa chứa file
+    # ĐỐI TÁC GỬI đủ mọi định dạng, `_thu_staging` chứa nguyên văn thư và đính
+    # kèm do pipeline X3E sinh; soi "file lạ" ở hai chỗ đó là báo oan hàng loạt
+    # (0b đã xuống cả ba từ vòng 63 - nó chỉ tìm bản conflicted).
+    _ls_ok = re.compile(
+        r"NHATKY_\d{4}Q[1-4]\.md"
+        r"|(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU)[_A-Za-z0-9-]*\.md")
+    _la += sorted("_so\\_lich_su\\" + f.name + ("\\" if f.is_dir() else "")
+                  for f in ((so / "_lich_su").iterdir()
+                            if (so / "_lich_su").is_dir() else [])
+                  if not (f.is_dir() and f.name.startswith("backup_"))
+                  and not (f.is_file() and _ls_ok.fullmatch(f.name)))
     if _la:
         bao("0j. không file lạ trong 00_Index", False,
             f"{_liet(_la[:5])}: 00_Index là vùng luật, bị loại khỏi quan sát nghiệp vụ"

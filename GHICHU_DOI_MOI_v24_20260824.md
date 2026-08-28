@@ -9,6 +9,25 @@ Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 64: 0j xuống lưu trữ, và chỉ lưu trữ
+
+Mục cuối tôi tự hoãn ở vòng 63. 0j whitelist TRỌN ba thư mục `_lich_su`,
+`_inbox`, `_thu_staging`, nên file lạ nấp ở đó không ai nhặt - mà `_lich_su`
+chính là chỗ hồ sơ nằm LÂU NHẤT.
+
+CHỈ mở `_lich_su`, và đây là phần đáng nói: `_inbox` theo định nghĩa chứa file
+ĐỐI TÁC GỬI đủ mọi định dạng, `_thu_staging` chứa nguyên văn thư cùng đính kèm
+do pipeline X3E sinh. Soi "file lạ" ở hai chỗ đó là báo oan HÀNG LOẠT - đúng
+lớp lỗi đã tái phát mười một lần, và hai lần gần nhất do chính bản vá chống báo
+oan đẻ ra. Vá đúng ở đây là vá HẸP. 0b thì đã xuống cả ba từ vòng 63, và điều
+đó an toàn vì nó chỉ tìm bản conflicted chứ không phán xét file lành.
+
+Bàn thử 7/7, trong đó bốn ca ĐÚNG LUẬT: sổ lưu trữ đúng tên, NHATKY quý cũ,
+thư mục `backup_<ngày>`, và file đối tác đủ loại trong `_inbox`.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(a) hash QUYETDINH · (c) khuôn bản sao · (e) bản rà cho sổ CSV.
+
 ## Vòng 63: bốn mục cuối của hội đồng vòng 20
 
 KHAI TRÙNG MỘT @KEY - "dòng sau đè dòng trước" IM LẶNG. Mọi hàm đọc X0 đều

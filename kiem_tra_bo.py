@@ -646,6 +646,10 @@ def phep_fuzz(goc, phu_them=()):
              "CUA1 = " + str(k) + " · thiet bi MAY1" + NL
              + "                 CUA1 = D:\\KHO_2024 · thiet bi MAY9"), "0i3.")
 
+    thu3("file lạ nấp trong _so/_lich_su",
+         lambda k, i, so, G, sua: (so / "_lich_su").mkdir(exist_ok=True)
+             or _ghi(so / "_lich_su" / "VIEC_2025.md.bak", "x"), "0j.")
+
     thu3("bản conflicted copy nấp trong _so/_lich_su",
          lambda k, i, so, G, sua: (so / "_lich_su").mkdir(exist_ok=True) or _ghi(
              so / "_lich_su" / "NHATKY_2026Q2 (Long's conflicted copy).md",
@@ -997,9 +1001,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 45):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 46):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 13,"
-                    f" I3 45 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 46 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
