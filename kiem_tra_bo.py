@@ -79,6 +79,13 @@ KY_TU_CAM = ["—", "–", "→", "←", "≈"] + [chr(c) for c in range(0x20)
              if chr(c) not in "\n\t\r"]  # em/en-dash, mũi tên, xấp xỉ, control char
 # control char: hội đồng vòng 2 bắt được backspace 0x08 lọt vào đường dẫn
 # backup của X5 do escape bị nuốt khi soạn; dò cả dải để lớp lỗi này tuyệt chủng
+NL = chr(10)
+
+
+def _ghi(f, nd):
+    f.write_text(nd, encoding="utf-8", newline=NL)
+
+
 def _muc(nd, tu, den=None):
     """Ký tự của đoạn từ heading '# tu.' tới trước '# den.' (hết file nếu None)."""
     m = re.search(rf"^# {tu}\. .*$", nd, re.M)
@@ -147,6 +154,160 @@ def kiem(ten, dieu_kien, chi_tiet=""):
     else:
         print(f"  FAIL  {ten}" + (f": {chi_tiet}" if chi_tiet else ""))
         loi.append(ten)
+
+
+
+def _kho_song(goc, td):
+    """Dựng một KHO LÀNH tối thiểu từ chính bộ mẫu ở goc: X0 rev 1, C12 đúng
+    tập mục trống, một lượt ghi hoàn tất có dấu ở NHATKY, VIEC và bảng."""
+    import shutil
+    import kiem_van_hanh as K
+    kho = Path(td) / "kho"
+    idx = kho / "00_Index"
+    idx.mkdir(parents=True)
+    for f in FILE_BAT_BUOC + FILE_KEM:
+        (idx / f).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(goc / f, idx / f)
+    shutil.copy(sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"))[0], idx)
+    (idx / "_so" / "_inbox" / "_da_nap").mkdir(parents=True)
+    for a, b in [("X0_CAUHINH_TEMPLATE.md", "X0_CAUHINH_FUZ.md"),
+                 ("X1_CAM_TEMPLATE.md", "X1_CAM_FUZ.md"),
+                 ("X2_PHATHANH_TEMPLATE.md", "X2_PHATHANH_FUZ.md"),
+                 ("X3_CUAVAO_TEMPLATE.md", "X3_CUAVAO_FUZ.md"),
+                 ("X3E_EMAIL_TEMPLATE.md", "X3E_EMAIL_FUZ.md"),
+                 ("X4_RASOAT_TEMPLATE.md", "X4_RASOAT_FUZ.md"),
+                 ("X5_HESO_TEMPLATE.md", "X5_HESO_FUZ.md")]:
+        (idx / a).rename(idx / b)
+    so = idx / "_so"
+    x0p = idx / "X0_CAUHINH_FUZ.md"
+    x0 = x0p.read_text(encoding="utf-8").replace("<MÃ>", "FUZ")
+    x0 = x0.replace("v13 · rev 0 · <YYYYMMDD>", "v13 · rev 1 · 20260828")
+    x0 = x0.replace("@DUAN.<MÃ DA>    <tên dự án>          đang chạy | NGỪNG",
+                    "@DUAN.DA1        Du an mot                    đang chạy")
+    x0 = x0.replace(
+        "                 CUA1 = <điền: đường dẫn gốc trên máy 1> · thiết bị <điền: tên>",
+        "                 CUA1 = " + str(kho) + " · thiet bi MAY1")
+    x0 = x0.replace("[ ] <X9 liệt kê mọi mục chưa trả lời được vào đây>",
+                    NL.join("[ ] " + k for k in sorted(K.muc_con_trong(x0))))
+    _ghi(x0p, x0)
+    G = "G-20260828-CUA1-01"
+    nk = (so / "NHATKY_TEMPLATE.md").read_text(encoding="utf-8")
+    nk = nk.replace("<năm>Q<quý>", "2026Q3").replace("<MÃ>", "FUZ").rstrip(NL)
+    _ghi(so / "NHATKY_2026Q3.md", nk + NL + "| " + G + " | 2026-08-28 | CUA1.0900.a1b2"
+         " | A | mo viec V-DA1-001 | VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+    v = (so / "VIEC.md").read_text(encoding="utf-8")
+    v = v.replace("<MÃ>", "FUZ").replace("## <KHỐI>", "## KHOI1").rstrip(NL)
+    _ghi(so / "VIEC.md", v + NL + "| DA1 | V-DA1-001 | Viec mot | buoc sau | toi | |"
+         " 2026-12-31 | ĐANG LÀM | | " + G + " |" + NL)
+    for t in ["DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md", "THU.md"]:
+        _ghi(so / t, (so / t).read_text(encoding="utf-8").replace("<MÃ>", "FUZ"))
+    _ghi(so / "X0_INDEX.md", "# X0_INDEX · FUZ" + NL * 2 + "```yaml" + NL
+         + "may_sinh: true · sinh_boi: " + G + " · x0_rev: 1 · instruction: v11"
+         + NL + "```" + NL)
+    _ghi(so / "BANG_DIEU_KHIEN.md", "# BANG_DIEU_KHIEN · FUZ" + NL * 2 + "```yaml" + NL
+         + "may_sinh: true · sinh_boi: " + G + " · x0_rev: 1" + NL
+         + "watermark: CUA1=" + G + NL + "```" + NL * 2 + "bàn sạch · mốc: chưa có" + NL)
+    return kho, idx, so, G
+
+
+def _ra_soat(idx, kho):
+    """Chạy TRỌN main() của kiem_van_hanh, trả TẬP tên phép LỆCH. Kẹp CHỖ GỌI
+    chứ không chỉ hàm helper: hội đồng vòng 14 đo được 12/25 đột biến lọt vì
+    fixture chỉ khẳng định giá trị trả về của hàm, không ai gọi main()."""
+    import contextlib
+    import io as _io2
+    import kiem_van_hanh as K
+    argv = sys.argv
+    K.loi.clear()
+    K.LOI_DOC.clear()
+    try:
+        sys.argv = ["kvh", str(idx), str(kho)]
+        with contextlib.redirect_stdout(_io2.StringIO()):
+            try:
+                K.main(idx)
+            except SystemExit:
+                pass  # main() kết thúc bằng sys.exit theo số lệch, không phải lỗi
+    finally:
+        sys.argv = argv
+    return set(K.loi)
+
+
+def phep_fuzz(goc):
+    """Phép 13: hai BẤT BIẾN đối xứng, đo bằng cách ép trạng thái thật.
+    I1  mọi trạng thái làm MẤT dấu mã G phải sinh ÍT NHẤT MỘT lệch
+    I2  mọi trạng thái ĐÚNG LUẬT không được sinh lệch nào
+    Vế I2 chính là thứ vòng 38, 40 và 41 vi phạm ba lần: vá một lỗ rồi quay
+    ra phạt người dùng vì làm đúng. Không có lưới này thì lớp lỗi đó chỉ lộ
+    khi có hội đồng chạy tay (hội đồng vòng 14 đo được 14,2 phần trăm trạng
+    thái mất dấu đi im)."""
+    import tempfile
+    import shutil
+    hong = []
+
+    def _sua(f, cu, moi):
+        _ghi(f, f.read_text(encoding="utf-8").replace(cu, moi))
+
+    def thu(ten, sua, mat_dau):
+        with tempfile.TemporaryDirectory() as td:
+            kho, idx, so, G = _kho_song(goc, td)
+            if _ra_soat(idx, kho):
+                hong.append(ten + ": KHO LÀNH đã lệch sẵn, ca không tin được")
+                return
+            sua(kho, idx, so, G, _sua)
+            lech = _ra_soat(idx, kho)
+            if mat_dau and not lech:
+                hong.append("I1 " + ten + ": mất dấu mã G mà KHÔNG phép nào kêu")
+            if not mat_dau and lech:
+                hong.append("I2 " + ten + ": ĐÚNG LUẬT mà bị báo " + str(sorted(lech)[:2]))
+
+    # ---- I1: trạng thái MẤT dấu, phải kêu ----
+    thu("xóa trọn file NHATKY quý",
+        lambda k, i, so, G, sua: (so / "NHATKY_2026Q3.md").unlink(), True)
+    thu("xóa dòng NHATKY, file còn",
+        lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md", "| " + G, "| x-" + G), True)
+    thu("xóa ô Ghi lần của dòng VIEC",
+        lambda k, i, so, G, sua: sua(so / "VIEC.md", " | " + G + " |", " |  |"), True)
+    thu("xóa trọn dòng VIEC",
+        lambda k, i, so, G, sua: sua(so / "VIEC.md", "| DA1 | V-DA1-001", "x| DA1 |"), True)
+    thu("cắt cụt dòng NHATKY ở mức byte",
+        lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
+            (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8")[:-24]), True)
+    thu("bản conflicted copy của sổ",
+        lambda k, i, so, G, sua: shutil.copy(so / "VIEC.md",
+                                             so / "VIEC (conflicted copy).md"), True)
+
+    # ---- I2: trạng thái ĐÚNG LUẬT, không được kêu ----
+    def _tach_quy(k, i, so, G, sua):
+        (so / "_lich_su").mkdir(exist_ok=True)
+        shutil.move(str(so / "NHATKY_2026Q3.md"), str(so / "_lich_su" / "NHATKY_2026Q3.md"))
+    thu("tách NHATKY quý cũ vào _lich_su (X5 mục 7)", _tach_quy, False)
+
+    def _luu_viec(k, i, so, G, sua):
+        (so / "_lich_su").mkdir(exist_ok=True)
+        _ghi(so / "_lich_su" / "VIEC_2026.md", (so / "VIEC.md").read_text(encoding="utf-8"))
+        sua(so / "VIEC.md", "| DA1 | V-DA1-001", "x| DA1 |")
+    thu("chuyển dòng VIEC đã xong sang _lich_su (X5 mục 5)", _luu_viec, False)
+
+    def _danh_dau(k, i, so, G, sua):
+        x0 = i / "X0_CAUHINH_FUZ.md"
+        sua(x0, "@NHIP.MUIGIO     <điền>", "@NHIP.MUIGIO     UTC+7")
+        sua(x0, "[ ] @NHIP.MUIGIO", "[x] @NHIP.MUIGIO - điền lần đầu rev 2 ngày 20260828")
+        sua(x0, "v13 · rev 1 · 20260828", "v13 · rev 2 · 20260828")
+        sua(so / "X0_INDEX.md", "x0_rev: 1", "x0_rev: 2")
+    thu("điền lần đầu rồi đánh dấu [x] ở C12 (C11 ngoại lệ 2)", _danh_dau, False)
+
+    def _them_luot(k, i, so, G, sua):
+        G2 = "G-20260828-CUA1-02"
+        _ghi(so / "NHATKY_2026Q3.md", (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8")
+             + "| " + G2 + " | 2026-08-28 | CUA1.1000.c3d4 | A | cap nhat buoc |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+        sua(so / "VIEC.md", " | " + G + " |", " | " + G + " " + G2 + " |")
+        sua(so / "BANG_DIEU_KHIEN.md", "sinh_boi: " + G, "sinh_boi: " + G2)
+        sua(so / "BANG_DIEU_KHIEN.md", "watermark: CUA1=" + G, "watermark: CUA1=" + G2)
+    thu("lượt hai nối thêm mã vào ô Ghi lần (X5 mục 3 bước 3)", _them_luot, False)
+
+    kiem("13. fuzz hai bất biến: mất dấu phải kêu, đúng luật không được kêu",
+         not hong, "; ".join(hong[:4]))
 
 
 def main(goc):
@@ -1069,6 +1230,8 @@ def main(goc):
         ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git kể cả ở thư mục cha", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "THƯ MỤC CHA" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
     kiem("12. luật nghiệp vụ then chốt có mặt (67 luật)", not thieu_luat, str(thieu_luat))
+
+    phep_fuzz(goc)
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}

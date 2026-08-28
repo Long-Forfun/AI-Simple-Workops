@@ -31,6 +31,41 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 42: phép 13 FUZZ - lưới thường trực cho lớp lỗi đã tái phát ba vòng
+
+Ba vòng liên tiếp (38, 40, 41) đều đẻ ra cùng MỘT lớp lỗi khi đang vá lớp lỗi
+đó: phép kiểm mới quay ra PHẠT NGƯỜI DÙNG VÌ LÀM ĐÚNG. Mỗi lần đều phải có
+giám khảo chạy tay cả buổi mới thấy. Vòng này biến phát hiện đó thành MÁY.
+
+Phép 13 khẳng định HAI bất biến đối xứng, đo bằng cách ép trạng thái thật trên
+một kho lành dựng từ chính bộ mẫu:
+  I1  mọi trạng thái làm MẤT dấu mã G phải sinh ÍT NHẤT MỘT lệch
+  I2  mọi trạng thái ĐÚNG LUẬT không được sinh lệch nào
+Vế I2 là vế mà ba vòng vừa rồi vi phạm; hội đồng vòng 14 đề nghị đúng cặp này.
+
+Sáu ca I1 (xóa trọn file NHATKY quý · xóa dòng NHATKY · xóa ô Ghi lần · xóa
+trọn dòng sổ · cắt cụt dòng ở mức byte · bản conflicted rụng dòng) và bốn ca I2
+(tách NHATKY quý cũ vào _lich_su theo X5 mục 7 · chuyển dòng VIEC đã xong sang
+_lich_su theo X5 mục 5 · điền lần đầu rồi đánh dấu [x] ở C12 theo C11 ngoại lệ
+2 · lượt hai nối thêm mã vào ô Ghi lần theo X5 mục 3 bước 3).
+
+Phép 13 gọi TRỌN main() của kiem_van_hanh, không gọi hàm helper: hội đồng vòng
+14 đo được 12/25 đột biến lọt vì fixture chỉ khẳng định giá trị trả về của hàm
+mà không ai kẹp CHỖ GỌI. Nay tắt một phép ở chỗ gọi là phép 13 kêu ngay.
+
+Kiểm chứng bằng hai đột biến, chạy thật trên bản sao:
+- gỡ đúng bản vá _lich_su của vòng 41 (một dòng) thì phép 13 FAIL với
+  "I2 chuyển dòng VIEC đã xong sang _lich_su: ĐÚNG LUẬT mà bị báo 3c" - tức
+  lưới này TỰ BẮT được defect NẶNG mà giám khảo VẬN HÀNH phải chạy trọn một
+  pilot mới tìm ra.
+- tắt cả 0d lẫn 3e thì phép 13 FAIL với "I1 xóa trọn file NHATKY quý: mất dấu
+  mã G mà KHÔNG phép nào kêu" và "I1 xóa dòng NHATKY".
+Hai chiều đều bắt, và trên bộ hiện tại phép 13 PASS.
+
+BACKLOG: mục (e) ĐÓNG. Còn (a) ô chốt hash cho nội dung QUYETDINH, (b) phép 5
+đối chiếu số cột với schema X5 mục 4, (c) khuôn bản sao " (n)" bị bỏ im lặng
+(bản vá đã soạn, chưa áp), (d) tách bản LUẬT thuần khỏi bản gộp.
+
 ## Vòng 41: hội đồng vòng 14 - vá chính bản vá vòng 40
 
 Điểm vòng 14: KHÔNG MISS 8,0 · VẬN HÀNH 7,0 · KHÔNG SAI 6,8. Ba giám khảo
