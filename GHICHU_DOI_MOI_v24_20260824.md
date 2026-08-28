@@ -36,6 +36,40 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 54: đính kèm hết biến mất im lặng
+
+Backlog (y), mục cuối trong danh sách hội đồng vòng 18 giao.
+
+Hai biến thể, cả hai từng "hệ sạch":
+(a) HopDong_daky.pdf nằm trong staging, mail COMMITTED, nhưng chưa hề chép ra
+    chỗ xếp và cột "Đính kèm" của THU để RỖNG. X3E mục ĐÍNH KÈM nói rõ trình
+    tự: chép về chỗ xếp, tính sha256, trỏ vào cột Đính kèm của THU, RỒI MỚI
+    được append COMMITTED.
+(b) mọi đính kèm khai cờ `de_ngoai` với lý do "qua tran", không dòng TAILIEU
+    nào trỏ nguồn, không VIEC "tải tay" nào - X3E mục 2 bắt buộc CẢ HAI.
+
+12j chỉ kiểm sha và byte của file TRONG staging; kiem_payload với de_ngoai chỉ
+đòi `ly_do` là chuỗi; không phép nào nối `dinh_kem` của payload với nội dung
+THU, TAILIEU hay VIEC.
+
+Hậu quả nặng vì nó IM LẶNG hai lần: hợp đồng đã ký số gửi qua mail được coi là
+"đã nạp" (có COMMITTED, có trong registry) nên lượt quét sau BỎ QUA VĨNH VIỄN,
+trong khi file chỉ nằm trong _thu_staging chờ bị dọn - hoặc chưa bao giờ rời
+hộp thư và không việc nào nhắc tải. Sổ không có nó, digest không nhắc, registry
+chặn nạp lại.
+
+Phép 12n nối hai đầu đó: mail COMMITTED thì mỗi đính kèm thường phải có TÊN
+hoặc 12 ký tự đầu sha256 xuất hiện ở THU hay TAILIEU; mục để ngoài phải có ở
+TAILIEU (nguồn) VÀ ở VIEC (việc tải tay).
+
+Và một điều đáng ghi: fixture "email bộ sạch PASS hết" - bàn nền của cả nhóm
+phép 12 - THẬT RA CHƯA SẠCH theo X3E. Nó có mail COMMITTED mang đính kèm f.pdf
+mà không sổ nào nhắc tới. Nó "sạch" suốt bấy lâu chỉ vì không ai kiểm. Nay
+fixture ghi f.pdf vào TAILIEU đúng như luật đòi, cộng hai ca âm mới.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(k) cache _quan_sat_truoc.json giả mạo được · (a) (b) (c) (e) (g) (h) như cũ.
+
 ## Vòng 53: backup ra khỏi vùng nổ
 
 Backlog (v). Hội đồng vòng 18 tạo 7 bản backup ĐÚNG X5 mục 7

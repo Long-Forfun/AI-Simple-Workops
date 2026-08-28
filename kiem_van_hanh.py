@@ -1482,6 +1482,41 @@ def kiem_email(goc, so):
     ket.append(("12j. staging đúng vòng đời: còn thì đúng nội dung, vắng thì có manifest dọn",
                 not loi_staging, "; ".join(loi_staging[:3])))
 
+    # 12n. Đính kèm của mail ĐÃ COMMITTED phải để lại DẤU Ở SỔ. X3E mục ĐÍNH
+    #      KÈM: chép về chỗ xếp, tính sha256, trỏ vào cột Đính kèm của THU,
+    #      RỒI MỚI được append COMMITTED; mục để ngoài theo mục 2 thì phải có
+    #      dòng TAILIEU trỏ nguồn VÀ một VIEC tải tay. Trước vòng 54 không phép
+    #      nào nối dinh_kem của payload với nội dung sổ, nên hợp đồng đã ký số
+    #      được coi là "đã nạp" trong khi file chỉ nằm trong staging chờ bị dọn
+    #      - và registry chặn nạp lại, tức mất IM LẶNG (hội đồng vòng 18).
+    _tl_nd = doc(so / "TAILIEU.md")
+    _vc_nd = doc(so / "VIEC.md")
+    _loi_dk = []
+    for _k in sorted(committed):
+        if not luot[_k]["payload_ok"]:
+            continue
+        for _dk in luot[_k]["payload"].get("dinh_kem", []):
+            _ten = str(_dk.get("ten") or "").strip()
+            if not _ten:
+                continue
+            _sha12 = str(_dk.get("sha256") or "")[:12]
+            _co = lambda _nd: (_ten in _nd) or bool(_sha12 and _sha12 in _nd)
+            if _dk.get("de_ngoai"):
+                # X3E mục 2: để ngoài thì phải có nguồn ở TAILIEU VÀ việc tải tay
+                if not _co(_tl_nd) or not _co(_vc_nd):
+                    _loi_dk.append(f"{_ten[:28]} khai de_ngoai mà thiếu dòng "
+                                   + ("TAILIEU trỏ nguồn"
+                                      if not _co(_tl_nd) else "VIEC tải tay"))
+            elif not (_co(thu_nd) or _co(_tl_nd)):
+                _loi_dk.append(f"{_ten[:28]} đã COMMITTED mà không có ở THU"
+                               f" lẫn TAILIEU")
+    ket.append(("12n. đính kèm của mail đã COMMITTED để lại dấu ở sổ",
+                not _loi_dk, "; ".join(_loi_dk[:3])
+                + ". Registry đã chặn nạp lại nên đây là MẤT IM LẶNG: chép về"
+                  " chỗ xếp và trỏ vào cột Đính kèm của THU (X3E mục ĐÍNH KÈM),"
+                  " mục để ngoài thì thêm dòng TAILIEU trỏ nguồn và một VIEC"
+                  " tải tay (X3E mục 2)"))
+
     # 12k. tập mục index BẰNG ĐÚNG tập "khoa|operation_id" của các mail đã
     #      COMMITTED (thừa hay thiếu đều lệch); sổ và mã dòng phải khớp payload
     idx_p = so / "_thu_ap_dung.json"

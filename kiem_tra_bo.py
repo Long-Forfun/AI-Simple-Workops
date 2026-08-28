@@ -77,7 +77,7 @@ NGAN_SACH = {
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 140000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 155000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -1434,9 +1434,12 @@ def main(goc):
                "thao_tac": [{"operation_id": "op1", "so": "VIEC",
                              "dong": "V-001", "noi_dung": "| V-001 | viec |"}],
                "dinh_kem": [{"ten": "f.pdf", "sha256": ATT_SHA, "bytes": 3}]}
+        # đính kèm f.pdf PHẢI để lại dấu ở sổ: X3E mục ĐÍNH KÈM bắt chép về
+        # chỗ xếp và trỏ vào sổ TRƯỚC khi append COMMITTED (phép 12n, vòng 54)
         FILES_SACH = {f"_so/_thu_staging/{THU_MUC_A}/thu.eml": "eml",
                       f"_so/_thu_staging/{THU_MUC_A}/f.pdf": "PDF",
-                      "_so/VIEC.md": "| V-001 | viec |\n"}
+                      "_so/VIEC.md": "| V-001 | viec |\n",
+                      "_so/TAILIEU.md": "| T-001 | Kho 01_Phap_ly/f.pdf |\n"}
         IDX_SACH = {"<a@x>|op1": {"so": "VIEC", "dong": "V-001"}}
         P = lambda k, pay=PAY, **t: _json.dumps({"ev": "PREPARED", "khoa": k,
                                         "hop_thu": "mail@congty.vn", "payload": pay, **t})
@@ -1455,6 +1458,24 @@ def main(goc):
         r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH, files=FILES_SACH,
                        thu_rows="| #L-001 | L1 | c1 | <a@x> | CHỜ TÔI |\n")
         ca.append(("email bộ sạch PASS hết", all(r.values()) and len(r) >= 11))
+        # đính kèm của mail ĐÃ COMMITTED không để lại dấu nào ở sổ: hợp đồng đã
+        # ký số coi như "đã nạp", registry chặn nạp lại -> mất IM LẶNG (vòng 18)
+        _f_khong_so = {k: v for k, v in FILES_SACH.items()
+                       if k != "_so/TAILIEU.md"}
+        r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH, files=_f_khong_so,
+                       thu_rows="| #L-001 | L1 | c1 | <a@x> | CHỜ TÔI |\n")
+        ca.append(("đính kèm COMMITTED không có ở THU lẫn TAILIEU bị bắt",
+                   r.get("12n. đính kèm của mail đã COMMITTED để lại dấu ở sổ")
+                   is False))
+        # de_ngoai theo X3E mục 2 phải có CẢ dòng TAILIEU trỏ nguồn LẪN VIEC tải tay
+        _pay_ng = dict(PAY, dinh_kem=[{"ten": "Dump_KH.zip", "de_ngoai": True,
+                                       "ly_do": "vượt @NHIP.TRANDINHKEM"}])
+        r = chay_email(nk=P("<a@x>", pay=_pay_ng) + "\n" + C("<a@x>") + "\n",
+                       reg=["<a@x>"], idx=IDX_SACH, files=_f_khong_so,
+                       thu_rows="| #L-001 | L1 | c1 | <a@x> | CHỜ TÔI |\n")
+        ca.append(("đính kèm de_ngoai không có nguồn ở sổ bị bắt",
+                   r.get("12n. đính kèm của mail đã COMMITTED để lại dấu ở sổ")
+                   is False))
         # có nhật ký, MẤT registry: phải LỆCH
         r = chay_email(nk=SACH)
         ca.append(("mất registry bị bắt", r.get("12a. nhật ký nạp và registry cùng tồn tại") is False))
@@ -2008,8 +2029,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 96,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 96: bớt ca là"
+             not hong and len(ca) == 98,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 98: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
