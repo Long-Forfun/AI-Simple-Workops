@@ -63,17 +63,18 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
     "X0_CAUHINH_TEMPLATE.md": 20000,  # đọc THEO MỤC (thuế thật là X0_INDEX ~228): nâng vòng 41, gate sẵn có
-    "X1_CAM_TEMPLATE.md": 3200,
+    "X1_CAM_TEMPLATE.md": 2900,   # hạ vòng 83 làm BÙ cho X5 (X1 dùng ~1.900)
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 5500,   # 5b gate khi dán chat; nâng vòng 37: phần tăng nằm trọn trong 5b gated
     "X3E_EMAIL_TEMPLATE.md": 13000,  # gate: chỉ nạp khi bật EMAIL; nay 92,3% trần
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
-    "X5_HESO_TEMPLATE.md": 20000,  # mục 1b và 7b đều gate; nâng vòng 43 theo quy ước (headroom 98,1% là nợ)
+    "X5_HESO_TEMPLATE.md": 20300,  # mục 1b, 7b gate; nâng vòng 43 (nợ) rồi
+    # vòng 83 cho neo QUYETDINH - BÙ bằng hạ X1 xuống 2900, tổng trần luật giữ
     "X9_CAIDAT.md": 8500,  # gate: đọc MỘT LẦN mỗi công ty, KHÔNG nạp vào CHAT, ngoài mọi route
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 180000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 190000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
@@ -1295,6 +1296,56 @@ def phep_fuzz(goc, phu_them=()):
     thu("file MẪU .example và .sample khai cấu hình (X5 mục 1b cho phép)",
         _ca_lanh_mau, False)
 
+    def _dong_qd(so, G, chon="Dung Postgres"):
+        _ghi(so / "QUYETDINH.md",
+             (so / "QUYETDINH.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-001 | 2026-08-28 | " + chon + " | re | it tien |"
+               " HIỆN HÀNH | | " + G + " |" + NL)
+
+    def _neo_qd(i, G, chon="Dung Postgres"):
+        import hashlib as _hl, unicodedata as _ud
+        _loi = _ud.normalize("NFC", "|".join(
+            ["Q-001", "2026-08-28", chon, "re", "it tien", G]))
+        _ghi(i / "_moc_qd.txt",
+             "Q-001 " + _hl.sha256(_loi.encode("utf-8")).hexdigest()[:12] + NL)
+
+    def _ca_13n_sua(k, i, so, G, sua):
+        """Sửa NỘI DUNG quyết định tại chỗ - thứ sổ tự cấm mà trước 13n không
+        máy nào giữ (backlog a)."""
+        _dong_qd(so, G)
+        _neo_qd(i, G)
+        sua(so / "QUYETDINH.md", "Dung Postgres", "Dung MySQL")
+
+    thu3("sửa nội dung QUYETDINH tại chỗ (neo còn, sha lệch)", _ca_13n_sua,
+         "13n.")
+
+    def _ca_13n_xoa(k, i, so, G, sua):
+        """Xóa TRỌN dòng quyết định - sổ cấm ("Không xóa dòng") mà trước 13n
+        chỉ là lời tự khai; neo còn thì dòng biến mất phải kêu."""
+        _dong_qd(so, G)
+        _neo_qd(i, G)
+        _nd = (so / "QUYETDINH.md").read_text(encoding="utf-8")
+        _nd = NL.join(d for d in _nd.splitlines() if "Q-001" not in d)
+        _ghi(so / "QUYETDINH.md", _nd + NL)
+
+    thu3("xóa trọn dòng QUYETDINH (neo còn, dòng mất)", _ca_13n_xoa, "13n.")
+
+    def _ca_13n_thay(k, i, so, G, sua):
+        """ĐÚNG LUẬT: dòng cũ chỉ đổi HAI Ô QUẢN TRỊ (ĐÃ THAY + Thay bởi) -
+        13n không được kêu, vì hai ô đó nằm ngoài sha."""
+        _dong_qd(so, G)
+        _neo_qd(i, G)
+        _ghi(so / "QUYETDINH.md",
+             (so / "QUYETDINH.md").read_text(encoding="utf-8")
+             .replace("| HIỆN HÀNH | |", "| ĐÃ THAY | Q-002 |"))
+        _ghi(so / "QUYETDINH.md",
+             (so / "QUYETDINH.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-002 | 2026-08-28 | Dung SQLite | re hon | don gian |"
+               " HIỆN HÀNH | | " + G + " |" + NL)
+
+    thu("QUYETDINH đổi hai ô quản trị theo luật ĐÃ THAY (không được kêu)",
+        _ca_13n_thay, False)
+
     def _moi_truong_thu(i, so, G, trang_thai):
         """Môi trường EMAIL tối thiểu + một dòng THU: nhật ký rỗng, registry
         rỗng, @NHIP.HOPTHU khai - đủ cho cổng phép 12 không kêu oan."""
@@ -1510,9 +1561,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 69 if _os_dem.name == "nt" else 68   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 30, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 30,"
+    _i3_mong = 71 if _os_dem.name == "nt" else 70   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 31, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 31,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 

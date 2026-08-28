@@ -44,8 +44,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1339 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6025 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6078 + khối (không phần mềm trừ thêm mục 1b ~421) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
@@ -55,10 +55,11 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
 INSTRUCTION 8.000 ký tự · X0 20.000 (đọc theo mục, thuế là X0_INDEX) · X5
-20.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
-gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 8.500 (đọc một
-lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
-4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
+20.300 (mục 1b và 7b đều có gate; nâng vòng 83 cho neo QUYETDINH, BÙ bằng hạ
+X1) · X3 5.500 (mục 5b gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật
+EMAIL) · X9 8.500 (đọc một lần mỗi công ty, không nạp vào CHAT) · X4 5.500
+(chỉ đọc khi RA_SOAT) · X2 4.200 · X1 2.900 (hạ vòng 83 làm bù, thực dùng
+~1.900) · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
 bản gộp _GOP 260.000 (không nạp vào phiên nào). Vượt trần là FAIL.
 
 ## Ngưỡng RUNTIME, máy enforce ở kiem_van_hanh.py và đối chiếu ở phép kiểm 9c
@@ -85,10 +86,10 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17123 token
-CHAT không EMAIL ~18819 token
-CHAT có EMAIL (kèm X3E) ~22708 token
-CHAT nạp cả X9 và X4 ~23070 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17177 token
+CHAT không EMAIL ~18872 token
+CHAT có EMAIL (kèm X3E) ~22870 token
+CHAT nạp cả X9 và X4 ~23232 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
@@ -110,7 +111,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~824
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~853
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả

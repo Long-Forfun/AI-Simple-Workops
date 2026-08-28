@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 74 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 75 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,37 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 75: backlog (a) - nội dung QUYETDINH thành thứ MÁY GIỮ (phép 13n)
+
+QUYETDINH tự khai "Không xóa dòng, không sửa NỘI DUNG quyết định" từ ngày
+đầu, mà cả hai lệnh cấm đều chỉ là lời: sửa ô "Chọn gì" tại chỗ hay xóa trọn
+dòng đều im. Đây là mục backlog nặng nhất còn lại vì nó đòi ĐỔI SCHEMA - phải
+có chỗ LƯU dấu vân nội dung.
+
+Thiết kế theo đúng khuôn _moc_ghi đã chạy tốt: NEO NGOÀI `00_Index\_moc_qd.txt`
+(chỉ-thêm, một dòng "Q-mã sha12"), sha lấy trên PHẦN BẤT BIẾN của dòng (Mã ·
+Ngày · Chọn gì · Vì sao · Đánh đổi · Ghi lần) - hai ô quản trị Trạng
+thái/Thay bởi đổi theo luật ĐÃ THAY nên KHÔNG vào sha, luật thay-quyết-định
+không bị phạt. Phép 13n: có neo mà sha lệch = SỬA TẠI CHỖ (mức C); có neo mà
+dòng biến mất = XÓA DÒNG (mức C); chưa có neo = LƯU Ý kèm dòng neo IN SẴN để
+dán (mức A) - kho lập trước nâng cấp không bị phạt vì làm đúng luật thời
+điểm cũ, và công thức sha sống trong MÁY chứ không chiếm chỗ trong X5 (13n in
+sẵn, người dùng không thể tính sai). Tombstone xóa pháp lý miễn.
+
+Bốn ca ghim: I3 sửa-tại-chỗ · I3 xóa-dòng (lượt đo đầu mutant "bỏ nhánh xóa"
+SỐNG - thêm ca này mới chết, lại đúng bài mỗi nhánh một ca) · I2 đổi hai ô
+quản trị theo ĐÃ THAY không được kêu · đột biến hash-cả-ô-quản-trị bị I2 bắt.
+Đo 3/3 mutant vùng 13n CHẾT.
+
+TRẢ NỢ TRẦN có bù: X5 +265 ký tự cho luật neo, cân bằng nâng trần X5
+20000->20300 kèm HẠ X1 3200->2900 (X1 thực dùng ~1.900) - tổng trần luật
+KHÔNG tăng; 9b/BENCHMARK khai lại cùng lượt; route đo lại bằng
+--sinh-benchmark (X5 mục 3: 1339->1392). Hội đồng 23 hai giám khảo còn lại
+đã bị dừng bởi người dùng - coi như hủy, không phóng lại.
+
+BẤT BIẾN I1 7, I2 31, I3 71(nt)/70. BACKLOG còn: (e) sổ CSV (đang CẤM chuyển,
+chưa có bản rà đọc định dạng đó).
 
 ## Vòng 74: rubric vòng chấm 02 - 96/100, vá cả ba khoản trừ mới
 
@@ -1543,8 +1574,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1339 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6025 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6078 + khối (không phần mềm trừ thêm mục 1b ~421) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
@@ -1554,10 +1585,11 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
 INSTRUCTION 8.000 ký tự · X0 20.000 (đọc theo mục, thuế là X0_INDEX) · X5
-20.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
-gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 8.500 (đọc một
-lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
-4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
+20.300 (mục 1b và 7b đều có gate; nâng vòng 83 cho neo QUYETDINH, BÙ bằng hạ
+X1) · X3 5.500 (mục 5b gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật
+EMAIL) · X9 8.500 (đọc một lần mỗi công ty, không nạp vào CHAT) · X4 5.500
+(chỉ đọc khi RA_SOAT) · X2 4.200 · X1 2.900 (hạ vòng 83 làm bù, thực dùng
+~1.900) · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
 bản gộp _GOP 260.000 (không nạp vào phiên nào). Vượt trần là FAIL.
 
 ## Ngưỡng RUNTIME, máy enforce ở kiem_van_hanh.py và đối chiếu ở phép kiểm 9c
@@ -1584,10 +1616,10 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17123 token
-CHAT không EMAIL ~18819 token
-CHAT có EMAIL (kèm X3E) ~22708 token
-CHAT nạp cả X9 và X4 ~23070 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17177 token
+CHAT không EMAIL ~18872 token
+CHAT có EMAIL (kèm X3E) ~22870 token
+CHAT nạp cả X9 và X4 ~23232 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
@@ -1609,7 +1641,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~824
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~853
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
@@ -2881,9 +2913,12 @@ GHI, rà 4 canh vế ĐÃ GHI. Plan ĐANG LÀM quá 7 ngày: lên bàn làm vi�
    (ghi đè thì lượt cũ mất dấu và rà 3c lệch mãi)
 4  update ngược X0 nếu có, sinh lại X0_INDEX khi rev tăng
 5  NHATKY sang XONG; mức C: plan sang ĐÃ GHI, điền mã G
-6  nối mã G vừa xong vào `00_Index\_moc_ghi.txt` (chỉ-thêm, một dòng một mã):
-   file này nằm NGOÀI `_so\` nên một lần khôi phục nhầm hay rollback đám mây
-   TRỌN thư mục `_so` không đụng tới nó, rà 0k lấy nó làm nhân chứng cuối.
+6  nối mã G vừa xong vào `00_Index\_moc_ghi.txt` (chỉ-thêm, một dòng một
+   mã): file nằm NGOÀI `_so\` nên rollback mây trọn `_so` không đụng nó, rà
+   0k lấy làm nhân chứng cuối. Dòng QUYETDINH mới: nối neo vào
+   `00_Index\_moc_qd.txt` (chỉ-thêm) - rà 13n IN SẴN dòng neo cho dòng chưa
+   có, dán nguyên văn; đổi Trạng thái/Thay bởi theo ĐÃ THAY không làm lệch
+   neo. Đóng neo là mức A.
    Sinh lại BANG_DIEU_KHIEN thì header ghi sinh_boi = mã lượt vừa xong của CHÍNH
    cửa mình, kèm dòng watermark: mã cuối của TỪNG cửa (giữa các cửa không có thứ
    tự thời gian tin được, "mới nhất" chỉ có nghĩa trong một cửa). Bảng có thêm:

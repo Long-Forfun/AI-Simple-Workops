@@ -165,9 +165,12 @@ GHI, rà 4 canh vế ĐÃ GHI. Plan ĐANG LÀM quá 7 ngày: lên bàn làm vi�
    (ghi đè thì lượt cũ mất dấu và rà 3c lệch mãi)
 4  update ngược X0 nếu có, sinh lại X0_INDEX khi rev tăng
 5  NHATKY sang XONG; mức C: plan sang ĐÃ GHI, điền mã G
-6  nối mã G vừa xong vào `00_Index\_moc_ghi.txt` (chỉ-thêm, một dòng một mã):
-   file này nằm NGOÀI `_so\` nên một lần khôi phục nhầm hay rollback đám mây
-   TRỌN thư mục `_so` không đụng tới nó, rà 0k lấy nó làm nhân chứng cuối.
+6  nối mã G vừa xong vào `00_Index\_moc_ghi.txt` (chỉ-thêm, một dòng một
+   mã): file nằm NGOÀI `_so\` nên rollback mây trọn `_so` không đụng nó, rà
+   0k lấy làm nhân chứng cuối. Dòng QUYETDINH mới: nối neo vào
+   `00_Index\_moc_qd.txt` (chỉ-thêm) - rà 13n IN SẴN dòng neo cho dòng chưa
+   có, dán nguyên văn; đổi Trạng thái/Thay bởi theo ĐÃ THAY không làm lệch
+   neo. Đóng neo là mức A.
    Sinh lại BANG_DIEU_KHIEN thì header ghi sinh_boi = mã lượt vừa xong của CHÍNH
    cửa mình, kèm dòng watermark: mã cuối của TỪNG cửa (giữa các cửa không có thứ
    tự thời gian tin được, "mới nhất" chỉ có nghĩa trong một cửa). Bảng có thêm:

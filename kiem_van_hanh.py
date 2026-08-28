@@ -223,7 +223,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
+           "8e.", "11b.", "0m.", "0n.", "13m.", "13n.", "7h.", "5b.", "0p.",
            "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.", "0r.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
@@ -233,7 +233,7 @@ BIET_MAT_SO = re.compile(
 BIET_MAT_00 = re.compile(
     r"X[0-9]E?_[A-Z0-9_]+\.md|INSTRUCTION_WORKOPS_v\d+\.md|README\.md"
     r"|GHICHU_(DOI_MOI|LICHSU)_v.*\.md|DOC_TRUOC\.md|BENCHMARK_TOKEN\.md"
-    r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|\.gitignore|_moc_ghi\.txt")
+    r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|\.gitignore|_moc_(ghi|qd)\.txt")
 
 
 def loc_dau_vet_ghi(so, doc_ham=None):
@@ -2096,6 +2096,46 @@ def main(goc):
             f" đừng gõ git pull hay git stash ở đây; lỡ gõ mà sổ trống thì git"
             f" stash pop lấy lại ngay. Nâng cấp bộ theo X9 mục 3c")
 
+    # 13n. QUYETDINH tự khai "Không xóa dòng, không sửa NỘI DUNG quyết định"
+    #      mà chưa máy nào giữ - sửa ô "Chọn gì" tại chỗ hay xóa trọn dòng
+    #      đều im (backlog a). Neo ngoài _moc_qd.txt theo đúng khuôn _moc_ghi;
+    #      sha chỉ lấy PHẦN BẤT BIẾN, hai ô quản trị đổi theo luật ĐÃ THAY
+    #      không vào sha. Dòng chưa neo chỉ LƯU Ý - kho lập trước nâng cấp
+    #      không bị phạt vì làm đúng luật của thời điểm cũ.
+    _qd_neo_p = goc / "_moc_qd.txt"
+    _qd_rows = {}
+    for _r in dong_bang(doc(so / "QUYETDINH.md")):
+        if len(_r) >= 8 and _r[0].strip().startswith("Q-") \
+                and "[đã xóa theo Q-" not in "|".join(_r):
+            import unicodedata as _ud13n
+            _loi_qd = _ud13n.normalize(
+                "NFC", "|".join(o.strip() for o in
+                                (_r[0], _r[1], _r[2], _r[3], _r[4], _r[7])))
+            _qd_rows[_r[0].strip()] = hashlib.sha256(
+                _loi_qd.encode("utf-8")).hexdigest()[:12]
+    _neo_qd = {}
+    if _qd_neo_p.is_file():
+        for _d in doc(_qd_neo_p).splitlines():
+            _m = re.match(r"\s*(Q-\S+)\s+([0-9a-f]{12})\s*$", _d)
+            if _m:
+                _neo_qd[_m.group(1)] = _m.group(2)
+    _loi13n = []
+    for _ma, _sha in sorted(_neo_qd.items()):
+        if _ma not in _qd_rows:
+            _loi13n.append(f"{_ma}: neo còn mà DÒNG BIẾN MẤT (sổ cấm xóa dòng)")
+        elif _qd_rows[_ma] != _sha:
+            _loi13n.append(f"{_ma}: nội dung quyết định bị SỬA TẠI CHỖ (sha"
+                           f" lệch neo; muốn đổi thì thêm dòng mới + ĐÃ THAY)")
+    bao("13n. QUYETDINH khớp neo _moc_qd", not _loi13n,
+        f"{_liet(_loi13n[:3])}. Khôi phục dòng theo {BAN_CU}, mức C")
+    _chua_neo = sorted(m for m in _qd_rows if m not in _neo_qd)
+    if _chua_neo:
+        # in SẴN dòng neo để dán nguyên văn: máy tính sha nên công thức không
+        # cần chiếm chỗ trong X5, và người dùng không thể tính sai
+        _dan = "; ".join(f"{m} {_qd_rows[m]}" for m in _chua_neo[:4])
+        print(f"        LƯU Ý  13n: {len(_chua_neo)} dòng chưa neo - dán các"
+              f" dòng sau vào _moc_qd.txt (mức A): {_dan}")
+
     # 0k. NEO NGOÀI _so: mọi nhân chứng (NHATKY, sáu sổ, hai view) đều nằm
     #     TRONG _so, nên một lần khôi phục nhầm hay rollback đám mây TRỌN thư
     #     mục đó xóa sạch bằng chứng cùng lúc: kho đã ghi 500 lượt trông y hệt
@@ -2129,7 +2169,7 @@ def main(goc):
     if not chua_cai and x0s:
         _mat_muc = [m for m in ("C1", "C2", "C7", "C12")
                     if not re.search(rf"^# {m}\. ", doc(x0s[0]), re.M)]
-        bao("0i2. X0 còn đủ các mục phép kiểm dùng", not _mat_muc,
+        bao("0i2. X0 còn đủ mục phép kiểm dùng", not _mat_muc,
             f"mất mục {_liet(_mat_muc)}: xóa mục là TẮT LUÔN phép canh chính mục"
             f" đó - mất C12 thì 0i im, mất C2 thì 7b im (hội đồng vòng 16)")
         # 0i3. Khai TRÙNG một @KEY: mọi hàm đọc X0 đều re.search MỘT LẦN nên
@@ -2193,7 +2233,7 @@ def main(goc):
             f" chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ khai vào"
             f" _so\\_quan_sat_bo.txt, để NGOÀI 00_Index")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
-        bao("0e. THU.md tồn tại khi EMAIL có dấu vết", False,
+        bao("0e. THU.md tồn tại khi EMAIL có vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
 
     bdk_nd = doc(so / "BANG_DIEU_KHIEN.md")
@@ -2406,7 +2446,7 @@ def main(goc):
             and (len(h) < so_o_dau or not (h[7].strip() if len(h) > 7 else "x")
                  or any(o.strip().startswith("ĐANG") and
                         o.strip() != "ĐANG GHI" for o in h))]
-        bao("3a. không dòng NHATKY cụt hay ĐANG GHI", not treo, str(treo))
+        bao("3a. không dòng NHATKY cụt / ĐANG GHI", not treo, str(treo))
         trung = sorted({m for m in ma_g if ma_g.count(m) > 1})
         bao("3b. không mã G trùng ở cột Mã ghi", not trung, str(trung))
         cu = [m for m in ma_g if cua_cua(m) is None]
@@ -2506,10 +2546,10 @@ def main(goc):
                      | set(re.findall(MAU_G, doc(so / "X0_INDEX.md"))))
         mo_coi = sorted(dau_ngoai - set(ma_g))
         bao("3e. mã G ở sổ có dòng NHATKY", not mo_coi,
-            f"{_liet(mo_coi[:5])}: sổ hay bảng mang mã mà NHATKY không có dòng nào."
-            f" Kiểm _so\\_lich_su\\ TRƯỚC: quý cũ đã tách theo X5 mục 7 là hợp lệ,"
-            f" không phải mất sổ. Nếu thật sự mất thì dòng NHATKY hay CẢ FILE QUÝ"
-            f" đã bay: khôi phục mức C từ {BAN_CU}. [AI: cấm cấp mã G mới]")
+            f"{_liet(mo_coi[:5])}: sổ hay bảng mang mã mà NHATKY không có dòng."
+            f" Kiểm _so\\_lich_su\\ TRƯỚC (quý cũ tách theo X5 mục 7 là hợp"
+            f" lệ); thật sự mất thì dòng NHATKY hay CẢ FILE QUÝ đã bay: khôi"
+            f" phục mức C từ {BAN_CU}. [AI: cấm cấp mã G mới]")
 
         # 3g. Ô Mức và Trạng thái là DỮ LIỆU ĐIỀU KHIỂN, không phải văn xuôi: 3d
         #     chỉ nhìn h[3] == "C" và 3c chỉ nhìn "XONG", nên gõ "c" hay "xong"
@@ -3032,7 +3072,7 @@ def main(goc):
             elif _tt == "ĐÃ THAY" and not _co_tb:
                 _cap_qd.append(f"{(_r[0] or '?').strip()} ĐÃ THAY mà ô Thay bởi"
                                f" không trỏ quyết định có thật")
-        bao("13m. QUYETDINH: Trạng thái khớp Thay bởi", not _cap_qd,
+        bao("13m. Trạng thái QUYETDINH khớp Thay bởi", not _cap_qd,
             f"{_liet(_cap_qd[:3])}: hai quyết định cùng HIỆN HÀNH về một việc"
             f" thì phiên sau lấy dòng nào cũng 'đúng sổ'. Đánh ĐÃ THAY cho dòng"
             f" cũ, mức A")
@@ -3117,7 +3157,7 @@ def main(goc):
         _loi7b = ([f"cửa không khai ở C1: {_la_cua}"] if _la_cua else []) \
             + ([f"dự án không khai ở C2: {_liet(sorted(_la_da)[:3])}"] if _la_da else []) \
             + ([f"dự án NGỪNG còn việc mở: {_liet(_mo_ngung[:3])}"] if _mo_ngung else [])
-        bao("7b. từ vựng của sổ (cửa, dự án) khai ở X0", not _loi7b,
+        bao("7b. từ vựng sổ (cửa, dự án) khai ở X0", not _loi7b,
             "; ".join(_loi7b) + " - cửa THU HỒI thì khai xuống @KHO.CUA_NGUNG"
             " (X0 C1), đừng gỡ trắng: mã G cũ nằm trong NHATKY chỉ-thêm nên"
             " không xóa được. Gõ nhầm một ký tự cũng sinh cửa ma và một lane"

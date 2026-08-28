@@ -9,6 +9,37 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 75: backlog (a) - nội dung QUYETDINH thành thứ MÁY GIỮ (phép 13n)
+
+QUYETDINH tự khai "Không xóa dòng, không sửa NỘI DUNG quyết định" từ ngày
+đầu, mà cả hai lệnh cấm đều chỉ là lời: sửa ô "Chọn gì" tại chỗ hay xóa trọn
+dòng đều im. Đây là mục backlog nặng nhất còn lại vì nó đòi ĐỔI SCHEMA - phải
+có chỗ LƯU dấu vân nội dung.
+
+Thiết kế theo đúng khuôn _moc_ghi đã chạy tốt: NEO NGOÀI `00_Index\_moc_qd.txt`
+(chỉ-thêm, một dòng "Q-mã sha12"), sha lấy trên PHẦN BẤT BIẾN của dòng (Mã ·
+Ngày · Chọn gì · Vì sao · Đánh đổi · Ghi lần) - hai ô quản trị Trạng
+thái/Thay bởi đổi theo luật ĐÃ THAY nên KHÔNG vào sha, luật thay-quyết-định
+không bị phạt. Phép 13n: có neo mà sha lệch = SỬA TẠI CHỖ (mức C); có neo mà
+dòng biến mất = XÓA DÒNG (mức C); chưa có neo = LƯU Ý kèm dòng neo IN SẴN để
+dán (mức A) - kho lập trước nâng cấp không bị phạt vì làm đúng luật thời
+điểm cũ, và công thức sha sống trong MÁY chứ không chiếm chỗ trong X5 (13n in
+sẵn, người dùng không thể tính sai). Tombstone xóa pháp lý miễn.
+
+Bốn ca ghim: I3 sửa-tại-chỗ · I3 xóa-dòng (lượt đo đầu mutant "bỏ nhánh xóa"
+SỐNG - thêm ca này mới chết, lại đúng bài mỗi nhánh một ca) · I2 đổi hai ô
+quản trị theo ĐÃ THAY không được kêu · đột biến hash-cả-ô-quản-trị bị I2 bắt.
+Đo 3/3 mutant vùng 13n CHẾT.
+
+TRẢ NỢ TRẦN có bù: X5 +265 ký tự cho luật neo, cân bằng nâng trần X5
+20000->20300 kèm HẠ X1 3200->2900 (X1 thực dùng ~1.900) - tổng trần luật
+KHÔNG tăng; 9b/BENCHMARK khai lại cùng lượt; route đo lại bằng
+--sinh-benchmark (X5 mục 3: 1339->1392). Hội đồng 23 hai giám khảo còn lại
+đã bị dừng bởi người dùng - coi như hủy, không phóng lại.
+
+BẤT BIẾN I1 7, I2 31, I3 71(nt)/70. BACKLOG còn: (e) sổ CSV (đang CẤM chuyển,
+chưa có bản rà đọc định dạng đó).
+
 ## Vòng 74: rubric vòng chấm 02 - 96/100, vá cả ba khoản trừ mới
 
 Giám khảo độc lập chấm lại bản vòng 41 bằng cùng rubric: 96/100 (+1 so vòng
