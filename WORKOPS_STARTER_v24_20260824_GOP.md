@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 47 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 48 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -275,6 +275,60 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 48: trả nợ backlog - secret vào kho bằng hai lối chưa ai soi
+
+Vòng vá thuần backlog, không chờ hội đồng mới. Bốn mục nặng nhất của backlog
+vòng 47 đã đóng, mỗi mục kèm ca của chính nó và một ca ĐÚNG LUẬT.
+
+(m) SECRET VÀO KHO BẰNG HAI LỐI TỰ NHIÊN NHẤT, cả hai chưa ai soi. X5 mục 1b
+cấm secret ở kho đồng bộ, ở sổ VÀ ở _INBOX; máy làm được hai phần ba - 7e soi
+Ô SỔ, 7e2 soi TÊN FILE ngoài 00_Index. Còn lại:
+  _so\_inbox\prod.env (file đối tác gửi mail rơi vào _INBOX)  -> IM
+  02_Ky_thuat\bangiao_moitruong.md chứa DATABASE_URL prod và
+  sk_live_... trong RUỘT, vì 7e2 chỉ dò TÊN                    -> IM, còn
+                                                                 được MỜI vào sổ
+File bàn giao môi trường là chỗ tự nhiên nhất một shop nhỏ viết chuỗi kết nối
+prod. Nay 7e3 soi _INBOX (cả tên lẫn ruột) và 7e2 soi thêm RUỘT file kho.
+
+(l) DUMP CSDL CHẠY THẬT MANG DỮ LIỆU KHÁCH kéo về kho: im, và bộ còn mời vào
+sổ mức A. Kho nằm trên thư mục đồng bộ chung 12 người, tức CCCD khách đã đi ra
+12 máy cá nhân. Phép 7e4, và CHỈ tính khi tên hay đường dẫn mang neo chạy thật
+- dump của staging hay của máy dev không bị đá oan.
+
+(o) XÓA PHÁP LÝ KHÔNG LAN. X5 mục 7b bắt trung hòa cả dòng TAILIEU VÀ dòng THU
+trỏ file đã xóa. Bỏ sót THU thì công ty trả lời khách "đã xóa xong" trong khi
+sổ còn tên đối tác, tiêu đề luồng, Message-ID và sha256 của file - một lượt
+kiểm tra của khách hay cơ quan quản lý là vỡ, và chính lưới an toàn đã cấp giấy
+"hệ sạch". Phép 7b2 lan tombstone tới mọi dòng trỏ mã đã xóa.
+
+(p) TRẦN X0 CỦA KHO ĐANG CHẠY KHÔNG TỒN TẠI - cùng lớp "trần giả" của vòng 46.
+NGAN_SACH chỉ chấm bản TEMPLATE trong bộ mẫu; file mà phiên CHAT nạp NGUYÊN VẸN
+là X0 mang mã công ty, và không phép nào đo nó: bơm lên 49.591 ký tự (2,5 lần
+trần khai) vẫn "hệ sạch". Không phải máy yếu - 1b và 1c kêu đúng khi bơm hai
+view - mà thiếu đúng một phép. Phép 1d, trần 22.000 = trần template cộng 10%
+chỗ điền giá trị thật, nên kho vừa cài (18.969 LITE, 19.059 REGULATED+EMAIL)
+không bị kêu oan.
+
+CHỐNG BÁO OAN, vì lớp lỗi này đã tái phát SÁU lần: file MẪU (.example, .sample,
+.template, .mau, .dist) KHÔNG bị tính - `05_Mau\cauhinh.env.example` chứa
+`DATABASE_URL=<điền>` là cách khai ĐÚNG. Bàn thử 9/9: bắt bốn ca thật, im với
+năm ca đúng luật gồm cả file mẫu trong _INBOX, mô tả LOẠI secret theo nguyên
+văn X5 1b, và dump của staging.
+
+TRẦN ĐẦU RA: bốn phép mới đẩy đầu ra kho CẬN XẤU lên 5.325 ký tự, vượt trần
+13c là 5.200. Tôi KHÔNG nâng trần: đó là số ký tự người dùng và phiên AI thật
+sự gánh, nâng nó là chuyển chi phí sang họ. Trả nợ bằng cách CẮT ĐUÔI NHÃN của
+tám phép (nhãn là thứ máy đọc; 29 dòng PASS đang chiếm 31% đầu ra), giữ nguyên
+toàn bộ phần HƯỚNG DẪN trong các dòng LỆCH - đó mới là thứ người dùng không
+rành máy tính cần. Về 5.16x ký tự, dưới trần, không nâng một trần nào.
+
+BACKLOG còn: (f) MIEN_TRU 16 phép chưa ai canh · (i) phần hành vi của phép 14 ·
+(n) schema @DUAN.PHANMEM chưa có ô khai nhánh CI/CD tự deploy · (q) mọi hằng
+ngưỡng (2700, 5200, 4200, 500, 22000) đứng ngoài lưới, chỉ NGAN_SACH có 9b canh
+· (j) vòng đời _inbox và _da_nap · (s) tách mục vòng <= 25 của GHICHU ra file lưu trữ: đo được giảm 43.029 ký tự, tức 37% thứ mọi công ty phải chép về kho theo X9 mục 3c · (k) cache _quan_sat_truoc.json giả mạo được
+· (r) MỚI: "hệ sạch" và mã thoát 0 in ra ngay cả khi có ĐỀ XUẤT _INBOX, tức máy
+vừa nói sạch vừa nói có file ngoài sổ · (a) (b) (c) (e) (g) (h) như cũ.
 
 ## Vòng 47: lời khai phần mềm thành thứ ĐIỀU KHIỂN mức duyệt, và lưới của lưới
 
@@ -2208,7 +2262,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~788
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~806
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1618 chỉ phải trả
