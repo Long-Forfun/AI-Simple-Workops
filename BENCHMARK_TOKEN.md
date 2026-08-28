@@ -80,10 +80,10 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16619 token
-CHAT không EMAIL ~18315 token
-CHAT có EMAIL (kèm X3E) ~22313 token
-CHAT nạp cả X9 và X4 ~22632 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16739 token
+CHAT không EMAIL ~18434 token
+CHAT có EMAIL (kèm X3E) ~22432 token
+CHAT nạp cả X9 và X4 ~22794 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.

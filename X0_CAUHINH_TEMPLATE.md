@@ -50,10 +50,15 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <điền: đường dẫn gốc trên máy 1> · thiết bị <điền: tên>
-                 <thêm CUA2... nếu kho mây có nhiều máy cùng vào>
+                 <thêm cửa thứ hai, thứ ba... nếu kho mây có nhiều máy cùng vào>
                  Kho Ổ MÁY ĐƠN: backup cùng ổ, phải sao lưu ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
+@KHO.CUA_NGUNG   <điền: cửa đã thu hồi - CUAn · thiết bị · ngày · căn cứ
+                 Q-<mã>; hoặc "chưa có". Mã G cũ của cửa đó nằm trong
+                 NHATKY chỉ-thêm nên KHÔNG xóa được: gỡ hẳn dòng cửa
+                 khỏi trên mà không khai xuống đây thì rà 7b tố "cửa ma"
+                 vĩnh viễn. Thu hồi cửa là mức C, kèm QUYETDINH>
 @KHO.CU          <điền: kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
 @DUONG.SO        <điền: gốc kho>\00_Index\_so\
 @DUONG.INBOX     <điền: gốc kho>\00_Index\_so\_inbox\ · mục đã nạp chuyển

@@ -77,7 +77,7 @@ NGAN_SACH = {
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 125000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 140000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -481,7 +481,7 @@ def phep_danh_muc(goc):
     return hong, phu, len(DANH_MUC) + len(LANH)
 
 
-def phep_fuzz(goc):
+def phep_fuzz(goc, phu_them=()):
     """Phép 13: hai BẤT BIẾN đối xứng, đo bằng cách ép trạng thái thật.
     I1  mọi trạng thái làm MẤT dấu mã G phải sinh ÍT NHẤT MỘT lệch
     I2  mọi trạng thái ĐÚNG LUẬT không được sinh lệch nào
@@ -491,7 +491,11 @@ def phep_fuzz(goc):
     thái mất dấu đi im)."""
     import tempfile
     import shutil
-    hong, phu, _dem = [], set(), {"I1": 0, "I2": 0, "I3": 0}
+    # phu_them: tập phép mà PHÉP 15 đã ép kêu. 14b từng chỉ nhìn tập phủ của
+    # phép 13, nên tám phép nghiệp vụ nặng nhất phải nằm trong MIEN_TRU dù
+    # phép 15 canh chúng thật (hội đồng vòng 17: 8/8 đột biến vào vùng miễn
+    # trừ lọt, 10/10 con ngoài vùng đó bị bắt)
+    hong, phu, _dem = [], set(phu_them), {"I1": 0, "I2": 0, "I3": 0}
 
     def _sua(f, cu, moi):
         _ghi(f, f.read_text(encoding="utf-8").replace(cu, moi))
@@ -605,6 +609,28 @@ def phep_fuzz(goc):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    thu3("gõ CUA2 ở ô Phiên của kho MỘT CỬA (cửa ma)",
+         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
+                                      "| CUA1.0900.a1b2 |", "| CUA2.0900.a1b2 |"),
+         "7b.")
+
+    def _ca_env(k, i, so, G, sua):
+        """.env trần: quet_ho loại dotfile TRƯỚC lưới secret, nên tên file
+        secret phổ biến nhất chưa bao giờ tới được 7e2 (hội đồng vòng 18)."""
+        (k / "02_Ky_thuat").mkdir(exist_ok=True)
+        _ghi(k / "02_Ky_thuat" / ".env", "DB_PASSWORD=Sup3rS3cretPass99" + NL)
+
+    thu3("file .env trần trong kho (đi qua lọc dotfile)", _ca_env, "7e2.")
+
+    def _ca_che(k, i, so, G, sua):
+        """_quan_sat_bo.txt là file NGƯỜI DÙNG SỬA TAY ĐƯỢC: nó dùng để bớt ồn
+        khi quan sát tài liệu, KHÔNG được tự miễn luật X5 mục 1b."""
+        (k / "02_Ky_thuat").mkdir(exist_ok=True)
+        _ghi(k / "02_Ky_thuat" / "prod.pem", "-----BEGIN RSA PRIVATE KEY-----" + NL)
+        _ghi(so / "_quan_sat_bo.txt", "02_Ky_thuat" + NL)
+
+    thu3("secret bị _quan_sat_bo.txt che", _ca_che, "7e2.")
+
     def _ca_1d(k, i, so, G, sua):
         """X0 của kho ĐANG CHẠY phình quá trần runtime. NGAN_SACH chỉ chấm bản
         TEMPLATE trong bộ mẫu, nên trước vòng 48 file mà phiên CHAT thật sự
@@ -746,9 +772,9 @@ def phep_fuzz(goc):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 6, 26):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 6, 29):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 6,"
-                    f" I3 26 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 29 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -757,11 +783,12 @@ def phep_fuzz(goc):
     #      14b đỏ NGAY LƯỢT VÁ ĐÓ - quy tắc mà ba vòng liền tự viết rồi không
     #      thi hành, nay thành MÁY chứ không còn là lời dặn (vòng 15b).
     import kiem_van_hanh as K14
-    MIEN_TRU = ["0.", "0c.", "0e.", "0f.", "1.", "1b.", "1c.",
-                "3a.", "3b.", "6.", "7.", "9.", "10a.", "10b.", "10c.", "11."]
-    # phải RỖNG DẦN: mỗi mục là một phép chưa ai canh. Vòng 16 bỏ "4." và "5."
-    # vì phép 13 ĐÃ bắt được chúng - miễn trừ thừa là mất cảnh báo nếu ca canh
-    # chúng hỏng về sau.
+    MIEN_TRU = ["0c.", "0e.", "0f.", "1b.", "1c.", "3b.", "10c.", "11."]
+    # phải RỖNG DẦN: mỗi mục là một phép chưa ai canh. Vòng 16 bỏ "4." và "5.";
+    # vòng 50 bỏ tiếp tám phép NGHIỆP VỤ NẶNG NHẤT (0, 1, 3a, 6, 7, 9, 10a,
+    # 10b) vì phép 15 canh chúng thật - chỉ cần nối tập phủ của nó vào đây,
+    # không phải viết thêm ca nào. Miễn trừ thừa là mất cảnh báo nếu ca canh
+    # chúng hỏng về sau, nên danh sách này không được dài ra.
     _ho = [pp for pp in K14.PHEP_VH if pp not in phu and pp not in MIEN_TRU]
     # 14c. Danh bạ PHEP_VH là dữ liệu CHÉP TAY: vòng 45 đẻ ra 7d2 rồi quên
     #      khai, nên 14b mù đúng phép mới nhất và quy tắc vòng 44 bị phá ngay
@@ -1517,12 +1544,12 @@ def main(goc):
         # được mà mọi lưới im (hội đồng vòng 15)
         _tpl = (goc / "X0_CAUHINH_TEMPLATE.md").read_text(encoding="utf-8")
         _mt = _kv26.muc_con_trong(_tpl)
-        ca.append(("0i trên CHÍNH template: 37 ô trống khi chưa bật profile nào,"
-                   " 44 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
+        ca.append(("0i trên CHÍNH template: 38 ô trống khi chưa bật profile nào,"
+                   " 45 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
                    " đã điền; có khóa của C13",
-                   len(_mt) == 37 and len(_kv26.muc_con_trong(
+                   len(_mt) == 38 and len(_kv26.muc_con_trong(
                        _tpl.replace("  [ ] EMAIL", "  [x] EMAIL")
-                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 44
+                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 45
                    and not ({"@DUAN.", "@NGUON.", "@TEN.PROJECT"} & _mt)
                    and "@MUC.NANG" in _mt))
         # PH-5: ghim CHIỀU của lời dặn phép 8, thứ mà phán quyết không giữ
@@ -1986,7 +2013,12 @@ def main(goc):
                             f" con số này trong CÙNG lượt vá"
                             if len(_luat) != 74 else ""))
 
-    phep_fuzz(goc)
+    _h15, _phu15, _n15 = phep_danh_muc(goc)
+    kiem("15. danh mục TRẠNG THÁI HỎNG: mỗi nghĩa vụ X4 khai máy dò đều có"
+         f" trạng thái mẫu và rà soát kêu ({_n15} ca)",
+         not _h15, "; ".join(_h15[:4]))
+
+    phep_fuzz(goc, _phu15)
 
     # 2d. Hệ số quy đổi ước-lượng -> token THẬT là lời khai NẶNG KÝ nhất của
     #     BENCHMARK, và trước vòng 47 không ai giữ nó: bộ tự khai "chưa đối
@@ -2026,10 +2058,6 @@ def main(goc):
          f"X4 khai {sorted(_khai15)}, danh mục ghim {sorted(X4_MAY_DO)}."
          f" Sửa X4 mà không sửa danh mục là bộ hứa nhiều hơn thứ nó làm")
 
-    _h15, _phu15, _n15 = phep_danh_muc(goc)
-    kiem("15. danh mục TRẠNG THÁI HỎNG: mỗi nghĩa vụ X4 khai máy dò đều có"
-         f" trạng thái mẫu và rà soát kêu ({_n15} ca)",
-         not _h15, "; ".join(_h15[:4]))
 
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật

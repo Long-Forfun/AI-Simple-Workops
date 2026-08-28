@@ -31,6 +31,87 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 50: hội đồng vòng 18 - lưới secret có lỗ to bằng chính thứ nó canh
+
+Điểm vòng 18 (chấm bản vòng 47): KHÔNG MISS 6,0 · VẬN HÀNH 7,0. Giám khảo
+KHÔNG SAI vòng 16 cũng về muộn, chấm bản vòng 45 được 7,4 và tự kiểm lại ở
+HEAD: 5/6 phát hiện của họ đã đóng.
+
+LƯỚI SECRET CÓ LỖ TO BẰNG CHÍNH THỨ NÓ CANH. Vòng 48 dựng 7e2 đọc tập `moi`
+của quet_ho, mà quet_ho loại `f.name.startswith(".")` TRƯỚC đó - nên `.env`,
+TÊN FILE SECRET PHỔ BIẾN NHẤT, chưa bao giờ tới được lưới, và mẫu `\.env(\.|$)`
+là mã chết cho ca trần. Đối chứng: prod.pem và id_rsa cùng chỗ thì BỊ BẮT,
+.env thì LỌT. Tệ hơn: `_so\_quan_sat_bo.txt` - file text NGƯỜI DÙNG SỬA TAY
+ĐƯỢC - cũng lọc trước, nên thêm một dòng "02_Ky_thuat" là tắt hẳn lưới secret
+cho cả thư mục, không để lại dấu vết nào. Một luật TUYỆT ĐỐI của X5 mục 1b bị
+vô hiệu bằng một dòng text. Vá: hàm quet_secret quét ĐỘC LẬP, không qua lọc
+dotfile và không chịu bo_them. Bàn thử 5/5, gồm hai ca đúng luật (.gitignore
+thường, và _quan_sat_bo loại thư mục video - đúng mục đích X5 khai).
+
+LỚP "PHẠT NGƯỜI DÙNG VÌ LÀM ĐÚNG", LẦN THỨ BẢY VÀ THỨ TÁM, trong cùng một vòng:
+- Lần 7: phép 6 BẮT tách sổ THU khi vượt 500 dòng; tách xong theo đúng X5 mục 7
+  thì 12l lệch 400 DÒNG VĨNH VIỄN, vì nó chỉ đọc sổ sống chứ không đọc
+  `_so\_lich_su\`. Lối thoát duy nhất người dùng nghĩ ra là xóa
+  _thu_ap_dung.json - tự tay phá rào chống nạp trùng của X3E. Phép 3c, 3d, 3e,
+  7 đã học đọc _lich_su từ vòng 41; 12l là vế còn sót.
+- Lần 8: nhân viên nghỉ, thu hồi máy, công ty gỡ cửa CUA2 khỏi X0 C1 ĐÚNG THỦ
+  TỤC mức C (plan, QUYETDINH, rev mới) -> 7b tố "cửa ma" vĩnh viễn, không bao
+  giờ tắt được vì mã G cũ nằm trong NHATKY chỉ-thêm. GIỮ NGUYÊN dòng cửa của
+  một cái máy đã không còn thì "hệ sạch": bộ THƯỞNG lời khai sai, PHẠT lời khai
+  đúng. Và thông điệp dạy sai - nói "gõ nhầm một ký tự", đẩy người dùng đi sửa
+  NHATKY, đúng thứ 0k và 3e sinh ra để chặn. X0 C2 có "đang chạy | NGỪNG" cho
+  dự án, C1 có @KHO.CU cho kho ngừng; chỉ CỬA là không có đường khai ngừng.
+  Thêm @KHO.CUA_NGUNG, không phải sửa dòng mã nào.
+
+VĂN XUÔI MẪU CỦA X0 TỰ KHAI HỘ MỘT CỬA - tôi bắt được cái này khi dựng ca thử
+cho vế trên, và nó đáng ghi vì cùng lớp với defect của vòng 46: dòng hướng dẫn
+C1 viết nguyên văn "<thêm CUA2... nếu kho mây có nhiều máy cùng vào>", mà 7b
+gom cửa đã khai bằng regex trên TRỌN khối C1. Với MỌI công ty, CUA2 luôn được
+coi là đã khai. Tức đúng cửa thứ hai - cửa dễ gõ nhầm nhất, và là cửa đầu tiên
+sinh ra khi công ty thêm máy - là cửa DUY NHẤT lưới cửa-ma không bao giờ bắt.
+
+MỐC CHÍNH THỨC MẤT LƯỚI CHỈ VÌ CÁCH VIẾT MỘT Ô. `any(t in h for t in BAT_BIEN)`
+so chuỗi TUYỆT ĐỐI, nên sửa đè một hợp đồng ĐÃ KÝ: ô ghi "ĐÃ KÝ" thì 10a kêu
+(mức C), còn "Đã ký", "da ky", "ĐÃ KÝ (ban scan 19/8)" thì 10a IM và chỉ còn
+10b (mức A); thêm bỏ trống ô sha256 thì "hệ sạch". Bốn cách viết đời thực làm
+thao tác chạm mốc chính thức tụt hạng hay biến mất. Nay so BỎ DẤU và cho phép
+chú thích kèm sau.
+
+MIEN_TRU RỖNG DẦN THẬT: 16 xuống 8. Nguyên nhân cấu trúc là 14b chỉ nhìn tập
+phủ của PHÉP 13, trong khi từ vòng 47 bộ có thêm PHÉP 15 cũng ép trạng thái
+thật - chỉ là tập phủ của nó không ai dùng. Nối hai tập thì tám phép NGHIỆP VỤ
+NẶNG NHẤT (0, 1, 3a, 6, 7, 9, 10a, 10b) ra khỏi vùng miễn trừ mà không phải
+viết thêm ca nào. Đo lại bằng đục ruột: 8/8 bị bắt, hội đồng vòng 17 đo 0/8.
+
+CÁC VÁ CÒN LẠI: 3g phủ nốt sổ THU và coi ô Trạng thái RỖNG của THU là lệch
+(dòng rỗng rơi khỏi bộ đếm CHỜ TÔI của bảng và digest, tức luồng khách đang
+chờ trả lời biến mất) · cot_thu GIỮ ô rỗng, vì lọc nó ra là mở lối thoát cho
+12f và 12i: bỏ trống Conversation-ID thì mỗi thư trong một hội thoại được cấp
+một mã #L- mới · khi _so bị khôi phục nhầm mà neo ngoài _so còn mã G thì máy
+in CẢNH BÁO thay vì để dòng "CHƯA ghi lần nào" nằm cạnh dòng tố mất 5 mã -
+người dùng đang hoảng đọc câu đầu bảng rồi ghi tiếp là cấp lại mã đã dùng ·
+7d hết cho trường này ăn ké chữ của trường kia (`repo git.cty.vn/app` một
+mình từng thỏa luôn "thành phần chính"), nay bỏ đoạn repo ra trước khi dò bốn
+trường còn lại - mục cuối còn mở của giám khảo KHÔNG SAI.
+
+ĐO ĐƯỢC: 9/9 đột biến nhắm vào chính các lưới mới bị bắt · 8/8 phép vừa rời
+MIEN_TRU thật sự có lưới · 6/6 đột biến nới ngưỡng bị bắt · 5/5 ca secret ·
+4/4 ca 7d · 5/5 ca 3g trên THU · 3/3 ca cửa thu hồi.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(k) cache _quan_sat_truoc.json giả mạo được · (n) schema @DUAN.PHANMEM chưa có
+ô khai nhánh CI/CD tự deploy · (s) tách lịch sử GHICHU (giảm 37%) · (t) MỚI:
+toàn bộ tầng HẠN không ai thi hành - bảng khai "bàn sạch" trong lúc chứng thư
+số đã hết hạn 59 ngày, việc quá hạn, dữ kiện quá mốc rà lại 119 ngày; X4 xếp
+9 dòng rà (7-11, 13-15, 21) vào "kiểm tay" dù cả 9 đều là so ngày trên đúng
+những cột dong_bang đã parse sẵn · (u) MỚI: @NHIP.INBOX là tham số chết, mục
+_INBOX kẹt không mặt phẳng nào hiện · (v) MỚI: backup theo X5 mục 7 nằm TRONG
+_so nên chết cùng lượt rollback mà 0k2 lấy làm lý do tồn tại; X0 không có
+tham số nào khai nơi sao lưu ngoài kho · (w) MỚI: file trùng tên khuôn " (n)"
+bị loại lặng lẽ, bộ chỉ người dùng vào bản CŨ NHẤT · (x) MỚI: manifest dọn
+staging không ai mở file bằng chứng ra xem · (y) MỚI: đính kèm của mail đã
+COMMITTED có thể không để lại dấu nào ở sổ · (a) (b) (c) (e) (g) (h) như cũ.
+
 ## Vòng 49: ngưỡng vào lưới, và máy hết nói hai điều trái nhau cùng lúc
 
 (q) MỌI HẰNG NGƯỠNG ĐỨNG NGOÀI LƯỚI. Chỉ NGAN_SACH có phép 9b canh - khai ở

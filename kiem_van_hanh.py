@@ -700,6 +700,45 @@ def _la_lien_ket(p):
             return False
 
 
+def quet_secret(kho):
+    """Quét secret ĐỘC LẬP với quet_ho. Trả (list file secret, list dump prod).
+
+    KHÔNG dùng lại vòng lặp của quet_ho vì vòng đó loại dotfile và chịu bo_them
+    TRƯỚC khi lưới secret nhìn thấy gì: `.env` - tên file secret phổ biến nhất -
+    chưa bao giờ tới được 7e2, và một dòng trong _quan_sat_bo.txt tắt được hẳn
+    lưới cho cả một thư mục (hội đồng vòng 18). Danh sách loại trừ của công ty
+    là để bớt ồn khi quan sát TÀI LIỆU, không phải để tự miễn luật X5 mục 1b."""
+    bo, dump = [], []
+    for f in sorted(kho.rglob("*")):
+        try:
+            if not f.is_file():
+                continue
+        except OSError:
+            continue
+        rel = str(f.relative_to(kho)).replace("\\", "/")
+        if any(seg == t or seg.startswith((t + " ", t + "_", t + "-",
+                                           t + ".", t + "("))
+               for seg in rel.split("/")
+               for t in THU_MUC_HE_THONG + (".git", "__pycache__")):
+            continue
+        if MAU_FILE_MAU.search(f.name):
+            continue           # file MẪU khai cấu hình là cách làm ĐÚNG
+        if MAU_FILE_SECRET.search(rel):
+            bo.append(rel)
+            continue
+        if MAU_DUOI_DUMP.search(rel) and MAU_DUMP_PROD.search(rel):
+            dump.append(rel)
+            continue
+        try:
+            if f.stat().st_size > 256 * 1024:
+                continue
+            if MAU_SECRET.search(f.read_text(encoding="utf-8", errors="ignore")):
+                bo.append(rel + " (giá trị trong ruột file)")
+        except OSError:
+            continue
+    return sorted(bo), sorted(dump)
+
+
 def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
     """Quét kho, nhóm theo (thư mục tương đối, họ). Trả (nhom, trang_thai_moi).
     truoc: {rel: {"sha", "luc"}} lần quan sát trước (nhận cả {rel: sha} kiểu cũ).
@@ -866,7 +905,13 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
                 # ĐƯỢC, không phải "bị sửa" - hết cáo buộc oan bản ĐÃ KÝ đang mở
                 khong_kiem.append((h[1], rel))
             elif not sha_that.startswith(sha_so[:12]):
-                (sua_bat_bien if any(t in h for t in BAT_BIEN) else lech_sha).append(h[1])
+                # so BỎ DẤU và cho phép chú thích kèm sau: "Đã ký",
+                # "da ky", "ĐÃ KÝ (ban scan 19/8)" đều là MỐC CHÍNH THỨC.
+                # So chuỗi tuyệt đối làm bốn cách viết đời thực tụt thao tác
+                # mức C xuống mức A hay biến mất hẳn (hội đồng vòng 18)
+                _o_kd = [bo_dau(o) for o in h]
+                (sua_bat_bien if any(bo_dau(t) in o for t in BAT_BIEN
+                                     for o in _o_kd) else lech_sha).append(h[1])
     bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat, str(mat[:5]))
     bao("10a. mốc chính thức (từ ĐÃ GỬI DUYỆT trở đi) không bị sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
     bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha, str(lech_sha[:5]))
@@ -913,26 +958,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     # soi cả TÊN lẫn RUỘT: file bàn giao môi trường là chỗ tự nhiên nhất một
     # shop nhỏ viết chuỗi kết nối prod, mà bản cũ chỉ dò tên nên im (vòng 17).
     # File MẪU (.example...) là cách khai ĐÚNG, không tính.
-    _secret_kho, _dump_kho = [], []
-    for _d in moi:
-        if MAU_FILE_MAU.search(_d):
-            continue
-        if MAU_FILE_SECRET.search(_d):
-            _secret_kho.append(_d)
-            continue
-        if MAU_DUOI_DUMP.search(_d) and MAU_DUMP_PROD.search(_d):
-            _dump_kho.append(_d)
-            continue
-        _p2 = kho / _d
-        try:
-            if _p2.stat().st_size > 256 * 1024:
-                continue
-            if MAU_SECRET.search(_p2.read_text(encoding="utf-8", errors="ignore")):
-                _secret_kho.append(_d + " (giá trị trong ruột file)")
-        except OSError:
-            pass
-    _secret_kho = sorted(_secret_kho)
-    _dump_kho = sorted(_dump_kho)
+    _secret_kho, _dump_kho = quet_secret(kho)
     _bo_moi = {_x.split(" (")[0] for _x in _secret_kho} | set(_dump_kho)
     de_xuat = [d for d in de_xuat if d not in _bo_moi]
     if _secret_kho:
@@ -1134,8 +1160,12 @@ def cot_thu(nd, ten_cot):
             header = [o.strip() for o in d.strip("|").split("|")]
             if ten_cot in header:
                 idx = header.index(ten_cot)
+                # GIỮ ô rỗng: lọc nó ra là mở lối thoát cho 12f và 12i -
+                # bỏ trống Conversation-ID thì hai dòng cùng luồng hết trùng,
+                # và mỗi thư trong một hội thoại được cấp một mã #L- mới
+                # (hội đồng vòng 18)
                 return [r[idx] for r in dong_bang(nd)
-                        if len(r) == len(header) and r[idx].strip()]
+                        if len(r) == len(header)]
     return []
 
 
@@ -1346,7 +1376,14 @@ def kiem_email(goc, so):
                 loi_dong.append(f"{kk}: sổ {v['so']} không tồn tại")
                 continue
             if v["so"] not in o_cua:
-                o_cua[v["so"]] = dong_bang(doc(so_p))
+                # đọc CẢ _lich_su: phép 6 BẮT tách sổ khi vượt 500 dòng, tách
+                # xong theo đúng X5 mục 7 mà 12l chỉ đọc sổ sống thì người làm
+                # ĐÚNG lãnh 400 dòng lệch vĩnh viễn, và lối thoát duy nhất họ
+                # nghĩ ra là xóa _thu_ap_dung.json - tự phá rào chống nạp
+                # trùng. 3c, 3d, 3e, 7 đã học điều này từ vòng 41 (vòng 18)
+                o_cua[v["so"]] = dong_bang(doc(so_p)) + [
+                    r for q in sorted((so / "_lich_su").glob(v["so"] + "*.md"))
+                    for r in dong_bang(doc(q))]
             hang = [r for r in o_cua[v["so"]] if v["dong"] in [o.strip() for o in r]]
             if not hang:
                 loi_dong.append(f"{kk}: mã dòng {v['dong']} không là Ô nào trong {v['so']}")
@@ -1615,6 +1652,17 @@ def main(goc):
             f" nó phình là thuế thường trực phình theo. Chuyển phần liệt kê dài"
             f" xuống sổ, giữ X0 là nơi khai THAM SỐ")
 
+    # D7 vòng 18: chua_cai và dau_vet_ghi đọc TRỌN từ trong _so, nên khi _so
+    # bay thì cả hai rơi về "kho mới cài" - đầu ra có "CHƯA ghi lần nào" nằm
+    # ngay cạnh dòng tố mất 5 mã G. Người dùng đang hoảng đọc câu đầu bảng,
+    # kết luận không mất gì, rồi ghi tiếp - cấp lại chính những mã đã dùng.
+    # Neo ngoài _so sinh ra đúng để trả lời câu này; chỉ là chưa ai hỏi nó.
+    if chua_cai and _moc_p.is_file() and re.search(MAU_G, doc(_moc_p)):
+        print("        CẢNH BÁO: kho trông như CHƯA ghi lần nào, nhưng neo"
+              " ngoài _so còn mã G - nhiều khả năng _so vừa bị khôi phục nhầm"
+              " hay rollback đám mây, xem dòng 0k. [AI: TUYỆT ĐỐI không cấp mã"
+              " G mới trước khi dựng lại sổ]")
+
     idx = doc(so / "X0_INDEX.md")
     if not chua_cai:
         if idx:
@@ -1755,10 +1803,24 @@ def main(goc):
                 ("VIEC.md", 7, ("MỚI", "ĐANG LÀM", "CHỜ ĐỐI TÁC", "CHỜ DUYỆT",
                                 "TREO", "XONG", "HỦY")),
                 ("DUKIEN.md", 7, ("A", "B", "C", "D")),
-                ("PLANNING.md", 9, ("MỚI", "ĐANG LÀM", "CHỜ CHỐT", "ĐÃ GHI", "HỦY"))]:
+                ("PLANNING.md", 9, ("MỚI", "ĐANG LÀM", "CHỜ CHỐT", "ĐÃ GHI", "HỦY")),
+                # THU cũng có từ vựng ĐÓNG mà 3g bỏ sót đúng nó: dòng gõ sai
+                # rơi khỏi bộ đếm CHỜ TÔI của bảng và của digest, tức luồng
+                # khách đang chờ trả lời biến mất (hội đồng vòng 18)
+                ("THU.md", 8, ("CHỜ TÔI", "CHỜ ĐỐI TÁC", "THEO DÕI",
+                               "ĐÃ ĐÓNG", "BỎ QUA"))]:
             for _r in dong_bang(doc(so / _t)):
-                if len(_r) > _c and _r[_c].strip() and _r[_c].strip() not in _hl:
-                    _tv.append(f"{_t}:{(_r[0] or '?').strip()[:12]} ô {_r[_c].strip()[:14]}")
+                if len(_r) <= _c:
+                    continue
+                _gt = _r[_c].strip()
+                # ô Trạng thái RỖNG của THU cũng là lệch: dòng đó rơi khỏi bộ
+                # đếm CHỜ TÔI của bảng và của digest, tức luồng khách đang chờ
+                # trả lời biến mất khỏi mọi mặt phẳng (hội đồng vòng 18)
+                if not _gt and _t != "THU.md":
+                    continue
+                if _gt not in _hl:
+                    _tv.append(f"{_t}:{(_r[0] or '?').strip()[:12]}"
+                               f" ô {_gt[:14] or '(rỗng)'}")
         bao("3g. ô Mức, Trạng thái, Mức nguồn đều thuộc từ vựng X5", not _tv,
             f"{_liet(_tv[:5])}: giá trị ngoài từ vựng làm chính dòng đó TÀNG HÌNH"
             f" với 3c, 3d và mọi bộ đếm của bảng. Sửa về đúng từ vựng X5 mục 2,"
@@ -1896,13 +1958,22 @@ def main(goc):
             _can_pm = [("repo", r"repo\s*[:=]?\s*\S"),
                        ("thành phần chính",
                         r"thành phần|thanh phan|gồm|gom|\bweb\b|\bapi\b"
-                        r"|máy chủ|may chu|mobile|app"),
+                        r"|máy chủ|may chu|mobile|\bapp\b"),
                        ("môi trường (dev, staging hay prod)",
                         r"dev|staging|prod|môi trường|moi truong"),
                        ("nơi chạy thật", r"chạy thật|chay that"),
                        ("nơi giữ secret", r"secret|bí mật|bi mat")]
+            # Bỏ đoạn "repo ..." ra trước khi dò BỐN trường còn lại: khai
+            # báo phân đoạn bằng dấu ·, mà dò từ khóa trên TRỌN dòng thì
+            # trường này ăn ké chữ của trường kia - `repo git.cty.vn/app` một
+            # mình từng thỏa luôn cả "thành phần chính" nên công ty bỏ trống
+            # trường đó vẫn xanh (hội đồng vòng 16, mục cuối còn mở của họ)
+            _ngoai_repo = " · ".join(
+                _d for _d in _khoi_pm.split("·")
+                if not re.match(r"\s*repo\b", _d, re.I))
             _hut = [_ten for _ten, _mau in _can_pm
-                    if not re.search(_mau, _khoi_pm, re.I)]
+                    if not re.search(_mau, _khoi_pm if _ten == "repo"
+                                     else _ngoai_repo, re.I)]
             if _hut:
                 _thieu_pm.append(f"{_m.group(1)} thiếu: {', '.join(_hut)}")
         # QUÊN KHAI HẲN: C2 có dự án đang chạy và sổ đầy dấu vết làm phần mềm
@@ -2117,9 +2188,11 @@ def main(goc):
             + ([f"dự án không khai ở C2: {_liet(sorted(_la_da)[:3])}"] if _la_da else []) \
             + ([f"dự án NGỪNG còn việc mở: {_liet(_mo_ngung[:3])}"] if _mo_ngung else [])
         bao("7b. từ vựng của sổ (cửa, dự án) đều khai ở X0", not _loi7b,
-            "; ".join(_loi7b) + " - gõ nhầm một ký tự là sinh cửa ma và một lane"
-            " watermark giả; dự án NGỪNG còn việc mở thì việc đó rơi khỏi bàn làm"
-            " việc mà không ai đóng (X0 C2)")
+            "; ".join(_loi7b) + " - cửa THU HỒI thì khai xuống @KHO.CUA_NGUNG"
+            " (X0 C1), đừng gỡ trắng: mã G cũ nằm trong NHATKY chỉ-thêm nên"
+            " không xóa được. Gõ nhầm một ký tự cũng sinh cửa ma và một lane"
+            " watermark giả; dự án NGỪNG còn việc mở thì việc đó rơi khỏi bàn"
+            " làm việc mà không ai đóng (X0 C2)")
 
     if not chua_cai:
         bdk = doc(so / "BANG_DIEU_KHIEN.md")
