@@ -2108,9 +2108,13 @@ def main(goc):
         if len(_r) >= 8 and _r[0].strip().startswith("Q-") \
                 and "[đã xóa theo Q-" not in "|".join(_r):
             import unicodedata as _ud13n
+            # KHÔNG gồm ô Ghi lần: X5 mục 3 bước 3 bắt nối mã G vào Ghi
+            # lần của MỌI dòng chạm tới - kể cả dòng bị đánh ĐÃ THAY - nên
+            # gồm nó vào sha là phạt người làm đúng HAI luật cùng lúc (giám
+            # khảo rubric 03). "Nội dung bất biến" = năm ô đầu, đúng lời sổ.
             _loi_qd = _ud13n.normalize(
                 "NFC", "|".join(o.strip() for o in
-                                (_r[0], _r[1], _r[2], _r[3], _r[4], _r[7])))
+                                (_r[0], _r[1], _r[2], _r[3], _r[4])))
             _qd_rows[_r[0].strip()] = hashlib.sha256(
                 _loi_qd.encode("utf-8")).hexdigest()[:12]
     _neo_qd = {}
@@ -2798,6 +2802,7 @@ def main(goc):
         _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
         _host_pm = []   # GIÁ TRỊ nơi chạy thật, để 7g đọc lại
         _nhanh_pm = []  # GIÁ TRỊ nhánh tự deploy, cũng để 7g đọc lại
+        _db_pm = []     # tên ĐÍCH DANH CSDL chạy thật (rubric 03)
         for _i, _dg in enumerate(_dong_pm):
             # KHÔNG đòi 2-6 ký tự HOA: không văn bản nào của bộ khai luật
             # đó, mà mã ngoài khuôn ngầm làm công ty khai ĐÚNG bị 7d và
@@ -2817,11 +2822,24 @@ def main(goc):
             _ma_pm.append(_m.group(1))
             # GIÁ TRỊ nơi chạy thật: "chạy thật app.cty.vn" -> app.cty.vn.
             # Bỏ qua "chưa rõ" (đó là khai hợp lệ tạm thời, 7d đã lo).
-            _mh = re.search(r"(?:nơi\s+)?ch[ạa]y\s+th[ậa]t\s*:?\s*"
-                            r"([A-Za-z0-9][A-Za-z0-9.:_-]*\.[A-Za-z0-9][\w.-]*)",
+            # bắt TRỌN vế sau "chạy thật" rồi nhặt MỌI token dạng domain:
+            # re.search một host làm "app.tst.vn va api.tst.vn" chỉ neo host
+            # đầu, deploy lên host thứ hai lọt cả 7g cứng lẫn lưới mềm
+            # (giám khảo rubric vòng 03)
+            _mh = re.search(r"(?:nơi\s+)?ch[ạa]y\s+th[ậa]t\s*:?\s*([^·\n]+)",
                             _khoi_pm)
             if _mh:
-                _host_pm.append(_mh.group(1).rstrip(".,;·"))
+                _host_pm += [_h.rstrip(".,;·") for _h in re.findall(
+                    r"[A-Za-z0-9][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_-]+)+",
+                    _mh.group(1))]
+            _mdb = re.search(r"(?:csdl|c[ơo] s[ởo] d[ữu] li[ệe]u"
+                             r"|kho d[ữu] li[ệe]u|database|\bdb\b)"
+                             r"\s*(?:ch[ạa]y\s+th[ậa]t)?\s*:?\s*([^·\n]+)",
+                             _khoi_pm, re.I)
+            if _mdb and not re.search(r"(?i)ch[ưu]a r[õo]", _mdb.group(1)):
+                _ten_db = _mdb.group(1).strip().rstrip(".,;·")
+                if _ten_db:
+                    _db_pm.append(_ten_db[:40])
             _mb = re.search(r"nh[áa]nh\s+t[ựu]\s+deploy[^·]*?"
                             r"(?:th[ậa]t\s+)?([A-Za-z0-9][\w./-]*)\s*(?:·|$)",
                             _khoi_pm)
@@ -2843,7 +2861,12 @@ def main(goc):
                        # dữ kiện bộ không bao giờ hỏi, nên MỌI lượt merge rơi
                        # về mức A theo mặc định thực tế (hội đồng vòng 18)
                        ("nhánh tự deploy chạy thật",
-                        r"nhánh tự deploy|nhanh tu deploy|auto-?deploy")]
+                        r"nhánh tự deploy|nhanh tu deploy|auto-?deploy"),
+                       # update bảng giá trên CSDL khách là mức C theo X5 mục
+                       # 1 mà máy không có neo nào nếu không hỏi tên (rubric 03)
+                       ("CSDL/kho dữ liệu chạy thật",
+                        r"csdl|cơ sở dữ liệu|co so du lieu|kho dữ liệu"
+                        r"|kho du lieu|database|\bdb\b")]
             # Bỏ đoạn "repo ..." ra trước khi dò BỐN trường còn lại: khai
             # báo phân đoạn bằng dấu ·, mà dò từ khóa trên TRỌN dòng thì
             # trường này ăn ké chữ của trường kia - `repo git.cty.vn/app` một
@@ -2923,7 +2946,8 @@ def main(goc):
                r"|l[ấa]y b[ảa]n sao|lay ban sao|b[ậa]t c[ờo]|t[ắa]t c[ờo]"
                r"|c[ấa]p quy[ềe]n|cap quyen|thu h[ồo]i quy[ềe]n")
         _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
-            "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm]
+            "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm] + [
+            re.escape(_d) for _d in _db_pm]
         # merge vào ĐÚNG nhánh tự deploy là chạm chạy thật, dù câu ghi không
         # nhắc chữ nào về production - đó là cả lý do trường này tồn tại
         # nhận cả KHÔNG DẤU: danh sách động từ _dv cố ý nhận "gop nhanh"
@@ -2954,12 +2978,13 @@ def main(goc):
         # mức A/B nhắc ĐÍCH DANH host/nhánh đã khai mà máy không nhận ra động
         # từ nào thì KHÔNG kết tội (họp, xem, bàn về prod là hợp lệ) - chỉ in
         # LƯU Ý tự soát, để động từ thứ N+1 không lọt trong im lặng tuyệt đối.
-        _neo_cung = _neo[2:]          # chỉ host/nhánh ĐÍCH DANH, bỏ neo chữ
+        # neo CHỮ (prod, chạy thật) cũng vào lưới mềm: "push ban moi len
+        # prod" - động từ lạ + chữ suông - trước im tuyệt đối (rubric 03)
         _tu_soat = [f"{(_r[0] or '?').strip()[:22]}"
                     for _r in hang_nk
                     if len(_r) >= 5 and _r[3].strip() != "C"
                     and not re.search(_dv, _r[4])
-                    and any(re.search(_n, _r[4], re.I) for _n in _neo_cung)]
+                    and any(re.search(_n, _r[4], re.I) for _n in _neo)]
         if _tu_soat:
             print(f"        LƯU Ý  7g: {_liet(_tu_soat[:3])} mức A/B nhắc"
                   f" đích danh nơi chạy thật/nhánh tự deploy mà máy không"

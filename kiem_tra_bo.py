@@ -255,6 +255,13 @@ def _kho_song(goc, td):
     # theo X5 mục 5 chỉ đúng luật với việc XONG hay HỦY (hội đồng vòng 15b)
     for t in ["DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md", "THU.md"]:
         _ghi(so / t, (so / t).read_text(encoding="utf-8").replace("<MÃ>", "FUZ"))
+    pl = (so / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL)
+    _ghi(so / "PLANNING.md", pl + NL + "| P-001 | 2098-01-01 | DA1 | mini |"
+         " Viec mot | X5 muc 3 | VIEC.md | V-DA1-001 | thap | ĐÃ GHI | " + G
+         + " |" + NL)  # 2098: plan ĐÃ GHI quá 30 ngày phải chuyển _lich_su,
+    # ngày quá khứ làm kho lành tự hỏng dần theo thời gian thật (khuôn 2099
+    # của VIEC, vòng 51); lane PLANNING của 3g nhờ dòng này được quan sát
+    # HAI CHIỀU - trước đây mutant đọc lệch cột báo oan mà mọi ca vẫn xanh
     _ghi(idx / "_moc_ghi.txt", G + NL)
     # X5 mục 3 bước 6 BẮT nối mã G vào neo ngoài _so. Thiếu nó thì vế I2 của
     # phép 13 đang khẳng định một kho THIẾU NEO là "đúng luật", nhánh PASS của
@@ -1305,7 +1312,7 @@ def phep_fuzz(goc, phu_them=()):
     def _neo_qd(i, G, chon="Dung Postgres"):
         import hashlib as _hl, unicodedata as _ud
         _loi = _ud.normalize("NFC", "|".join(
-            ["Q-001", "2026-08-28", chon, "re", "it tien", G]))
+            ["Q-001", "2026-08-28", chon, "re", "it tien"]))
         _ghi(i / "_moc_qd.txt",
              "Q-001 " + _hl.sha256(_loi.encode("utf-8")).hexdigest()[:12] + NL)
 
@@ -1346,6 +1353,31 @@ def phep_fuzz(goc, phu_them=()):
     thu("QUYETDINH đổi hai ô quản trị theo luật ĐÃ THAY (không được kêu)",
         _ca_13n_thay, False)
 
+    def _ca_13n_ghilan(k, i, so, G, sua):
+        """ĐÚNG LUẬT HAI LẦN: lượt SAU đánh ĐÃ THAY và nối mã G của nó vào
+        Ghi lần dòng cũ (X5 mục 3 bước 3 bắt nối với MỌI dòng chạm tới). Sha
+        gồm Ghi lần thì người làm đúng cả hai luật ăn lệch oan (rubric 03).
+        Lượt sau dựng ĐỦ nhân chứng: dòng NHATKY + watermark bảng."""
+        _dong_qd(so, G)
+        _neo_qd(i, G)
+        G2 = "G-20260828-CUA1-02"
+        _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip(NL)
+             + NL + "| " + G2 + " | 2026-08-28 | CUA1.1700.ij | B |"
+             " thay quyet dinh | QUYETDINH Q-001 | khong | XONG | khong |" + NL)
+        b = (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+        _ghi(so / "BANG_DIEU_KHIEN.md", b.replace("CUA1=" + G, "CUA1=" + G2)
+             .replace("sinh_boi: " + G, "sinh_boi: " + G2))
+        sua(so / "QUYETDINH.md", "| HIỆN HÀNH | | " + G + " |",
+            "| ĐÃ THAY | Q-002 | " + G + " " + G2 + " |")
+        _ghi(so / "QUYETDINH.md",
+             (so / "QUYETDINH.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-002 | 2026-08-28 | Dung SQLite | re hon | don gian |"
+               " HIỆN HÀNH | | " + G2 + " |" + NL)
+
+    thu("nối mã G vào Ghi lần dòng ĐÃ THAY (không được kêu)",
+        _ca_13n_ghilan, False)
+
     def _moi_truong_thu(i, so, G, trang_thai):
         """Môi trường EMAIL tối thiểu + một dòng THU: nhật ký rỗng, registry
         rỗng, @NHIP.HOPTHU khai - đủ cho cổng phép 12 không kêu oan."""
@@ -1370,6 +1402,9 @@ def phep_fuzz(goc, phu_them=()):
     thu("dòng THU hợp lệ trong môi trường EMAIL tối thiểu (không được kêu)",
         lambda k, i, so, G, sua: _moi_truong_thu(i, so, G, "CHỜ TÔI"), False)
 
+    thu3("ô Trạng thái THU bỏ RỖNG (với THU, rỗng cũng là lệch)",
+         lambda k, i, so, G, sua: _moi_truong_thu(i, so, G, ""), "3g.")
+
     def _ca_7g_phat_hanh(k, i, so, G, sua):
         """'phat hanh ban 2.1 len <host chạy thật>' mức B: nêu ĐÍCH DANH host
         mà lọt vì thiếu động từ (giám khảo rubric vòng 02, ca g8)."""
@@ -1387,6 +1422,48 @@ def phep_fuzz(goc, phu_them=()):
              " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
 
     thu3("phat hanh lên host chạy thật mà ghi mức B", _ca_7g_phat_hanh, "7g.")
+
+    def _ca_7g_csdl(k, i, so, G, sua):
+        """Khai CSDL chạy thật đích danh, rồi ghi update dữ liệu trên đúng
+        CSDL đó mức A. X5 mục 1 định nghĩa đây là mức C mà trước vòng 85 máy
+        không có neo nào (giám khảo rubric vòng 03)."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He ban hang · repo github.com/cty/bh · web · dev may"
+               " doi, chạy thật bh.bacha.vn" + NL
+             + "        · secret o Vault · CSDL chạy thật: CSDL khach hang ·"
+             + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-15 | 2026-08-28 | CUA1.2000.op | A |"
+             " chay update bang gia tren CSDL khach hang |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+
+    thu3("update dữ liệu trên CSDL chạy thật đã khai mà ghi mức A",
+         _ca_7g_csdl, "7g.")
+
+    def _ca_7g_host2(k, i, so, G, sua):
+        """Khai HAI host chạy thật trên một vế ('app... va api...'), rồi ghi
+        deploy lên host THỨ HAI mức B. Bản chỉ neo host đầu để lọt ca này
+        (giám khảo rubric vòng 03)."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He hai host · repo github.com/cty/haihost" + NL
+             + "        · web + api · dev may doi, chạy thật app.bacha.vn va"
+               " api.bacha.vn" + NL
+             + "        · secret o Vault ·" + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-14 | 2026-08-28 | CUA1.1800.kl | B |"
+             " deploy ban moi len api.bacha.vn |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+
+    thu3("deploy lên host THỨ HAI của vế chạy thật mà ghi mức B",
+         _ca_7g_host2, "7g.")
 
     def _ca_7g_squash(k, i, so, G, sua):
         """'squash branch feature vao main' mức B: nhánh tự deploy nêu đích
@@ -1416,6 +1493,24 @@ def phep_fuzz(goc, phu_them=()):
     thu3("file _da_nap không sổ nào mang tên gốc (nạp mồ côi)",
          lambda k, i, so, G, sua: _ghi(so / "_inbox" / "_da_nap"
                                        / "hd_thue_vp.pdf", "x"), "0r.")
+
+    def _ca_nfd(k, i, so, G, sua):
+        """ĐÚNG LUẬT: đĩa macOS/iCloud/Dropbox lưu tên dạng NFD, sổ ghi NFC -
+        CÙNG một tên. Nhánh thử lại NFC/NFD của phép 9 đỡ ca này; trước đây
+        không fixture nào phủ nên mutant lật điều kiện báo MẤT oan (rubric
+        03, m09)."""
+        import unicodedata as _ud
+        (k / "05_Bao_cao").mkdir(exist_ok=True)
+        _ten_nfd = _ud.normalize("NFD", "báo_cáo_quý.md")
+        _ghi(k / "05_Bao_cao" / _ten_nfd, "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-090 | Bao cao quy | v01 | 2026-08-20 | Kho"
+               " 05_Bao_cao/" + _ud.normalize("NFC", "báo_cáo_quý.md")
+             + " | HIỆN HÀNH | NHÁP | 2026-08-20 | qs | noi bo | | | | "
+             + G + " |" + NL)
+
+    thu("file NFD trên đĩa, sổ ghi NFC (không được kêu)", _ca_nfd, False)
 
     def _ca_0r_dung(k, i, so, G, sua):
         """ĐÚNG LUẬT: file đã nạp, tên gốc nằm ở ô Căn cứ trạng thái TAILIEU
@@ -1561,9 +1656,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 71 if _os_dem.name == "nt" else 70   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 31, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 31,"
+    _i3_mong = 74 if _os_dem.name == "nt" else 73   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 33, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 33,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -2444,6 +2539,11 @@ def main(goc):
         ca.append(("metadata nguồn sai kiểu (số) bị từ chối",
                    any("conv_id" in l for l in
                        _kv26.kiem_payload(dict(_pl_dung, conv_id=123), _khoa_pl))))
+        # thao_tac RỖNG: mail nạp mà không tạo dòng sổ nào vẫn ĐẠT là vô
+        # nghĩa - mutant or->and của rubric 03 sống nhờ nhánh này chưa ghim
+        ca.append(("payload thao_tac rỗng bị từ chối",
+                   any("thao_tac" in l for l in
+                       _kv26.kiem_payload(dict(_pl_dung, thao_tac=[]), _khoa_pl))))
         # BA QUYẾT ĐỊNH của rà 0d, 0g, 0i (hội đồng vòng 13: vùng rà soát từng
         # có mutation score 0% vì main() không hàm nào gọi được; ba hàm này nay
         # ở tầng module nên fixture kẹp thẳng)
@@ -2873,8 +2973,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 101,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 101: bớt ca là"
+             not hong and len(ca) == 102,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 102: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

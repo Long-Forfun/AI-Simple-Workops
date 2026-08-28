@@ -9,6 +9,50 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 77: rubric vòng chấm 03 - 91/100, vá cả chín khoản
+
+Giám khảo chấm bản vòng 44, seed đột biến 44 chiếu thẳng vào VÙNG MÃ MỚI chưa
+kịp có fixture: 91/100 (01: 95 · 02: 96). Điểm tụt KHÔNG phải thoái lui - cả
+sáu vá vòng 42-44 tái xác minh GIỮ - mà là giá của mã mới chưa ghim. Chín
+khoản, vá hết:
+
+LƯỚI TỰ GIỮ (bốn mutant sống, mỗi con có hành vi lệch chứng minh):
+· m02: kho lành fuzz KHÔNG có dòng PLANNING đi qua 3g - mutant đọc lệch cột
+  báo oan mà mọi ca vẫn xanh. Kho lành nay có plan ĐÃ GHI (ngày 2098 để
+  không hỏng theo thời gian thật) - lane PLANNING được quan sát HAI CHIỀU.
+· m03: lane THU vòng 43 chỉ ghim SAI TỪ VỰNG; trạng thái RỖNG - luật hội
+  đồng vòng 18 - bị mutant nuốt im. Ca I3 rỗng thêm.
+· m07: kiem_payload nhận thao_tac RỖNG khi lật or->and - mail nạp không tạo
+  dòng sổ nào vẫn ĐẠT. Ca trực tiếp; fixture 102 ca.
+· m09: nhánh thử lại NFC/NFD của phép 9 (đĩa macOS/Dropbox) không fixture
+  nào phủ - mutant báo MẤT oan. Ca I2 file NFD trên đĩa, sổ ghi NFC.
+
+PHẠM VI PHẦN MỀM (ba lỗ chạm sản xuất):
+· ĐA HOST: "chạy thật app... va api..." chỉ neo host ĐẦU - deploy lên host
+  thứ hai lọt cả 7g cứng lẫn lưới mềm. Nay bắt trọn vế rồi nhặt MỌI token
+  dạng domain; ca I3 deploy-host-thứ-hai ghim.
+· TRƯỜNG THỨ BẢY của @DUAN.PHANMEM - CSDL/kho dữ liệu chạy thật (tên đích
+  danh hay "CSDL chưa rõ"): update bảng giá trên CSDL khách là mức C theo X5
+  mục 1 mà máy không có neo nào nếu không hỏi tên. 7d đòi trường, giá trị
+  nạp vào neo 7g; ca I3 ghim. Đây là câu trả lời trực tiếp cho điều kiện
+  "nắm rõ phạm vi tổ chức phần mềm": phạm vi nay gồm cả TẦNG DỮ LIỆU.
+· Lưới mềm mở sang NEO CHỮ: "push ban moi len prod" (động từ lạ + chữ suông)
+  trước im tuyệt đối, nay LƯU Ý tự soát.
+
+KHÔNG BÁO OAN (mâu thuẫn hai luật): X5 m3 b3 bắt nối mã G vào Ghi lần của
+MỌI dòng chạm tới - kể cả dòng QUYETDINH bị đánh ĐÃ THAY - trong khi sha 13n
+gồm ô Ghi lần, nên làm đúng CẢ HAI luật ăn lệch "SỬA TẠI CHỖ" oan. Sha nay
+chỉ lấy NĂM Ô ĐẦU (đúng lời sổ tự khai "nội dung bất biến"); ca I2 lượt-sau-
+nối-Ghi-lần dựng đủ nhân chứng (dòng NHATKY + watermark bảng).
+
+TÁI ĐO: 6/6 mutant CHẾT (m02 <- 13+15, m03/m09/đa-host/13n <- 13, m07 <- 11).
+Lab neo CSDL 4/4 hành vi đúng (bản đầu regex nuốt "chạy thật" vào tên - lab
+bắt trước khi lên bản). Trần X0 giữ 20000: trường mới trả chỗ bằng cắt chữ
+thừa trong chính khối C2.
+
+BẤT BIẾN I1 7, I2 33, I3 74(nt)/73. NHẬT KÝ RUBRIC: 95 · 96 · 91 (giá của mã
+mới - cả chín khoản đã vá trong vòng này). BACKLOG: (e) sổ CSV (đang CẤM).
+
 ## Vòng 76: lưới MỀM cho động từ thứ N+1 của 7g
 
 Hai vòng rubric liền, mục PHẠM VI PHẦN MỀM đều mất điểm theo cùng một khuôn:
