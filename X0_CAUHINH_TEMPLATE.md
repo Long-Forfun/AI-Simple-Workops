@@ -54,6 +54,11 @@ giữ bản cuối" giữa các cửa của cùng một kho.
                  Kho Ổ MÁY ĐƠN: backup cùng ổ, phải sao lưu ra thiết bị khác
 @KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
                  không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
+@KHO.SAOLUU      <điền: thư mục NGOÀI gốc kho (ổ khác, máy khác, hay tài
+                 khoản mây khác) và nhịp sao; hoặc "chưa có". Bản backup
+                 hằng ngày của X5 mục 7 nằm TRONG _so nên một lượt
+                 rollback đám mây trọn _so xóa sạch cả chúng cùng lúc -
+                 đây là bản duy nhất sống sót cảnh đó>
 @KHO.CUA_NGUNG   <điền: cửa đã thu hồi - CUAn · thiết bị · ngày · căn cứ
                  Q-<mã>; hoặc "chưa có". Mã G cũ của cửa đó nằm trong
                  NHATKY chỉ-thêm nên KHÔNG xóa được: gỡ hẳn dòng cửa

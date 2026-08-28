@@ -295,6 +295,8 @@ nguyên vẹn ở 99_Goc, thêm _Summary có bảng tra ngược, TAILIEU trỏ 
 COWORK sao NĂM sổ lõi, PLANNING và THU trong _so\ (KHÔNG sao _lich_su\,
 _thu_staging\, _inbox\ và các bản backup cũ) vào _so\_lich_su\backup_<YYYYMMDD>\
 một lần mỗi ngày trước lượt ghi đầu, giữ 7 bản (mức A, không vào sổ).
+Bản này nằm TRONG _so nên rollback trọn _so xóa sạch cả nó: phải có thêm
+bản NGOÀI kho theo @KHO.SAOLUU (X0 C1).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.

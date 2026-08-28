@@ -167,7 +167,7 @@ loi = []
 
 DA_KIEM = []
 PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
-                 "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.",
+                 "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.", "1f.",
                  "13c.", "13d.", "14.", "14b.", "14c.", "14d.", "14e.", "15.", "15b.", "2d.", "9c."]
 # phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
 
@@ -611,6 +611,19 @@ def phep_fuzz(goc, phu_them=()):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    def _ca_0m(k, i, so, G, sua):
+        """Nơi sao lưu ĐÃ KHAI và có thật, nhưng bỏ bê từ lâu."""
+        _tm = k.parent / "saoluu_ngoai_kho"
+        _tm.mkdir(exist_ok=True)
+        _ghi(_tm / "backup_cu.md", "ban sao cu")
+        import os as _os0m
+        _os0m.utime(_tm / "backup_cu.md", (0, 0))
+        sua(i / "X0_CAUHINH_FUZ.md", "@KHO.SAOLUU      <điền: thư mục NGOÀI",
+            "@KHO.SAOLUU      " + str(_tm) + " · mỗi ngày" + NL
+            + "@KHO.SAOLUU_CU   <điền: thư mục NGOÀI")
+
+    thu3("nơi sao lưu ngoài kho đã khai mà bỏ bê từ lâu", _ca_0m, "0m.")
+
     def _ca_11b(k, i, so, G, sua):
         """Đối tác gửi lại bản sửa; Chrome đặt tên " (1)". Bản MỚI bị loại
         lặng lẽ và người dùng được chỉ vào bản CŨ NHẤT (hội đồng vòng 18)."""
@@ -813,9 +826,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 8, 31):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 8, 32):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 8,"
-                    f" I3 31 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 32 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -1014,7 +1027,7 @@ def main(goc):
         if not f.is_file() or da_khai_bo(rel):
             continue
         if rel not in cho_phep and not re.fullmatch(
-                r"INSTRUCTION_WORKOPS_v\d+\.md|GHICHU_DOI_MOI_v.*\.md"
+                r"INSTRUCTION_WORKOPS_v\d+\.md|GHICHU_(DOI_MOI|LICHSU)_v.*\.md"
                 r"|WORKOPS_.*_GOP\.md|_so/NHATKY_\d{4}Q[1-4]\.md", rel):
             thua.append(rel)
     kiem("1e. không file thừa ngoài danh sách bộ", not thua,
@@ -1022,6 +1035,25 @@ def main(goc):
          f" NGUYÊN TRẠNG nên thứ ở đây vào 00_Index của mọi công ty")
     kiem("1b. đúng một file INSTRUCTION", len(instr) == 1, f"thấy {len(instr)}")
     kiem("1c. đúng một file GHICHU_DOI_MOI_v*", len(ghichu) == 1, f"thấy {len(ghichu)}")
+    # 1f. Lịch sử tách ra thì phải CÒN ĐÓ và còn LIỀN MẠCH. Nới allow-list mà
+    #     không thêm nghĩa vụ là mở một lỗ: xóa file lưu trữ đi thì 25 vòng
+    #     lịch sử biến mất mà không phép nào kêu (vòng 53).
+    _ls = sorted(goc.glob("GHICHU_LICHSU_v*.md"))
+    _loi1f = []
+    if len(_ls) != 1:
+        _loi1f.append(f"thấy {len(_ls)} file GHICHU_LICHSU_v*, phải đúng một")
+    elif ghichu:
+        _gh_nd = (goc / ghichu[0].name).read_text(encoding="utf-8")
+        _ls_nd = _ls[0].read_text(encoding="utf-8")
+        if _ls[0].name not in _gh_nd:
+            _loi1f.append(f"GHICHU không trỏ tới {_ls[0].name}")
+        _v = sorted(int(x) for x in re.findall(r"^## Vòng (\d+)", _gh_nd, re.M)
+                    + re.findall(r"^## Vòng (\d+)", _ls_nd, re.M))
+        _thung = [n for n in range(min(_v), max(_v) + 1) if n not in _v] if _v else []
+        if _thung:
+            _loi1f.append(f"thủng vòng {_thung[:5]} giữa hai file")
+    kiem("1f. lịch sử đã tách vẫn còn đủ và liền mạch", not _loi1f,
+         "; ".join(_loi1f))
     if thieu or not instr or not ghichu:
         return
 
@@ -1200,13 +1232,13 @@ def main(goc):
            " CẢ HAI nơi, tức phải khai ra cho người đọc thấy")
     # GHICHU bị phép 8 ĐÒI có trong bản gộp nhưng chưa từng có trần: động cơ
     # phình thứ hai của bản gộp, không ai quản (hội đồng vòng 16).
-    # Nâng 115.000 -> 130.000 ở vòng 48. GATE: GHICHU không nằm trong route
-    # nào, không phiên nào nạp nó. Nhưng X9 mục 3c CHÉP nó vào kho mọi công ty
-    # mỗi lượt nâng cấp, nên đây là NỢ chứ không phải giải pháp: bản vá đúng là
-    # tách các mục vòng <= 25 ra file lưu trữ, đo được còn 73.546 ký tự (giảm
-    # 37%). Backlog (s). Trần này KHÔNG được nâng lần nữa trước khi tách.
-    if len(kem[ghichu[0].name]) > 130000:
-        vuot_ns.append((ghichu[0].name, len(kem[ghichu[0].name]), 130000))
+    # Vòng 48 nâng 115.000 -> 130.000 và ghi thẳng đó là NỢ. Vòng 53 TRẢ nợ:
+    # tách các mục vòng <= 25 sang GHICHU_LICHSU (131.366 -> 88.531, đúng con
+    # số 37% đã đo). Giữ trần đã vay là giữ chỗ trống, nên hạ về 100.000 -
+    # còn khoảng tám vòng headroom trước lượt tách kế. Phép 1f canh phần lịch
+    # sử đã tách vẫn còn đủ và liền mạch.
+    if len(kem[ghichu[0].name]) > 100000:
+        vuot_ns.append((ghichu[0].name, len(kem[ghichu[0].name]), 100000))
     kiem("9. mọi file trong ngân sách context", not vuot_ns,
          "; ".join(f"{t} {c} ký tự / trần {tr}" for t, c, tr in vuot_ns))
     print(f"        thuế thường trực (INSTRUCTION + X0_INDEX + BANG_DIEU_KHIEN mẫu): "
@@ -1585,12 +1617,12 @@ def main(goc):
         # được mà mọi lưới im (hội đồng vòng 15)
         _tpl = (goc / "X0_CAUHINH_TEMPLATE.md").read_text(encoding="utf-8")
         _mt = _kv26.muc_con_trong(_tpl)
-        ca.append(("0i trên CHÍNH template: 38 ô trống khi chưa bật profile nào,"
-                   " 45 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
+        ca.append(("0i trên CHÍNH template: 39 ô trống khi chưa bật profile nào,"
+                   " 46 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
                    " đã điền; có khóa của C13",
-                   len(_mt) == 38 and len(_kv26.muc_con_trong(
+                   len(_mt) == 39 and len(_kv26.muc_con_trong(
                        _tpl.replace("  [ ] EMAIL", "  [x] EMAIL")
-                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 45
+                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 46
                    and not ({"@DUAN.", "@NGUON.", "@TEN.PROJECT"} & _mt)
                    and "@MUC.NANG" in _mt))
         # PH-5: ghim CHIỀU của lời dặn phép 8, thứ mà phán quyết không giữ

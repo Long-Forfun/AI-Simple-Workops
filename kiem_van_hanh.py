@@ -218,7 +218,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.", "11b.",
+           "8e.", "11b.", "0m.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -226,7 +226,7 @@ BIET_MAT_SO = re.compile(
     r"|NHATKY_(\d{4}Q[1-4]|TEMPLATE)\.md|_thu_.*|_quan_sat_.*|_moc_ghi\.txt")
 BIET_MAT_00 = re.compile(
     r"X[0-9]E?_[A-Z0-9_]+\.md|INSTRUCTION_WORKOPS_v\d+\.md|README\.md"
-    r"|GHICHU_DOI_MOI_v.*\.md|DOC_TRUOC\.md|BENCHMARK_TOKEN\.md"
+    r"|GHICHU_(DOI_MOI|LICHSU)_v.*\.md|DOC_TRUOC\.md|BENCHMARK_TOKEN\.md"
     r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|\.gitignore|_moc_ghi\.txt")
 
 
@@ -757,6 +757,18 @@ def dem_qua_han(so, x0nd, hom_nay=None):
 # Đây là tập CON của MAU_TAM: mọi file khớp nó vốn bị loại lặng lẽ.
 MAU_BAN_SAO_N = re.compile(r"^(?P<goc>.+?) (?:\((?P<n>\d+)\)|- ?[Cc]opy"
                            r"(?: \d+)?|\(bản sao\))(?P<duoi>\.[^.]+)$")
+
+
+def doc_saoluu(x0nd):
+    """Giá trị @KHO.SAOLUU: trả (đường dẫn hay None, có_khai_chua_co)."""
+    m = re.search(r"@KHO\.SAOLUU\s+(.+)", x0nd or "")
+    if not m:
+        return None, False
+    v = m.group(1).strip()
+    if re.search(r"(?i)ch[ưu]a c[óo]|<", v):
+        return None, True
+    d = re.match(r"([A-Za-z]:[\\/][^·,;]*|[\\/][^·,;]*)", v)
+    return (d.group(1).strip() if d else None), False
 
 
 def quet_ban_sao_n(kho):
@@ -1804,6 +1816,30 @@ def main(goc):
               " ngoài _so còn mã G - nhiều khả năng _so vừa bị khôi phục nhầm"
               " hay rollback đám mây, xem dòng 0k. [AI: TUYỆT ĐỐI không cấp mã"
               " G mới trước khi dựng lại sổ]")
+
+    # 0m. NƠI SAO LƯU NGOÀI KHO. Backup hằng ngày của X5 mục 7 nằm TRONG
+    #     _so, nên lượt rollback đám mây trọn _so xóa sạch cả chúng - hội đồng
+    #     vòng 18 dựng đúng cảnh đó và 7/7 bản chết cùng lượt. Lối khôi phục mà
+    #     chính phép 0 chỉ ra ("bản sao lưu ở thiết bị khác") trước vòng 53
+    #     không có thủ tục nào trong bộ tạo ra nó.
+    if not chua_cai and x0s:
+        _sl_d, _sl_chua = doc_saoluu(doc(x0s[0]))
+        # chưa khai thì KHÔNG nhắc ở đây: @KHO.SAOLUU là mục trống của X0
+        # C12 và phép 0i đã canh đúng việc đó. Nhắc thêm ở mỗi lượt RA_SOAT là
+        # thuế vĩnh viễn trên trần đầu ra cho một nghĩa vụ đã có lưới.
+        if not (_sl_chua or _sl_d is None):
+            _slp = Path(_sl_d)
+            if not _slp.is_dir():
+                print(f"        LƯU Ý  0m: nơi sao lưu {_sl_d} không thấy;"
+                      f" ổ ngoài chưa cắm? Không kết luận")
+            else:
+                import time as _t0m
+                _moi_nhat = max((f.stat().st_mtime for f in _slp.rglob("*")
+                                 if f.is_file()), default=0)
+                _ngay = int((_t0m.time() - _moi_nhat) / 86400) if _moi_nhat else 9999
+                bao("0m. nơi sao lưu ngoài kho còn được cập nhật", _ngay <= 7,
+                    f"{_sl_d}: bản mới nhất cách đây {_ngay} ngày - đây là bản"
+                    f" DUY NHẤT sống sót một lượt rollback trọn _so. Sao lại, mức A")
 
     idx = doc(so / "X0_INDEX.md")
     if not chua_cai:

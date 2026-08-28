@@ -45,7 +45,7 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1339 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5987 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6025 + khối (không phần mềm trừ thêm mục 1b ~421) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
@@ -80,10 +80,10 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16864 token
-CHAT không EMAIL ~18559 token
-CHAT có EMAIL (kèm X3E) ~22557 token
-CHAT nạp cả X9 và X4 ~22919 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17015 token
+CHAT không EMAIL ~18710 token
+CHAT có EMAIL (kèm X3E) ~22708 token
+CHAT nạp cả X9 và X4 ~23070 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
