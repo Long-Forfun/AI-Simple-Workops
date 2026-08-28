@@ -2406,7 +2406,7 @@ def main(goc):
         _verbose = "--verbose" in sys.argv
 
         def chay_email(nk=None, reg=None, thu_rows="", x0_hop="mail@congty.vn",
-                       idx=None, files=None, don=None):
+                       idx=None, files=None, don=None, thu_header=None):
             """Dựng hệ EMAIL tạm rồi gọi TOÀN BỘ kiem_email(). files: dict
             đường dẫn tương đối từ gốc sang nội dung (staging, sổ đích...).
             Mặc định nuốt output chi tiết (LECH của tình huống ÂM là chủ ý);
@@ -2431,8 +2431,9 @@ def main(goc):
                     f.parent.mkdir(parents=True, exist_ok=True)
                     f.write_text(nd_f, encoding="utf-8")
                 (s9 / "THU.md").write_text(
-                    "# T\n\n| Mã | Luồng | Conversation-ID | Message-ID cuối | Trạng thái |\n"
-                    "|---|---|---|---|---|\n" + thu_rows, encoding="utf-8")
+                    "# T\n\n" + (thu_header or
+                    "| Mã | Luồng | Conversation-ID | Message-ID cuối | Trạng thái |\n"
+                    "|---|---|---|---|---|\n") + thu_rows, encoding="utf-8")
                 if _verbose:
                     return {t: ok for t, ok, _ in kiem_email(g9, s9)}
                 with contextlib.redirect_stdout(_io.StringIO()):
@@ -2904,6 +2905,14 @@ def main(goc):
         r = chay_email(nk=P("<a@x>", pay=dict(PAY, thao_tac=[42])) + "\n" + C("<a@x>") + "\n",
                        reg=["<a@x>"])
         ca.append(("thao tác không phải object bị bắt", r.get(TEN_12H) is False))
+        # đổi TÊN CỘT Conversation-ID: 12i2 là người canh DUY NHẤT của tình
+        # huống 12f/12i cùng tắt im lặng - chưa ca nào từng ép nó đỏ (tự
+        # quét vòng 90)
+        r = chay_email(nk=SACH, reg=["<a@x>"], thu_header=(
+            "| Mã | Luồng | Conv | Message-ID cuối | Trạng thái |\n"
+            "|---|---|---|---|---|\n"))
+        ca.append(("đổi tên cột Conversation-ID bị 12i2 bắt",
+                   r.get("12i2. header THU còn đủ tên cột then chốt") is False))
         # thao tác {} rỗng: bị bắt
         r = chay_email(nk=P("<a@x>", pay=dict(PAY, thao_tac=[{}])) + "\n" + C("<a@x>") + "\n",
                        reg=["<a@x>"])
@@ -3170,8 +3179,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 107,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 107: bớt ca là"
+             not hong and len(ca) == 108,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 108: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

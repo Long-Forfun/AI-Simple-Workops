@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 81 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 82 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,20 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 82: tự quét 12-series - vùng lớn cuối cùng
+
+Cùng chiến thuật vòng 80: quét chủ động TRƯỚC khi giám khảo chiếu tới. Sáu
+mutant luôn-xanh trên 12b, 12c, 12f, 12i, 12n, 12i2: 5/6 BẮT ngay - bộ
+fixture âm-dương của phép 11 phủ 12-series tốt hơn mọi vùng khác (nó được
+xây từ thời EMAIL là mặt trận chính). MỘT SỐNG: 12i2 - người canh DUY NHẤT
+của tình huống đổi-tên-cột Conversation-ID (12f và 12i cùng tắt im lặng)
+mà chưa ca nào từng ép nó đỏ. Thêm tham số thu_header cho harness
+chay_email + ca đổi tên cột; tái đo BẮT.
+
+Toàn bộ các vùng của kiem_van_hanh nay đều đã qua ít nhất một lượt quét
+đột biến chủ động hoặc của giám khảo. BẤT BIẾN I1 7, I2 34, I3 80(nt)/79;
+fixture 108 ca. Đang chờ rubric vòng chấm 06. BACKLOG: (e) sổ CSV (CẤM).
 
 ## Vòng 81: rubric vòng chấm 05 - 91/100, vá cả bảy khoản
 
