@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 67 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 68 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,32 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 68: lưới đúng mà thông điệp làm nó vô dụng
+
+Vòng TỰ DÒ, không chờ hội đồng: đo trước năm vùng mà giám khảo vòng 21 liệt là
+chưa ai soi. Bốn vùng xử đúng sẵn và ghi lại đây để khỏi đo lại - BOM UTF-8 ở
+đầu sổ (im, đúng: BOM nằm trước tiêu đề, không chạm dòng bảng) · dòng kẻ dùng
+dấu hai chấm căn lề `|:---|---:|` của GFM (im, đúng) · hai khối CÙNG TÊN trong
+một sổ (phép 7 bắt qua mã trùng) · khoảng trắng không ngắt U+00A0 cạnh giá trị
+(str.strip của Python vốn cắt nó nên giá trị về đúng, không lệch - ĐÚNG hành
+vi, ghi ra để vòng sau đừng "sửa cho đều").
+
+MỘT PHÁT HIỆN THẬT, và nó thuộc lớp lỗi tinh vi nhất từ trước tới nay: ký tự
+ZERO-WIDTH trong ô Trạng thái BỊ 3g bắt - lưới hoạt động đúng - nhưng thông
+điệp in ra là `ô XONG`. Người dùng nhìn thấy ĐÚNG CHỮ XONG, đối chiếu với từ
+vựng X5 thấy khớp hoàn toàn, và kết luận MÁY HỎNG. Lưới đúng mà thông điệp làm
+nó thành vô dụng, và người dùng không có cách nào tự thấy vấn đề - sát ngay lớp
+phạt-người-làm-đúng dù về mặt kỹ thuật thì phép này không hề sai.
+
+U+200B, U+FEFF, các dấu định hướng sinh ra khi dán từ web, Word hay Excel. Nay
+khi bỏ ký tự vô hình đi mà giá trị KHỚP từ vựng, thông điệp nói thẳng: "Trạng
+thái XONG kèm KÝ TỰ VÔ HÌNH (U+200B)". Giá trị SAI THẬT thì vẫn báo như cũ,
+không nhét thêm chữ gây nhiễu.
+
+BACKLOG còn: (j) vòng đời _inbox và _da_nap · (a) hash nội dung QUYETDINH -
+cần thêm chỗ LƯU hash, tức đổi schema, nên không phải việc vá một dòng · (c)
+khuôn bản sao · (e) bản rà cho sổ chuyển sang CSV.
 
 ## Vòng 67: hai bảng khác thứ tự cột trong một sổ
 

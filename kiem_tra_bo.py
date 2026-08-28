@@ -650,6 +650,10 @@ def phep_fuzz(goc, phu_them=()):
               " Hạn | Trạng thái | Liên kết | Ghi lần |")
     _KE_V = "|---|---|---|---|---|---|---|---|---|---|"
 
+    thu3("ô Trạng thái mang ký tự vô hình (dán từ web hay Word)",
+         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
+                                      "| XONG |", "| XO\u200bNG |"), "3g.")
+
     def _ca_5d(k, i, so, G, sua):
         """Khối thứ hai đảo hai cột Hạn và Chờ ai từ: mọi dòng vẫn CÙNG SỐ ô
         nên phép 5 xanh, mà bộ đếm quá hạn đọc nhầm ô (hội đồng vòng 21)."""
@@ -1077,9 +1081,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 14, 54):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 14, 55):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 14,"
-                    f" I3 54 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 55 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của

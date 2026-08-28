@@ -779,6 +779,25 @@ def ghi_cache(cache, luc_kho, files):
               f" lần quét sau coi như quan sát mới")
 
 
+# ký tự VÔ HÌNH hay sinh ra khi dán từ web, Word, Excel: zero-width, khoảng
+# trắng không ngắt, dấu định hướng. Mắt không thấy, máy thấy khác hoàn toàn.
+MAU_VO_HINH = re.compile(r"[\u200b-\u200f\u202a-\u202e\u2060\ufeff\xa0]")
+
+
+def ta_vo_hinh(gt, hop_le):
+    """Nếu bỏ ký tự vô hình đi thì giá trị KHỚP từ vựng, trả câu giải thích.
+
+    Không có câu này thì thông điệp in ra "ô XONG" trong khi từ vựng cũng có
+    "XONG": người dùng đối chiếu thấy khớp và kết luận MÁY HỎNG. Lưới đúng mà
+    thông điệp làm nó thành vô dụng."""
+    sach = MAU_VO_HINH.sub("", gt)
+    if sach != gt and sach in hop_le:
+        ma = ", ".join(sorted({f"U+{ord(c):04X}"
+                               for c in gt if MAU_VO_HINH.match(c)}))
+        return f"{sach} kèm KÝ TỰ VÔ HÌNH ({ma})"
+    return None
+
+
 def bo_dau(s):
     """Chữ thường, BỎ DẤU. Hội đồng vòng 16: ô "Chạm sổ nào" gõ "khong" thay
     vì "không" làm 3c báo LỆCH vĩnh viễn trên lượt tra cứu ĐÚNG LUẬT, và làm
@@ -2345,9 +2364,13 @@ def main(goc):
         _tv = []
         for h in hang_nk:
             if len(h) > 3 and h[3].strip() and h[3].strip() not in ("A", "B", "C"):
-                _tv.append(f"NHATKY {h[0].strip()[:20]}: Mức {h[3].strip()}")
+                _tv.append(f"NHATKY {h[0].strip()[:20]}: Mức "
+                           + (ta_vo_hinh(h[3].strip(), ("A", "B", "C"))
+                              or h[3].strip()))
             if len(h) > 7 and h[7].strip() and h[7].strip() not in ("XONG", "ĐANG GHI"):
-                _tv.append(f"NHATKY {h[0].strip()[:20]}: Trạng thái {h[7].strip()}")
+                _tv.append(f"NHATKY {h[0].strip()[:20]}: Trạng thái "
+                           + (ta_vo_hinh(h[7].strip(), ("XONG", "ĐANG GHI"))
+                              or h[7].strip()))
         for _t, _c, _hl in [
                 ("VIEC.md", 7, ("MỚI", "ĐANG LÀM", "CHỜ ĐỐI TÁC", "CHỜ DUYỆT",
                                 "TREO", "XONG", "HỦY")),
@@ -2370,8 +2393,8 @@ def main(goc):
                 if not _gt and _t != "THU.md":
                     continue
                 if _gt not in _hl:
-                    _tv.append(f"{_t}:{(_r[0] or '?').strip()[:12]}"
-                               f" ô {_gt[:14] or '(rỗng)'}")
+                    _tv.append(f"{_t}:{(_r[0] or '?').strip()[:12]} ô "
+                               + (ta_vo_hinh(_gt, _hl) or _gt[:14] or "(rỗng)"))
         bao("3g. ô Mức, Trạng thái đúng từ vựng", not _tv,
             f"{_liet(_tv[:5])}: giá trị ngoài từ vựng làm chính dòng đó TÀNG HÌNH"
             f" với 3c, 3d và mọi bộ đếm của bảng. Sửa về đúng từ vựng X5 mục 2,"
