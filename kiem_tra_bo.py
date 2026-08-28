@@ -160,7 +160,8 @@ loi = []
 
 DA_KIEM = []
 PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
-                 "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b."]
+                 "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.",
+                 "13c.", "14.", "14b."]
 # phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
 
 
@@ -240,7 +241,8 @@ def _kho_song(goc, td):
     v = (so / "VIEC.md").read_text(encoding="utf-8")
     v = v.replace("<MÃ>", "FUZ").replace("## <KHỐI>", "## KHOI1").rstrip(NL)
     _ghi(so / "VIEC.md", v + NL + "| DA1 | V-DA1-001 | Viec mot | buoc sau | toi | |"
-         " 2026-12-31 | ĐANG LÀM | | " + G + " |" + NL)
+         " 2026-12-31 | XONG | | " + G + " |" + NL)  # XONG: ca I2 chuyển _lich_su
+    # theo X5 mục 5 chỉ đúng luật với việc XONG hay HỦY (hội đồng vòng 15b)
     for t in ["DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md", "THU.md"]:
         _ghi(so / t, (so / t).read_text(encoding="utf-8").replace("<MÃ>", "FUZ"))
     _ghi(so / "X0_INDEX.md", "# X0_INDEX · FUZ" + NL * 2 + "```yaml" + NL
@@ -284,12 +286,13 @@ def phep_fuzz(goc):
     thái mất dấu đi im)."""
     import tempfile
     import shutil
-    hong = []
+    hong, phu, _dem = [], set(), {"I1": 0, "I2": 0, "I3": 0}
 
     def _sua(f, cu, moi):
         _ghi(f, f.read_text(encoding="utf-8").replace(cu, moi))
 
     def thu(ten, sua, mat_dau):
+        _dem["I1" if mat_dau else "I2"] += 1
         with tempfile.TemporaryDirectory() as td:
             kho, idx, so, G = _kho_song(goc, td)
             if _ra_soat(idx, kho):
@@ -297,6 +300,7 @@ def phep_fuzz(goc):
                 return
             sua(kho, idx, so, G, _sua)
             lech = _ra_soat(idx, kho)
+            phu.update(l.split(" ")[0] for l in lech)
             if mat_dau and not lech:
                 hong.append("I1 " + ten + ": mất dấu mã G mà KHÔNG phép nào kêu")
             if not mat_dau and lech:
@@ -311,10 +315,10 @@ def phep_fuzz(goc):
         lambda k, i, so, G, sua: sua(so / "VIEC.md", " | " + G + " |", " |  |"), True)
     thu("xóa trọn dòng VIEC",
         lambda k, i, so, G, sua: sua(so / "VIEC.md", "| DA1 | V-DA1-001", "x| DA1 |"), True)
-    thu("cắt cụt dòng NHATKY ở mức byte",
+    thu("cắt cụt dòng NHATKY ở mức byte (hỏng schema, mã G ở ô đầu còn)",
         lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8")[:-24]), True)
-    thu("bản conflicted copy của sổ",
+    thu("bản conflicted copy của sổ (thêm bản, không mất dấu)",
         lambda k, i, so, G, sua: shutil.copy(so / "VIEC.md",
                                              so / "VIEC (conflicted copy).md"), True)
 
@@ -353,10 +357,16 @@ def phep_fuzz(goc):
     #     định nghĩa không với tới 0h, 0i, 0j, 1a, 3f, 7b - hội đồng vòng 15 đo
     #     được 14/16 đột biến vào vùng đó lọt.
     def thu3(ten, sua, ten_phep):
+        _dem["I3"] += 1
         with tempfile.TemporaryDirectory() as td:
             kho, idx, so, G = _kho_song(goc, td)
+            if _ra_soat(idx, kho):
+                hong.append("I3 " + ten + ": KHO LÀNH đã lệch sẵn")
+                return
             sua(kho, idx, so, G, _sua)
-            if not any(l.startswith(ten_phep) for l in _ra_soat(idx, kho)):
+            _l3 = _ra_soat(idx, kho)
+            phu.update(l.split(" ")[0] for l in _l3)
+            if not any(l.startswith(ten_phep) for l in _l3):
                 hong.append("I3 " + ten + ": " + ten_phep + " không kêu ở CHỖ GỌI")
 
     thu3("C12 rụng dòng mà giá trị vẫn trống",
@@ -373,6 +383,28 @@ def phep_fuzz(goc):
          lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
              (so / "VIEC.md").read_text(encoding="utf-8")
              + "| DA1 | V-DA1-009 | dan tay | x | toi | | 2026-12-31 | MỚI | | |" + NL), "3f.")
+    thu3("_moc_ghi giữ mã mà NHATKY không có (rollback trọn _so)",
+         lambda k, i, so, G, sua: _ghi(i / "_moc_ghi.txt",
+             G + NL + "G-20260828-CUA1-77" + NL), "0k.")
+    thu3("bảng rụng bộ đếm mà banner phải in",
+         lambda k, i, so, G, sua: _ghi(so / "BANG_DIEU_KHIEN.md",
+             (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+             .replace("bàn sạch · mốc: chưa có", "0 quá hạn")), "8b.")
+    thu3("liên kết trong sổ trỏ mã không tồn tại",
+         lambda k, i, so, G, sua: sua(so / "VIEC.md", "| XONG | |",
+                                      "| XONG | Q-999 |"), "7c.")
+    thu3("kho đang chạy còn nằm trong bản làm việc git",
+         lambda k, i, so, G, sua: (k / ".git").mkdir(exist_ok=True), "0g.")
+    thu3("plan mức C ĐÃ GHI mà không mang mã G",
+         lambda k, i, so, G, sua: _ghi(so / "PLANNING.md",
+             (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
+             + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
+               " ĐÃ GHI |  |" + NL), "4.")
+    thu3("lượt mức C trong NHATKY mà không plan nào mang mã đó",
+         lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip() + NL
+             + "| G-20260828-CUA1-09 | 2026-08-28 | CUA1.1100.k2m4 | C | phat hanh"
+               " | VIEC V-DA1-001 | khong | XONG | khong |" + NL), "3d.")
     thu3("cửa ma sinh lane watermark giả",
          lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md", "CUA1-01", "CUAX-01"), "7b.")
 
@@ -382,8 +414,30 @@ def phep_fuzz(goc):
     thu("CA MỒI: kho LÀNH khai nhầm là mất dấu", lambda *a: None, True)
     if len(hong) == _n:
         hong.append("CA MỒI không kêu: vế I1 đã bị tắt, phép 13 chỉ còn trang trí")
-    else:
-        hong.pop()
+    elif hong[-1].startswith("I1 CA MỒI"):
+        hong.pop()   # pop() mù từng nuốt được thông điệp "KHO LÀNH đã lệch sẵn"
+
+    # CA MỒI chỉ canh vế I1. Ghim SỐ CA thì tắt I2, tắt I3, hay bỏ bớt ca đều
+    # đỏ - hội đồng vòng 15b tắt được cả I2 lẫn I3 mà bộ vẫn in "sạch".
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 12):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 4,"
+                    f" I3 12 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" trong CÙNG lượt vá")
+
+    # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
+    #      CHÍNH kiem_tra_bo, nên xóa một phép khỏi kiem_van_hanh vẫn "sạch".
+    #      Danh bạ PHEP_VH là DỮ LIỆU: phép mới không kèm ca của chính nó thì
+    #      14b đỏ NGAY LƯỢT VÁ ĐÓ - quy tắc mà ba vòng liền tự viết rồi không
+    #      thi hành, nay thành MÁY chứ không còn là lời dặn (vòng 15b).
+    import kiem_van_hanh as K14
+    MIEN_TRU = ["0.", "0b.", "0c.", "0e.", "0f.", "1.", "1b.", "1c.", "2.",
+                "3a.", "3b.", "4.", "5.", "6.", "7.", "9.", "10a.", "10b.",
+                "10c.", "11."]  # phải RỖNG DẦN: mỗi mục là một phép chưa ai canh
+    _ho = [pp for pp in K14.PHEP_VH if pp not in phu and pp not in MIEN_TRU]
+    kiem("14b. mọi phép của kiem_van_hanh đều có ca ép trạng thái ở phép 13",
+         not _ho, f"phép {_ho} không có ca nào: xóa trọn phép đó thì bộ vẫn in"
+         f" 'hệ sạch'. Thêm một ca I1, I2 hay I3 cho nó, hay khai vào MIEN_TRU"
+         f" trong CÙNG lượt vá")
 
     kiem("13. fuzz ba bất biến: mất dấu phải kêu, đúng luật không được kêu,"
          " mỗi phép phải kêu đúng tên mình", not hong, "; ".join(hong[:4]))
@@ -410,6 +464,30 @@ def phep_fuzz(goc):
     kiem("13b. bảng kết quả kiem_van_hanh trong trần đầu ra 2.400 ký tự",
          n_ra <= 2400, f"{n_ra} ký tự ~{n_ra // 3} token: đầu ra này DÁN VÀO"
          f" phiên RA_SOAT, là context thật của người dùng")
+
+    # 13c. Trần trên kho TOÀN PASS là ca DỄ NHẤT; RA_SOAT chỉ chạy khi kho CÓ
+    #      vấn đề. Hội đồng vòng 15b: kho 8 lệch cho 3.832 ký tự, vượt 60%.
+    with tempfile.TemporaryDirectory() as td:
+        kho, idx, so, G = _kho_song(goc, td)
+        _ghi(idx / "rac_la.md", "x")
+        shutil.copy(idx / "INSTRUCTION_WORKOPS_v11.md",
+                    idx / "INSTRUCTION_WORKOPS_v9.md")
+        _ghi(so / "VIEC.md", (so / "VIEC.md").read_text(encoding="utf-8")
+             + "| DA1 | V-DA1-009 | dan tay | x | toi | | 2026-12-31 | MỚI | | |" + NL)
+        buf2, argv = _io3.StringIO(), sys.argv
+        try:
+            sys.argv = ["kvh", str(idx), str(kho)]
+            with contextlib.redirect_stdout(buf2):
+                try:
+                    K3.main(idx)
+                except SystemExit:
+                    pass
+        finally:
+            sys.argv = argv
+        n_lech = len(buf2.getvalue())
+    kiem("13c. bảng kiem_van_hanh trên kho ĐANG LỆCH trong trần 4.400 ký tự",
+         n_lech <= 4400, f"{n_lech} ký tự ~{n_lech // 3} token: đây mới là ca"
+         f" người dùng THẬT SỰ dán vào phiên RA_SOAT")
 
 
 def main(goc):
@@ -516,7 +594,8 @@ def main(goc):
         for _so in cac_max:
             if abs(_so - gia_tri) > nguong * gia_tri:
                 lech_bm.append(f"{nhan}: BENCHMARK ~{_so}, đo thật ~{gia_tri}")
-    kiem("2c. số route BENCHMARK khớp số đo thật (dung sai 10%)", not lech_bm,
+    kiem("2c. số route BENCHMARK khớp số đo thật (dung sai 0 cho dòng CỘNG,"
+         " 2% trên 5.000 token, 10% còn lại)", not lech_bm,
          str(lech_bm) + " ; chạy --sinh-benchmark để lấy số mới")
     if "--sinh-benchmark" in sys.argv:
         print("  SỐ ĐO route hiện tại (dán vào BENCHMARK):")
@@ -1321,7 +1400,7 @@ def main(goc):
 
     # 12. Luật nghiệp vụ then chốt phải có mặt trong X5 và X3 (chống rơi khi rút gọn)
     x5nd = docs["X5_HESO_TEMPLATE.md"]
-    thieu_luat = [t for t, dk in [
+    _luat = [
         ("im lặng không suy đã duyệt", "không bao giờ suy" in x5nd and "im lặng" in x5nd.lower()),
         ("gửi duyệt là ảnh chụp, việc tiếp trên vN+1", "ẢNH" in x5nd and "vN+1" in x5nd),
         ("bất biến chỉ cho phát hành nộp ký cấp", "ĐÃ PHÁT HÀNH" in x5nd),
@@ -1390,8 +1469,14 @@ def main(goc):
         ("người vận hành là tham số có thật để bàn giao đổi", "@VANHANH.NGUOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "đổi @VANHANH.NGUOI ở C6" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("có chỗ khai nơi phát hành bộ để biết bản mới sau khi gỡ .git", "@NHIP.BANMOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.BANMOI" in docs["X5_HESO_TEMPLATE.md"]),
         ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git kể cả ở thư mục cha", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "THƯ MỤC CHA" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
-    ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (68 luật)", not thieu_luat, str(thieu_luat))
+    ]
+    thieu_luat = [t for t, dk in _luat if not dk]
+    kiem(f"12. luật nghiệp vụ then chốt có mặt ({len(_luat)} luật)",
+         not thieu_luat and len(_luat) == 67,
+         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 67: bớt"
+                            f" luật là bớt lưới không ai hay; đổi số thì sửa"
+                            f" con số này trong CÙNG lượt vá"
+                            if len(_luat) != 67 else ""))
 
     phep_fuzz(goc)
 
@@ -1435,7 +1520,7 @@ def main(goc):
     # 14. ĐIỂM DANH PHÉP, đặt CUỐI cùng: xóa trọn một phép thì bộ vẫn in "sạch,
     #     đóng gói được" và dòng của nó chỉ lặng lẽ biến mất - hội đồng vòng 15
     #     xóa được cả phép 13, sản phẩm đầu bảng của vòng 42.
-    _da = {t.split(" ")[0] for t in DA_KIEM}
+    _da = {t.split(" ")[0] for t in DA_KIEM} | {"14."}  # tự điểm danh mình
     thieu_phep = [pp for pp in PHEP_BAT_BUOC if pp not in _da]
     kiem("14. điểm danh: đủ mọi phép bắt buộc đã chạy", not thieu_phep,
          f"phép {thieu_phep} biến khỏi lượt chạy. Xóa một phép mà bộ vẫn 'sạch'"

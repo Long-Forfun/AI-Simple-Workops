@@ -31,6 +31,66 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 44: quy tắc tự viết ba vòng liền, nay thành MÁY
+
+Điểm THÔNG MINH vòng 15b: 7,8/10 (vòng 13: 9,0). Tất định ĐẠT tuyệt đối - ép
+qua PYTHONHASHSEED, bốn locale kể cả tr_TR (bẫy chữ I), đường dẫn có dấu,
+junction: mọi lượt chạy giống nhau từng byte. Điểm tụt vì vòng 43 mở một bề
+mặt lời khai rất lớn (phép 13, 14, "lưới của lưới") mà bề mặt đó yếu hơn lời
+khai, cộng hai defect vận hành mới.
+
+HAI DEFECT NẶNG, đều do CHÍNH bản vá vòng 43 gây ra:
+1. 3c mù TRỌN DÒNG. Vòng 43 thêm `if "đã xóa theo Q-" in cham: continue` để
+   thôi phạt người thi hành lệnh xóa pháp lý - nhưng X5 mục 7b chỉ dặn GỠ TÊN
+   SỔ đó khỏi ô, nghĩa là phép đã tự loại đúng sổ bị xóa rồi, cái continue vừa
+   thừa vừa MỞ LẠI ĐÚNG LỖ VÒNG 41 ĐÃ ĐÓNG: ghi đè ô "Ghi lần" của sổ CÒN LẠI
+   đi im hoàn toàn, và chỉ cần gõ chuỗi đó vào ô là được, mã Q- không cần có
+   thật. Nay chỉ bỏ qua khi ô thay TRỌN, và mã Q- phải có ở QUYETDINH.
+2. 00_Index chỉ lọc ở TẦNG ĐẦU. Một bản sao lưu 00_Index lồng trong kho - thao
+   tác sao lưu bình thường - đẩy trọn 14 file LUẬT của chính bộ thành ứng viên
+   vào TAILIEU; qua junction thì thành 93 và đệ quy tới khi MAX_PATH cắt, tức
+   chỉ giới hạn Windows chặn chứ không phải thiết kế. Nay lọc MỌI TẦNG như
+   "_so" đã làm, và không đi xuyên junction hay symlink.
+
+PHÉP 14b - quy tắc thành máy. Ba vòng liền bộ tự viết một quy tắc rồi không
+thi hành ngay trong lượt đó: vòng 40 "mỗi bản vá phải đi kèm lưới của chính
+nó", vòng 41 "phép kiểm mới nguy hiểm ngang một luật mới", vòng 43 "phép mới
+phải kèm một ca I1 và một ca I2 của chính nó". Hậu quả đo được: 27/36 phép của
+kiem_van_hanh xóa trọn được mà bộ vẫn in "sạch, đóng gói được" - gồm 8b mà mục
+Vòng 43 nêu đích danh là đã vá, và 0k, 7c, 8c, 3d do CHÍNH vòng 43 đẻ ra.
+Nay kiem_van_hanh mang DANH BẠ PHEP_VH (dữ liệu, không phải nhãn) và phép 14b
+đối chiếu danh bạ đó với tập phép mà phép 13 THẬT SỰ ép được trạng thái vi
+phạm. Phép mới không kèm ca của chính nó thì 14b đỏ NGAY LƯỢT VÁ ĐÓ. Nó chứng
+minh giá trị ngay lần chạy đầu: nêu đích danh 3d chưa có ca nào canh, và ca
+đó đã được thêm trong cùng lượt. MIEN_TRU còn 20 phép, phải rỗng dần - đó là
+danh sách nợ công khai, không còn là vùng mù im lặng.
+
+LƯỚI CỦA LƯỚI, khâu tiếp: tắt vế I2 hay I3 của phép 13 trước đây vẫn "sạch"
+(CA MỒI chỉ canh vế I1) - nay SỐ CA là khẳng định (7/4/12) nên tắt vế nào cũng
+đỏ · hong.pop() mù từng nuốt được thông điệp "KHO LÀNH đã lệch sẵn", nay có
+điều kiện · thu3 nay cũng kiểm kho lành trước khi ép, hết ca đúng-một-cách-rỗng
+· "68 luật" vẫn là NHÃN và đếm thật là 67, nay là khẳng định · phép 13c đo
+trần đầu ra trên kho ĐANG LỆCH (kho toàn PASS là ca dễ nhất, mà RA_SOAT chỉ
+chạy khi kho CÓ vấn đề: đo được 3.832 ký tự, vượt trần cũ 60 phần trăm).
+
+BA CA CỦA PHÉP 13 SAI BẢN CHẤT, nay sửa: hai ca I1 không hề mất dấu mã G (cắt
+byte cuối dòng trong khi mã nằm ô đầu - thực chất là hỏng schema do phép 5
+bắt; và bản conflicted chỉ THÊM file, không xóa gì) nay đổi tên cho đúng bản
+chất; một ca I2 khai "chuyển việc ĐÃ XONG sang _lich_su" mà dữ liệu là ĐANG
+LÀM - lưới đang KHẲNG ĐỊNH rằng đem việc dở dang vào lịch sử là đúng luật, nay
+sửa thành XONG.
+
+Khâu nhỏ: 8c đọc ĐÚNG dòng watermark (một dòng văn xuôi mang chuỗi "CUA2=" là
+đủ đánh lừa nó) · tên phép 2c khai đúng dung sai thật (0 cho dòng CỘNG, 2%
+trên 5.000, 10% còn lại) thay vì "10%".
+
+BACKLOG: (a) hash QUYETDINH · (b) phép 5 đối chiếu số cột với X5 mục 4 · (c)
+khuôn bản sao (đã hạ mức) · (d) tách bản LUẬT thuần khỏi bản gộp, ĐƯỜNG GĂNG ·
+(e) chuyển sổ sang CSV/SQLite còn CẤM chứ chưa có bản rà · (f) MIEN_TRU của
+phép 14b còn 20 phép chưa ai canh · (g) loc_ban_chinh tất định nhờ sorted mà
+không phép nào ghim - đổi hệ file thì im lặng đổi hành vi · (h) phép 7c chưa
+soi PLANNING và DUKIEN, phép 9b bỏ qua hai trần script.
+
 ## Vòng 43: hội đồng vòng 15 - lưới phải có lưới của chính nó
 
 Điểm vòng 15: TOKEN 9,4 (13: 9,3) · ĐƠN GIẢN 8,9 (8,8) · KHÔNG MISS 8,5 (14:
@@ -128,10 +188,13 @@ _lich_su theo X5 mục 5 · điền lần đầu rồi đánh dấu [x] ở C12 
 Phép 13 gọi TRỌN main() của kiem_van_hanh, không gọi hàm helper: hội đồng vòng
 14 đo được 12/25 đột biến lọt vì fixture chỉ khẳng định giá trị trả về của hàm
 mà không ai kẹp CHỖ GỌI.
-[ĐÍNH CHÍNH vòng 43: câu "tắt một phép ở chỗ gọi là phép 13 kêu ngay" KHAI
- QUÁ NET. Vòng 42 chỉ kiểm bằng hai đột biến; hội đồng vòng 15 đo trọn 32
- phép thì phép 13 bắt 4/32 (0b, 3c, 3e, 5) - 12 phần trăm. Vòng 43 thêm bất
- biến I3 nên nay phủ thêm 0h, 0i, 0j, 1a, 3f, 7b; vẫn CHƯA phủ hết.]
+[ĐÍNH CHÍNH vòng 43, ĐO LẠI ở vòng 44: câu "tắt một phép ở chỗ gọi là phép
+ 13 kêu ngay" KHAI QUÁ NET - và bản đính chính của vòng 43 CŨNG khai quá net.
+ Đo trọn 36 mã phép của kiem_van_hanh (49 nếu kể 12a-12l), tắt từng phép một:
+ vế I1 và I2 của vòng 42 bắt 3 (3c, 3e, 5), KHÔNG phải 4/32; 0b bị chính bản
+ mở rộng "0j soi xuống _so" của vòng 43 che mất. I3 của vòng 43 thêm 0h, 0i,
+ 0j, 1a, 3f, 7b, thành 9/36. Vòng 44 thêm phép 14b nên con số này không còn
+ là lời khai nữa mà là thứ MÁY tự đối chiếu mỗi lượt chạy.]
 
 Kiểm chứng bằng hai đột biến, chạy thật trên bản sao:
 - gỡ đúng bản vá _lich_su của vòng 41 (một dòng) thì phép 13 FAIL với

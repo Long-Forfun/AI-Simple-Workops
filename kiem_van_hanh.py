@@ -209,6 +209,14 @@ if hasattr(sys.stdout, "reconfigure"):
 
 loi = []
 MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
+# DANH BẠ PHÉP: DỮ LIỆU, không phải nhãn. Phép 14b của kiem_tra_bo đối
+# chiếu danh bạ này với tập phép mà phép 13 THẬT SỰ ép được trạng thái vi
+# phạm. Hội đồng vòng 15b: 27/36 phép xóa trọn được mà bộ vẫn in "sạch",
+# gồm cả 8b mà vòng 43 khai đã vá, và 0k, 7c, 8c, 3d do vòng 43 tự đẻ ra.
+PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
+           "0j.", "0k.", "1.", "1a.", "1b.", "1c.", "2.", "3a.", "3b.",
+           "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
+           "7c.", "8.", "8b.", "8c.", "9.", "10a.", "10b.", "10c.", "11."]
 BIET_MAT_SO = re.compile(
     r"(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU|BANG_DIEU_KHIEN|X0_INDEX)\.md"
     r"|NHATKY_(\d{4}Q[1-4]|TEMPLATE)\.md|_thu_.*|_quan_sat_.*|_moc_ghi\.txt")
@@ -641,8 +649,17 @@ def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
             continue
         if rel.split("/")[0] == "99_Archive":
             continue
-        if rel.split("/")[0] in THU_MUC_HE_THONG:
-            continue  # 00_Index là vùng luật và sổ, không phải tài liệu nghiệp vụ
+        if any(seg in THU_MUC_HE_THONG for seg in rel.split("/")):
+            continue  # 00_Index là vùng luật và sổ, không phải tài liệu nghiệp
+            # vụ - lọc ở MỌI TẦNG như "_so", không riêng tầng đầu: một bản sao
+            # lưu 00_Index lồng trong kho đẩy trọn 14 file LUẬT thành ứng viên
+            # vào TAILIEU, qua junction thì thành 93 (hội đồng vòng 15b)
+        if f.is_symlink() or any(
+                (kho / "/".join(rel.split("/")[:i + 1])).is_symlink()
+                for i in range(len(rel.split("/")) - 1)):
+            continue  # junction hay symlink: nội dung thật đã quét ở đường
+            # CHÍNH của nó; đi xuyên vào đây là đếm đúp và đệ quy tới khi
+            # MAX_PATH cắt - giới hạn của Windows, không phải thiết kế
         if any(rel == b or rel.startswith(b.rstrip("/") + "/") for b in bo_them):
             continue  # danh sách loại của công ty ở _so/_quan_sat_bo.txt
         if la_file_tam(f.name):
@@ -1511,9 +1528,20 @@ def main(goc):
                 continue
             if "không" in cham.lower():
                 continue
-            if "đã xóa theo Q-" in cham:
-                continue  # X5 mục 7b: sổ đã bị lệnh pháp lý gỡ khỏi ô này, đòi
-                          # dấu ở đó là phạt người thi hành đúng lệnh xóa
+            # X5 mục 7b dặn GỠ TÊN SỔ đó khỏi ô, nên `can` đã tự loại đúng sổ
+            # bị xóa: bỏ TRỌN DÒNG là mù luôn các sổ CÒN LẠI mà lượt đó chạm.
+            # Hội đồng vòng 15b: gõ chuỗi "đã xóa theo Q-" vào ô là đủ để ghi
+            # đè ô Ghi lần của sổ còn lại đi im - đúng lỗ vòng 41 đã đóng, mở
+            # lại bởi chính bản vá vòng 43. Mã Q- cũng phải CÓ THẬT.
+            _mq = re.search(r"đã xóa theo (Q-[A-Za-z0-9-]+)", cham)
+            if _mq and not any(_mq.group(1) == o.strip()
+                               for rq in dong_bang(doc(so / "QUYETDINH.md"))
+                               for o in rq):
+                khong_dau.append(f"{ma} khai xóa theo {_mq.group(1)} mà QUYETDINH"
+                                 f" không có mã đó")
+                continue
+            if "không, đã xóa theo Q-" in cham:
+                continue  # X5 mục 7b: mất dấu ở MỌI sổ, ô thay trọn
             can = {t for t in SO_CO_GHI_LAN if t.split(".")[0] in cham}
             thieu = sorted(t for t in (can or set()) if ma not in ghi_lan_theo_so.get(t, set()))
             if thieu or (not can and ma not in ghi_lan):
@@ -1731,7 +1759,12 @@ def main(goc):
             #     3 bước 6 đặt watermark làm chỗ DUY NHẤT giữ mã cuối của cửa
             #     KHÁC. Lane rụng thì cửa đó mất mốc cao nhất và lượt sau có thể
             #     cấp lại mã đã dùng - phép 8 chỉ đọc sinh_boi nên mù (vòng 15).
-            _thieu_lane = sorted(cc for cc in wm if f"{cc}=" not in bdk_nd)
+            # đọc ĐÚNG dòng watermark, không quét trọn bảng: một dòng văn
+            # xuôi bất kỳ mang chuỗi "CUA2=" là đủ để lane rụng mà phép này im
+            _wmd = re.search(r"watermark:\s*(.+)", bdk_nd or "")
+            _wm_khai = set(re.findall(r"\b(CUA\d+)\s*=",
+                                      _wmd.group(1) if _wmd else ""))
+            _thieu_lane = sorted(cc for cc in wm if cc not in _wm_khai)
             bao("8c. bảng khai lane watermark cho mọi cửa có lượt ghi",
                 not _thieu_lane, f"thiếu lane {_liet(_thieu_lane)}: cửa đó mất mốc"
                 f" cao nhất, lượt sau có thể cấp lại mã đã dùng. Sinh lại bảng"
