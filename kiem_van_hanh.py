@@ -223,6 +223,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
+           "0i3.", "2b.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -1141,11 +1142,11 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     _bo_moi = {_x.split(" (")[0] for _x in _secret_kho} | set(_dump_kho)
     de_xuat = [d for d in de_xuat if d not in _bo_moi]
     if _secret_kho:
-        bao("7e2. file secret không nằm trong kho đồng bộ (X5 mục 1b)", False,
+        bao("7e2. file secret không ở kho đồng bộ", False,
             f"{_liet(_secret_kho[:5])}: KHÔNG mời vào sổ. Thu hồi và xoay khóa"
             f" TRƯỚC, chuyển ra khỏi kho sau; nơi giữ secret khai ở X0 C2. Mức C")
     if _dump_kho:
-        bao("7e4. dump hay log của CHẠY THẬT không nằm trong kho (X5 mục 1b)",
+        bao("7e4. dump của chạy thật không ở kho",
             False, f"{_liet(_dump_kho[:5])}: dump chạy thật mang dữ liệu KHÁCH"
             f" HÀNG và kho là thư mục đồng bộ, file đã đi ra mọi máy công ty."
             f" Chuyển ra ngoài kho; cần phân tích thì lấy bản đã che. Mức C")
@@ -1716,11 +1717,17 @@ def main(goc):
 
     # 0b. Conflicted copy của file sổ do đồng bộ mây: chứa lượt ghi bị kẹt,
     #     phải hòa giải theo X5 mục 3 rồi chuyển _lich_su, không được để im.
-    xung = sorted(f.name for vung in (so.glob("*"), goc.glob("*.md"))
-                  for f in vung
-                  if f.is_file() and ("conflicted" in f.name.lower()
-                                      or "xung đột" in f.name.lower()
-                                      or la_file_tam(f.name)))
+    # rglob trên _so: bản conflicted nấp trong _lich_su, _inbox hay
+    # _thu_staging từng lọt trọn - loc_ban_chinh lọc nó khỏi lượt gộp NHATKY
+    # nên một lượt ghi mức C tồn tại trên đĩa mà bộ tuyên bố sạch (vòng 20).
+    # Báo ĐƯỜNG DẪN tương đối, không chỉ tên, để người dùng biết nó nằm đâu.
+    xung = sorted(
+        str(f.relative_to(so)).replace("\\", "/") if vung is so else f.name
+        for vung in (so, goc)
+        for f in (vung.rglob("*") if vung is so else vung.glob("*.md"))
+        if f.is_file() and ("conflicted" in f.name.lower()
+                            or "xung đột" in f.name.lower()
+                            or la_file_tam(f.name)))
     # hậu tố LẠ trên tên sổ chuẩn (khuôn OneDrive -<TênMáy>...): cũng là bản sao
     xung += sorted(f.name for f in so.glob("NHATKY_*.md")
                    if f.name not in {x.split("/")[-1] for x in xung}
@@ -1755,7 +1762,7 @@ def main(goc):
             bao("0c. có bản X0 đang chạy", False,
                 "không thấy X0_CAUHINH nào: mất file cấu hình, khôi phục mức C")
     else:
-        bao("0c. đúng MỘT bản X0 đang chạy",
+        bao("0c. đúng một bản X0",
             len(x0s) == 1, f"thấy {[q.name for q in x0s]}: nhiều ứng viên thì hệ"
             f" không tự chọn, gộp về một bản rồi rà lại")
     instrs = sorted(goc.glob("INSTRUCTION_WORKOPS_v*.md"),
@@ -1875,9 +1882,31 @@ def main(goc):
     if not chua_cai and x0s:
         _mat_muc = [m for m in ("C1", "C2", "C7", "C12")
                     if not re.search(rf"^# {m}\. ", doc(x0s[0]), re.M)]
-        bao("0i2. X0 còn đủ các mục mà phép kiểm dựa vào", not _mat_muc,
+        bao("0i2. X0 còn đủ các mục phép kiểm dùng", not _mat_muc,
             f"mất mục {_liet(_mat_muc)}: xóa mục là TẮT LUÔN phép canh chính mục"
             f" đó - mất C12 thì 0i im, mất C2 thì 7b im (hội đồng vòng 16)")
+        # 0i3. Khai TRÙNG một @KEY: mọi hàm đọc X0 đều re.search MỘT LẦN nên
+        #      bản trùng được giải theo "dòng nào gặp trước", không ai biết có
+        #      mâu thuẫn. Hai dòng CUA1 trỏ hai gốc là CHIA ĐÔI KHO - hai máy
+        #      cùng cấp mã một lane; hai @CTY.MA thì tên file và mã G hết quy
+        #      về một công ty. Trùng khóa sinh ra rất tự nhiên khi người dùng
+        #      "chép dòng cũ xuống rồi sửa" đúng như X9 hướng dẫn (vòng 20).
+        #      Chỉ đếm dòng KHỚP "^@KEY " nên các dòng NỐI thụt lề dưới cùng
+        #      một khóa (X0 mẫu có @NHIP.HOPTHU ba dòng) không bị tính.
+        _gt_khoa = {}
+        for _d0i3 in doc(x0s[0]).splitlines():
+            _m0i3 = (re.match(r"(@[A-Z][A-Z0-9._]*)\s+(\S.*)$", _d0i3)
+                     or re.match(r"\s+(CUA\d+)\s*=\s*(\S.*)$", _d0i3))
+            if _m0i3:
+                _gt_khoa.setdefault(_m0i3.group(1), set()).add(
+                    _m0i3.group(2).strip())
+        _trung_khoa = sorted(f"{_k}: {_liet(sorted(_v)[:2])}"
+                             for _k, _v in _gt_khoa.items() if len(_v) > 1)
+        bao("0i3. mỗi @KEY của X0 khai một giá trị", not _trung_khoa,
+            f"{_liet(_trung_khoa[:3])}: mọi phép đọc X0 lấy dòng GẶP TRƯỚC nên"
+            f" bản khai trùng đi im. Hai cửa cùng tên trỏ hai gốc là chia đôi"
+            f" kho: hai máy cùng cấp mã một lane. Gộp về một dòng, mức B")
+
         _lc = lech_c12(doc(x0s[0]))
         if _lc:
             bao("0i. C12 khai đúng tập mục còn <chưa điền>", False,
@@ -1909,16 +1938,51 @@ def main(goc):
 
     bdk_nd = doc(so / "BANG_DIEU_KHIEN.md")
     if bdk_nd:
-        bao("1b. BANG_DIEU_KHIEN trong trần runtime 4.200 ký tự",
+        bao("1b. BANG_DIEU_KHIEN trong trần 4.200",
             len(bdk_nd) <= 4200,
             f"{len(bdk_nd)} ký tự: bảng phình làm thuế mở phiên tăng ngầm, dọn bớt"
             f" khối cũ hay chuyển chi tiết xuống sổ")
     idx_rt = doc(so / "X0_INDEX.md")
     if idx_rt:
-        bao("1c. X0_INDEX trong trần runtime 2.400 ký tự",
+        bao("1c. X0_INDEX trong trần 2.400",
             len(idx_rt) <= 2400,
             f"{len(idx_rt)} ký tự: view phình thì thuế mở phiên tăng ngầm,"
             f" rút gọn về đúng rev, kho, profile, dự án, vị trí mục")
+
+    # 2b. X0_INDEX khớp X0 ở PROFILE và DỰ ÁN, không chỉ ở rev. Sửa X0 mà
+    #     không tăng rev là đường đi thường ngày (thêm dự án, bật profile), nên
+    #     view mà INSTRUCTION bắt phiên đọc TRƯỚC có thể khai "profile: LITE"
+    #     cho một công ty REGULATED: phiên chạy không nghi thức mức C và dự án
+    #     thứ hai vô hình (hội đồng vòng 20). So theo TẬP, không nguyên văn.
+    if not chua_cai and x0s and idx_rt:
+        _x0nd2 = doc(x0s[0])
+        _pf_x0 = set(re.findall(
+            r"\[x\]\s*(REGULATED|PARALLEL|AUTOMATED|EMAIL)", _x0nd2))
+        # CHỈ so trường mà view CÓ KHAI: view tối giản (không dòng profile,
+        # không dòng du_an) là hợp lệ, so vô điều kiện là báo oan mọi kho như
+        # thế - bản đầu của phép này làm đúng vậy trên chính kho lành của
+        # phép 13.
+        _m_pf = re.search(r"profile:\s*(.+)", idx_rt)
+        _pf_iv = set(re.findall(r"\b(REGULATED|PARALLEL|AUTOMATED|EMAIL)\b",
+                                _m_pf.group(1) if _m_pf else ""))
+        _c2b = _x0nd2[_x0nd2.find("# C2."):_x0nd2.find("# C3.")]
+        _da_x0 = {m.group(1) for m in re.finditer(
+            r"@DUAN\.([A-Z0-9]+)[^\n]*đang chạy", _c2b) if m.group(1) != "PHANMEM"}
+        _m_da = re.search(r"du_an:\s*(.+)", idx_rt)
+        _da_iv = set(re.findall(r"[A-Z0-9]{2,6}",
+                                _m_da.group(1) if _m_da else ""))
+        _lech2b = []
+        if _m_pf and _pf_x0 != _pf_iv:
+            _lech2b.append(f"profile: X0 bật {_liet(sorted(_pf_x0)) or 'LITE'},"
+                           f" view khai {_liet(sorted(_pf_iv)) or 'LITE'}")
+        if _m_da and _da_x0 and _da_x0 != _da_iv:
+            _lech2b.append(f"dự án đang chạy: X0 có {_liet(sorted(_da_x0))},"
+                           f" view khai {_liet(sorted(_da_iv)) or 'không'}")
+        bao("2b. X0_INDEX khớp X0: profile, dự án", not _lech2b,
+            f"{'; '.join(_lech2b)}: INSTRUCTION bắt phiên đọc view NÀY trước,"
+            f" nên view lạc hậu là cả phiên chạy sai chế độ - công ty REGULATED"
+            f" bị xử như LITE thì không nghi thức mức C, và dự án vắng ở view"
+            f" thành vô hình. Sinh lại view theo X5 mục 3 bước 6")
 
     # 1d. X0 CỦA KHO ĐANG CHẠY. NGAN_SACH của kiem_tra_bo chỉ chấm bản
     #     TEMPLATE trong bộ mẫu; file mà phiên CHAT thật sự nạp nguyên vẹn là
@@ -1928,7 +1992,7 @@ def main(goc):
     #     (18.969 LITE, 19.059 REGULATED+EMAIL) không bị kêu oan.
     if x0s:
         _n_x0 = len(doc(x0s[0]))
-        bao("1d. X0 đang chạy trong trần runtime 28.000 ký tự", _n_x0 <= 28000,
+        bao("1d. X0 đang chạy trong trần 28.000", _n_x0 <= 28000,
             f"{_n_x0} ký tự: X0 là file phiên CHAT nạp NGUYÊN VẸN mỗi lượt, nên"
             f" nó phình là thuế thường trực phình theo. Chuyển phần liệt kê dài"
             f" xuống sổ, giữ X0 là nơi khai THAM SỐ")
@@ -2212,7 +2276,7 @@ def main(goc):
                         if len(h) > 3 and h[3].strip() == "C"
                         and re.fullmatch(MAU_G, h[0].strip("* "))
                         and h[0].strip("* ") not in plan_da_ghi]
-        bao("3d. lượt mức C đều có plan mang mã G tương ứng", not c_khong_plan,
+        bao("3d. lượt mức C đều có plan mang mã G", not c_khong_plan,
             str(c_khong_plan[:5]))
 
         hang_pl = dong_bang(doc(so / "PLANNING.md"))
@@ -2403,7 +2467,7 @@ def main(goc):
             if _dau_pm:
                 _thieu_pm.append("@DUAN.PHANMEM chưa khai dòng nào, trong khi sổ đã"
                                  " có dấu vết làm phần mềm")
-        bao("7d. dự án phần mềm khai đủ phạm vi tổ chức",
+        bao("7d. dự án phần mềm khai đủ phạm vi",
             not _thieu_pm,
             f"{' · '.join(_thieu_pm[:3])}. Thiếu trường nào thì vận hành liên quan"
             f" trường đó chạy mù: không rõ repo thì code có thể bị chép vào kho;"
@@ -2426,7 +2490,7 @@ def main(goc):
                     _repo_mo_coi.append((_r[1] if len(_r) > 1 else "?").strip()
                                         + (f" (Repo {_pm_o[0]})" if _pm_o else ""))
         if _repo_mo_coi:
-            bao("7d2. dòng TAILIEU dạng Repo phải thuộc dự án có khai phần mềm",
+            bao("7d2. dòng Repo thuộc dự án có khai phần mềm",
                 False, f"{_liet(_repo_mo_coi[:3])}: cột \"Ở đâu\" dạng Repo chỉ"
                 f" cho dòng thuộc dự án ĐÃ khai @DUAN.PHANMEM (X0 C1)."
                 f" Đang khai: {_liet(_ma_pm) or 'chưa dự án nào'}. Khai phạm vi"
@@ -2570,7 +2634,7 @@ def main(goc):
         if not re.match(r"(Kho|KhoCu|Project|Drive|Repo)\s\S", _o):
             _sai_khuon.append(f"{(_r[1] if len(_r) > 1 else '?').strip()[:14]}:"
                               f" {_o[:30]}")
-    bao("7f. ô \"Ở đâu\" của TAILIEU thuộc bốn dạng X0 C1", not _sai_khuon,
+    bao("7f. ô \"Ở đâu\" thuộc các dạng X0 C1", not _sai_khuon,
         f"{_liet(_sai_khuon[:5])}: X0 C1 cho ĐÚNG bốn dạng - Kho · Project ·"
         f" Drive · Repo. Sai khuôn thì phép 9, 10a, 10b BỎ QUA dòng này: tài"
         f" liệu trông như được theo dõi mà không có lưới toàn vẹn nào, hợp"
@@ -2731,7 +2795,7 @@ def main(goc):
                 "quá hạn", "chờ đối tác", "plan C treo", "ĐANG GHI", "mail", "mốc",
                 "watermark"]
             _thieu_dem = [k for k in _nhan if k.lower() not in bdk_nd.lower()]
-            bao("8b. BANG_DIEU_KHIEN mang đủ sáu bộ đếm mà banner INSTRUCTION mục 2 in",
+            bao("8b. BANG_DIEU_KHIEN mang đủ sáu bộ đếm",
                 not _thieu_dem, f"thiếu nhãn {_thieu_dem}: bảng thiếu bộ đếm thì"
                 f" banner mở phiên in số bịa; sinh lại theo X5 mục 3 bước 6")
             # 8e. Bộ đếm của bảng phải KHỚP SỔ, không chỉ có mặt tên. 8b chỉ

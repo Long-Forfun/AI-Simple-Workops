@@ -9,6 +9,45 @@ Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 63: bốn mục cuối của hội đồng vòng 20
+
+KHAI TRÙNG MỘT @KEY - "dòng sau đè dòng trước" IM LẶNG. Mọi hàm đọc X0 đều
+`re.search` MỘT LẦN, nên bản khai trùng được giải theo "dòng nào regex gặp
+trước" và không ai biết có mâu thuẫn. Hai dòng `CUA1 =` trỏ hai gốc là kịch bản
+CHIA ĐÔI KHO: hai máy cùng cấp mã CUA1-NN, watermark một lane, sổ hai nơi. Hai
+`@CTY.MA` thì tên file X0/X1/X5 và mã G hết quy về một công ty. Trùng khóa sinh
+ra rất tự nhiên khi người dùng "chép dòng cũ xuống rồi sửa" - đúng như X9
+hướng dẫn. Phép 0i3, và chỉ đếm dòng khớp `^@KEY ` nên các dòng NỐI thụt lề
+dưới cùng một khóa (X0 mẫu có @NHIP.HOPTHU ba dòng) không bị tính.
+
+0b KHÔNG XUỐNG `_lich_su`, `_inbox`, `_thu_staging`. Dropbox đẻ
+`_lich_su\NHATKY_2026Q2 (Long's conflicted copy).md` chứa MỘT lượt mức C không
+có ở bản chính; `loc_ban_chinh` lọc bản conflicted khỏi lượt gộp, nên lượt ký
+phụ lục đó tồn tại trên đĩa, bị bỏ qua, và bộ tuyên bố sạch. Đúng vùng mù mà
+vòng 58 đã vá cho lưới secret nhưng bỏ quên cho 0b. Nay rglob, và báo ĐƯỜNG DẪN
+chứ không chỉ TÊN để người dùng biết nó nằm đâu.
+
+X0_INDEX LẠC HẬU: phép 2 chỉ đối chiếu `x0_rev`. Sửa X0 mà KHÔNG tăng rev là
+đường đi thường ngày - thêm dự án, bật profile đều là sửa nội dung - nên view
+mà INSTRUCTION bắt phiên đọc TRƯỚC có thể khai `profile: LITE` cho một công ty
+REGULATED: phiên chạy không nghi thức mức C, không plan cho thay đổi chạy thật,
+dự án thứ hai VÔ HÌNH. Phép 2b so theo TẬP profile và TẬP mã dự án.
+Bản đầu của tôi so VÔ ĐIỀU KIỆN và báo oan ngay trên KHO LÀNH của phép 13 -
+view tối giản ở đó không có dòng `profile:` lẫn `du_an:`, và bốn phép cùng đỏ
+theo. Lại suýt là một bản vá chống báo oan tự đẻ báo oan. Nay CHỈ so trường mà
+view THỰC SỰ khai; ca của giám khảo vẫn bị bắt trọn vì view của họ khai đủ, chỉ
+là khai SAI. Và ngay sau đó 2b bắt được một lỗi trong chính script cài thử của
+tôi: view liệt kê dự án CTY mà X0 không khai.
+
+14e SIẾT LẦN HAI: giám khảo lách được bằng `[] == []`, `x or True`, `all([])`.
+Nay chặn cả BoolOp `or`, so hai hằng rỗng, và `all(<hằng rỗng>)`. Đo lại: 4/4
+cách lách đều bị bắt.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(a) hash QUYETDINH · (c) khuôn bản sao · (e) bản rà cho sổ CSV · 0j vẫn chưa
+xuống trong ba thư mục máy sinh (0b đã xuống; 0j cần whitelist riêng cho
+`_lich_su` nên để lượt sau).
+
 ## Vòng 62: lời hứa tôi viết mà không dựng, và hai lỗ của chính bản vá cũ
 
 Hội đồng vòng 20: KHÔNG MISS 4,0 (lên từ 3,0). Phần đáng giá nhất của báo cáo

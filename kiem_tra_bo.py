@@ -629,6 +629,29 @@ def phep_fuzz(goc, phu_them=()):
              + "DA1 | V-DA1-089 | Viec | b | toi | | 2099-12-31 | dang lam |"
                " |  |" + NL), "3g.")
 
+    def _ca_2b(k, i, so, G, sua):
+        """View khai profile LITE trong khi X0 đã bật REGULATED và EMAIL: phiên
+        AI đọc view NÀY trước, rồi chạy công ty REGULATED ở chế độ LITE - không
+        nghi thức mức C, không plan cho thay đổi chạy thật (hội đồng vòng 20)."""
+        sua(i / "X0_CAUHINH_FUZ.md", "  [ ] REGULATED", "  [x] REGULATED")
+        _p = so / "X0_INDEX.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "profile: LITE" + NL)
+
+    thu3("X0_INDEX khai profile LITE trong khi X0 bật REGULATED", _ca_2b, "2b.")
+
+    thu3("X0 khai HAI cửa CUA1 trỏ hai gốc khác nhau (chia đôi kho)",
+         lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md",
+             "CUA1 = " + str(k) + " · thiet bi MAY1",
+             "CUA1 = " + str(k) + " · thiet bi MAY1" + NL
+             + "                 CUA1 = D:\\KHO_2024 · thiet bi MAY9"), "0i3.")
+
+    thu3("bản conflicted copy nấp trong _so/_lich_su",
+         lambda k, i, so, G, sua: (so / "_lich_su").mkdir(exist_ok=True) or _ghi(
+             so / "_lich_su" / "NHATKY_2026Q2 (Long's conflicted copy).md",
+             "| G-20260515-CUA1-02 | 2026-05-15 | CUA1.0900.zz | C | ky phu luc"
+             " | TAILIEU | khong | XONG | khong |" + NL), "0b.")
+
     thu3("sổ lõi bị cắt còn 0 byte (đồng bộ hay ghi đè cắt cụt)",
          lambda k, i, so, G, sua: _ghi(so / "TAILIEU.md", ""), "0p.")
 
@@ -974,9 +997,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 42):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 45):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 13,"
-                    f" I3 42 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 45 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -1039,8 +1062,15 @@ def phep_fuzz(goc, phu_them=()):
             return True
         if isinstance(_n, _ast.UnaryOp) and isinstance(_n.op, _ast.Not):
             return _hang_rong(_n.operand)
+        if isinstance(_n, _ast.BoolOp) and isinstance(_n.op, _ast.Or):
+            return any(_luon_dung(_v) for _v in _n.values)
+        if (isinstance(_n, _ast.Call) and isinstance(_n.func, _ast.Name)
+                and _n.func.id == "all" and len(_n.args) == 1):
+            return _hang_rong(_n.args[0])
         if (isinstance(_n, _ast.Compare) and len(_n.ops) == 1
                 and isinstance(_n.ops[0], (_ast.Eq, _ast.Is))):
+            if _hang_rong(_n.left) and _hang_rong(_n.comparators[0]):
+                return True
             _t = _n.left
             if (isinstance(_t, _ast.Call) and isinstance(_t.func, _ast.Name)
                     and _t.func.id == "len" and len(_t.args) == 1
