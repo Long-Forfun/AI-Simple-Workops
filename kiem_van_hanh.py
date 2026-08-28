@@ -223,7 +223,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
-           "0i3.", "2b.", "10d.",
+           "0i3.", "2b.", "10d.", "5d.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -2419,6 +2419,26 @@ def main(goc):
                     j += 1
     bao("5. schema bảng: mọi dòng cùng số cột",
         not lech, str(lech[:5]))
+
+    # 5d. Mọi bảng trong CÙNG một sổ phải cùng thứ tự cột. X5 cho nhiều khối
+    #     `## <KHỐI>` mỗi khối một bảng - đó là cách bộ dặn tách dự án - nhưng
+    #     không ai đòi chúng cùng THỨ TỰ, trong khi dem_qua_han, 3g, 7f, 10d và
+    #     13m đều đọc theo VỊ TRÍ CỨNG. Đảo hai cột ở khối thứ hai là mọi dòng
+    #     vẫn cùng SỐ ô (phép 5 xanh) mà bộ đếm đọc nhầm ô: việc quá hạn 58
+    #     ngày biến mất khỏi mọi mặt phẳng, bảng giữ "bàn sạch" (vòng 21).
+    _lech_hdr = []
+    for p in sorted(so.glob("*.md")) + sorted((so / "_lich_su").glob("*.md")):
+        _lines = ngoai_fence(doc(p))
+        _hdrs = []
+        for _i, _d in enumerate(_lines[:-1]):
+            if _d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", _lines[_i + 1]):
+                _hdrs.append(tuple(tach_o(_d)))
+        if len(set(_hdrs)) > 1:
+            _lech_hdr.append(f"{p.name}: {len(set(_hdrs))} thứ tự cột khác nhau")
+    bao("5d. mọi bảng trong một sổ cùng thứ tự cột", not _lech_hdr,
+        f"{_liet(_lech_hdr[:4])}: các phép đọc sổ theo VỊ TRÍ cột, nên khối"
+        f" đảo cột làm bộ đếm quá hạn và từ vựng đọc nhầm ô trong khi phép 5"
+        f" vẫn xanh (mọi dòng cùng SỐ ô). Đưa các khối về cùng header, mức A")
 
     # 5b. Dòng thụt SÂU (>=4 dấu cách hay tab) mà trông như dòng bảng: GFM coi
     #     đó là khối code, nên dong_bang KHÔNG đọc nó - và docstring của

@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 66 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 67 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,27 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 67: hai bảng khác thứ tự cột trong một sổ
+
+Mục cuối của hội đồng vòng 21. X5 cho phép một sổ có nhiều khối `## <KHỐI>`,
+mỗi khối một bảng - đó là cách bộ DẶN tách dự án. Nhưng không phép nào đòi các
+bảng đó CÙNG MỘT thứ tự cột, trong khi `dem_qua_han`, `3g`, `7f`, `10d` và
+`13m` đều đọc theo VỊ TRÍ CỨNG.
+
+Giám khảo dựng VIEC.md có khối thứ hai đủ 10 cột nhưng đảo `Hạn` với `Chờ ai
+từ`, trong đó một việc nộp hồ sơ dự thầu quá hạn 58 ngày. Mọi dòng CÙNG SỐ ô
+nên phép 5 xanh, và bộ đếm quá hạn đọc nhầm ô - bảng giữ "bàn sạch", hồ sơ thầu
+trễ hạn biến mất khỏi mọi mặt phẳng. Đúng hậu quả 8e sinh ra để chặn.
+
+Phép 5d đòi mọi header trong CÙNG một sổ giống hệt nhau, và ca ĐÚNG LUẬT đi
+kèm là chính ca của giám khảo: khối thứ hai dùng ĐÚNG header chuẩn phải giữ im.
+
+Đây là mục thứ tám và cuối cùng của vòng 21 - toàn bộ danh sách hội đồng đó đã
+đóng, mỗi mục kèm ca của chính nó và ít nhất một ca chứng minh không báo oan.
+
+BACKLOG còn: (j) vòng đời _inbox và _da_nap · (a) hash nội dung QUYETDINH ·
+(c) khuôn bản sao · (e) bản rà cho sổ chuyển sang CSV.
 
 ## Vòng 66: sáu lỗ của hội đồng vòng 21, hai trong đó là lời tôi tự hứa
 
@@ -1911,7 +1932,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~789
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~806
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả

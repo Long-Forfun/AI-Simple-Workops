@@ -646,6 +646,33 @@ def phep_fuzz(goc, phu_them=()):
              "CUA1 = " + str(k) + " · thiet bi MAY1" + NL
              + "                 CUA1 = D:\\KHO_2024 · thiet bi MAY9"), "0i3.")
 
+    _HDR_V = ("| Dự án | Mã | Việc | Bước tiếp theo | Ai làm | Chờ ai từ |"
+              " Hạn | Trạng thái | Liên kết | Ghi lần |")
+    _KE_V = "|---|---|---|---|---|---|---|---|---|---|"
+
+    def _ca_5d(k, i, so, G, sua):
+        """Khối thứ hai đảo hai cột Hạn và Chờ ai từ: mọi dòng vẫn CÙNG SỐ ô
+        nên phép 5 xanh, mà bộ đếm quá hạn đọc nhầm ô (hội đồng vòng 21)."""
+        _dao = _HDR_V.replace("| Chờ ai từ | Hạn |", "| Hạn | Chờ ai từ |")
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "## KHOI2" + NL * 2 + _dao + NL + _KE_V + NL
+             + "| DA1 | V-DA1-055 | Nop ho so thau | b | toi | 2099-12-31 | |"
+               " MỚI | | " + G + " |" + NL)
+
+    thu3("khối thứ hai của sổ đảo thứ tự cột", _ca_5d, "5d.")
+
+    def _ca_5d_lanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: khối thứ hai dùng ĐÚNG header chuẩn - nhiều khối là cách
+        X5 dặn tách dự án, không được phạt."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "## KHOI2" + NL * 2 + _HDR_V + NL + _KE_V + NL
+             + "| DA1 | V-DA1-056 | Nop ho so thau | b | toi | | 2099-12-31 |"
+               " MỚI | | " + G + " |" + NL)
+
+    thu("sổ có khối thứ hai dùng đúng header (không được kêu)", _ca_5d_lanh, False)
+
     def _ca_10d(k, i, so, G, sua):
         """Hợp đồng ĐÃ KÝ, file có thật, mà ô sha256 BỎ TRỐNG: 10a và 10b bỏ
         qua trọn dòng nên bản đã ký hết lưới toàn vẹn (hội đồng vòng 21)."""
@@ -1050,9 +1077,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 53):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 13,"
-                    f" I3 53 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 14, 54):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 14,"
+                    f" I3 54 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
