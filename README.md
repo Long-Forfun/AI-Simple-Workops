@@ -30,7 +30,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    <gốc>. NGUYÊN TRẠNG: không chọn lọc file, không đổi tên file nào.
    Máy Mac: đường dẫn dùng dấu / thay cho \.
    Dùng git clone: sau khi cài xong, AI xóa thư mục 00_Index\.git giúp bạn.
-   Kho đang chạy không phải bản làm việc git, vì _so\ là sổ sống của công ty.
+   Kho đang chạy không nối với GitHub nữa, vì thư mục _so (sổ sách của công
+   ty bạn) nằm trong đó.
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
@@ -88,8 +89,11 @@ CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ đ
 Cập nhật bộ về sau: tải bản mới về MỘT THƯ MỤC KHÁC (clone hay ZIP đều được),
 rồi nói với AI trong phiên Cowork "cập nhật bộ luật, bản mới ở <đường dẫn>".
 AI tự đối chiếu, áp phần luật và nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
-ĐỪNG chạy `git pull` trong 00_Index: sổ của bạn nằm trong đó, git sẽ dừng và
-lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ khỏi thư mục làm việc.
+ĐỪNG chạy `git pull` trong 00_Index, và cả ở thư mục CHA của nó: sổ của bạn nằm
+trong đó, git sẽ dừng và lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ
+khỏi thư mục làm việc. Lỡ chạy `git stash` rồi thấy sổ trống: gõ ngay
+`git stash pop` ở đúng thư mục đó là dòng quay về, rồi nói với AI "rà file" để
+đối chiếu. Đừng gõ thêm lệnh git nào khác trước khi làm việc này.
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc

@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v34 · 20260828
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v35 · 20260828
+# v35, theo hội đồng vòng 13 (ba giám khảo cùng dựng lại được cảnh MẤT SỔ mà
+# máy in "hệ sạch"): dấu vết đã-từng-ghi quét MỌI sổ và view trong _so (v34
+# bỏ sót THU và BANG_DIEU_KHIEN, hai nơi mã G đậu theo X5 mục 3-4) · 0g dò
+# .git ở CẢ THƯ MỤC CHA (clone vào chính gốc kho thì git stash vẫn nuốt sổ)
+# · 0h rev 0 không còn tự nhận "chưa ghi" khi sổ đã mang mã G · 0i C12 phải
+# khai đúng tập mục còn <chưa điền> (chống lách ngoại lệ C11) · 0j file lạ
+# trong 00_Index (vùng bị loại khỏi quan sát nghiệp vụ) · 3e chiều NGƯỢC của
+# 3c: mã G đậu ở sổ phải có dòng NHATKY, bắt mất TRỌN file quý · phép 8 tách
+# hai chiều lệch, hết dẫn người dùng sinh lại bảng đè mất bằng chứng cuối.
 # v34, theo PILOT vận hành thật: 0d hết báo động giả ngay sau khi cài (kho
 # vừa cài chưa ghi lần nào thì NHATKY CHƯA sinh là đúng luật X5 mục 3, cũ
 # báo 'trục sự thật đã biến mất, cấm cấp mã G') · 0g mới: 00_Index còn là
@@ -191,6 +200,65 @@ if hasattr(sys.stdout, "reconfigure"):
 
 loi = []
 MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
+BIET_MAT_00 = re.compile(
+    r"X[0-9]E?_[A-Z0-9_]+\.md|INSTRUCTION_WORKOPS_v\d+\.md|README\.md"
+    r"|GHICHU_DOI_MOI_v.*\.md|DOC_TRUOC\.md|BENCHMARK_TOKEN\.md"
+    r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|\.gitignore")
+
+
+def loc_dau_vet_ghi(so, doc_ham=None):
+    """Mọi nơi mã G ĐẬU LẠI theo X5 mục 3-4, không phải chỉ 5 sổ lõi.
+    THU.md có cột "Ghi lần"; BANG_DIEU_KHIEN và X0_INDEX mang sinh_boi và
+    watermark sinh ở bước 6 của MỌI lượt ghi (kho vừa cài in "bàn sạch" nên
+    KHÔNG mang mã G). Hai file máy _thu_* nằm trong .gitignore nên không
+    được là bằng chứng DUY NHẤT. Hội đồng vòng 13: v34 quét thiếu ở đây làm
+    máy in "hệ sạch" khi NHATKY đã mất."""
+    d = doc_ham or (lambda p: p.read_text(encoding="utf-8") if p.is_file() else "")
+    ra = sorted(q.name for q in so.glob("*.md")
+                if "TEMPLATE" not in q.name and re.search(MAU_G, d(q)))
+    if (so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file():
+        ra.append("nhật ký EMAIL")
+    return ra
+
+
+def tim_vung_git(goc):
+    """Thư mục gần nhất (kho hay TỔ TIÊN của nó) đang là bản làm việc git.
+    Bắt cả .git thư mục lẫn .git FILE (worktree, submodule). Hội đồng vòng
+    13: v34 chỉ soi đúng một tầng, clone vào chính gốc kho thì git stash
+    vẫn nuốt dòng sổ mà lưới im."""
+    g = Path(goc).resolve()
+    return next((d for d in [g, *g.parents] if (d / ".git").exists()), None)
+
+
+MAU_TRONG = re.compile(r"<(?:chưa )?điền[^>]*>|<N>|<tên [^>]*>|<điền>")
+
+
+def lech_c12(nd):
+    """Tập mục lệch giữa C12 và tập THẬT còn dấu chưa điền của template.
+    Dấu chưa điền gồm MỌI khuôn mẫu: <chưa điền>, <điền...>, <N>. Hội đồng
+    vòng 13 (VẬN HÀNH) đếm được 29 mục còn trống sau khi cài mà C12 chỉ khai
+    2, nên ngoại lệ C11 (2) phủ đúng 2/29. Quét theo DÒNG: mục nhiều dòng thì
+    dấu trống ở dòng nối vẫn thuộc về @KEY gần nhất phía trên. Mục tự khai là
+    tùy chọn ("chỉ khai khi") không tính. Dòng C12 đã ĐÁNH DẤU [x] là mục đã
+    điền, giữ lại làm bằng chứng nhưng không còn là mục trống."""
+    if "# C12." not in nd:
+        return []
+    c12 = nd[nd.index("# C12."):]
+    c12 = c12[:c12.index("# C13.")] if "# C13." in c12 else c12
+    than = nd[:nd.index("# C12.")]
+    that, khoa_hien = set(), None
+    for dong in than.splitlines():
+        m = re.search(r"@[A-Z][A-Z0-9._]*", dong)
+        if m:
+            khoa_hien = m.group(0)
+        if khoa_hien and MAU_TRONG.search(dong) and "chỉ khai khi" not in dong:
+            that.add(khoa_hien)
+    khai = set()
+    for dong in c12.splitlines():
+        if dong.strip().startswith(("[x]", "[X]")):
+            continue  # đã điền, dòng giữ làm bằng chứng
+        khai |= set(re.findall(r"@[A-Z][A-Z0-9._]*", dong))
+    return sorted((that - khai) | (khai - that))
 BAT_BIEN = ("ĐÃ GỬI DUYỆT", "ĐÃ DUYỆT NỘI BỘ", "ĐÃ PHÁT HÀNH", "ĐÃ NỘP",
             "TRẢ HỒ SƠ", "ĐÃ KÝ", "ĐÃ CẤP")
 MAU_TAM = re.compile(r"^~\$|\.tmp$|\.bak\d*$|conflicted copy|xung đột|autosave|-nhap\d+"
@@ -1173,7 +1241,18 @@ def main(goc):
 
     LOI_DOC.clear()
     rev = re.search(r"rev (\d+)", doc(x0s[0])) if x0s else None
-    chua_cai = bool(rev and rev.group(1) == "0") or (not x0s and co_template)
+    dau_vet_ghi = loc_dau_vet_ghi(so, doc)
+    # rev 0 là LỜI KHAI của X0, không phải sự thật của sổ: X0 bị đồng bộ mây trả
+    # về bản cũ thì cờ này tắt một lượt cả 0d, 2, 3, 4, 8. Có dấu vết ghi thì
+    # KHÔNG cho phép tự nhận "chưa cài đặt" nữa (hội đồng vòng 13).
+    chua_cai = ((bool(rev and rev.group(1) == "0") or (not x0s and co_template))
+                and not dau_vet_ghi)
+    if rev and rev.group(1) == "0" and dau_vet_ghi:
+        bao("0h. rev của X0 khớp trạng thái sổ đã ghi", False,
+            f"X0 còn rev 0 (nghĩa là CHƯA cài) mà sổ đã mang dấu mã G"
+            f" ({dau_vet_ghi[:3]}): X0 bị khôi phục nhầm về bản cũ hay mất dòng"
+            f" rev. Phục hồi rev đúng, mức C, từ version history TRƯỚC khi ghi"
+            f" tiếp; cấm cấp mã G mới khi chưa có lại")
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: " + ("X0 tên chưa chuẩn (xem 0c), chưa đọc được rev"
               if not x0s and ung_vien_tho else "X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào"))
@@ -1184,13 +1263,8 @@ def main(goc):
         # KHO VỪA CÀI, CHƯA GHI LẦN NÀO: NHATKY chưa sinh là ĐÚNG luật (X5 mục
         # 3 bước 1 tạo file quý ở lượt ghi ĐẦU). Chỉ khi có DẤU VẾT đã từng ghi
         # mà NHATKY vắng thì mới là mất trục sự thật (PILOT vòng 38: bản cũ dọa
-        # "cấm cấp mã G" ngay sau khi cài đúng X9, hệ tự khóa mình).
-        dau_vet_ghi = []
-        for _t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md"]:
-            if re.search(MAU_G, doc(so / _t)):
-                dau_vet_ghi.append(_t)
-        if (so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file():
-            dau_vet_ghi.append("nhật ký EMAIL")
+        # "cấm cấp mã G" ngay sau khi cài đúng X9, hệ tự khóa mình). Tập dấu vết
+        # tính ở loc_dau_vet_ghi, phủ MỌI sổ và view (hội đồng vòng 13).
         if not co_nk and not chi_conflict and not dau_vet_ghi:
             print("  BỎ QUA  0d: hệ đã cài nhưng CHƯA ghi lần nào; NHATKY quý sinh"
                   " ở lượt ghi đầu theo X5 mục 3 bước 1, chưa có là đúng")
@@ -1199,19 +1273,45 @@ def main(goc):
                 ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
                  " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
                  if chi_conflict else
-                 f"sổ còn dấu mã G ({dau_vet_ghi[:3]}) mà NHATKY vắng: trục sự thật"
+                 f"còn dấu mã G ở ({dau_vet_ghi[:3]}) mà NHATKY vắng: trục sự thật"
                  " để cấp mã, hòa giải trùng và chốt sổ đã biến mất; khôi phục mức C"
                  " từ version history, cấm cấp mã G mới khi chưa có lại"))
-    # 0g. Kho ĐANG CHẠY không được là bản làm việc git: _so chứa sổ SỐNG, mà
-    #     sổ ship kèm bộ nên bị git quản; "git pull" sẽ dừng vì local changes và
-    #     làm theo lời khuyên "git stash" của git thì DÒNG SỔ BIẾN MẤT khỏi bản
-    #     làm việc (PILOT vòng 38 dựng lại được). Nâng cấp theo X9 mục 3c.
-    if not chua_cai and (goc / ".git").exists():
-        bao("0g. kho đang chạy không còn là bản làm việc git", False,
-            "00_Index còn thư mục .git: sổ sống nằm trong vùng git quản."
-            " XÓA 00_Index\\.git (sổ trên đĩa giữ nguyên), giữ bản clone để nâng"
-            " cấp ở thư mục KHÁC ngoài kho; nâng cấp theo X9 mục 3c."
-            " CẤM chạy git pull hay git stash trong kho đang chạy")
+    # 0g. Kho ĐANG CHẠY không được nằm TRONG bất kỳ bản làm việc git nào, kể
+    #     cả khi .git ở thư mục CHA: git pull và git stash chạy từ gốc repo vẫn
+    #     đụng _so. Hội đồng vòng 13 dựng lại được cảnh mất trọn sổ ở ca cha.
+    vung_git = tim_vung_git(goc) if not chua_cai else None
+    if vung_git is not None:
+        bao("0g. kho đang chạy không nằm trong bản làm việc git", False,
+            f"thấy thư mục ẩn tên .git ở {vung_git} (thư mục này, hay THƯ MỤC CHA"
+            f" của kho). Sổ sách của công ty đang nằm trong vùng git quản. Nói"
+            f" với AI \"xóa .git giúp tôi\" - sổ trên đĩa không suy suyển gì; muốn"
+            f" tự làm thì bật hiện file ẩn trong File Explorer (tab View, tick"
+            f" Hidden items) rồi xóa. TUYỆT ĐỐI đừng gõ git pull hay git stash ở"
+            f" đây: lỡ gõ rồi mà sổ trống thì chạy git stash pop lấy lại ngay."
+            f" Nâng cấp bộ theo X9 mục 3c")
+
+    # 0i. C12 phải khai ĐÚNG tập mục còn trống. Ngoại lệ C11 (2) cho phép "điền
+    #     lần đầu" ở mức B dựa trên tư cách thành viên của C12, nên C12 trôi khỏi
+    #     sự thật là mở cửa lách (hội đồng vòng 13).
+    if not chua_cai and x0s:
+        _lc = lech_c12(doc(x0s[0]))
+        if _lc:
+            bao("0i. C12 khai đúng tập mục còn <chưa điền>", False,
+                f"lệch {_lc[:5]}: mục biến khỏi C12 mà giá trị vẫn trống là lách"
+                f" ngoại lệ C11 (2); ngược lại là mục đã điền còn kẹt ở C12."
+                f" Đồng bộ C12 rồi sinh lại X0_INDEX")
+
+    # 0j. File LẠ trong 00_Index: vùng luật bị loại khỏi quan sát nghiệp vụ
+    #     (THU_MUC_HE_THONG), nên tài liệu lỡ lưu vào đây KHÔNG phép nào nhặt.
+    #     Trước vòng 38, "git status" là lưới cuối; xóa .git thì mất nốt.
+    _la = sorted(f.name for f in goc.iterdir()
+                 if f.is_file() and not BIET_MAT_00.fullmatch(f.name))
+    if _la:
+        bao("0j. không file lạ trong 00_Index", False,
+            f"{_la[:5]}: 00_Index là vùng luật, bị loại khỏi quan sát nghiệp vụ"
+            f" nên file ở đây KHÔNG BAO GIỜ được đề xuất vào TAILIEU. Tài liệu"
+            f" thì chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ thì khai"
+            f" vào _so\\_quan_sat_bo.txt và để NGOÀI 00_Index")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
@@ -1247,8 +1347,16 @@ def main(goc):
     wm = watermark(ma_g)
 
     if not chua_cai:
-        treo = [h[0] for h in hang_nk if any(o == "ĐANG GHI" for o in h)]
-        bao("3a. không dòng NHATKY còn ĐANG GHI", not treo, str(treo))
+        # dòng CỤT: đứt giữa lượt ghi ở mức byte (ổ đồng bộ cắt ngang) làm ô
+        # Trạng thái mất chữ, so khớp "ĐANG GHI" trượt và "chốt sổ" tuyên bố
+        # đóng phiên an toàn trong khi sổ đã mang mã của lượt dở (hội đồng 13)
+        so_o_dau = len(hang_nk[0]) if hang_nk else 0
+        treo = [h[0] for h in hang_nk if any(o == "ĐANG GHI" for o in h)] + [
+            (h[0] or "?") + " (dòng CỤT)" for h in hang_nk[1:]
+            if not any(o == "ĐANG GHI" for o in h)
+            and (len(h) < so_o_dau or any(o.strip().startswith("ĐANG") and
+                                          o.strip() != "ĐANG GHI" for o in h))]
+        bao("3a. không dòng NHATKY còn ĐANG GHI hay dòng cụt", not treo, str(treo))
         trung = sorted({m for m in ma_g if ma_g.count(m) > 1})
         bao("3b. không mã G trùng ở cột Mã ghi", not trung, str(trung))
         cu = [m for m in ma_g if cua_cua(m) is None]
@@ -1261,7 +1369,9 @@ def main(goc):
         # 3c (X4 dòng 19 nửa sau): lượt XONG phải để dấu mã G ở ít nhất một sổ,
         # trừ khi cột Chạm sổ nào ghi "không"
         ghi_lan = set()
-        for t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md"]:
+        for t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md",
+                  "PLANNING.md", "THU.md"]:  # THU có cột "Ghi lần" (profile EMAIL):
+                  # thiếu nó thì lượt chỉ chạm THU bị 3c báo LỆCH oan
             for r in dong_bang(doc(so / t)):
                 if r:
                     ghi_lan |= set(re.findall(MAU_G, r[-1]))
@@ -1272,6 +1382,16 @@ def main(goc):
                      and h[0].strip("* ") not in ghi_lan]
         bao("3c. lượt ghi XONG đều để dấu mã G ở ít nhất một sổ", not khong_dau,
             str(khong_dau[:5]))
+
+        # 3e. Chiều NGƯỢC của 3c: mã G đã đậu ở sổ hay bảng thì phải có dòng
+        #     NHATKY. 3c chỉ đi từ NHATKY ra sổ nên MẤT TRỌN một file quý (mây
+        #     rollback, restore lệch, git stash) không lay động phép nào.
+        dau_ngoai = ghi_lan | set(re.findall(MAU_G, doc(so / "BANG_DIEU_KHIEN.md")))
+        mo_coi = sorted(dau_ngoai - set(ma_g))
+        bao("3e. mã G đã đậu ở sổ đều có dòng NHATKY tương ứng", not mo_coi,
+            f"{mo_coi[:5]}: sổ hay bảng mang mã mà NHATKY không có dòng nào -"
+            f" dòng NHATKY hay CẢ FILE QUÝ của mã đó đã mất; khôi phục mức C từ"
+            f" version history TRƯỚC, cấm cấp mã G mới khi chưa có lại")
 
         # 3d (X4 dòng 23): lượt NHATKY mức C phải khớp một plan mang đúng mã G đó
         plan_da_ghi = {m for r in dong_bang(doc(so / "PLANNING.md"))
@@ -1332,9 +1452,28 @@ def main(goc):
         else:
             gb = g_bdk.group(1) if g_bdk else None
             c = cua_cua(gb) if gb else None
-            bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó",
+            # hai chiều lệch phải nói hai câu KHÁC nhau: bảng CŨ hơn thì sinh
+            # lại là đúng; bảng MỚI hơn mọi dòng NHATKY của chính cửa mình thì
+            # NHATKY đã mất dòng, sinh lại bảng là XÓA BẰNG CHỨNG CUỐI CÙNG
+            # (hội đồng vòng 13: phép cũ dẫn thẳng người dùng tới thao tác đó)
+            moi_hon = bool(gb and c and gb > (wm.get(c) or ""))
+            if not gb or not c:
+                bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó", False,
+                    "bảng chưa khai sinh_boi hay watermark mang mã G có cửa:"
+                    " bảng sinh TRƯỚC lượt ghi đầu tiên thì ghi \"cai dat\"; bảng"
+                    " sinh SAU một lượt ghi mà thiếu hai giá trị này là bảng sửa"
+                    " tay, sinh lại theo X5 mục 3 bước 6")
+            else:
+             bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó",
                 bool(gb and c and wm.get(c) == gb),
-                f"bảng={gb} watermark {c}={wm.get(c) if c else 'không'}")
+                (f"bảng={gb} MỚI HƠN mọi dòng NHATKY của cửa {c}"
+                 f" ({wm.get(c) or 'không có dòng nào'}): bảng chứng minh lượt ghi"
+                 f" đó ĐÃ xong mà NHATKY không còn - dòng hay CẢ FILE QUÝ đã mất."
+                 f" CẤM sinh lại bảng (sinh lại là xóa bằng chứng cuối); khôi"
+                 f" phục NHATKY mức C từ version history TRƯỚC, rồi mới sinh lại"
+                 if moi_hon else
+                 f"bảng={gb} watermark {c}={wm.get(c) if c else 'không'}:"
+                 f" bảng cũ hơn lượt ghi gần nhất, sinh lại bảng"))
             khac = [f"{k}={v}" for k, v in sorted(wm.items()) if k != c and v[2:10] > (gb or '')[2:10]]
             if khac:
                 print(f"        LƯU Ý: cửa khác có lượt ghi ngày mới hơn bảng ({'; '.join(khac)}), cân nhắc sinh lại")

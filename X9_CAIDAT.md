@@ -49,8 +49,11 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
 Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, dựng _so\_inbox\
 và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
-Kho vừa clone bằng git: XÓA `00_Index\.git` - kho chạy không phải bản làm việc
-git, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c).
+Kho vừa clone bằng git: XÓA `00_Index\.git`, VÀ cả `.git` ở THƯ MỤC CHA nếu lỡ
+clone vào chính `<gốc>` - kho chạy không được nằm trong bất kỳ bản làm việc git
+nào, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c). Quét X0 một lượt, đưa MỌI
+mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi: C12
+trống sau khi cài là SAI (rà 0i bắt).
 TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
@@ -103,18 +106,26 @@ Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy �
 # 3b. Kho CÓ SẴN file, không từ zero
 
 Công ty đã có đống file trước khi cài: KHÔNG đi từng mục _INBOX. Chạy
-kiem_van_hanh lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
+kiem_van_hanh HAI lần cách nhau ít nhất 5 phút rồi mới đọc khối ĐỀ XUẤT _INBOX:
+lần quét đầu luôn trả rỗng theo luật ổn định, "hệ sạch" ở lần đầu KHÔNG có nghĩa
+kho không có file. Lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
 bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành (căn
 cứ nhận diện: lời người dùng hay dấu vết _SIGNED, _NOP; KHÔNG suy từ tên
-suông), file cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
+suông), file cũ giữ tên, tên gốc ghi vào ô "Căn cứ trạng thái" của chính dòng đó. DUKIEN và VIEC không nạp đón trước, chỉ mở
 khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới
 
-CẤM `git pull`, `git stash`, `git checkout` trong kho đang chạy: `_so\` là sổ
-SỐNG, pull dừng vì local changes và `git stash` mà git khuyên làm DÒNG SỔ biến
-mất khỏi bản làm việc. Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép
-file _TEMPLATE mới vào `00_Index`.
+CẤM `git pull`, `git stash`, `git checkout` ở BẤT KỲ đâu trong bản làm việc git
+chứa kho, kể cả chạy từ thư mục cha: `_so\` là sổ SỐNG, pull dừng vì local
+changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bản làm việc.
+
+Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
+(a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
+thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, kiem_van_hanh.py,
+kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
+mới thay bản cũ là xong (bản v* cũ của INSTRUCTION xóa đi, chỉ giữ MỘT). Bỏ nhóm
+(b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới không bao giờ tới.
 
 Chép xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
 mang mã: chúng là NGUỒN LUẬT, không phải bộ chạy. AI diff template mới với bản
@@ -128,7 +139,8 @@ dòng sổ: `git stash pop`, rồi rà 3c và 2 đối chiếu.
 # 4. Luật hỏi lại, áp mãi mãi về sau
 
 ```
-Giữa chừng đụng tới tham số còn <chưa điền>:
+Giữa chừng đụng tới tham số còn dấu chưa điền (`<chưa điền>`, `<điền...>`, `<N>`,
+hay để trống):
   DỪNG việc đang làm ở điểm đó · GOM mọi tham số và dữ kiện còn thiếu CỦA CÙNG
   VIỆC ĐÓ vào MỘT lượt hỏi duy nhất, kèm vì sao cần, không hỏi nhỏ giọt từng câu
   · trả lời xong update ngược X0 (tăng rev, xóa dòng khỏi C12) · rồi mới làm

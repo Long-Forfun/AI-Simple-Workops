@@ -39,7 +39,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    <gốc>. NGUYÊN TRẠNG: không chọn lọc file, không đổi tên file nào.
    Máy Mac: đường dẫn dùng dấu / thay cho \.
    Dùng git clone: sau khi cài xong, AI xóa thư mục 00_Index\.git giúp bạn.
-   Kho đang chạy không phải bản làm việc git, vì _so\ là sổ sống của công ty.
+   Kho đang chạy không nối với GitHub nữa, vì thư mục _so (sổ sách của công
+   ty bạn) nằm trong đó.
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
@@ -97,8 +98,11 @@ CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ đ
 Cập nhật bộ về sau: tải bản mới về MỘT THƯ MỤC KHÁC (clone hay ZIP đều được),
 rồi nói với AI trong phiên Cowork "cập nhật bộ luật, bản mới ở <đường dẫn>".
 AI tự đối chiếu, áp phần luật và nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
-ĐỪNG chạy `git pull` trong 00_Index: sổ của bạn nằm trong đó, git sẽ dừng và
-lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ khỏi thư mục làm việc.
+ĐỪNG chạy `git pull` trong 00_Index, và cả ở thư mục CHA của nó: sổ của bạn nằm
+trong đó, git sẽ dừng và lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ
+khỏi thư mục làm việc. Lỡ chạy `git stash` rồi thấy sổ trống: gõ ngay
+`git stash pop` ở đúng thư mục đó là dòng quay về, rồi nói với AI "rà file" để
+đối chiếu. Đừng gõ thêm lệnh git nào khác trước khi làm việc này.
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
@@ -267,6 +271,105 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 40: hội đồng vòng 13 chấm PILOT - vá chính bản vá vòng 38
+
+Điểm vòng 13: TOKEN 9,3 · THÔNG MINH 9,0 · ĐƠN GIẢN 8,8 · KHÔNG MISS 8,6 ·
+KHÔNG SAI 7,6 · VẬN HÀNH 6,8. Điểm TỤT MẠNH so với 96,8 đọc-tĩnh, và tụt
+đúng lý do đáng mừng: sáu giám khảo lần này CHẠY hệ thay vì đọc, mỗi người
+một đường chưa ai đi (LITE không phần mềm, kho có sẵn file, bàn giao, hai
+phiên cùng cửa, mất mát, mutation). Ba defect NẶNG là do CHÍNH bản vá vòng
+38 sinh ra: vá một BÁO ĐỘNG GIẢ bằng cách đổi lấy ba lời BÁO SẠCH GIẢ.
+
+MÁY (kiem_van_hanh v35), tất cả đều dựng lại được trước khi vá:
+1. 0d quét thiếu (NẶNG, 3 giám khảo độc lập). v34 chỉ soi 5 sổ lõi, bỏ
+   THU.md và BANG_DIEU_KHIEN - hai nơi mã G ĐẬU theo đúng X5 mục 3-4. Kho
+   mất NHATKY mà bảng còn `sinh_boi: G-...` in "hệ sạch". Nay
+   loc_dau_vet_ghi quét MỌI sổ và view trong _so.
+2. 0g mù thư mục CHA (NẶNG, 3 giám khảo). `(goc/".git").exists()` chỉ soi
+   một tầng; clone vào chính `<gốc>` thì `git stash` vẫn nuốt trọn sổ mà
+   lưới im. Nay tim_vung_git dò kho VÀ mọi tổ tiên, bắt cả .git dạng file
+   (worktree, submodule).
+3. 0h MỚI (NẶNG). Cờ `rev 0` một mình tắt 0d, 2, 3, 4, 8: X0 bị đồng bộ mây
+   trả về bản cũ thì máy KHẲNG ĐỊNH "chưa có lượt ghi nào" trong khi NHATKY
+   nằm ngay đó. Nay có dấu vết ghi thì cấm tự nhận "chưa cài".
+4. 3e MỚI (NẶNG). 3c chỉ đi MỘT chiều NHATKY sang sổ. Mất TRỌN một file quý,
+   hay hai phiên cùng cửa ghi đè cả file NHATKY, đều không phép nào thấy.
+   3e đi chiều ngược: mã G đậu ở sổ hay bảng phải có dòng NHATKY.
+5. Phép 8 tách hai chiều lệch. Bảng MỚI HƠN mọi dòng NHATKY nghĩa là NHATKY
+   mất dòng; câu cũ xui người dùng "sinh lại bảng", tức xóa nốt bằng chứng
+   cuối cùng. Nay hai chiều nói hai câu khác nhau.
+6. 0i, 0j MỚI. 0i: C12 phải khai ĐÚNG tập mục còn dấu chưa điền (chống lách
+   ngoại lệ C11 bằng cách thêm bớt dòng C12). 0j: file lạ trong 00_Index -
+   vùng bị loại khỏi quan sát nghiệp vụ nên tài liệu lỡ lưu vào đây KHÔNG
+   phép nào nhặt, mà `git status` từng là lưới cuối thì vòng 38 vừa gỡ.
+   3a bắt thêm dòng CỤT (đứt lượt ghi ở mức byte, ô Trạng thái mất chữ).
+
+LUẬT:
+7. Ngoại lệ C11 (2) phủ 2/29 mục (NẶNG, VẬN HÀNH đếm được). Neo cũ đòi
+   ĐỒNG THỜI `<chưa điền>` VÀ có dòng ở C12, trong khi template viết
+   `<điền...>`, `<N>`, và nhóm C không bao giờ được đưa vào C12. Nay neo là
+   "CHƯA TỪNG mang giá trị, còn bất kỳ dấu chưa điền nào"; X9 mục 1 bắt
+   buộc quét X0 đưa MỌI mục trống vào C12 khi cài (pilot mới liệt 27 mục);
+   dòng C12 khi điền thì ĐÁNH DẤU `[x]` chứ không xóa, vì dấu đó là bằng
+   chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị. Thêm CHỐT CHỐNG
+   LÁCH: C11 và C12 tự nằm trong nhóm khóa, đưa mục đã điền trở lại C12 là
+   mức C.
+8. Nâng cấp không chở lưới (NẶNG). X9 3c chỉ bảo chép `_TEMPLATE`, mà
+   kiem_van_hanh, kiem_tra_bo, INSTRUCTION, README đều KHÔNG mang
+   `_TEMPLATE`: mọi công ty cài trước vòng 38 nâng cấp đúng luật vẫn vĩnh
+   viễn không có 0g và vẫn dính 0d báo động giả. Vá vòng 38 không có đường
+   giao hàng. Nay 3c chép HAI nhóm, nhóm (b) đè thẳng năm file đó.
+9. Một cửa MỘT phiên đang ghi là luật CORE, không riêng PARALLEL (công ty
+   LITE mở hai tab là ca thường nhất). Ô "Ghi lần" khai rõ là danh sách
+   CHỈ-THÊM (ghi đè làm lượt cũ mất dấu, 3c lệch kinh niên mỗi tuần).
+   @VANHANH.NGUOI có thật ở C6 (thủ tục bàn giao đang trỏ tới một tham số
+   không tồn tại). @NHIP.BANMOI có thật ở C9 (sau khi gỡ .git thì KHÔNG ai
+   sở hữu việc biết bộ đã cũ). Lượt ghi ĐẦU TIÊN của kho hết bị nhắc vòng
+   quý oan. X9 3b nói rõ phải quét HAI lần và tên gốc vào ô có thật.
+   README có lối thoát `git stash pop` bằng tiếng người.
+
+LƯỚI: phép 1e MỚI - phép BÙ của phép 1, bắt file THỪA (lưới là allow-list
+nên rác vô hình theo cấu trúc: lọt hai commit liên tiếp, vòng 37 và 38).
+Dung sai 2c siết theo bậc (2% cho số trên 5.000: 10% trên dòng CHAT che tới
+2.000 token). Phép 10 hết mù tham chiếu bị xuống dòng. Luật ghim 52 lên 60,
+gồm ba luật CHỐNG ĐỘT BIẾN mà hội đồng chứng minh được là lưới cũ cho qua:
+README không được khuyên ngược, mức ĐIỀN LẦN ĐẦU phải khớp cả ba nơi, số
+ngoại lệ C11 phải bằng số liệt kê. Fixture 82 lên 88: ba quyết định của 0d,
+0g, 0i lên tầng module nên fixture kẹp thẳng - vùng rà soát trước đây có
+mutation score 0% vì main() không hàm nào gọi được.
+
+TOKEN: X9 và X4 KHÔNG nạp vào phiên CHAT nữa (X9 đọc một lần khi cài, X4
+chỉ khi RA_SOAT mà pilot đo được RA_SOAT thực tế trả 0 token vì chạy
+script): CHAT 20.314 xuống 17.335, cắt 14,7%. BENCHMARK khai thẳng ĐỘ BẤT
+ĐỊNH của hệ số ký-tự/3 (đối chứng T5 cho 2,1x, là TRẦN TRÊN) và thôi gọi số
+pilot là "đo được" - cái đo được là file nào thật sự đọc, không phải token.
+Cả 14 số route dán lại từ máy trong cùng commit.
+
+Watchlist trần (nâng X0 16.500 lên 18.500, X9 6.500 lên 7.500, X5 18.000
+lên 19.000, X3E 12.000 lên 13.000 - mọi mục nâng đều có gate đã khai và đã
+được do_route trừ): X9 7.407/7.500 (98,8%) · X5 17.812/19.000 (93,7%) · X0
+17.707/18.500 (95,7%) · X3E 11.995/13.000 (92,3%) · README 8.398/9.000
+(93,3%) · _GOP 91,9%.
+
+BACKLOG CÒN LẠI, khai thẳng (không vá vòng này, đều có địa chỉ rõ):
+(a) QUYETDINH tự khai "không sửa nội dung" nhưng KHÔNG có cưỡng chế nào -
+    sửa tay ô "Đánh đổi" không phép nào bắt; cần ô chốt hash mỗi dòng, là
+    đổi schema sổ nên để riêng một vòng.
+(b) Phép 5 chỉ kiểm bảng nhất quán NỘI BỘ, chưa đối chiếu số cột với schema
+    X5 mục 4, nên schema sổ trôi âm thầm được.
+(c) File trúng khuôn bản sao " (n)" bị bỏ IM LẶNG khi quét kho, trong khi
+    khuôn OneDrive được in đích danh - kho có sẵn file thì bản " (1)" có
+    thể là bản mới hơn mà vô hình.
+(d) _GOP 102k token, 71% là hai script và GHICHU; nên tách bản LUẬT thuần
+    ~30k cho người đánh giá.
+(e) Chưa có bộ sinh trạng thái đứt gãy (fuzz) khẳng định bất biến "mọi
+    trạng thái mất mã G phải sinh ít nhất một LỆCH".
+
+Bài học vòng này: đọc-tĩnh bão hòa ở 96,8 là thật, nhưng con số đó đo cái
+BỘ ĐÃ ĐƯỢC ĐỌC, không đo cái bộ CHẠY. Một buổi chạy ra nhiều defect hơn
+mười hai vòng đọc. Và bản vá viết vội ở vòng 38 tự nó sinh ba lỗ NẶNG -
+bằng chứng đắt giá rằng mỗi bản vá phải đi kèm lưới của chính nó.
+
 ## Vòng 39: PILOT EMAIL - luật tả bằng văn xuôi, máy đòi schema
 
 Pilot tiếp phần chưa ai đi: thực thi X3E mục 1 BẰNG TAY, chỉ theo CHỮ trong
@@ -344,6 +447,17 @@ thấy được, vì cả ba chỉ tồn tại ở TRẠNG THÁI, không ở ch�
    rồi chép _TEMPLATE vào; README nói bằng tiếng người kèm lối thoát
    `git stash pop`; rà 0g MỚI của kiem_van_hanh v34 chặn ngay trạng thái đó.
    Trần X9 giữ nguyên 6.500 bằng BÙ (cắt hai chỗ diễn đạt trùng), không nâng.
+   [ĐÍNH CHÍNH vòng 40, theo hội đồng vòng 13 - BA lời khai trên sai:
+    (a) "README kèm lối thoát git stash pop" - README KHÔNG có câu đó, lối
+    thoát chỉ nằm ở X9 mục 3c, file người dùng không đọc; vá ở vòng 40.
+    (b) "đồng bộ INSTRUCTION" - sót mục 5, chỗ đó vẫn viết "ngoại lệ duy
+    nhất" trong khi mục 6 đã nói "ba ngoại lệ"; vá ở vòng 40.
+    (c) "trần X9 giữ nguyên bằng BÙ" - đúng về TRẦN nhưng bù THIẾU: file
+    phình +6%, còn đúng 14 ký tự headroom, và vòng 38 là vòng đầu tiên
+    trong 10 vòng KHÔNG có dòng Watchlist trần, tắt đèn đúng lúc cần nhất.
+    Ngoài ra vòng 38 để lọt assets/ (669 KB, ảnh của dự án khác) vào chính
+    commit của mình - tái phát lớp lỗi .codex_audit_mutant của vòng 37 -
+    và không dán lại 9/13 số route sau khi sửa X0, X5, X9, INSTRUCTION.]
 4. README VÀO LƯỚI. File người dùng đọc ĐẦU TIÊN lại đứng ngoài mọi phép kiểm
    (không ký tự cấm, không tham chiếu chéo, không _GOP) - lỗi ở đó hại nhất mà
    được bảo vệ ít nhất. Nay README nằm trong FILE_BAT_BUOC, qua sạch cả bốn
@@ -1497,7 +1611,16 @@ FILE: BENCHMARK_TOKEN.md
 
 # BENCHMARK_TOKEN · STARTER v24 · 20260824
 
-Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt). Version khớp
+Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt).
+ĐỘ BẤT ĐỊNH CỦA HỆ SỐ 1/3, khai thẳng: bộ CHƯA đối chứng tokenizer sản xuất nào.
+Đối chứng duy nhất làm được (sentencepiece 32k của T5, SAI HỌ vì vocab tiếng Anh)
+cho 1,43 ký tự/token trên chính bộ này, tức 2,1 lần ước lượng; cùng văn bản bỏ
+dấu là 2,01 và văn xuôi tiếng Anh là 5,26. Tokenizer sản xuất phủ tiếng Việt tốt
+hơn T5 nhiều, nên 2,1x là TRẦN TRÊN chứ không phải đáp số. Bộ này 16,0 phần trăm
+ký tự non-ASCII, 1,243 byte mỗi ký tự UTF-8, mà mọi BPE hiện đại đếm theo BYTE.
+Kết luận: MỌI con số token trong file này phải đọc với khoảng 1,0x tới 2,1x. Ai
+có tiktoken hãy chạy len(get_encoding("o200k_base").encode(nội dung)) trên X0 và
+X5 rồi ghi tỉ số thật vào đây; đó là việc còn lại duy nhất để đóng khoảng này. Version khớp
 DOC_TRUOC (phép kiểm 2b); các số route được MÁY GIỮ KHỚP file thật bằng phép
 kiểm 2c (dung sai 10%), số mới lấy bằng lệnh
 `python kiem_tra_bo.py . --sinh-benchmark`. Đây là BENCHMARK TĨNH; cột
@@ -1508,14 +1631,14 @@ không tuyên bố kết quả runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | ~1905 |
+| INSTRUCTION dán trong Project | 4148 | ~1924 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
-| CỘNG | ~6969 | ~2235 |
+| CỘNG | ~6969 | ~2316 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.905) xấp xỉ 4.105
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.924) xấp xỉ 4.124
 token, vẫn thấp hơn trước tối ưu.
 Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
 mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
@@ -1529,43 +1652,50 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1668 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5256 + khối (không phần mềm trừ thêm mục 1b ~421) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2580 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6371 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3431 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3431 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1684 (thêm X5 mục 3 ~1235 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5448 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2596 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6387 + khối | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1578 | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3447 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3447 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
-INSTRUCTION 8.000 ký tự · X0 16.500 (đọc theo mục, thuế là X0_INDEX) · X5
-18.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
-gate khi dán chat) · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4
-5.500 (chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 ·
-BANG_DIEU_KHIEN 1.400. Vượt trần là FAIL.
+INSTRUCTION 8.000 ký tự · X0 18.500 (đọc theo mục, thuế là X0_INDEX) · X5
+19.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
+gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 7.500 (đọc một
+lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
+4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
+bản gộp _GOP 340.000. Vượt trần là FAIL.
 
 ## Ghi chú phiên CHAT
 
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0
 tới X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy
 hồi theo cơ chế riêng, xấu nhất là cả bộ:
-CHAT không EMAIL ~20314 token
-CHAT có EMAIL (kèm X3E) ~24313 token
-(hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
-BAN, soạn nháp, không phải phiên ghi sổ chính.
+Phiên CHAT chỉ nên nạp X0 tới X5 (và X3E nếu bật EMAIL). GỠ X9 ra sau khi cài
+xong (đọc một lần mỗi công ty) và KHÔNG nạp X4 (chỉ đọc khi RA_SOAT, mà pilot đo
+được RA_SOAT thực tế trả 0 token vì bảng kiem_van_hanh.py tự đủ nghĩa):
+CHAT không EMAIL ~17335 token
+CHAT có EMAIL (kèm X3E) ~21334 token
+CHAT nạp cả X9 và X4 ~21382 token
+(ba số này máy giữ khớp qua phép 2c; bỏ X9 và X4 cắt gần 3.000 token mỗi phiên).
+CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
 
 ## Phiên thật đã đo (PILOT 2026-08-28)
 
 Pilot dựng một công ty giả lập có dự án PHẦN MỀM (profile REGULATED + EMAIL):
-clone bộ, chạy X9 cài từ zero, vòng thử mức A của X9 mục 3, rồi rà máy. Đây là
-số ĐO ĐƯỢC của phiên thật đầu tiên, không phải ước lượng.
+clone bộ, chạy X9 cài từ zero, vòng thử mức A của X9 mục 3, rồi rà máy. Cái ĐO
+ĐƯỢC ở đây là: file nào THẬT SỰ được đọc, bao nhiêu lượt đọc, có đọc thừa không,
+kết quả đúng hay sai. Số TOKEN vẫn là ước lượng ký tự/3 áp lên phần đã đọc thật,
+chưa đối chứng tokenizer nào (xem ĐỘ BẤT ĐỊNH ở đầu file).
 
 ```
 CÀI ĐẶT (X9 phiên đầu)   đọc thật INSTRUCTION + X9 + X0 + 9 mẫu sổ
-                         ~35,5k ký tự ~11,8k token · 6 lượt đọc file
-                         đọc thừa: không · sai: không
-NOI_BO mức A (vòng thử)  đọc thật X5 mục 3 ~2,4k ký tự ~0,8k token
+                         32.924 ký tự đo tại commit, ~11,0k token ước lượng
+                         6 lượt đọc file · đọc thừa: không · sai: không
+NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 token
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng kết
@@ -1683,8 +1813,8 @@ C RỦI RO   plan vào PLANNING; gật mới làm, chốt mới ghi
 ```
 
 C tối thiểu, cấm hạ: đầu ra rời công ty (trừ thường lệ, điều kiện ở X5 mục 1) ·
-chạm bản đã gửi, đã nộp, đã ký · sửa X0 nhóm khóa C11, X1 tới X5, file này (ngoại lệ duy
-nhất khai tại X0 C11) · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên
+chạm bản đã gửi, đã nộp, đã ký · sửa X0 nhóm khóa C11, X1 tới X5, file này (ba ngoại
+lệ khai tại X0 C11) · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên
 hay di chuyển hàng loạt · xóa thứ đã vào sổ. X0 C13 chỉ được NÂNG mức. Phân vân giữa hai mức: lấy mức
 cao. Lệnh trực tiếp "sửa đi", "làm luôn" là đồng ý của B và gật plan của C.
 Danh mục A, B đầy đủ, ngoại lệ thường lệ, ranh giới nháp, kiểm bản mới nhất,
@@ -1693,7 +1823,8 @@ chốt, phiên không người: X5 mục 1.
 # 6. UPDATE NGƯỢC
 
 GIÁ TRỊ về X0: sửa đúng mục, tăng rev, sinh lại X0_INDEX; nhóm khóa cần QUYETDINH
-và là mức C (ba ngoại lệ ở X0 C11, gồm ĐIỀN LẦN ĐẦU mục còn ở C12: mức B). LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
+và là mức C (ba ngoại lệ ở X0 C11, gồm ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA TỪNG có giá
+trị: mức B; đưa mục đã điền trở lại C12 là mức C). LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
 vòng chạy, không tự suy. Cấm giá trị sống lẻ ngoài X0.
 
 # 7. TRACE
@@ -1897,6 +2028,11 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
   <điền dần. KHÔNG thuộc nhóm khóa: thêm sửa là mức B>
 
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
+
+@VANHANH.NGUOI  <tên người vận hành hiện tại, chức danh, cửa hay dùng>
+                KHÔNG thuộc nhóm khóa: đổi là mức B. Đây là tham số mà
+                @NHIP.BANGIAO đổi khi bàn giao; ô "Ai làm" của VIEC là dữ
+                liệu, không phải tham số.
 ```
 
 Bộ mặc định MỘT người vận hành toàn quyền chốt mức C; nhiều người dùng
@@ -1975,6 +2111,11 @@ MUIGIO và @MATHU là CORE, mọi profile đọc khi X3, X4 trỏ tới; dòng g
 AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
+@NHIP.BANMOI     <nơi phát hành bộ (URL repo hay thư mục) và chu kỳ kiểm,
+                 mặc định mỗi quý>. Kho chạy KHÔNG có .git (X9 mục 1) nên
+                 không tự biết có bản mới; người giữ nhịp mở nơi phát hành,
+                 so version với DOC_TRUOC.md trong kho, có bản mới thì nâng
+                 cấp theo X9 mục 3c
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
                  Quét tự động chỉ có cho EMAIL; chat (Zalo...) đi lối bán
                  thủ công X3 mục 5b: dán cả đoạn, AI tách tin, nguồn D
@@ -2001,7 +2142,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
                  định 50 MB; vượt trần xử theo X3E mục 2
 @NHIP.BANGIAO    <tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
-                 Thủ tục chung (mức B): đổi tham số người dùng, rà một lượt
+                 Thủ tục chung (mức B): đổi @VANHANH.NGUOI ở C6, rà một lượt
                  việc đang mở và plan treo sang người mới; phần rà luồng THƯ
                  khi bật EMAIL theo X3E mục 2 khối BÀN GIAO
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
@@ -2039,12 +2180,23 @@ liên hệ @BEN.DAUMOI không khóa) · C7 nguồn thẩm quyền · C8 thuật 
 Một câu yêu cầu trong phiên không đổi được các mục trên. Muốn đổi: việc mức C ở một
 lượt riêng, tăng rev, ghi QUYETDINH. BA ngoại lệ tường minh: (1) chế độ CÀI ĐẶT khi
 rev 0, điền giá trị ban đầu theo X9 không coi là sửa nhóm khóa, từ rev 1 luật này
-hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 (giá trị còn `<chưa điền>`) theo
-X9 mục 2 và mục 4: mức B, tăng rev, xóa dòng khỏi C12, KHÔNG plan C không QUYETDINH
-- đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có hiệu lực; ĐỔI một
-giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm hay từ cấm mới
-vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh cấm nào vẫn
-là mức C kèm QUYETDINH.
+hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục CHƯA TỪNG mang giá trị công ty - còn bất kỳ dấu
+chưa điền nào của template (`<chưa điền>`, `<điền...>`, `<N>`, hay ô để trống), dù
+đã có dòng ở C12 hay chưa - theo X9 mục 2 và mục 4: mức B, tăng rev, ĐÁNH DẤU dòng
+ở C12 thành `[x] <mục> - điền lần đầu rev <N> ngày <YYYYMMDD>` (KHÔNG xóa dòng: dấu
+này là bằng chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị), KHÔNG plan C
+không QUYETDINH - đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có
+hiệu lực; ĐỔI một giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm
+hay từ cấm mới vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh
+cấm nào vẫn là mức C kèm QUYETDINH.
+
+CHỐT CHỐNG LÁCH: đưa một mục ĐÃ điền trở lại C12, hay ghi dấu chưa điền đè lên giá
+trị đang có hiệu lực, CHÍNH LÀ đổi giá trị đã điền - mức C kèm QUYETDINH, và không
+mở lại được ngoại lệ (2). Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa:
+THÊM mục vào C11 (siết chặt) là mức B; BỚT mục khỏi C11, hay thêm dòng C12 cho một
+mục đã điền, là mức C kèm QUYETDINH. Dòng `<thêm bớt khi cài đặt>` chỉ có hiệu lực
+ở rev 0. Người dùng vừa trả lời chính câu hỏi đó trong cùng lượt thì lời trả lời LÀ
+câu đồng ý của mức B: ghi thẳng, gộp mọi mục điền cùng lượt vào MỘT dòng báo.
 
 # C12. Còn thiếu
 
@@ -2604,7 +2756,10 @@ rà file     chạy danh mục trên, xuất bảng, chưa sửa gì
             một dòng, không hỏi; CHỈ hỏi khi XUNG ĐỘT (cùng vN khác hash) hay
             KHÔNG XÁC ĐỊNH. RA_SOAT thuần vẫn chỉ báo cáo; tự ghi chỉ xảy ra
             qua câu tắt này hay khi nạp CUA_VAO theo X3
-chốt sổ     lưới an toàn theo trình tự X5 mục 3: dòng NHATKY còn ĐANG GHI, đọc "Chạm
+chốt sổ     trước hết đọc phép 5 của kiem_van_hanh: dòng NHATKY sai số ô là lượt
+            ĐỨT GIỮA CHỪNG, không phải lỗi trình bày; dựng lại ô Trạng thái từ ô
+            "Làm gì" rồi xử tiếp như dòng ĐANG GHI.
+            Lưới an toàn theo trình tự X5 mục 3: dòng NHATKY còn ĐANG GHI, đọc "Chạm
             sổ nào", kiểm "Ghi lần", thiếu ghi nốt; nội dung không tái
             lập chắc từ "Làm gì" và plan: ghi VIEC hỏi người dùng, CẤM đoán;
             đủ thì đổi XONG, plan sang ĐÃ GHI
@@ -2628,16 +2783,16 @@ Ba mức A B C khai ở INSTRUCTION mục 5. Danh mục chi tiết:
 ```
 C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản đã gửi, đã nộp, đã ký,
    file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ theo
-   X0 C11: THÊM lệnh hay từ cấm để siết chặt, và ĐIỀN LẦN ĐẦU mục còn ở C12, là
-   B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
+   X0 C11: THÊM lệnh hay từ cấm để siết chặt, và ĐIỀN LẦN ĐẦU mục còn ở C12 và
+   CHƯA TỪNG có giá trị, là B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
    PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
    của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
-   nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12, theo
-   ngoại lệ C11 · dọn hay xóa nháp
+   nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA
+   TỪNG có giá trị, theo ngoại lệ C11 · dọn hay xóa nháp
    CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
@@ -2745,7 +2900,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    NHATKY ngay trước khi cấp; sang quý chưa có file thì tạo NHATKY_<năm>Q<quý>
    mới từ template trong cùng lượt (mức A), NN đọc ở file của quý mang ngày
    cấp mã; lượt tạo file quý mới ĐỒNG THỜI nhắc chạy vòng quý của X4 cho quý
-   vừa đóng. Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
+   vừa đóng, TRỪ lượt ghi ĐẦU TIÊN của kho (chưa có NHATKY quý nào trước đó
+   thì không có quý nào để đóng: bỏ qua và nói rõ vì sao). Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
    của NHATKY ghi ĐỊNH DANH LƯỢT = <CỬA>.<giờ phút>.<hậu tố ngẫu nhiên 3-4 ký
    tự>; cặp (mã G, định danh lượt) dùng để HÒA GIẢI XUNG ĐỘT, không phải khóa
    nguyên tử; mã G chỉ là số hiển thị
@@ -2758,10 +2914,14 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    đứng, lớn hơn đổi mã: quy tắc tất định, hai phiên cùng áp nên không lặp. Mã G
    chỉ được điền vào các sổ SAU khi đã đứng vững ở NHATKY, nên trùng bị giam
    trong NHATKY và tự phục hồi tại đó. Đây là HÒA GIẢI SAU XUNG ĐỘT, không phải
-   khóa nguyên tử; file thường qua đồng bộ mây KHÔNG có khóa nguyên tử, PARALLEL
-   phải tuyên bố giới hạn này và khuyến nghị mỗi cửa một phiên ghi tại một thời
-   điểm. Rà 12 của X4 là lưới cuối
-3  ghi sổ, mỗi dòng chạm tới mang mã G ở cột "Ghi lần"
+   khóa nguyên tử. MỌI profile, kể cả LITE: một cửa chỉ được có MỘT phiên ĐANG
+   GHI tại một thời điểm; file thường, dù qua đồng bộ mây hay qua hai tab trên
+   cùng máy, KHÔNG có khóa nguyên tử, nên phiên thứ hai ghi ĐÈ CẢ FILE sẽ xóa
+   dòng NHATKY của phiên thứ nhất mà không để lại dấu trùng mã nào để hòa giải.
+   Mở phiên thứ hai thì phiên đó CHỈ ĐỌC. Rà 3e và rà 12 của X4 là lưới cuối
+3  ghi sổ, mỗi dòng chạm tới NỐI THÊM mã G vào cột "Ghi lần", cách nhau một
+   khoảng trắng: ô này là danh sách CHỈ-THÊM, cấm ghi đè mã của lượt trước
+   (ghi đè thì lượt cũ mất dấu và rà 3c lệch mãi)
 4  update ngược X0 nếu có, sinh lại X0_INDEX khi rev tăng
 5  NHATKY sang XONG; mức C: plan sang ĐÃ GHI, điền mã G
 6  sinh lại BANG_DIEU_KHIEN thì header ghi sinh_boi = mã lượt vừa xong của CHÍNH
@@ -2771,7 +2931,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    tài liệu đang trong chu kỳ) và một dòng nhắc lấy từ X0 C12 khi còn mục thiếu
    chặn phát hành. Bảng giữ các BỘ ĐẾM cho banner mở phiên: quá hạn, chờ đối
    tác quá ngưỡng, plan C treo, lượt ĐANG GHI còn trong NHATKY lúc sinh, số
-   ngày từ lần quét mail cuối; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
+   ngày từ lần quét mail cuối, số ngày từ lần kiểm bản mới của bộ theo X0 C9
+   @NHIP.BANMOI; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
    phải đọc lại từ NHATKY trước khi tin. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
    lên tài liệu Project (@DUONG.PROJECT ở X0 C1): nền tảng KHÔNG cho phiên tự
    ghi vào Project; CHAT chỉ đọc được bản người dùng đã tải, luôn kèm nhãn
@@ -2973,8 +3134,11 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
 Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, dựng _so\_inbox\
 và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
-Kho vừa clone bằng git: XÓA `00_Index\.git` - kho chạy không phải bản làm việc
-git, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c).
+Kho vừa clone bằng git: XÓA `00_Index\.git`, VÀ cả `.git` ở THƯ MỤC CHA nếu lỡ
+clone vào chính `<gốc>` - kho chạy không được nằm trong bất kỳ bản làm việc git
+nào, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c). Quét X0 một lượt, đưa MỌI
+mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi: C12
+trống sau khi cài là SAI (rà 0i bắt).
 TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
@@ -3027,18 +3191,26 @@ Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy �
 # 3b. Kho CÓ SẴN file, không từ zero
 
 Công ty đã có đống file trước khi cài: KHÔNG đi từng mục _INBOX. Chạy
-kiem_van_hanh lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
+kiem_van_hanh HAI lần cách nhau ít nhất 5 phút rồi mới đọc khối ĐỀ XUẤT _INBOX:
+lần quét đầu luôn trả rỗng theo luật ổn định, "hệ sạch" ở lần đầu KHÔNG có nghĩa
+kho không có file. Lấy danh sách file chưa vào sổ, nạp TAILIEU hàng loạt theo khối
 bằng MỘT plan mức C; chỉ đổi tên về chuẩn X0 C4 với file CHƯA phát hành (căn
 cứ nhận diện: lời người dùng hay dấu vết _SIGNED, _NOP; KHÔNG suy từ tên
-suông), file cũ giữ tên, tên gốc vào ghi chú. DUKIEN và VIEC không nạp đón trước, chỉ mở
+suông), file cũ giữ tên, tên gốc ghi vào ô "Căn cứ trạng thái" của chính dòng đó. DUKIEN và VIEC không nạp đón trước, chỉ mở
 khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới
 
-CẤM `git pull`, `git stash`, `git checkout` trong kho đang chạy: `_so\` là sổ
-SỐNG, pull dừng vì local changes và `git stash` mà git khuyên làm DÒNG SỔ biến
-mất khỏi bản làm việc. Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép
-file _TEMPLATE mới vào `00_Index`.
+CẤM `git pull`, `git stash`, `git checkout` ở BẤT KỲ đâu trong bản làm việc git
+chứa kho, kể cả chạy từ thư mục cha: `_so\` là sổ SỐNG, pull dừng vì local
+changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bản làm việc.
+
+Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
+(a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
+thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, kiem_van_hanh.py,
+kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
+mới thay bản cũ là xong (bản v* cũ của INSTRUCTION xóa đi, chỉ giữ MỘT). Bỏ nhóm
+(b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới không bao giờ tới.
 
 Chép xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
 mang mã: chúng là NGUỒN LUẬT, không phải bộ chạy. AI diff template mới với bản
@@ -3052,7 +3224,8 @@ dòng sổ: `git stash pop`, rồi rà 3c và 2 đối chiếu.
 # 4. Luật hỏi lại, áp mãi mãi về sau
 
 ```
-Giữa chừng đụng tới tham số còn <chưa điền>:
+Giữa chừng đụng tới tham số còn dấu chưa điền (`<chưa điền>`, `<điền...>`, `<N>`,
+hay để trống):
   DỪNG việc đang làm ở điểm đó · GOM mọi tham số và dữ kiện còn thiếu CỦA CÙNG
   VIỆC ĐÓ vào MỘT lượt hỏi duy nhất, kèm vì sao cần, không hỏi nhỏ giọt từng câu
   · trả lời xong update ngược X0 (tăng rev, xóa dòng khỏi C12) · rồi mới làm
@@ -3074,7 +3247,7 @@ FILE: kiem_tra_bo.py
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, vòng 39 thêm 2 ca schema X3E, tổng 82 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, vòng 39 thêm 2 ca schema X3E, vòng 40 thêm 6 ca cho ba quyết định của rà 0d, 0g, 0i, tổng 88 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -3134,14 +3307,16 @@ FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
     "INSTRUCTION": 8000,          # ~2.600 token, thuế thường trực
-    "X0_CAUHINH_TEMPLATE.md": 16500,  # đọc theo mục, thuế là X0_INDEX; nâng chủ động vòng 35 theo quy ước
+    "X0_CAUHINH_TEMPLATE.md": 18500,  # đọc THEO MỤC (thuế thật là X0_INDEX ~228): nâng vòng 40 kèm gate sẵn có
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 5500,   # 5b gate khi dán chat; nâng vòng 37: phần tăng nằm trọn trong 5b gated
-    "X3E_EMAIL_TEMPLATE.md": 12000,  # chỉ nạp khi bật EMAIL, không phải thuế lõi
+    "X3E_EMAIL_TEMPLATE.md": 13000,  # gate: chỉ nạp khi bật EMAIL; nâng vòng 40 (headroom còn 5 ký tự)
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
-    "X5_HESO_TEMPLATE.md": 18000,  # mục 1b và 7b đều gate; nâng chủ động vòng 37 theo quy ước (headroom 98,1% là nợ)
-    "X9_CAIDAT.md": 6500,  # đọc một lần mỗi công ty, không phải thuế thường trực
+    "X5_HESO_TEMPLATE.md": 19000,  # mục 1b và 7b đều gate; nâng vòng 40 (headroom còn 188 ký tự) (headroom 98,1% là nợ)
+    "X9_CAIDAT.md": 7500,  # gate: đọc MỘT LẦN mỗi công ty, và không nạp vào phiên CHAT
+    "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
+    "WORKOPS_STARTER_v24_20260824_GOP.md": 340000,  # bản gộp để đánh giá, không phải bộ chạy
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
@@ -3179,8 +3354,11 @@ def do_route(docs):
     return {
         "thêm mục 1b": t(_muc(x5, "1b", 2)),
         "thêm X5 mục 3": t(_muc(x5, 3, 4)),
-        "CHAT không EMAIL": t(tong_bo),
-        "CHAT có EMAIL": t(tong_bo + len(x3e)),
+        # CHAT không nạp X9 (đọc một lần khi cài) và X4 (chỉ đọc khi RA_SOAT,
+        # mà pilot đo được RA_SOAT thực tế trả 0 token vì chạy script)
+        "CHAT không EMAIL": t(tong_bo - len(docs["X9_CAIDAT.md"]) - len(x4)),
+        "CHAT có EMAIL": t(tong_bo - len(docs["X9_CAIDAT.md"]) - len(x4) + len(x3e)),
+        "CHAT nạp cả X9 và X4": t(tong_bo),
         "NOI_BO mức A": t(x5m1 + x1m34),
         "CUA_VAO thường": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1),
         "CUA_VAO thường của LITE": t(_muc(x3, 1, '5b')),
@@ -3238,6 +3416,28 @@ def main(goc):
                + ([] if seg_ok else ["_thu_"])
     kiem("1d. .gitignore che các file máy sinh (_quan_sat_truoc, _thu_*)",
          not thieu_gi, f"thiếu khuôn {thieu_gi} trong .gitignore")
+    # 1e. Phép BÙ của phép 1: lưới là allow-list nên thứ DÔI RA vô hình theo cấu
+    #     trúc. .codex_audit_mutant lọt commit vòng 37, assets\ lọt vòng 38, cả hai
+    #     qua sạch phép 1. Bộ ship "NGUYÊN TRẠNG" nên rác ở đây hạ cánh vào
+    #     00_Index của MỌI công ty, nơi 0j của kiem_van_hanh mới nhặt lên được.
+    bo_qua = {"__pycache__", ".git", ".venv", ".idea", ".vscode"}
+    for l in gi_nd.splitlines():
+        l = l.strip().rstrip("/")
+        if l and not l.startswith(("#", "!")) and "/" not in l and "*" not in l:
+            bo_qua.add(l)
+    cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {".gitignore"}
+    thua = []
+    for f in goc.rglob("*"):
+        rel = str(f.relative_to(goc)).replace("\\", "/")
+        if not f.is_file() or rel.split("/")[0] in bo_qua:
+            continue
+        if rel not in cho_phep and not re.fullmatch(
+                r"INSTRUCTION_WORKOPS_v\d+\.md|GHICHU_DOI_MOI_v.*\.md"
+                r"|WORKOPS_.*_GOP\.md|_so/NHATKY_\d{4}Q[1-4]\.md", rel):
+            thua.append(rel)
+    kiem("1e. không file thừa ngoài danh sách bộ", not thua,
+         f"{sorted(thua)[:5]}: xóa khỏi repo hay đưa vào .gitignore; bộ ship"
+         f" NGUYÊN TRẠNG nên thứ ở đây vào 00_Index của mọi công ty")
     kiem("1b. đúng một file INSTRUCTION", len(instr) == 1, f"thấy {len(instr)}")
     kiem("1c. đúng một file GHICHU_DOI_MOI_v*", len(ghichu) == 1, f"thấy {len(ghichu)}")
     if thieu or not instr or not ghichu:
@@ -3264,7 +3464,8 @@ def main(goc):
         cac_so = [int(x) for x in re.findall(r"~(\d+)", m_rt.group(1))] if m_rt else []
         if not cac_so:
             lech_bm.append(f"{nhan}: không thấy dòng trong BENCHMARK")
-        elif abs(max(cac_so) - gia_tri) > 0.10 * gia_tri:
+        elif abs(max(cac_so) - gia_tri) > (0.02 if gia_tri > 5000 else 0.10) * gia_tri:
+            # số lớn siết 2%: 10% trên dòng CHAT ~20.000 là 2.000 token trôi mà máy vẫn im
             # tổng của dòng là số LỚN NHẤT (các số nhỏ hơn là thành phần)
             lech_bm.append(f"{nhan}: BENCHMARK ~{max(cac_so)}, đo thật ~{gia_tri}")
     kiem("2c. số route BENCHMARK khớp số đo thật (dung sai 10%)", not lech_bm,
@@ -3636,6 +3837,34 @@ def main(goc):
         _pl_cu["convId"], _pl_cu["thoi_diem_utc"] = "c1", "2026-08-28T03:10:00Z"
         ca.append(("payload dùng tên trường ngoài schema thì máy từ chối",
                    len(_kv26.kiem_payload(_pl_cu, _khoa_pl)) == 2))
+        # BA QUYẾT ĐỊNH của rà 0d, 0g, 0i (hội đồng vòng 13: vùng rà soát từng
+        # có mutation score 0% vì main() không hàm nào gọi được; ba hàm này nay
+        # ở tầng module nên fixture kẹp thẳng)
+        import tempfile as _tf
+        with _tf.TemporaryDirectory() as _td:
+            _g = Path(_td) / "kho" / "00_Index"
+            (_g / "_so").mkdir(parents=True)
+            _so = _g / "_so"
+            (_so / "VIEC.md").write_text("| V-001 | x |\n", encoding="utf-8")
+            (_so / "BANG_DIEU_KHIEN.md").write_text("bàn sạch\n", encoding="utf-8")
+            ca.append(("0d: kho chưa ghi lần nào thì không có dấu vết",
+                       _kv26.loc_dau_vet_ghi(_so) == []))
+            (_so / "BANG_DIEU_KHIEN.md").write_text(
+                "sinh_boi: G-20260828-CUA1-01\n", encoding="utf-8")
+            ca.append(("0d: mã G chỉ ở BANG_DIEU_KHIEN vẫn là dấu vết đã ghi",
+                       _kv26.loc_dau_vet_ghi(_so) == ["BANG_DIEU_KHIEN.md"]))
+            ca.append(("0g: kho không nằm trong bản làm việc git nào",
+                       _kv26.tim_vung_git(_g) is None))
+            (Path(_td) / ".git").mkdir()
+            ca.append(("0g: .git ở THƯ MỤC CHA vẫn bị bắt",
+                       _kv26.tim_vung_git(_g) == Path(_td).resolve()))
+        _x0 = ("# C1.\n@A.MOT   giá trị thật\n@A.HAI   <điền, mô tả>\n"
+               "@A.BA    13  <điền thêm>\n@A.BON   <chưa điền, chỉ khai khi dùng>\n"
+               "# C12.\n[ ] @A.HAI\n[ ] @A.BA\n# C13.\n")
+        ca.append(("0i: C12 khai đúng tập mục còn dấu chưa điền",
+                   _kv26.lech_c12(_x0) == []))
+        ca.append(("0i: xóa dòng khỏi C12 mà giá trị vẫn trống thì lệch",
+                   _kv26.lech_c12(_x0.replace("[ ] @A.BA\n", "")) == ["@A.BA"]))
         # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
         giu10, nghi10 = _kv26.loc_nghi_ban_sao(
             ["01_A/BC-KH-PHULUC-2026.docx"],
@@ -4048,10 +4277,18 @@ def main(goc):
         ("event_id tin chat có số thứ tự trong khối, trùng khóa thì so nội dung", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"] and "SO NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("X3E khai nguyên văn schema file máy sinh mà máy thực thi", all(t in docs["X3E_EMAIL_TEMPLATE.md"] for t in ["conv_id", "nguoi_gui", "thoi_diem", "tieu_de", "eml_sha256", "operation_id", "_so/_thu_staging/"])),
         # PILOT vòng 38: hai luật do vận hành thật phơi ra
-        ("điền lần đầu mục còn ở C12 là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục đang nằm ở C12" in docs["X0_CAUHINH_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["X5_HESO_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["INSTRUCTION"]),
-        ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
+        ("điền lần đầu mục CHƯA TỪNG có giá trị là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục CHƯA TỪNG mang giá trị" in docs["X0_CAUHINH_TEMPLATE.md"] and "CHỐT CHỐNG LÁCH" in docs["X0_CAUHINH_TEMPLATE.md"] and all("CHƯA TỪNG" in docs[k] for k in ("X5_HESO_TEMPLATE.md", "INSTRUCTION"))),
+        ("mức của ĐIỀN LẦN ĐẦU khớp nhau ở cả ba nơi khai, không nơi nào nói A", all("CHƯA TỪNG" in d and re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,260}?(?:mức B|, là\s*\n?\s*B)", d) and not re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,60}?mức A", d) for d in [docs["X0_CAUHINH_TEMPLATE.md"], docs["X5_HESO_TEMPLATE.md"], docs["INSTRUCTION"]])),
+        ("số ngoại lệ C11 khai đúng bằng số ngoại lệ liệt kê", ("BA ngoại lệ" in docs["X0_CAUHINH_TEMPLATE.md"]) == (len(re.findall(r"\((\d)\) ", docs["X0_CAUHINH_TEMPLATE.md"].split("# C11.")[1].split("# C12.")[0])) == 3)),
+        ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
+        ("nâng cấp chở CẢ script và INSTRUCTION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and "kiem_van_hanh.py" in docs["X9_CAIDAT.md"]),
+        ("một cửa một phiên ĐANG GHI là luật CORE, không riêng PARALLEL", "MỌI profile, kể cả LITE" in docs["X5_HESO_TEMPLATE.md"]),
+        ("ô Ghi lần là danh sách chỉ-thêm, cấm ghi đè mã lượt trước", "CHỈ-THÊM" in docs["X5_HESO_TEMPLATE.md"]),
+        ("người vận hành là tham số có thật để bàn giao đổi", "@VANHANH.NGUOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "đổi @VANHANH.NGUOI ở C6" in docs["X0_CAUHINH_TEMPLATE.md"]),
+        ("có chỗ khai nơi phát hành bộ để biết bản mới sau khi gỡ .git", "@NHIP.BANMOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.BANMOI" in docs["X5_HESO_TEMPLATE.md"]),
+        ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git kể cả ở thư mục cha", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "THƯ MỤC CHA" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (52 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (60 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
@@ -4063,7 +4300,7 @@ def main(goc):
     muc_cua["INSTRUCTION"] = set(re.findall(r"^# (\d+[a-z]?)\.", docs["INSTRUCTION"], re.M))
     sai_ref = []
     for ten, nd in docs.items():
-        for dich, n in re.findall(r"(X[1-5]E?|X9|INSTRUCTION) mục (\d+[a-z]?)", nd):
+        for dich, n in re.findall(r"(X[1-5]E?|X9|INSTRUCTION)\s+mục\s+(\d+[a-z]?)", nd):
             if n not in muc_cua.get(dich, set()):
                 sai_ref.append((ten, f"{dich} mục {n}"))
     kiem("10. tham chiếu chéo tới mục có thật", not sai_ref, str(sorted(set(sai_ref))))
@@ -4107,7 +4344,16 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v34 · 20260828
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v35 · 20260828
+# v35, theo hội đồng vòng 13 (ba giám khảo cùng dựng lại được cảnh MẤT SỔ mà
+# máy in "hệ sạch"): dấu vết đã-từng-ghi quét MỌI sổ và view trong _so (v34
+# bỏ sót THU và BANG_DIEU_KHIEN, hai nơi mã G đậu theo X5 mục 3-4) · 0g dò
+# .git ở CẢ THƯ MỤC CHA (clone vào chính gốc kho thì git stash vẫn nuốt sổ)
+# · 0h rev 0 không còn tự nhận "chưa ghi" khi sổ đã mang mã G · 0i C12 phải
+# khai đúng tập mục còn <chưa điền> (chống lách ngoại lệ C11) · 0j file lạ
+# trong 00_Index (vùng bị loại khỏi quan sát nghiệp vụ) · 3e chiều NGƯỢC của
+# 3c: mã G đậu ở sổ phải có dòng NHATKY, bắt mất TRỌN file quý · phép 8 tách
+# hai chiều lệch, hết dẫn người dùng sinh lại bảng đè mất bằng chứng cuối.
 # v34, theo PILOT vận hành thật: 0d hết báo động giả ngay sau khi cài (kho
 # vừa cài chưa ghi lần nào thì NHATKY CHƯA sinh là đúng luật X5 mục 3, cũ
 # báo 'trục sự thật đã biến mất, cấm cấp mã G') · 0g mới: 00_Index còn là
@@ -4299,6 +4545,65 @@ if hasattr(sys.stdout, "reconfigure"):
 
 loi = []
 MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
+BIET_MAT_00 = re.compile(
+    r"X[0-9]E?_[A-Z0-9_]+\.md|INSTRUCTION_WORKOPS_v\d+\.md|README\.md"
+    r"|GHICHU_DOI_MOI_v.*\.md|DOC_TRUOC\.md|BENCHMARK_TOKEN\.md"
+    r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|\.gitignore")
+
+
+def loc_dau_vet_ghi(so, doc_ham=None):
+    """Mọi nơi mã G ĐẬU LẠI theo X5 mục 3-4, không phải chỉ 5 sổ lõi.
+    THU.md có cột "Ghi lần"; BANG_DIEU_KHIEN và X0_INDEX mang sinh_boi và
+    watermark sinh ở bước 6 của MỌI lượt ghi (kho vừa cài in "bàn sạch" nên
+    KHÔNG mang mã G). Hai file máy _thu_* nằm trong .gitignore nên không
+    được là bằng chứng DUY NHẤT. Hội đồng vòng 13: v34 quét thiếu ở đây làm
+    máy in "hệ sạch" khi NHATKY đã mất."""
+    d = doc_ham or (lambda p: p.read_text(encoding="utf-8") if p.is_file() else "")
+    ra = sorted(q.name for q in so.glob("*.md")
+                if "TEMPLATE" not in q.name and re.search(MAU_G, d(q)))
+    if (so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file():
+        ra.append("nhật ký EMAIL")
+    return ra
+
+
+def tim_vung_git(goc):
+    """Thư mục gần nhất (kho hay TỔ TIÊN của nó) đang là bản làm việc git.
+    Bắt cả .git thư mục lẫn .git FILE (worktree, submodule). Hội đồng vòng
+    13: v34 chỉ soi đúng một tầng, clone vào chính gốc kho thì git stash
+    vẫn nuốt dòng sổ mà lưới im."""
+    g = Path(goc).resolve()
+    return next((d for d in [g, *g.parents] if (d / ".git").exists()), None)
+
+
+MAU_TRONG = re.compile(r"<(?:chưa )?điền[^>]*>|<N>|<tên [^>]*>|<điền>")
+
+
+def lech_c12(nd):
+    """Tập mục lệch giữa C12 và tập THẬT còn dấu chưa điền của template.
+    Dấu chưa điền gồm MỌI khuôn mẫu: <chưa điền>, <điền...>, <N>. Hội đồng
+    vòng 13 (VẬN HÀNH) đếm được 29 mục còn trống sau khi cài mà C12 chỉ khai
+    2, nên ngoại lệ C11 (2) phủ đúng 2/29. Quét theo DÒNG: mục nhiều dòng thì
+    dấu trống ở dòng nối vẫn thuộc về @KEY gần nhất phía trên. Mục tự khai là
+    tùy chọn ("chỉ khai khi") không tính. Dòng C12 đã ĐÁNH DẤU [x] là mục đã
+    điền, giữ lại làm bằng chứng nhưng không còn là mục trống."""
+    if "# C12." not in nd:
+        return []
+    c12 = nd[nd.index("# C12."):]
+    c12 = c12[:c12.index("# C13.")] if "# C13." in c12 else c12
+    than = nd[:nd.index("# C12.")]
+    that, khoa_hien = set(), None
+    for dong in than.splitlines():
+        m = re.search(r"@[A-Z][A-Z0-9._]*", dong)
+        if m:
+            khoa_hien = m.group(0)
+        if khoa_hien and MAU_TRONG.search(dong) and "chỉ khai khi" not in dong:
+            that.add(khoa_hien)
+    khai = set()
+    for dong in c12.splitlines():
+        if dong.strip().startswith(("[x]", "[X]")):
+            continue  # đã điền, dòng giữ làm bằng chứng
+        khai |= set(re.findall(r"@[A-Z][A-Z0-9._]*", dong))
+    return sorted((that - khai) | (khai - that))
 BAT_BIEN = ("ĐÃ GỬI DUYỆT", "ĐÃ DUYỆT NỘI BỘ", "ĐÃ PHÁT HÀNH", "ĐÃ NỘP",
             "TRẢ HỒ SƠ", "ĐÃ KÝ", "ĐÃ CẤP")
 MAU_TAM = re.compile(r"^~\$|\.tmp$|\.bak\d*$|conflicted copy|xung đột|autosave|-nhap\d+"
@@ -5281,7 +5586,18 @@ def main(goc):
 
     LOI_DOC.clear()
     rev = re.search(r"rev (\d+)", doc(x0s[0])) if x0s else None
-    chua_cai = bool(rev and rev.group(1) == "0") or (not x0s and co_template)
+    dau_vet_ghi = loc_dau_vet_ghi(so, doc)
+    # rev 0 là LỜI KHAI của X0, không phải sự thật của sổ: X0 bị đồng bộ mây trả
+    # về bản cũ thì cờ này tắt một lượt cả 0d, 2, 3, 4, 8. Có dấu vết ghi thì
+    # KHÔNG cho phép tự nhận "chưa cài đặt" nữa (hội đồng vòng 13).
+    chua_cai = ((bool(rev and rev.group(1) == "0") or (not x0s and co_template))
+                and not dau_vet_ghi)
+    if rev and rev.group(1) == "0" and dau_vet_ghi:
+        bao("0h. rev của X0 khớp trạng thái sổ đã ghi", False,
+            f"X0 còn rev 0 (nghĩa là CHƯA cài) mà sổ đã mang dấu mã G"
+            f" ({dau_vet_ghi[:3]}): X0 bị khôi phục nhầm về bản cũ hay mất dòng"
+            f" rev. Phục hồi rev đúng, mức C, từ version history TRƯỚC khi ghi"
+            f" tiếp; cấm cấp mã G mới khi chưa có lại")
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: " + ("X0 tên chưa chuẩn (xem 0c), chưa đọc được rev"
               if not x0s and ung_vien_tho else "X0 rev 0, hệ chưa cài đặt, chưa có lượt ghi nào"))
@@ -5292,13 +5608,8 @@ def main(goc):
         # KHO VỪA CÀI, CHƯA GHI LẦN NÀO: NHATKY chưa sinh là ĐÚNG luật (X5 mục
         # 3 bước 1 tạo file quý ở lượt ghi ĐẦU). Chỉ khi có DẤU VẾT đã từng ghi
         # mà NHATKY vắng thì mới là mất trục sự thật (PILOT vòng 38: bản cũ dọa
-        # "cấm cấp mã G" ngay sau khi cài đúng X9, hệ tự khóa mình).
-        dau_vet_ghi = []
-        for _t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md"]:
-            if re.search(MAU_G, doc(so / _t)):
-                dau_vet_ghi.append(_t)
-        if (so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file():
-            dau_vet_ghi.append("nhật ký EMAIL")
+        # "cấm cấp mã G" ngay sau khi cài đúng X9, hệ tự khóa mình). Tập dấu vết
+        # tính ở loc_dau_vet_ghi, phủ MỌI sổ và view (hội đồng vòng 13).
         if not co_nk and not chi_conflict and not dau_vet_ghi:
             print("  BỎ QUA  0d: hệ đã cài nhưng CHƯA ghi lần nào; NHATKY quý sinh"
                   " ở lượt ghi đầu theo X5 mục 3 bước 1, chưa có là đúng")
@@ -5307,19 +5618,45 @@ def main(goc):
                 ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
                  " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
                  if chi_conflict else
-                 f"sổ còn dấu mã G ({dau_vet_ghi[:3]}) mà NHATKY vắng: trục sự thật"
+                 f"còn dấu mã G ở ({dau_vet_ghi[:3]}) mà NHATKY vắng: trục sự thật"
                  " để cấp mã, hòa giải trùng và chốt sổ đã biến mất; khôi phục mức C"
                  " từ version history, cấm cấp mã G mới khi chưa có lại"))
-    # 0g. Kho ĐANG CHẠY không được là bản làm việc git: _so chứa sổ SỐNG, mà
-    #     sổ ship kèm bộ nên bị git quản; "git pull" sẽ dừng vì local changes và
-    #     làm theo lời khuyên "git stash" của git thì DÒNG SỔ BIẾN MẤT khỏi bản
-    #     làm việc (PILOT vòng 38 dựng lại được). Nâng cấp theo X9 mục 3c.
-    if not chua_cai and (goc / ".git").exists():
-        bao("0g. kho đang chạy không còn là bản làm việc git", False,
-            "00_Index còn thư mục .git: sổ sống nằm trong vùng git quản."
-            " XÓA 00_Index\\.git (sổ trên đĩa giữ nguyên), giữ bản clone để nâng"
-            " cấp ở thư mục KHÁC ngoài kho; nâng cấp theo X9 mục 3c."
-            " CẤM chạy git pull hay git stash trong kho đang chạy")
+    # 0g. Kho ĐANG CHẠY không được nằm TRONG bất kỳ bản làm việc git nào, kể
+    #     cả khi .git ở thư mục CHA: git pull và git stash chạy từ gốc repo vẫn
+    #     đụng _so. Hội đồng vòng 13 dựng lại được cảnh mất trọn sổ ở ca cha.
+    vung_git = tim_vung_git(goc) if not chua_cai else None
+    if vung_git is not None:
+        bao("0g. kho đang chạy không nằm trong bản làm việc git", False,
+            f"thấy thư mục ẩn tên .git ở {vung_git} (thư mục này, hay THƯ MỤC CHA"
+            f" của kho). Sổ sách của công ty đang nằm trong vùng git quản. Nói"
+            f" với AI \"xóa .git giúp tôi\" - sổ trên đĩa không suy suyển gì; muốn"
+            f" tự làm thì bật hiện file ẩn trong File Explorer (tab View, tick"
+            f" Hidden items) rồi xóa. TUYỆT ĐỐI đừng gõ git pull hay git stash ở"
+            f" đây: lỡ gõ rồi mà sổ trống thì chạy git stash pop lấy lại ngay."
+            f" Nâng cấp bộ theo X9 mục 3c")
+
+    # 0i. C12 phải khai ĐÚNG tập mục còn trống. Ngoại lệ C11 (2) cho phép "điền
+    #     lần đầu" ở mức B dựa trên tư cách thành viên của C12, nên C12 trôi khỏi
+    #     sự thật là mở cửa lách (hội đồng vòng 13).
+    if not chua_cai and x0s:
+        _lc = lech_c12(doc(x0s[0]))
+        if _lc:
+            bao("0i. C12 khai đúng tập mục còn <chưa điền>", False,
+                f"lệch {_lc[:5]}: mục biến khỏi C12 mà giá trị vẫn trống là lách"
+                f" ngoại lệ C11 (2); ngược lại là mục đã điền còn kẹt ở C12."
+                f" Đồng bộ C12 rồi sinh lại X0_INDEX")
+
+    # 0j. File LẠ trong 00_Index: vùng luật bị loại khỏi quan sát nghiệp vụ
+    #     (THU_MUC_HE_THONG), nên tài liệu lỡ lưu vào đây KHÔNG phép nào nhặt.
+    #     Trước vòng 38, "git status" là lưới cuối; xóa .git thì mất nốt.
+    _la = sorted(f.name for f in goc.iterdir()
+                 if f.is_file() and not BIET_MAT_00.fullmatch(f.name))
+    if _la:
+        bao("0j. không file lạ trong 00_Index", False,
+            f"{_la[:5]}: 00_Index là vùng luật, bị loại khỏi quan sát nghiệp vụ"
+            f" nên file ở đây KHÔNG BAO GIỜ được đề xuất vào TAILIEU. Tài liệu"
+            f" thì chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ thì khai"
+            f" vào _so\\_quan_sat_bo.txt và để NGOÀI 00_Index")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
@@ -5355,8 +5692,16 @@ def main(goc):
     wm = watermark(ma_g)
 
     if not chua_cai:
-        treo = [h[0] for h in hang_nk if any(o == "ĐANG GHI" for o in h)]
-        bao("3a. không dòng NHATKY còn ĐANG GHI", not treo, str(treo))
+        # dòng CỤT: đứt giữa lượt ghi ở mức byte (ổ đồng bộ cắt ngang) làm ô
+        # Trạng thái mất chữ, so khớp "ĐANG GHI" trượt và "chốt sổ" tuyên bố
+        # đóng phiên an toàn trong khi sổ đã mang mã của lượt dở (hội đồng 13)
+        so_o_dau = len(hang_nk[0]) if hang_nk else 0
+        treo = [h[0] for h in hang_nk if any(o == "ĐANG GHI" for o in h)] + [
+            (h[0] or "?") + " (dòng CỤT)" for h in hang_nk[1:]
+            if not any(o == "ĐANG GHI" for o in h)
+            and (len(h) < so_o_dau or any(o.strip().startswith("ĐANG") and
+                                          o.strip() != "ĐANG GHI" for o in h))]
+        bao("3a. không dòng NHATKY còn ĐANG GHI hay dòng cụt", not treo, str(treo))
         trung = sorted({m for m in ma_g if ma_g.count(m) > 1})
         bao("3b. không mã G trùng ở cột Mã ghi", not trung, str(trung))
         cu = [m for m in ma_g if cua_cua(m) is None]
@@ -5369,7 +5714,9 @@ def main(goc):
         # 3c (X4 dòng 19 nửa sau): lượt XONG phải để dấu mã G ở ít nhất một sổ,
         # trừ khi cột Chạm sổ nào ghi "không"
         ghi_lan = set()
-        for t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md"]:
+        for t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md",
+                  "PLANNING.md", "THU.md"]:  # THU có cột "Ghi lần" (profile EMAIL):
+                  # thiếu nó thì lượt chỉ chạm THU bị 3c báo LỆCH oan
             for r in dong_bang(doc(so / t)):
                 if r:
                     ghi_lan |= set(re.findall(MAU_G, r[-1]))
@@ -5380,6 +5727,16 @@ def main(goc):
                      and h[0].strip("* ") not in ghi_lan]
         bao("3c. lượt ghi XONG đều để dấu mã G ở ít nhất một sổ", not khong_dau,
             str(khong_dau[:5]))
+
+        # 3e. Chiều NGƯỢC của 3c: mã G đã đậu ở sổ hay bảng thì phải có dòng
+        #     NHATKY. 3c chỉ đi từ NHATKY ra sổ nên MẤT TRỌN một file quý (mây
+        #     rollback, restore lệch, git stash) không lay động phép nào.
+        dau_ngoai = ghi_lan | set(re.findall(MAU_G, doc(so / "BANG_DIEU_KHIEN.md")))
+        mo_coi = sorted(dau_ngoai - set(ma_g))
+        bao("3e. mã G đã đậu ở sổ đều có dòng NHATKY tương ứng", not mo_coi,
+            f"{mo_coi[:5]}: sổ hay bảng mang mã mà NHATKY không có dòng nào -"
+            f" dòng NHATKY hay CẢ FILE QUÝ của mã đó đã mất; khôi phục mức C từ"
+            f" version history TRƯỚC, cấm cấp mã G mới khi chưa có lại")
 
         # 3d (X4 dòng 23): lượt NHATKY mức C phải khớp một plan mang đúng mã G đó
         plan_da_ghi = {m for r in dong_bang(doc(so / "PLANNING.md"))
@@ -5440,9 +5797,28 @@ def main(goc):
         else:
             gb = g_bdk.group(1) if g_bdk else None
             c = cua_cua(gb) if gb else None
-            bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó",
+            # hai chiều lệch phải nói hai câu KHÁC nhau: bảng CŨ hơn thì sinh
+            # lại là đúng; bảng MỚI hơn mọi dòng NHATKY của chính cửa mình thì
+            # NHATKY đã mất dòng, sinh lại bảng là XÓA BẰNG CHỨNG CUỐI CÙNG
+            # (hội đồng vòng 13: phép cũ dẫn thẳng người dùng tới thao tác đó)
+            moi_hon = bool(gb and c and gb > (wm.get(c) or ""))
+            if not gb or not c:
+                bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó", False,
+                    "bảng chưa khai sinh_boi hay watermark mang mã G có cửa:"
+                    " bảng sinh TRƯỚC lượt ghi đầu tiên thì ghi \"cai dat\"; bảng"
+                    " sinh SAU một lượt ghi mà thiếu hai giá trị này là bảng sửa"
+                    " tay, sinh lại theo X5 mục 3 bước 6")
+            else:
+             bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó",
                 bool(gb and c and wm.get(c) == gb),
-                f"bảng={gb} watermark {c}={wm.get(c) if c else 'không'}")
+                (f"bảng={gb} MỚI HƠN mọi dòng NHATKY của cửa {c}"
+                 f" ({wm.get(c) or 'không có dòng nào'}): bảng chứng minh lượt ghi"
+                 f" đó ĐÃ xong mà NHATKY không còn - dòng hay CẢ FILE QUÝ đã mất."
+                 f" CẤM sinh lại bảng (sinh lại là xóa bằng chứng cuối); khôi"
+                 f" phục NHATKY mức C từ version history TRƯỚC, rồi mới sinh lại"
+                 if moi_hon else
+                 f"bảng={gb} watermark {c}={wm.get(c) if c else 'không'}:"
+                 f" bảng cũ hơn lượt ghi gần nhất, sinh lại bảng"))
             khac = [f"{k}={v}" for k, v in sorted(wm.items()) if k != c and v[2:10] > (gb or '')[2:10]]
             if khac:
                 print(f"        LƯU Ý: cửa khác có lượt ghi ngày mới hơn bảng ({'; '.join(khac)}), cân nhắc sinh lại")
@@ -5543,6 +5919,7 @@ C12 còn thiếu · C13 nâng mức · C14 bản đồ tham chiếu
 
 Còn thiếu (chép từ C12): <danh sách hoặc "không">
 
+Lượt CÀI ĐẶT chưa có mã G nào: ghi `sinh_boi: cai dat`.
 Luật: sinh lại mỗi khi X0 tăng rev, không sửa tay. Giá trị đưa vào bất kỳ đầu ra
 nào phải đọc từ X0 đúng mục, không lấy từ view này.
 
@@ -5557,6 +5934,8 @@ may_sinh: true · chua cai dat, X0 rev 0
 ```
 
 Chưa cài đặt. Phiên đầu tiên chạy X9 rồi sinh lại file này, in "bàn sạch".
+Lượt CÀI ĐẶT chưa có mã G nào: ghi `sinh_boi: cai dat` và
+`watermark: chưa có lượt ghi`. Từ lượt ghi đầu tiên mới mang mã G thật.
 Khi sinh thật, header mang: `sinh_boi: <mã G lượt vừa xong của cửa mình>` và
 `watermark: <CUA1>=<mã cuối> · <CUA2>=<mã cuối>...` theo X5 mục 3 bước 6.
 

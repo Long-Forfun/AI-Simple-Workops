@@ -79,7 +79,10 @@ rà file     chạy danh mục trên, xuất bảng, chưa sửa gì
             một dòng, không hỏi; CHỈ hỏi khi XUNG ĐỘT (cùng vN khác hash) hay
             KHÔNG XÁC ĐỊNH. RA_SOAT thuần vẫn chỉ báo cáo; tự ghi chỉ xảy ra
             qua câu tắt này hay khi nạp CUA_VAO theo X3
-chốt sổ     lưới an toàn theo trình tự X5 mục 3: dòng NHATKY còn ĐANG GHI, đọc "Chạm
+chốt sổ     trước hết đọc phép 5 của kiem_van_hanh: dòng NHATKY sai số ô là lượt
+            ĐỨT GIỮA CHỪNG, không phải lỗi trình bày; dựng lại ô Trạng thái từ ô
+            "Làm gì" rồi xử tiếp như dòng ĐANG GHI.
+            Lưới an toàn theo trình tự X5 mục 3: dòng NHATKY còn ĐANG GHI, đọc "Chạm
             sổ nào", kiểm "Ghi lần", thiếu ghi nốt; nội dung không tái
             lập chắc từ "Làm gì" và plan: ghi VIEC hỏi người dùng, CẤM đoán;
             đủ thì đổi XONG, plan sang ĐÃ GHI

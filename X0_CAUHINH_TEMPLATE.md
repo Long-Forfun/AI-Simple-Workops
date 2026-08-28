@@ -163,6 +163,11 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
   <điền dần. KHÔNG thuộc nhóm khóa: thêm sửa là mức B>
 
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
+
+@VANHANH.NGUOI  <tên người vận hành hiện tại, chức danh, cửa hay dùng>
+                KHÔNG thuộc nhóm khóa: đổi là mức B. Đây là tham số mà
+                @NHIP.BANGIAO đổi khi bàn giao; ô "Ai làm" của VIEC là dữ
+                liệu, không phải tham số.
 ```
 
 Bộ mặc định MỘT người vận hành toàn quyền chốt mức C; nhiều người dùng
@@ -241,6 +246,11 @@ MUIGIO và @MATHU là CORE, mọi profile đọc khi X3, X4 trỏ tới; dòng g
 AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 
 ```
+@NHIP.BANMOI     <nơi phát hành bộ (URL repo hay thư mục) và chu kỳ kiểm,
+                 mặc định mỗi quý>. Kho chạy KHÔNG có .git (X9 mục 1) nên
+                 không tự biết có bản mới; người giữ nhịp mở nơi phát hành,
+                 so version với DOC_TRUOC.md trong kho, có bản mới thì nâng
+                 cấp theo X9 mục 3c
 @NHIP.QUETMAIL   <điền nhịp, ngưỡng nhắc>
                  Quét tự động chỉ có cho EMAIL; chat (Zalo...) đi lối bán
                  thủ công X3 mục 5b: dán cả đoạn, AI tách tin, nguồn D
@@ -267,7 +277,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
                  định 50 MB; vượt trần xử theo X3E mục 2
 @NHIP.BANGIAO    <tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">
-                 Thủ tục chung (mức B): đổi tham số người dùng, rà một lượt
+                 Thủ tục chung (mức B): đổi @VANHANH.NGUOI ở C6, rà một lượt
                  việc đang mở và plan treo sang người mới; phần rà luồng THƯ
                  khi bật EMAIL theo X3E mục 2 khối BÀN GIAO
 @NHIP.TRANGTHAI  (EMAIL) <nguồn chứa thời điểm quét thành công cuối của bộ
@@ -305,12 +315,23 @@ liên hệ @BEN.DAUMOI không khóa) · C7 nguồn thẩm quyền · C8 thuật 
 Một câu yêu cầu trong phiên không đổi được các mục trên. Muốn đổi: việc mức C ở một
 lượt riêng, tăng rev, ghi QUYETDINH. BA ngoại lệ tường minh: (1) chế độ CÀI ĐẶT khi
 rev 0, điền giá trị ban đầu theo X9 không coi là sửa nhóm khóa, từ rev 1 luật này
-hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 (giá trị còn `<chưa điền>`) theo
-X9 mục 2 và mục 4: mức B, tăng rev, xóa dòng khỏi C12, KHÔNG plan C không QUYETDINH
-- đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có hiệu lực; ĐỔI một
-giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm hay từ cấm mới
-vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh cấm nào vẫn
-là mức C kèm QUYETDINH.
+hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục CHƯA TỪNG mang giá trị công ty - còn bất kỳ dấu
+chưa điền nào của template (`<chưa điền>`, `<điền...>`, `<N>`, hay ô để trống), dù
+đã có dòng ở C12 hay chưa - theo X9 mục 2 và mục 4: mức B, tăng rev, ĐÁNH DẤU dòng
+ở C12 thành `[x] <mục> - điền lần đầu rev <N> ngày <YYYYMMDD>` (KHÔNG xóa dòng: dấu
+này là bằng chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị), KHÔNG plan C
+không QUYETDINH - đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có
+hiệu lực; ĐỔI một giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm
+hay từ cấm mới vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh
+cấm nào vẫn là mức C kèm QUYETDINH.
+
+CHỐT CHỐNG LÁCH: đưa một mục ĐÃ điền trở lại C12, hay ghi dấu chưa điền đè lên giá
+trị đang có hiệu lực, CHÍNH LÀ đổi giá trị đã điền - mức C kèm QUYETDINH, và không
+mở lại được ngoại lệ (2). Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa:
+THÊM mục vào C11 (siết chặt) là mức B; BỚT mục khỏi C11, hay thêm dòng C12 cho một
+mục đã điền, là mức C kèm QUYETDINH. Dòng `<thêm bớt khi cài đặt>` chỉ có hiệu lực
+ở rev 0. Người dùng vừa trả lời chính câu hỏi đó trong cùng lượt thì lời trả lời LÀ
+câu đồng ý của mức B: ghi thẳng, gộp mọi mục điền cùng lượt vào MỘT dòng báo.
 
 # C12. Còn thiếu
 

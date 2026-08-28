@@ -1,6 +1,15 @@
 # BENCHMARK_TOKEN · STARTER v24 · 20260824
 
-Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt). Version khớp
+Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt).
+ĐỘ BẤT ĐỊNH CỦA HỆ SỐ 1/3, khai thẳng: bộ CHƯA đối chứng tokenizer sản xuất nào.
+Đối chứng duy nhất làm được (sentencepiece 32k của T5, SAI HỌ vì vocab tiếng Anh)
+cho 1,43 ký tự/token trên chính bộ này, tức 2,1 lần ước lượng; cùng văn bản bỏ
+dấu là 2,01 và văn xuôi tiếng Anh là 5,26. Tokenizer sản xuất phủ tiếng Việt tốt
+hơn T5 nhiều, nên 2,1x là TRẦN TRÊN chứ không phải đáp số. Bộ này 16,0 phần trăm
+ký tự non-ASCII, 1,243 byte mỗi ký tự UTF-8, mà mọi BPE hiện đại đếm theo BYTE.
+Kết luận: MỌI con số token trong file này phải đọc với khoảng 1,0x tới 2,1x. Ai
+có tiktoken hãy chạy len(get_encoding("o200k_base").encode(nội dung)) trên X0 và
+X5 rồi ghi tỉ số thật vào đây; đó là việc còn lại duy nhất để đóng khoảng này. Version khớp
 DOC_TRUOC (phép kiểm 2b); các số route được MÁY GIỮ KHỚP file thật bằng phép
 kiểm 2c (dung sai 10%), số mới lấy bằng lệnh
 `python kiem_tra_bo.py . --sinh-benchmark`. Đây là BENCHMARK TĨNH; cột
@@ -11,14 +20,14 @@ không tuyên bố kết quả runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | ~1905 |
+| INSTRUCTION dán trong Project | 4148 | ~1924 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
-| CỘNG | ~6969 | ~2235 |
+| CỘNG | ~6969 | ~2316 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.905) xấp xỉ 4.105
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.924) xấp xỉ 4.124
 token, vẫn thấp hơn trước tối ưu.
 Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
 mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
@@ -32,43 +41,50 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1668 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5256 + khối (không phần mềm trừ thêm mục 1b ~421) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2580 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6371 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3431 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3431 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1684 (thêm X5 mục 3 ~1235 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5448 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2596 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6387 + khối | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1578 | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3447 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3447 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
-INSTRUCTION 8.000 ký tự · X0 16.500 (đọc theo mục, thuế là X0_INDEX) · X5
-18.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
-gate khi dán chat) · X3E 12.000 (chỉ nạp khi bật EMAIL) · X9 6.500 · X4
-5.500 (chỉ đọc khi RA_SOAT) · X2 4.200 · X1 3.200 · X0_INDEX 1.500 ·
-BANG_DIEU_KHIEN 1.400. Vượt trần là FAIL.
+INSTRUCTION 8.000 ký tự · X0 18.500 (đọc theo mục, thuế là X0_INDEX) · X5
+19.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
+gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 7.500 (đọc một
+lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
+4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
+bản gộp _GOP 340.000. Vượt trần là FAIL.
 
 ## Ghi chú phiên CHAT
 
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0
 tới X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy
 hồi theo cơ chế riêng, xấu nhất là cả bộ:
-CHAT không EMAIL ~20314 token
-CHAT có EMAIL (kèm X3E) ~24313 token
-(hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
-BAN, soạn nháp, không phải phiên ghi sổ chính.
+Phiên CHAT chỉ nên nạp X0 tới X5 (và X3E nếu bật EMAIL). GỠ X9 ra sau khi cài
+xong (đọc một lần mỗi công ty) và KHÔNG nạp X4 (chỉ đọc khi RA_SOAT, mà pilot đo
+được RA_SOAT thực tế trả 0 token vì bảng kiem_van_hanh.py tự đủ nghĩa):
+CHAT không EMAIL ~17335 token
+CHAT có EMAIL (kèm X3E) ~21334 token
+CHAT nạp cả X9 và X4 ~21382 token
+(ba số này máy giữ khớp qua phép 2c; bỏ X9 và X4 cắt gần 3.000 token mỗi phiên).
+CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
 
 ## Phiên thật đã đo (PILOT 2026-08-28)
 
 Pilot dựng một công ty giả lập có dự án PHẦN MỀM (profile REGULATED + EMAIL):
-clone bộ, chạy X9 cài từ zero, vòng thử mức A của X9 mục 3, rồi rà máy. Đây là
-số ĐO ĐƯỢC của phiên thật đầu tiên, không phải ước lượng.
+clone bộ, chạy X9 cài từ zero, vòng thử mức A của X9 mục 3, rồi rà máy. Cái ĐO
+ĐƯỢC ở đây là: file nào THẬT SỰ được đọc, bao nhiêu lượt đọc, có đọc thừa không,
+kết quả đúng hay sai. Số TOKEN vẫn là ước lượng ký tự/3 áp lên phần đã đọc thật,
+chưa đối chứng tokenizer nào (xem ĐỘ BẤT ĐỊNH ở đầu file).
 
 ```
 CÀI ĐẶT (X9 phiên đầu)   đọc thật INSTRUCTION + X9 + X0 + 9 mẫu sổ
-                         ~35,5k ký tự ~11,8k token · 6 lượt đọc file
-                         đọc thừa: không · sai: không
-NOI_BO mức A (vòng thử)  đọc thật X5 mục 3 ~2,4k ký tự ~0,8k token
+                         32.924 ký tự đo tại commit, ~11,0k token ước lượng
+                         6 lượt đọc file · đọc thừa: không · sai: không
+NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 token
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng kết

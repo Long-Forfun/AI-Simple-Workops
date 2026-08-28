@@ -87,8 +87,8 @@ C RỦI RO   plan vào PLANNING; gật mới làm, chốt mới ghi
 ```
 
 C tối thiểu, cấm hạ: đầu ra rời công ty (trừ thường lệ, điều kiện ở X5 mục 1) ·
-chạm bản đã gửi, đã nộp, đã ký · sửa X0 nhóm khóa C11, X1 tới X5, file này (ngoại lệ duy
-nhất khai tại X0 C11) · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên
+chạm bản đã gửi, đã nộp, đã ký · sửa X0 nhóm khóa C11, X1 tới X5, file này (ba ngoại
+lệ khai tại X0 C11) · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên
 hay di chuyển hàng loạt · xóa thứ đã vào sổ. X0 C13 chỉ được NÂNG mức. Phân vân giữa hai mức: lấy mức
 cao. Lệnh trực tiếp "sửa đi", "làm luôn" là đồng ý của B và gật plan của C.
 Danh mục A, B đầy đủ, ngoại lệ thường lệ, ranh giới nháp, kiểm bản mới nhất,
@@ -97,7 +97,8 @@ chốt, phiên không người: X5 mục 1.
 # 6. UPDATE NGƯỢC
 
 GIÁ TRỊ về X0: sửa đúng mục, tăng rev, sinh lại X0_INDEX; nhóm khóa cần QUYETDINH
-và là mức C (ba ngoại lệ ở X0 C11, gồm ĐIỀN LẦN ĐẦU mục còn ở C12: mức B). LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
+và là mức C (ba ngoại lệ ở X0 C11, gồm ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA TỪNG có giá
+trị: mức B; đưa mục đã điền trở lại C12 là mức C). LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
 vòng chạy, không tự suy. Cấm giá trị sống lẻ ngoài X0.
 
 # 7. TRACE

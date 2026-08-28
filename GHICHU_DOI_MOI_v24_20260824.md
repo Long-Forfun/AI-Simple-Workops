@@ -31,6 +31,105 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 40: hội đồng vòng 13 chấm PILOT - vá chính bản vá vòng 38
+
+Điểm vòng 13: TOKEN 9,3 · THÔNG MINH 9,0 · ĐƠN GIẢN 8,8 · KHÔNG MISS 8,6 ·
+KHÔNG SAI 7,6 · VẬN HÀNH 6,8. Điểm TỤT MẠNH so với 96,8 đọc-tĩnh, và tụt
+đúng lý do đáng mừng: sáu giám khảo lần này CHẠY hệ thay vì đọc, mỗi người
+một đường chưa ai đi (LITE không phần mềm, kho có sẵn file, bàn giao, hai
+phiên cùng cửa, mất mát, mutation). Ba defect NẶNG là do CHÍNH bản vá vòng
+38 sinh ra: vá một BÁO ĐỘNG GIẢ bằng cách đổi lấy ba lời BÁO SẠCH GIẢ.
+
+MÁY (kiem_van_hanh v35), tất cả đều dựng lại được trước khi vá:
+1. 0d quét thiếu (NẶNG, 3 giám khảo độc lập). v34 chỉ soi 5 sổ lõi, bỏ
+   THU.md và BANG_DIEU_KHIEN - hai nơi mã G ĐẬU theo đúng X5 mục 3-4. Kho
+   mất NHATKY mà bảng còn `sinh_boi: G-...` in "hệ sạch". Nay
+   loc_dau_vet_ghi quét MỌI sổ và view trong _so.
+2. 0g mù thư mục CHA (NẶNG, 3 giám khảo). `(goc/".git").exists()` chỉ soi
+   một tầng; clone vào chính `<gốc>` thì `git stash` vẫn nuốt trọn sổ mà
+   lưới im. Nay tim_vung_git dò kho VÀ mọi tổ tiên, bắt cả .git dạng file
+   (worktree, submodule).
+3. 0h MỚI (NẶNG). Cờ `rev 0` một mình tắt 0d, 2, 3, 4, 8: X0 bị đồng bộ mây
+   trả về bản cũ thì máy KHẲNG ĐỊNH "chưa có lượt ghi nào" trong khi NHATKY
+   nằm ngay đó. Nay có dấu vết ghi thì cấm tự nhận "chưa cài".
+4. 3e MỚI (NẶNG). 3c chỉ đi MỘT chiều NHATKY sang sổ. Mất TRỌN một file quý,
+   hay hai phiên cùng cửa ghi đè cả file NHATKY, đều không phép nào thấy.
+   3e đi chiều ngược: mã G đậu ở sổ hay bảng phải có dòng NHATKY.
+5. Phép 8 tách hai chiều lệch. Bảng MỚI HƠN mọi dòng NHATKY nghĩa là NHATKY
+   mất dòng; câu cũ xui người dùng "sinh lại bảng", tức xóa nốt bằng chứng
+   cuối cùng. Nay hai chiều nói hai câu khác nhau.
+6. 0i, 0j MỚI. 0i: C12 phải khai ĐÚNG tập mục còn dấu chưa điền (chống lách
+   ngoại lệ C11 bằng cách thêm bớt dòng C12). 0j: file lạ trong 00_Index -
+   vùng bị loại khỏi quan sát nghiệp vụ nên tài liệu lỡ lưu vào đây KHÔNG
+   phép nào nhặt, mà `git status` từng là lưới cuối thì vòng 38 vừa gỡ.
+   3a bắt thêm dòng CỤT (đứt lượt ghi ở mức byte, ô Trạng thái mất chữ).
+
+LUẬT:
+7. Ngoại lệ C11 (2) phủ 2/29 mục (NẶNG, VẬN HÀNH đếm được). Neo cũ đòi
+   ĐỒNG THỜI `<chưa điền>` VÀ có dòng ở C12, trong khi template viết
+   `<điền...>`, `<N>`, và nhóm C không bao giờ được đưa vào C12. Nay neo là
+   "CHƯA TỪNG mang giá trị, còn bất kỳ dấu chưa điền nào"; X9 mục 1 bắt
+   buộc quét X0 đưa MỌI mục trống vào C12 khi cài (pilot mới liệt 27 mục);
+   dòng C12 khi điền thì ĐÁNH DẤU `[x]` chứ không xóa, vì dấu đó là bằng
+   chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị. Thêm CHỐT CHỐNG
+   LÁCH: C11 và C12 tự nằm trong nhóm khóa, đưa mục đã điền trở lại C12 là
+   mức C.
+8. Nâng cấp không chở lưới (NẶNG). X9 3c chỉ bảo chép `_TEMPLATE`, mà
+   kiem_van_hanh, kiem_tra_bo, INSTRUCTION, README đều KHÔNG mang
+   `_TEMPLATE`: mọi công ty cài trước vòng 38 nâng cấp đúng luật vẫn vĩnh
+   viễn không có 0g và vẫn dính 0d báo động giả. Vá vòng 38 không có đường
+   giao hàng. Nay 3c chép HAI nhóm, nhóm (b) đè thẳng năm file đó.
+9. Một cửa MỘT phiên đang ghi là luật CORE, không riêng PARALLEL (công ty
+   LITE mở hai tab là ca thường nhất). Ô "Ghi lần" khai rõ là danh sách
+   CHỈ-THÊM (ghi đè làm lượt cũ mất dấu, 3c lệch kinh niên mỗi tuần).
+   @VANHANH.NGUOI có thật ở C6 (thủ tục bàn giao đang trỏ tới một tham số
+   không tồn tại). @NHIP.BANMOI có thật ở C9 (sau khi gỡ .git thì KHÔNG ai
+   sở hữu việc biết bộ đã cũ). Lượt ghi ĐẦU TIÊN của kho hết bị nhắc vòng
+   quý oan. X9 3b nói rõ phải quét HAI lần và tên gốc vào ô có thật.
+   README có lối thoát `git stash pop` bằng tiếng người.
+
+LƯỚI: phép 1e MỚI - phép BÙ của phép 1, bắt file THỪA (lưới là allow-list
+nên rác vô hình theo cấu trúc: lọt hai commit liên tiếp, vòng 37 và 38).
+Dung sai 2c siết theo bậc (2% cho số trên 5.000: 10% trên dòng CHAT che tới
+2.000 token). Phép 10 hết mù tham chiếu bị xuống dòng. Luật ghim 52 lên 60,
+gồm ba luật CHỐNG ĐỘT BIẾN mà hội đồng chứng minh được là lưới cũ cho qua:
+README không được khuyên ngược, mức ĐIỀN LẦN ĐẦU phải khớp cả ba nơi, số
+ngoại lệ C11 phải bằng số liệt kê. Fixture 82 lên 88: ba quyết định của 0d,
+0g, 0i lên tầng module nên fixture kẹp thẳng - vùng rà soát trước đây có
+mutation score 0% vì main() không hàm nào gọi được.
+
+TOKEN: X9 và X4 KHÔNG nạp vào phiên CHAT nữa (X9 đọc một lần khi cài, X4
+chỉ khi RA_SOAT mà pilot đo được RA_SOAT thực tế trả 0 token vì chạy
+script): CHAT 20.314 xuống 17.335, cắt 14,7%. BENCHMARK khai thẳng ĐỘ BẤT
+ĐỊNH của hệ số ký-tự/3 (đối chứng T5 cho 2,1x, là TRẦN TRÊN) và thôi gọi số
+pilot là "đo được" - cái đo được là file nào thật sự đọc, không phải token.
+Cả 14 số route dán lại từ máy trong cùng commit.
+
+Watchlist trần (nâng X0 16.500 lên 18.500, X9 6.500 lên 7.500, X5 18.000
+lên 19.000, X3E 12.000 lên 13.000 - mọi mục nâng đều có gate đã khai và đã
+được do_route trừ): X9 7.407/7.500 (98,8%) · X5 17.812/19.000 (93,7%) · X0
+17.707/18.500 (95,7%) · X3E 11.995/13.000 (92,3%) · README 8.398/9.000
+(93,3%) · _GOP 91,9%.
+
+BACKLOG CÒN LẠI, khai thẳng (không vá vòng này, đều có địa chỉ rõ):
+(a) QUYETDINH tự khai "không sửa nội dung" nhưng KHÔNG có cưỡng chế nào -
+    sửa tay ô "Đánh đổi" không phép nào bắt; cần ô chốt hash mỗi dòng, là
+    đổi schema sổ nên để riêng một vòng.
+(b) Phép 5 chỉ kiểm bảng nhất quán NỘI BỘ, chưa đối chiếu số cột với schema
+    X5 mục 4, nên schema sổ trôi âm thầm được.
+(c) File trúng khuôn bản sao " (n)" bị bỏ IM LẶNG khi quét kho, trong khi
+    khuôn OneDrive được in đích danh - kho có sẵn file thì bản " (1)" có
+    thể là bản mới hơn mà vô hình.
+(d) _GOP 102k token, 71% là hai script và GHICHU; nên tách bản LUẬT thuần
+    ~30k cho người đánh giá.
+(e) Chưa có bộ sinh trạng thái đứt gãy (fuzz) khẳng định bất biến "mọi
+    trạng thái mất mã G phải sinh ít nhất một LỆCH".
+
+Bài học vòng này: đọc-tĩnh bão hòa ở 96,8 là thật, nhưng con số đó đo cái
+BỘ ĐÃ ĐƯỢC ĐỌC, không đo cái bộ CHẠY. Một buổi chạy ra nhiều defect hơn
+mười hai vòng đọc. Và bản vá viết vội ở vòng 38 tự nó sinh ba lỗ NẶNG -
+bằng chứng đắt giá rằng mỗi bản vá phải đi kèm lưới của chính nó.
+
 ## Vòng 39: PILOT EMAIL - luật tả bằng văn xuôi, máy đòi schema
 
 Pilot tiếp phần chưa ai đi: thực thi X3E mục 1 BẰNG TAY, chỉ theo CHỮ trong
@@ -108,6 +207,17 @@ thấy được, vì cả ba chỉ tồn tại ở TRẠNG THÁI, không ở ch�
    rồi chép _TEMPLATE vào; README nói bằng tiếng người kèm lối thoát
    `git stash pop`; rà 0g MỚI của kiem_van_hanh v34 chặn ngay trạng thái đó.
    Trần X9 giữ nguyên 6.500 bằng BÙ (cắt hai chỗ diễn đạt trùng), không nâng.
+   [ĐÍNH CHÍNH vòng 40, theo hội đồng vòng 13 - BA lời khai trên sai:
+    (a) "README kèm lối thoát git stash pop" - README KHÔNG có câu đó, lối
+    thoát chỉ nằm ở X9 mục 3c, file người dùng không đọc; vá ở vòng 40.
+    (b) "đồng bộ INSTRUCTION" - sót mục 5, chỗ đó vẫn viết "ngoại lệ duy
+    nhất" trong khi mục 6 đã nói "ba ngoại lệ"; vá ở vòng 40.
+    (c) "trần X9 giữ nguyên bằng BÙ" - đúng về TRẦN nhưng bù THIẾU: file
+    phình +6%, còn đúng 14 ký tự headroom, và vòng 38 là vòng đầu tiên
+    trong 10 vòng KHÔNG có dòng Watchlist trần, tắt đèn đúng lúc cần nhất.
+    Ngoài ra vòng 38 để lọt assets/ (669 KB, ảnh của dự án khác) vào chính
+    commit của mình - tái phát lớp lỗi .codex_audit_mutant của vòng 37 -
+    và không dán lại 9/13 số route sau khi sửa X0, X5, X9, INSTRUCTION.]
 4. README VÀO LƯỚI. File người dùng đọc ĐẦU TIÊN lại đứng ngoài mọi phép kiểm
    (không ký tự cấm, không tham chiếu chéo, không _GOP) - lỗi ở đó hại nhất mà
    được bảo vệ ít nhất. Nay README nằm trong FILE_BAT_BUOC, qua sạch cả bốn

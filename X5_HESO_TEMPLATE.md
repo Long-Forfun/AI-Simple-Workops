@@ -12,16 +12,16 @@ Ba mức A B C khai ở INSTRUCTION mục 5. Danh mục chi tiết:
 ```
 C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản đã gửi, đã nộp, đã ký,
    file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ theo
-   X0 C11: THÊM lệnh hay từ cấm để siết chặt, và ĐIỀN LẦN ĐẦU mục còn ở C12, là
-   B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
+   X0 C11: THÊM lệnh hay từ cấm để siết chặt, và ĐIỀN LẦN ĐẦU mục còn ở C12 và
+   CHƯA TỪNG có giá trị, là B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
    PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
    của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
-   nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12, theo
-   ngoại lệ C11 · dọn hay xóa nháp
+   nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA
+   TỪNG có giá trị, theo ngoại lệ C11 · dọn hay xóa nháp
    CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
@@ -129,7 +129,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    NHATKY ngay trước khi cấp; sang quý chưa có file thì tạo NHATKY_<năm>Q<quý>
    mới từ template trong cùng lượt (mức A), NN đọc ở file của quý mang ngày
    cấp mã; lượt tạo file quý mới ĐỒNG THỜI nhắc chạy vòng quý của X4 cho quý
-   vừa đóng. Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
+   vừa đóng, TRỪ lượt ghi ĐẦU TIÊN của kho (chưa có NHATKY quý nào trước đó
+   thì không có quý nào để đóng: bỏ qua và nói rõ vì sao). Thao tác A cùng lượt trả lời gộp một mã. Cột Phiên
    của NHATKY ghi ĐỊNH DANH LƯỢT = <CỬA>.<giờ phút>.<hậu tố ngẫu nhiên 3-4 ký
    tự>; cặp (mã G, định danh lượt) dùng để HÒA GIẢI XUNG ĐỘT, không phải khóa
    nguyên tử; mã G chỉ là số hiển thị
@@ -142,10 +143,14 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    đứng, lớn hơn đổi mã: quy tắc tất định, hai phiên cùng áp nên không lặp. Mã G
    chỉ được điền vào các sổ SAU khi đã đứng vững ở NHATKY, nên trùng bị giam
    trong NHATKY và tự phục hồi tại đó. Đây là HÒA GIẢI SAU XUNG ĐỘT, không phải
-   khóa nguyên tử; file thường qua đồng bộ mây KHÔNG có khóa nguyên tử, PARALLEL
-   phải tuyên bố giới hạn này và khuyến nghị mỗi cửa một phiên ghi tại một thời
-   điểm. Rà 12 của X4 là lưới cuối
-3  ghi sổ, mỗi dòng chạm tới mang mã G ở cột "Ghi lần"
+   khóa nguyên tử. MỌI profile, kể cả LITE: một cửa chỉ được có MỘT phiên ĐANG
+   GHI tại một thời điểm; file thường, dù qua đồng bộ mây hay qua hai tab trên
+   cùng máy, KHÔNG có khóa nguyên tử, nên phiên thứ hai ghi ĐÈ CẢ FILE sẽ xóa
+   dòng NHATKY của phiên thứ nhất mà không để lại dấu trùng mã nào để hòa giải.
+   Mở phiên thứ hai thì phiên đó CHỈ ĐỌC. Rà 3e và rà 12 của X4 là lưới cuối
+3  ghi sổ, mỗi dòng chạm tới NỐI THÊM mã G vào cột "Ghi lần", cách nhau một
+   khoảng trắng: ô này là danh sách CHỈ-THÊM, cấm ghi đè mã của lượt trước
+   (ghi đè thì lượt cũ mất dấu và rà 3c lệch mãi)
 4  update ngược X0 nếu có, sinh lại X0_INDEX khi rev tăng
 5  NHATKY sang XONG; mức C: plan sang ĐÃ GHI, điền mã G
 6  sinh lại BANG_DIEU_KHIEN thì header ghi sinh_boi = mã lượt vừa xong của CHÍNH
@@ -155,7 +160,8 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    tài liệu đang trong chu kỳ) và một dòng nhắc lấy từ X0 C12 khi còn mục thiếu
    chặn phát hành. Bảng giữ các BỘ ĐẾM cho banner mở phiên: quá hạn, chờ đối
    tác quá ngưỡng, plan C treo, lượt ĐANG GHI còn trong NHATKY lúc sinh, số
-   ngày từ lần quét mail cuối; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
+   ngày từ lần quét mail cuối, số ngày từ lần kiểm bản mới của bộ theo X0 C9
+   @NHIP.BANMOI; bảng cũ hơn lượt ghi gần nhất thì số ĐANG GHI
    phải đọc lại từ NHATKY trước khi tin. Sinh xong, COWORK NHẮC người dùng tải BANG_DIEU_KHIEN và X0_INDEX
    lên tài liệu Project (@DUONG.PROJECT ở X0 C1): nền tảng KHÔNG cho phiên tự
    ghi vào Project; CHAT chỉ đọc được bản người dùng đã tải, luôn kèm nhãn

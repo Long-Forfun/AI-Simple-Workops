@@ -16,5 +16,6 @@ C12 còn thiếu · C13 nâng mức · C14 bản đồ tham chiếu
 
 Còn thiếu (chép từ C12): <danh sách hoặc "không">
 
+Lượt CÀI ĐẶT chưa có mã G nào: ghi `sinh_boi: cai dat`.
 Luật: sinh lại mỗi khi X0 tăng rev, không sửa tay. Giá trị đưa vào bất kỳ đầu ra
 nào phải đọc từ X0 đúng mục, không lấy từ view này.
