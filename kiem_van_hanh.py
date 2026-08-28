@@ -1312,13 +1312,21 @@ def hop_thu_cua(luot):
     return ket
 
 
-def cot_thu(nd, ten_cot):
-    """Giá trị một cột của bảng THU theo TÊN cột trong header, không đoán vị trí."""
+def cot_thu(nd, ten_cot, thieu=None):
+    """Giá trị một cột của bảng THU theo TÊN cột trong header, không đoán vị trí.
+
+    `thieu`: giá trị trả về khi KHÔNG tìm thấy tên cột; mặc định [] giữ tương
+    thích. Gọi với một giá trị khác cho biết header đã đổi tên - đổi
+    "Conversation-ID" thành "Conversation ID" là 12f và 12i cùng tắt IM LẶNG,
+    hai dòng THU cùng một luồng hết trùng, và mỗi thư trong một hội thoại được
+    cấp một mã #L- mới (hội đồng vòng 19)."""
     lines = nd.splitlines()
     for i, d in enumerate(lines[:-1]):
         if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
             header = [o.strip() for o in d.strip("|").split("|")]
-            if ten_cot in header:
+            if ten_cot not in header:
+                return [] if thieu is None else thieu
+            if True:
                 idx = header.index(ten_cot)
                 # GIỮ ô rỗng: lọc nó ra là mở lối thoát cho 12f và 12i -
                 # bỏ trống Conversation-ID thì hai dòng cùng luồng hết trùng,
@@ -1326,7 +1334,7 @@ def cot_thu(nd, ten_cot):
                 # (hội đồng vòng 18)
                 return [r[idx] for r in dong_bang(nd)
                         if len(r) == len(header)]
-    return []
+    return [] if thieu is None else thieu
 
 
 def kiem_email(goc, so):
@@ -1415,7 +1423,14 @@ def kiem_email(goc, so):
     ket.append(("12f. không khóa nào đứng cuối ở HAI luồng THU", not trung, str(trung[:3])))
 
     # 12i. một Conversation-ID chỉ được nằm ở MỘT dòng THU
-    conv = cot_thu(thu_nd, "Conversation-ID")
+    _CO_MAT = object()
+    conv = cot_thu(thu_nd, "Conversation-ID", _CO_MAT)
+    if conv is _CO_MAT:
+        ket.append(("12i2. header THU còn đủ tên cột then chốt", False,
+                    "không thấy cột 'Conversation-ID': đổi tên cột là 12f và"
+                    " 12i cùng tắt IM LẶNG, mỗi thư trong một hội thoại được"
+                    " cấp một mã #L- mới. Trả tên cột về đúng X5 mục 4"))
+        conv = []
     conv_trung = sorted({c for c in conv if conv.count(c) > 1})
     ket.append(("12i. Conversation-ID duy nhất trong THU", not conv_trung,
                 f"{conv_trung[:3]}: một luồng bị tách hai dòng, gộp lại"))
@@ -2040,9 +2055,18 @@ def main(goc):
 
         # 3f. Mọi DÒNG DỮ LIỆU của sổ phải mang ít nhất một mã G ở ô "Ghi lần":
         #     dòng vào sổ ngoài lượt ghi (sửa tay, dán nhầm) trước đây đi im.
+        # đọc CẢ _lich_su: 3c, 3d, 3e, 7 và 12l đã học điều này từ vòng 41,
+        # 3f thì chưa - dòng thiếu mã G sống nhăn trong file lưu trữ mà bộ vẫn
+        # "hệ sạch", mà lưu trữ là nơi hồ sơ nằm LÂU NHẤT (hội đồng vòng 19).
+        # PHÉP 6 thì CỐ Ý không đọc _lich_su: nó đếm ngưỡng 500 dòng, và tách
+        # sang lưu trữ CHÍNH LÀ cách xử lý ngưỡng đó - cho nó đọc là đẻ ra báo
+        # oan không lối thoát. Đừng "sửa cho đều".
         thieu_g_dong = []
         for t in SO_CO_GHI_LAN:
-            for r in dong_bang(doc(so / t)):
+            _dong_t = [_x for _q in [so / t] + sorted(
+                (so / "_lich_su").glob(t.replace(".md", "*.md")))
+                for _x in dong_bang(doc(_q))]
+            for r in _dong_t:
                 # PLANNING chưa tới điểm ghi thì ô "Mã ghi" TRỐNG là ĐÚNG: X5 mục
                 # 2 cho bốn trạng thái MỚI, ĐANG LÀM, CHỜ CHỐT, HỦY; X5 mục 3 đặt
                 # điểm ghi mức C ở "khi chốt"; GHI MỐC giữ plan ĐANG LÀM cả chu
@@ -2095,7 +2119,9 @@ def main(goc):
                 # khách đang chờ trả lời biến mất (hội đồng vòng 18)
                 ("THU.md", 8, ("CHỜ TÔI", "CHỜ ĐỐI TÁC", "THEO DÕI",
                                "ĐÃ ĐÓNG", "BỎ QUA"))]:
-            for _r in dong_bang(doc(so / _t)):
+            for _r in [_x for _q in [so / _t] + sorted(
+                    (so / "_lich_su").glob(_t.replace(".md", "*.md")))
+                    for _x in dong_bang(doc(_q))]:
                 if len(_r) <= _c:
                     continue
                 _gt = _r[_c].strip()

@@ -1,8 +1,361 @@
 # GHICHU LỊCH SỬ · WORKOPS STARTER v24
 
-Các vòng vá 1 tới 25, tách khỏi `GHICHU_DOI_MOI_v24_20260824.md` ở vòng 53.
+Các vòng vá 1 tới 35, tách khỏi `GHICHU_DOI_MOI_v24_20260824.md` ở vòng 53.
 Vòng 26 trở đi nằm ở file đó. Đây là hồ sơ tra cứu, không nạp vào phiên nào
 và không cần đọc để dùng bộ.
+
+## Vòng 33: dọn backlog tự khai (ba mục hành-động-được cuối)
+
+Không chờ vòng chấm mới: ba mục backlog mà các giám khảo còn trừ điểm thật
+và ĐỀU vá được, vá luôn:
+
+1. CHAT DÁN TAY thành luật (X3 mục 5b): kênh Zalo, Messenger đi lối bán thủ
+   công qua cửa "người dùng đưa trực tiếp" - dán cả đoạn chat hay export, AI
+   tách từng tin theo khuôn giờ-tên, xử như mục đến ở chặng 1 (nguồn D, nâng
+   B khi có xác nhận văn bản), ảnh chat như nguồn scan, không cấp luồng THU,
+   theo dõi bằng VIEC. Vùng TRỐNG tần suất cao nhất với thị trường VN thành
+   MỘT PHẦN có đường chính thức; README và X0 C9 trỏ về mục 5b.
+2. X3E tách mục 1c PHỤC HỒI SỰ CỐ, gate "chỉ đọc khi rà 24-31 báo lệch" -
+   cùng khuôn gate đã chứng minh ở X5 mục 1b; route CUA_VAO mail trong
+   BENCHMARK và phép 2c đo trừ mục 1c.
+3. kiem_van_hanh v29: heuristic bản sao CÙNG TIỀN TỐ cho file nghiệp vụ
+   (khuôn OneDrive -<TênMáy>): ứng viên đề xuất _INBOX mà cùng thư mục có
+   file làm tiền tố tên nó, đuôi -XXXX không phải vN, chuyển sang cảnh báo
+   NGHI BẢN SAO thay vì mời vào sổ mức A.
+
+Bảng route dán lại từ --sinh-benchmark trong cùng commit (quy ước vòng 8).
+Watchlist trần: X0 ~15,99k/16.000 · X5 16,996/17.000 · X3E ~11,1k/12.000 ·
+X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai đã
+[ĐÍNH CHÍNH vòng 35: câu "KHÔNG" này khai sót - mốc chống dán lặp chat
+của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
+dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
+user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 35: khâu theo hội đồng vòng 10 (96/100)
+
+Điểm vòng 10: ĐƠN GIẢN 9,8 · KHÔNG MISS 9,7 · VẬN HÀNH 9,7 · TOKEN 9,6 ·
+KHÔNG SAI 9,4 · THÔNG MINH 9,4. Mọi phát hiện đều THẤP trừ một khoản quản
+trị đích đáng: vòng 33 khai "backlog rỗng" trong khi mốc chống dán lặp chat
+còn treo - vòng này vá món đó VÀ đính chính lời khai cũ ngay trong GHICHU.
+
+1. CHAT 5b khâu kín: CHỐNG DÁN LẶP bằng mốc "đã nạp tới tin <giờ> <người
+   gửi>" ghi vào VIEC/bảng chờ, lượt sau chỉ xử tin SAU mốc; event_id tin
+   chat <YYYYMMDD-HHMM>-chat (ngày theo ngữ cảnh phiên); không tách được
+   khuôn giờ-tên thì cả khối là MỘT mục nguồn D; luật ghim vào phép 12.
+2. kiem_van_hanh v31: nhãn "tiền tố gây nghi" TẤT ĐỊNH (sorted, chọn dài
+   nhất - 3 giám khảo cùng bắt dao động theo hash seed) + fixture đa-tiền-
+   tố; 12l siết miễn-hash về đúng khuôn "[đã xóa theo Q-" và thông điệp
+   lệch gợi kiểm tombstone; tự vệ tham số ĐẦU (thư mục ma, flag lạ = LỖI
+   CÁCH DÙNG exit 2, hết 4 LỆCH oan).
+3. Gate 7b về chuẩn hai-lưới như 1c (phép 12 ghim heading + vế gate; 47
+   luật); phép 10 phủ cả tham chiếu "X9 mục n"; phép 1d loại dòng "!" và
+   đuôi sau khoảng trắng (hết khe tự phá); hồi quy C4 dấu ":" dính nghĩa
+   sửa lại (kèm khai ngưỡng hậu tố ~5 ký tự cho khớp máy); X5 header nhắc
+   cả gate 7b; header kiem_tra_bo đếm đúng 76 ca; CỘNG ~2214 khớp máy;
+   trần X0 nâng chủ động 16.500 theo quy ước (headroom 99,8% là nợ đã
+   được giám khảo ĐƠN GIẢN đòi xử trước khi phát nổ); bảng route dán lại
+   từ máy đo trong cùng commit.
+
+Watchlist trần: X0 ~15,99k/16.500 (96,9%) · X5 17,16k/17.500 (98,1%) · X3
+~4,49k/4.500 (99,8% - ứng viên nâng-kèm-gate vòng sau nếu 5b cần thêm) ·
+X3E ~92,8%. Khuyến nghị chiến lược của hội đồng (ĐƠN GIẢN vòng 10): bộ đã
+bão hòa điểm đọc-tĩnh; nguồn phát hiện kế tiếp là PILOT vận hành thật 2-4
+tuần trên kho công ty thật, đo số lần AI hỏi thừa và ghi sai thực tế.
+
+## Vòng 34: vá theo hội đồng vòng 9 (94,8/100)
+
+Điểm vòng 9 (thang hiệu chỉnh: chỉ trừ defect có hành động sửa; đánh đổi
+được giám khảo công nhận đúng thì không trừ): ĐƠN GIẢN 9,7 · KHÔNG MISS 9,7
+· VẬN HÀNH 9,5 · TOKEN 9,5 · THÔNG MINH 9,3 · KHÔNG SAI 9,2. Không còn
+phát hiện CAO; các giám khảo đồng thanh "lỗi còn lại là lỗi KHÂU, không còn
+lỗi THIẾT KẾ". Vá trọn 16 mục hội tụ:
+
+1. MÁY GIỮ LỜI VÒNG 33 (VỪA duy nhất): heuristic cùng-tiền-tố lên tầng
+   module (loc_nghi_ban_sao) + 2 fixture ghim (ca dương -DESKTOP kèm tên
+   tiền tố, ca âm -v02); phép 12 ghim 2 luật mới (45 luật: chat 5b, gate
+   1c); phép 10 phủ hậu tố chữ (mục 5b, 1b, 1c, 7b được kiểm thật, hết mù
+   "\d+"); fixture 12l-tombstone-hash. Bộ fixture lên 75 ca.
+2. X5 tách mục 7b "Xóa theo yêu cầu pháp lý" GATE "chỉ đọc khi có Q-<mã>"
+   (tiền lệ gate thứ ba): SUA_FILE ~5665 xuống ~5221; sáu tham chiếu mục 7
+   đổi 7b (X1, X5 x3, QUYETDINH, NHATKY template); trần X5 17.500 kèm gate.
+   12l MIỄN so hash cho dòng tombstone (xóa đúng luật hết lệch oan ở index
+   có ô hash); X5 7b khai vế "máy miễn hash".
+3. Khâu chữ vòng 9: "nâng lên B" (4 giám khảo cùng bắt) · ô Mã thư của tin
+   chat = "phien-chat" · X5 mục 4 trỏ đích danh X3E mục 1c · README "xử
+   như mục đến ở cửa vào" (hết liên tưởng pipeline mail) · C4 khai giá
+   khuôn cùng-tiền-tố (kèm cắt bù X0: nén ghi chú ổ đơn) · X9 mục 3c thêm
+   câu gỡ kẹt pull một-lần cho bản cài cũ · thông điệp NGHI BẢN SAO nêu
+   đích danh tiền tố + lối ra file thật + trỏ đúng X5 mục 4 · BỎ QUA phép
+   1, 2-8 hết nói "chưa cài" khi X0 chỉ sai tên · tự vệ vế bốn nói lối đặt
+   lại quan sát · phép 1d lọc dòng comment · 2c giữ thêm số INSTRUCTION
+   (~1884), bảng route dán lại từ máy đo. kiem_van_hanh lên v30.
+
+Watchlist trần: X5 17,13k/17.500 · X0 15,97k/16.000 · X3E ~92,8% · X3
+~94,9%. Quy ước bổ sung: vN ở header các template đứng yên trong cùng bản
+phát hành bộ, chỉ nhích khi đóng gói bản mới - nâng cấp đi lối diff nội
+dung theo X9 mục 3c.
+
+## Vòng 32: vá theo hội đồng vòng 8 (đợt chốt)
+
+Vòng 8 về 4/6 giám khảo (hai giám khảo đứt giữa chừng vì giới hạn phiên):
+VẬN HÀNH 9,0 · TOKEN 9,2 · KHÔNG MISS 9,6 · ĐƠN GIẢN 9,6; giám khảo KHÔNG
+SAI kịp ghi nhận một phát hiện trước khi đứt (X9 thiếu vế secret - trùng
+với hai giám khảo khác). Vá:
+
+1. FILE MÁY SINH HẾT BỊ ĐÓNG GÓI (VỪA của vòng 8, chứng minh bằng clone
+   thật): _so/_quan_sat_truoc.json từng bị commit vào bộ mẫu khiến git pull
+   - đường nâng cấp duy nhất được tài liệu hóa - abort vì cache local bẩn.
+   Gỡ khỏi index, .gitignore che cả họ (_quan_sat_truoc, _thu_*, staging),
+   phép 1d mới của kiem_tra_bo giữ vĩnh viễn qua .gitignore (tất định,
+   không phụ thuộc git).
+2. kiem_van_hanh v28: tự vệ tham số vế BỐN (kho tồn tại nhưng quét 0 file
+   trong khi cache >0 mục: cảnh báo, GIỮ cache - hết ghi đè mốc ổn định
+   bằng tập rỗng); 0b chỉ flag bản X0 tên lạ khi BẢN CHUẨN cũng tồn tại,
+   không có bản chuẩn thì nhường 0c khuyên "đổi tên" - hết hai thông điệp
+   trái chiều; nhánh 0c "chưa cài" chỉ khi TEMPLATE là file X0 duy nhất.
+3. X9 mục 1 câu 3 thêm vế "nơi giữ secret" (3 giám khảo cùng chỉ - khớp
+   trọn ba đầu README, X0 C2, X9); ví dụ X0 C2 hết ngắt dòng giữa câu
+   (net 0 ký tự, X0 giữ 15.993/16.000); README mục phần mềm: đoạn hai tách
+   thành câu tiếng người + con trỏ X5 mục 1b (bớt chuỗi jargon git), intro
+   trỏ xuống mục; GHICHU vòng 31 sửa câu "bù tương đương" thành "bù MỘT
+   PHẦN, kín headroom" cho khớp diff thật (giám khảo TOKEN đối chiếu git);
+   BENCHMARK: đoạn văn hết lặp số SUA_FILE (thành tham chiếu bảng), toàn
+   bộ bảng route dán lại từ --sinh-benchmark (xóa trôi 2-4%).
+
+Watchlist trần: X0 15.993/16.000 (99,9%) · X5 16.996/17.000 (99,9%) · X3E
+~92% · X9 ~92,5%. Backlog tự khai giữ nguyên: pipeline chat bán thủ công
+(vùng TRỐNG tần suất cao nhất còn lại với thị trường VN) · heuristic
+cùng-tiền-tố OneDrive cho file nghiệp vụ · gate phục hồi X3E khi chạm ~95%.
+
+## Vòng 31: vá theo hội đồng vòng 7 (20260825, điểm vòng 7: 91,2/100)
+
+Điểm vòng 7: THÔNG MINH 8,5 · VẬN HÀNH 9,0 · KHÔNG SAI 9,0 · TOKEN 9,1 ·
+KHÔNG MISS 9,5 · ĐƠN GIẢN 9,6. Giám khảo THÔNG MINH tuyên bố "hệ đã hội tụ:
+lỗi còn lại là lỗi KHÂU, không còn lỗi THIẾT KẾ"; ĐƠN GIẢN tuyên bố bão hòa.
+Vá:
+
+1. XÓA PHÁP LÝ khớp trọn lưới máy (VỪA cuối, hai giám khảo cùng chỉ): dòng
+   TAILIEU, THU là ĐÍCH INDEX thì giữ khung và mã dòng, chỉ trung hòa ô dữ
+   liệu (12k, 12l tự khớp); dòng NHATKY mất dấu Ghi lần thì ô "Chạm sổ nào"
+   thay "không, đã xóa theo Q-<mã>" (đi lối "không" sẵn của phép 3c); VIEC,
+   DUKIEN, PLANNING, staging + manifest lý do Q, cache quan sát đều có cách
+   xử; fixture 73 "kho sau XÓA PHÁP LÝ đúng luật phải sạch" ghim hồi quy.
+2. kiem_van_hanh v27: loc_ban_chinh lên tầng module, ba hành vi bộ lọc bản
+   sao được fixture ghim (73 ca); regex mã X0 khớp luật 3-4 ký tự A-Z 0-9
+   (luật ghi rõ KHÔNG dấu ở X0 C1 và X9 câu 1, hết cáo buộc oan mã có dấu);
+   0c nhánh "tên không đúng chuẩn: đổi tên file"; tự vệ tham số vế ba (gốc
+   kho không tồn tại: bỏ qua quan sát, KHÔNG ghi đè cache mốc ổn định).
+3. Giới hạn nói ra ở nơi người dùng đọc (KHÔNG MISS: "ghi nhận đúng nhưng
+   sai chỗ"): kênh chat Zalo chưa có pipeline (README Ngày thường + X0 C9);
+   bộ mặc định MỘT người vận hành toàn quyền chốt C (X0 C6); giá của khuôn
+   bản sao khai tại luật tên file C4 (" (n)", "(bản sao)" bị máy coi là bản
+   sao đồng bộ).
+4. README thêm mục "CÔNG TY CÓ PHẦN MỀM": khai rõ PHẠM VI TỔ CHỨC từng phần
+   mềm (repo, thành phần, môi trường, nơi chạy thật, nơi giữ secret) ngay từ
+   phiên cài đặt để các vận hành liên quan chính xác; trỏ X9 mục 1 câu 3, X0
+   C2 @DUAN.PHANMEM, X5 mục 1b, X2 phát hành build.
+5. Máy giữ thêm hai số con của BENCHMARK (mục 1b ~421, X5 mục 3 ~1058) qua
+   phép 2c; số mục 3 cập nhật (~950 đã trôi 11%). Trần X0, X5 GIỮ NGUYÊN
+   theo quy ước nâng-trần-kèm-bù: phần thêm được bù MỘT PHẦN bằng cắt chữ
+   trong hai file đó, phần còn lại ăn hết headroom (X0 15.993/16.000, X5
+   16.996/17.000 - thử lửa một phần; bài kiểm net-zero còn ở phía trước).
+
+Watchlist trần: X0 99,9% · X5 99,9% · X3E ~92% · X9 ~92%. Hai file trụ đã
+kín trần thật sự: vòng sau muốn thêm chữ vào X0 hay X5 là phải cắt trước.
+
+## Vòng 30: vá theo hội đồng vòng 6 (20260825, điểm vòng 6: 89/100)
+
+Điểm vòng 6: VẬN HÀNH 8,5 · THÔNG MINH 8,5 · KHÔNG SAI 8,5 · TOKEN 9,0 ·
+KHÔNG MISS 9,4 · ĐƠN GIẢN 9,5. Hội đồng không còn phát hiện CAO nào; giám
+khảo KHÔNG MISS vẽ bản đồ độ phủ tổng thể: 8/11 nhóm PHỦ chắc, xác suất công
+ty nhỏ VN gặp tình huống TRỐNG trong 12 tháng ước 8-12% (persona đích ~5%).
+Vá:
+
+1. kiem_van_hanh v26: nhận dạng bản sao đồng bộ về MỘT nguồn ba tầng -
+   MAU_TAM học khuôn " (1)", " copy", " copy 2", "(bản sao)" nên bản sao
+   file nghiệp vụ hết được ĐỀ XUẤT vào sổ mức A; NHATKY và X0 chọn bản
+   chính theo TÊN CHUẨN (NHATKY_<năm>Q<quý>, X0_CAUHINH_<MÃ>) nên khuôn
+   OneDrive -<TênMáy> và mọi hậu tố lạ bị 0b flag thay vì gây lệch giả
+   "trùng mã G" · tự vệ tham số vế hai (gốc kho trùng 00_Index dừng sớm).
+2. XÓA PHÁP LÝ khâu nốt: dòng TAILIEU, THU trỏ file đã xóa thì XÓA DÒNG
+   trong chính plan C (hai sổ đó không phải chỉ-thêm; "CHỈ-THÊM" định danh
+   rõ NHATKY, QUYETDINH, nhật ký thư); tầng quét thêm "MỌI file theo con
+   trỏ sổ, kể cả 01_Phap_ly/_NOP, 99_Archive, file digest"; ô tên đính kèm
+   mang dữ liệu cá nhân cũng trung hòa; danh mục C của X5 mục 1 trỏ thủ
+   tục mục 7 (phiên NOI_BO cũng thấy đường).
+3. Schema @DUAN.PHANMEM thêm ô "nơi giữ secret" (con trỏ SECRET của X5 1b
+   hết trỏ vào ô không tồn tại), ví dụ đã điền cập nhật; C14 hàng X5 thêm
+   C5; "tự khai" RA_NGOAI được định nghĩa một vế (chữ phải NẰM trong danh
+   sách của chính dữ kiện, luật bao trùm không dùng cho lối người nhận
+   mới); X3E MAIL MÁY "một dòng ở phần 5" khớp khuôn digest; BENCHMARK
+   NOI_BO ghi chú "+mục 1b ~421 khi phần mềm", SUA_FILE hai số; header
+   kiem_tra_bo đếm đúng 69 ca; README rewrap dòng dài cuối; DOC_TRUOC
+   "X9 mục 1 câu 3".
+
+QUY ƯỚC MỚI cho người bảo trì (đề xuất giám khảo TOKEN): nâng trần một file
+phải kèm (a) gate để phần nâng không thành thuế chung, hoặc (b) cắt tương
+đương ở file khác cùng route. Phép 9 giữ trần; quy ước này giữ chính cái trần.
+
+Còn ghi nhận, chưa vá (đều NHẸ): kênh chat Zalo chưa có pipeline luồng kiểu
+THU · phân quyền nhiều người dùng "ai được chốt C" · X3E mục 1 tách gate
+phục hồi khi chạm ~95% trần · khuôn bản sao OneDrive cho FILE NGHIỆP VỤ
+(ngoài sổ) cần heuristic cùng-tiền-tố, để vòng sau cân nhắc.
+
+## Vòng 29: khâu đường nối theo hội đồng vòng 5 (20260825, điểm vòng 5: 84,5/100)
+
+Điểm vòng 5: KHÔNG SAI 7,5 · THÔNG MINH 8,0 · VẬN HÀNH 8,0 · TOKEN 8,6 ·
+KHÔNG MISS 9,2 · ĐƠN GIẢN 9,4. Bài học hội tụ từ ba giám khảo: mỗi vòng THÊM
+tính năng lại sinh đường nối mới; vòng này CHỈ KHÂU, không mở gì mới.
+
+1. kiem_van_hanh v25: ghi_cache bọc lỗi GHI (cache bị khóa chỉ in lưu ý, báo
+   cáo chạy trọn) · truyền nhầm gốc kho được tự nhận, dừng sớm kèm gợi ý ·
+   10a/10b có nhánh KHÔNG KIỂM ĐƯỢC khi file bị khóa (hết cáo buộc "bị sửa"
+   oan cho bản ĐÃ KÝ đang mở) · bộ lọc bản chính và 0b nhận khuôn bản sao
+   đồng bộ " (1)", " - Copy", "(bản sao)".
+2. XÓA PHÁP LÝ khâu kín: là ngoại lệ DUY NHẤT của X1 "cờ GỐC KHÔNG SỬA" và
+   luật cốt lõi 3 (phải có Q-<mã>); tầng quét thêm 99_Goc, _Summary,
+   _inbox/_da_nap, manifest dọn; đính kèm mail đã COMMITTED trung hòa bằng
+   cờ de_ngoai "đã xóa theo Q-<mã>" (12j tự nhận); nhắc thay bản đã tải lên
+   Project; "MỘT ngoại lệ" của NHATKY và QUYETDINH thành HAI, khai ở cả X5
+   lẫn hai template sổ.
+3. HOPTHU_CU đồng bộ chữ luật với máy: X4 rà 28 và X3E mục 1 nhận hộp cũ là
+   lịch sử hợp lệ; C14 đủ cạnh; fixture DƯƠNG hộp cũ (bộ 69 ca).
+4. Tách X5 mục 1b "Phần mềm và repo" GATE theo @DUAN.PHANMEM: bảng REPO,
+   SECRET, dữ liệu khách, bàn giao source dồn về một chỗ; công ty không phần
+   mềm hết trả thuế repo trên mọi việc đổi trạng thái (NOI_BO ~1628); X0 C2
+   còn con trỏ; khối ẢNH CHỤP trùng luật GHI MỐC rút gọn; trần X5 lên 17.000
+   với gate.
+5. NGOẠI LỆ SỰ CỐ nối đủ ba đầu: X2 "luôn tính" có vế trừ; X5 THƯỜNG LỆ
+   trỏ; X9 nhóm B trống vẫn gửi được thông báo sự cố. Phép thử HẬU CẦN vs
+   CAM KẾT hết mơ hồ chữ "gửi". RA_NGOAI có lối cho người nhận mới (điều
+   kiện dữ kiện tự khai RA_NGOAI + mở việc mức B khai phạm vi). MAIL MÁY
+   "đính kèm cần lưu" có phép thử; khuôn DIGEST có ô dòng mail máy.
+6. Máy giữ lời: phép 12 ghim 6 luật vòng 28 (43 luật); phép 2c phủ thêm hai
+   số CHAT; cảnh báo kho Ổ MÁY ĐƠN (backup cùng ổ) ở X0 C1 và README; UX
+   vòng 5 (câu mở tách chủ ngữ, vai trò trong câu 1, rewrap DOC_TRUOC, tín
+   hiệu phần mềm ở cả hai cửa ngõ).
+
+Watchlist trần: X0 ~15,4k/16.000 · X5 ~16,3k/17.000 · X9 ~6,0k/6.500.
+
+## Vòng 28: vá theo hội đồng vòng 4 (20260825, điểm vòng 4: 85/100)
+
+Điểm vòng 4: VẬN HÀNH 7,5 · KHÔNG SAI 8,0 · THÔNG MINH 8,5 · TOKEN 8,7 ·
+KHÔNG MISS 9,0 · ĐƠN GIẢN 9,3. Vá:
+
+1. kiem_van_hanh v24, CHỐNG CHẾT GIỮA BÁO CÁO (CAO của vòng 4, đã chạy thật):
+   doc() và sha_file() bắt UnicodeDecodeError, OSError, gom vào phép 0f "file
+   không đọc được" kèm chỉ dẫn, hết traceback vì file Office đang mở hay sổ
+   sai encoding; file tạm ~$ không hash. Bộ lọc bản chính (TEMPLATE,
+   conflicted, xung đột) dùng CHUNG cho X0 và NHATKY: chỉ còn bản xung đột
+   thì 0d LỆCH "bản chính mất" thay vì PASS tự mâu thuẫn với 0b; 12k khi
+   nhật ký mất hay rỗng đổi chẩn đoán GIỮ index; basename áp cho cả đính kèm
+   de_ngoai; 12e nhận dạng hiển thị "Tên <mail@dom>".
+2. ĐỔI HỘP THƯ có đường: @NHIP.HOPTHU_CU giữ danh sách hộp cũ (đổi hộp là
+   mức C kèm QUYETDINH), 12e chấp nhận hộp lịch sử, nhật ký cũ hết bị đá oan.
+3. MAIL MÁY có lối thoát nghiệp vụ (2 giám khảo cùng chỉ): hóa đơn, bản ký
+   DocuSign, thông báo giao dịch, thư có đính kèm cần lưu THOÁT luật gom, đi
+   pipeline như thư thường; chỉ thư thuần thông báo mới gom một dòng digest.
+4. de_ngoai dữ-liệu-khách siết về đúng ý: chỉ DUMP, LOG, EXPORT hàng loạt từ
+   hệ thống phần mềm; hợp đồng, CV có thông tin cá nhân vẫn theo 99_Goc.
+5. Bảng REPO chuyển từ X0 C2 về X5 mục 1 (gom luật mức về một chỗ, X0 nhẹ
+   bớt, công ty không phần mềm khỏi kéo khối này khi mở C2); thêm migration
+   dev/staging = A, lệnh "rollback đi" giữa sự cố là gật plan; danh mục B
+   "dọn nháp" khai rõ không áp trong repo.
+6. RA_NGOAI thành phạm vi BAO TRÙM có luật quan hệ với phạm vi chi tiết và
+   luật từ cấm (hết chặn oan hay lách lưới); X2 thêm NGOẠI LỆ SỰ CỐ (thông
+   báo sự cố gửi ngay, DUKIEN ghi bù cùng phiên) và phép thử HẬU CẦN vs CAM
+   KẾT; gói build hết đá luật bốn dạng (trong kho dạng Kho kèm sha, trong
+   repo dạng Repo, sha vào ghi chú); XÓA THEO YÊU CẦU PHÁP LÝ có thủ tục
+   xuyên tầng ở X5 mục 7; nghiệm thu source thuê ngoài vào 99_Goc.
+7. BENCHMARK: các số route sinh lại sau khi X5 phình (phép 2c tự bắt trôi
+   đúng như thiết kế); đoạn runtime-max hết dùng trần cũ; README câu mở
+   tiếng người kèm tín hiệu "công ty có phần mềm cũng dùng được"; GHICHU
+   header hết đếm tay số vòng; kiem_tra_bo header lên v21.
+
+Watchlist trần: X0 ~15,6k/16.000 (97%) · X9 ~5,9k/6.500 · X3E ~10,8k/12.000.
+
+## Vòng 27: vá theo hội đồng vòng 3 (20260825, điểm vòng 3: 80/100)
+
+Điểm vòng 3: VẬN HÀNH 7,5 · THÔNG MINH 7,5 · KHÔNG SAI 7,5 · KHÔNG MISS 8,0 ·
+TOKEN 8,5 · ĐƠN GIẢN 9,0. Ba giám khảo chạy thật và cùng bắt hai lỗi CAO do
+vòng 26 sinh: de_ngoai bị schema 12h đánh hỏng, và "ba dạng" chưa thành "bốn
+dạng" ở ba đầu luật. Vá:
+
+1. kiem_van_hanh v23: glob NHATKY loại _TEMPLATE (template nằm trong _so theo
+   cài chuẩn che phép 0d, xóa trục sự thật vẫn "hệ sạch" — kịch bản đinh của
+   giám khảo vận hành) · kiem_payload miễn sha256/bytes cho đính kèm de_ngoai
+   (đòi ten + ly_do), máy hết đá luật X3E; hai fixture mới (de_ngoai hợp lệ
+   phải sạch, thiếu ly_do phải lệch), bộ fixture lên 68 ca · 12d và 12j2 xử
+   nhật ký RỖNG như nhật ký vắng (hết lách qua nhánh "GIỮ registry"), khóa
+   staging lấy từ cả registry · 0c phân biệt "chưa cài, chỉ thấy template"
+   (bỏ qua êm — hết 3 LỆCH oan trên bộ mới clone) với "mất X0" và "nhiều
+   ứng viên" · 12e loại cả bản conflicted.
+2. BENCHMARK thành lời thật: bỏ tuyên bố "sinh lại tự động" treo; thêm phép
+   2c so SỐ route với số đo thật (dung sai 10%, đo bằng cùng quy tắc mục),
+   chế độ --sinh-benchmark in số mới; toàn bộ bảng route cập nhật theo số đo
+   20260825; dòng CHAT tách hai con số (không EMAIL ~15.800, có EMAIL ~19.100).
+3. "Bốn dạng" đồng bộ ba đầu: X1 mục 5, C14 hàng X1, header TAILIEU (kèm chú
+   dạng Repo chỉ cho dự án @DUAN.PHANMEM).
+4. Khép các khe phán đoán vòng 3: rollback môi trường chạy thật = C, xóa
+   nhánh đã merge = A chưa merge = C (C2) · phép thử thẩm quyền cho xác nhận
+   trong phiên + ngoại lệ VAI, TỶ LỆ chỉ theo văn bản ký (C7) · người dùng
+   TỰ dán secret: nhắc một câu rồi làm tiếp, cấm chép giá trị vào sổ; lộ RA
+   NGOÀI mới là VIEC mức gấp (C2) · thủ tục bàn giao CHUNG là mức B ở C9
+   (CORE), phần thư mới nằm X3E · C5 có RA_NGOAI mặc định, LITE khỏi dừng
+   hỏi phạm vi (gỡ vênh C0 "kích hoạt C5" với X2) · trigger vòng quý đặt
+   ngay tại điểm tạo NHATKY quý mới trong X5.
+5. Phần mềm nốt hai lỗ vòng 3: phát hành PHẦN MỀM chạy bảng kiểm trên BỘ TÀI
+   LIỆU PHÁT HÀNH, build vào TAILIEU kèm sha256 và tag repo (X2) · đính kèm
+   là dữ liệu khách hay dữ liệu cá nhân xử như de_ngoai, không kéo vào kho
+   đồng bộ; MAIL MÁY (no-reply, bot, CI/CD) không cấp luồng, gom một dòng
+   digest, bot công ty không tính "thư của mình" (X3E mục 2).
+6. UX vòng 3: phím Mac là Cmd không phải Ctrl · DOC_TRUOC hết câu "AI làm
+   bước 4" nói quá · "đồng bộ quan sát" tả bằng tiếng người · C14 hàng X3,
+   X4 thêm C1; X4 rà 29 chú de_ngoai.
+
+Watchlist trần cho vòng sau: X0 ~15,3k/16.000 · X9 ~5,9k/6.500 · X3E
+~10,3k/12.000. Chưa vá, ghi nhận: nghiệm thu source thuê ngoài vào 99_Goc ·
+con trỏ Repo@commit chết chưa có phép dò máy · lối khẩn cho truyền thông sự
+cố production.
+
+## Vòng 26: vá theo hội đồng vòng 2 (20260825, điểm vòng 2: 77,5/100)
+
+Hội đồng chấm lại sau vòng 24-25: VẬN HÀNH 7,0 (tụt vì bản vá backup tự sinh
+lỗi) · KHÔNG SAI 7,5 · KHÔNG MISS 7,5 · THÔNG MINH 8,0 · ĐƠN GIẢN 8,0 · TOKEN
+8,5. Ba giám khảo chạy thật kịch bản đứt gãy và bắt được lỗi do chính vòng vá
+trước sinh ra. Vá:
+
+1. BACKUP HỎNG KÉP (3 giám khảo cùng bắt): đường dẫn chứa byte backspace 0x08
+   (escape bị nuốt khi soạn) VÀ sao đệ quy _so vào con của _so. Sửa: chỉ sao
+   năm sổ lõi + PLANNING + THU, loại _lich_su, _thu_staging, _inbox; phép
+   kiểm 4 thêm CẢ DẢI control char để lớp lỗi này máy tự chặn từ nay.
+2. CHỌN X0 TẤT ĐỊNH: sau git pull, X0_CAUHINH_TEMPLATE đứng trước bản mã theo
+   bảng chữ nên kiem_van_hanh đọc nhầm rev 0, báo "chưa cài" trên hệ đang
+   chạy. Sửa: glob loại _TEMPLATE và conflicted, nhiều ứng viên là LỆCH (0c);
+   12e cũng lọc template và nhận dòng mang nhãn (EMAIL) đúng khuôn, fixture
+   sửa theo (fixture cũ che đúng lỗi này). kiem_van_hanh lên v22.
+3. TRỤC SỰ THẬT PHẢI TỒN TẠI: 0d đòi NHATKY khi rev >= 1, 0e đòi THU khi
+   pipeline EMAIL có dấu vết; 0b quét conflicted cả bộ X ở gốc; thông điệp
+   phép 0 tách VIEW (sinh lại mức A) khỏi SỔ (khôi phục mức C); 12d khi nhật
+   ký mất đổi chẩn đoán "GIỮ registry", hết xúi xóa.
+4. BANNER ĐANG GHI có nguồn số: bảng giữ bộ đếm cho banner, bảng cũ hơn lượt
+   ghi gần nhất thì số ĐANG GHI đọc lại từ NHATKY trước khi tin.
+5. ĐÍNH KÈM QUÁ LỚN hết đá pipeline: payload khai cờ de_ngoai kèm lý do,
+   12j bỏ qua mục mang cờ; luật viết cả hai đầu (X3E mục 1 và 2).
+6. PHẦN MỀM sâu thêm theo goal: SECRET không vào kho, sổ, phiên (lộ = VIEC
+   mức gấp); TAILIEU trỏ được vào repo (dạng "Ở đâu" thứ tư); bản đồ mức
+   thao tác repo (merge vào nhánh CI/CD deploy chạy thật = C, dev/staging =
+   A, danh mục folder-C không áp trong repo); dump, log mang dữ liệu khách
+   theo phạm vi C5; ví dụ đã điền và lối "chưa rõ" cho người không kỹ thuật.
+7. Xác nhận BẰNG CHỮ của người dùng có thẩm quyền trong phiên = mức B (hết
+   đường cụt "sếp nói trực tiếp vẫn là nguồn D"); thủ tục BÀN GIAO chuyển
+   thành luật ở X3E mục 2 (X0 chỉ giữ giá trị); vòng quý có trigger tất định
+   (lượt tạo NHATKY quý mới); C14 thêm hàng X3E, X5 thêm C11 C12; C0 và
+   INSTRUCTION hết tàn dư "thang A-D thuộc REGULATED"; phiên CHAT bật EMAIL
+   đưa thêm X3E vào Project (ba tài liệu cùng sửa); README định nghĩa Cowork,
+   nói rõ cần máy tính, ví dụ <gốc>, TextEdit cho Mac, câu tắt thứ năm.
+8. Trần theo vai đọc: X0 lên 16.000 (đọc theo mục, thuế là X0_INDEX), X4 lên
+   5.500 (chỉ đọc khi RA_SOAT); phép kiểm 10 phủ cả tham chiếu "X3E mục n".
 
 ## Vòng 25: tách X3E, phạm vi phần mềm, vét nốt danh sách treo (20260825)
 
