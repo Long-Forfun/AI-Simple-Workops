@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 48 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 49 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -275,6 +275,37 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 49: ngưỡng vào lưới, và máy hết nói hai điều trái nhau cùng lúc
+
+(q) MỌI HẰNG NGƯỠNG ĐỨNG NGOÀI LƯỚI. Chỉ NGAN_SACH có phép 9b canh - khai ở
+BENCHMARK, đối chiếu với hằng trong mã. Sáu ngưỡng RUNTIME thì không ai canh:
+hội đồng vòng 17 nới `n > 500` thành `n > 500000`, `<= 4200` thành `<= 420000`,
+trần đầu ra 2.700 thành 270.000, và CẢ SÁU con sống sót trọn bộ kiểm. Nới trần
+là lối "vá" rẻ nhất khi bộ đỏ, và không có gì cản. Đối chứng của chính giám
+khảo cho thấy khuôn 9b hiệu lực thật (nới một trần trong NGAN_SACH thì bị bắt
+ngay), nên vòng này chỉ NHÂN RỘNG đúng khuôn đó: phép 9c, sáu ngưỡng runtime
+khai ở BENCHMARK và đối chiếu với mã. Đo lại: 6/6 bị bắt, trước là 0/6.
+
+(r) MÁY VỪA NÓI "HỆ SẠCH" VỪA NÓI "CÓ FILE NGOÀI SỔ". X4 dặn "Sạch thì một
+dòng sổ khớp thực tế <ngày>", nhưng máy in ĐỀ XUẤT _INBOX rồi vẫn kết "hệ
+sạch" với mã thoát 0. Phiên AI đọc dòng KẾT QUẢ, hay CI đọc mã thoát, sẽ ghi
+NHATKY "sổ khớp thực tế" trong khi phụ lục hợp đồng đang nằm ngoài sổ - và
+vòng rà quý sau đếm từ chính các dòng NHATKY đó nên sai theo. Nay ba trạng
+thái, ba câu, ba mã thoát: 0 hệ sạch · 3 sạch về ràng buộc nhưng còn N mục chờ
+vào sổ · 1 có lệch. Bàn thử 3/3. X4 nói rõ chỉ mã 0 mới được viết câu đó.
+
+Kèm một lỗi của chính vòng này, bắt được nhờ danh mục trạng thái: bộ đếm mục
+chờ vào sổ KHÔNG được đặt lại giữa hai lượt chạy trong CÙNG tiến trình, nên
+mọi fixture chạy hai lượt đọc ra con số gấp đôi. Phép 15 đỏ ngay lượt đầu vì
+nó ghim KẾT LUẬN chứ không ghim mỗi dòng ĐỀ XUẤT - ghim dòng ĐỀ XUẤT thì hoàn
+nguyên "hệ sạch" vẫn xanh.
+
+BACKLOG còn: (f) MIEN_TRU 16 phép chưa ai canh · (i) phần hành vi của phép 14 ·
+(j) vòng đời _inbox và _da_nap · (k) cache _quan_sat_truoc.json giả mạo được ·
+(n) schema @DUAN.PHANMEM chưa có ô khai nhánh CI/CD tự deploy · (s) tách mục
+vòng <= 25 của GHICHU ra file lưu trữ, đo được giảm 43.029 ký tự tức 37% thứ
+mọi công ty phải chép về kho · (a) (b) (c) (e) (g) (h) như cũ.
 
 ## Vòng 48: trả nợ backlog - secret vào kho bằng hai lối chưa ai soi
 
@@ -2215,7 +2246,7 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5987 + khối (không phần mềm trừ thêm mục 1b ~421) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1618 (X4) cộng bảng kết quả in ra | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3683 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3683 + khối | |
 
@@ -2227,6 +2258,16 @@ gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 8.500 (đ�
 lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
 bản gộp _GOP 260.000 (không nạp vào phiên nào). Vượt trần là FAIL.
+
+## Ngưỡng RUNTIME, máy enforce ở kiem_van_hanh.py và đối chiếu ở phép kiểm 9c
+
+Sáu ngưỡng dưới đây trước vòng 49 đứng NGOÀI mọi lưới: nới con nào cũng không
+ai kêu, mà nới trần là lối "vá" rẻ nhất khi bộ đỏ. Nay chúng khai ở đây và
+phép 9c đối chiếu với hằng trong mã, đúng khuôn phép 9b đã dùng cho NGAN_SACH.
+
+X0 runtime 22.000 ký tự · BANG_DIEU_KHIEN runtime 4.200 · X0_INDEX runtime
+2.400 · một sổ tối đa 500 dòng · đầu ra kho lành 2.700 ký tự · đầu ra kho cận
+xấu 5.200 ký tự. Đổi một con số thì phải đổi CẢ HAI nơi trong cùng lượt vá.
 
 ## Ghi chú phiên CHAT
 
@@ -2265,7 +2306,7 @@ RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên:
                          kết quả kiem_van_hanh.py dán vào phiên đo được ~806
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
-                         ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1618 chỉ phải trả
+                         ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
                          khi cần luật rà, không phải mỗi lượt rà
 ```
 
@@ -3316,7 +3357,8 @@ phần quan sát file 1, 2, 4 bị bỏ qua), đọc kết quả để dựng b�
 cho người dùng - dòng PASS là việc của máy, người dùng chỉ đọc bảng lệch;
 không có Python thì kiểm tay đúng các dòng đó. Máy chỉ báo cáo, không sửa.
 Xuất bảng `| # | Loại lệch | Đối tượng | Chi tiết | Đề xuất |`. Sạch thì một dòng
-"sổ khớp thực tế <ngày>".
+"sổ khớp thực tế <ngày>" - nhưng CHỈ khi máy thoát mã 0. Máy thoát mã 3 nghĩa
+là sạch về ràng buộc mà còn mục chờ vào sổ (dòng 2): chưa được nói câu đó.
 
 Mỗi lần rà xong ghi MỘT dòng NHATKY tóm tắt các loại lệch (mức A); vòng quý
 đếm từ các dòng đó, không từ trí nhớ. Lượt tạo file NHATKY quý mới (X5 mục

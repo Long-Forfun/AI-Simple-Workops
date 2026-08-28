@@ -48,7 +48,7 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5987 + khối (không phần mềm trừ thêm mục 1b ~421) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1618 (X4) cộng bảng kết quả in ra | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3683 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3683 + khối | |
 
@@ -60,6 +60,16 @@ gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 8.500 (đ�
 lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
 bản gộp _GOP 260.000 (không nạp vào phiên nào). Vượt trần là FAIL.
+
+## Ngưỡng RUNTIME, máy enforce ở kiem_van_hanh.py và đối chiếu ở phép kiểm 9c
+
+Sáu ngưỡng dưới đây trước vòng 49 đứng NGOÀI mọi lưới: nới con nào cũng không
+ai kêu, mà nới trần là lối "vá" rẻ nhất khi bộ đỏ. Nay chúng khai ở đây và
+phép 9c đối chiếu với hằng trong mã, đúng khuôn phép 9b đã dùng cho NGAN_SACH.
+
+X0 runtime 22.000 ký tự · BANG_DIEU_KHIEN runtime 4.200 · X0_INDEX runtime
+2.400 · một sổ tối đa 500 dòng · đầu ra kho lành 2.700 ký tự · đầu ra kho cận
+xấu 5.200 ký tự. Đổi một con số thì phải đổi CẢ HAI nơi trong cùng lượt vá.
 
 ## Ghi chú phiên CHAT
 
@@ -98,7 +108,7 @@ RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên:
                          kết quả kiem_van_hanh.py dán vào phiên đo được ~806
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
-                         ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1618 chỉ phải trả
+                         ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
                          khi cần luật rà, không phải mỗi lượt rà
 ```
 

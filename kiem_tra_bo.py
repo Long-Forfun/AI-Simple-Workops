@@ -168,7 +168,7 @@ loi = []
 DA_KIEM = []
 PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
                  "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.",
-                 "13c.", "13d.", "14.", "14b.", "14c.", "14d.", "14e.", "15.", "15b.", "2d."]
+                 "13c.", "13d.", "14.", "14b.", "14c.", "14d.", "14e.", "15.", "15b.", "2d.", "9c."]
 # phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
 
 
@@ -279,6 +279,8 @@ def _ra_soat(idx, kho):
     argv = sys.argv
     K.loi.clear()
     K.LOI_DOC.clear()
+    K.CHO_VAO_SO.clear()   # cộng dồn qua các lượt trong CÙNG tiến trình thì
+    # mọi fixture chạy hai lượt đọc ra con số sai
     try:
         sys.argv = ["kvh", str(idx), str(kho)]
         with contextlib.redirect_stdout(_io2.StringIO()) as _bva:
@@ -417,7 +419,8 @@ def phep_danh_muc(goc):
     DANH_MUC = [
         (1, "sổ lõi QUYETDINH vắng trên đĩa", s1a, True),
         (1, "TAILIEU khai file mà kho không có", s1b, True),
-        (2, "file trên kho chưa vào TAILIEU", s2, "ĐỀ XUẤT _INBOX"),
+        (2, "file trên kho chưa vào TAILIEU", s2,
+         "sạch về ràng buộc, nhưng 1 mục chờ vào sổ"),
         (4, "sha256 khai khác nội dung thật", s4a, True),
         (4, "mốc ĐÃ KÝ bị sửa đè tại chỗ", s4b, True),
         (4, 'ô "Ở đâu" gõ "kho" thường: tắt lặng lẽ 9, 10a, 10b', s4c, True),
@@ -1097,6 +1100,36 @@ def main(goc):
         if khai != tran:
             lech_tran.append(f"{TEN_BM[ten]}: BENCHMARK {khai}, NGAN_SACH {tran}")
     kiem("9b. bảng trần ở BENCHMARK khớp NGAN_SACH", not lech_tran, str(lech_tran))
+    # 9c. Ngưỡng RUNTIME cũng phải khai ở BENCHMARK và khớp hằng trong mã.
+    #     Khuôn y hệt 9b - thứ DUY NHẤT đã chứng minh hiệu lực bằng đột biến:
+    #     nới một trần trong NGAN_SACH thì 9b bắt, còn nới `n > 500` hay
+    #     `<= 4200` thì không ai kêu (hội đồng vòng 17, 6/6 đột biến sống sót).
+    NGUONG_RT = [("X0 runtime", 22000, r"_n_x0 <= (\d+)", "kiem_van_hanh"),
+                 ("BANG_DIEU_KHIEN runtime", 4200, r"len\(bdk_nd\) <= (\d+)",
+                  "kiem_van_hanh"),
+                 ("X0_INDEX runtime", 2400, r"len\(idx_rt\) <= (\d+)",
+                  "kiem_van_hanh"),
+                 ("một sổ tối đa", 500, r"if n > (\d+) or p\.stat", "kiem_van_hanh"),
+                 ("đầu ra kho lành", 2700, r"n_ra <= (\d+)", "kiem_tra_bo"),
+                 ("đầu ra kho cận xấu", 5200, r"n_lech <= (\d+)", "kiem_tra_bo")]
+    import kiem_van_hanh as _K9c
+    _src9 = {"kiem_van_hanh": Path(_K9c.__file__).read_text(encoding="utf-8"),
+             "kiem_tra_bo": Path(__file__).read_text(encoding="utf-8")}
+    _bm9c, _lech9c = docs["BENCHMARK_TOKEN.md"], []
+    for _ten9, _so9, _mau9, _tep9 in NGUONG_RT:
+        _nguon9 = _src9[_tep9]
+        _mm9 = re.search(_mau9, _nguon9)
+        if not _mm9:
+            _lech9c.append(f"{_ten9}: không tìm thấy hằng trong {_tep9}")
+        elif int(_mm9.group(1)) != _so9:
+            _lech9c.append(f"{_ten9}: mã {_mm9.group(1)}, bảng ghim {_so9}")
+        _dang9 = f"{_so9:,}".replace(",", ".") if _so9 >= 1000 else str(_so9)
+        if _dang9 not in _bm9c:
+            _lech9c.append(f"{_ten9}: BENCHMARK chưa khai số {_dang9}")
+    kiem("9c. ngưỡng runtime khai ở BENCHMARK khớp hằng trong mã",
+         not _lech9c, "; ".join(_lech9c[:4])
+         + ". Nới một ngưỡng là lối vá rẻ nhất khi bộ đỏ; 9c bắt phải nới ở"
+           " CẢ HAI nơi, tức phải khai ra cho người đọc thấy")
     # GHICHU bị phép 8 ĐÒI có trong bản gộp nhưng chưa từng có trần: động cơ
     # phình thứ hai của bản gộp, không ai quản (hội đồng vòng 16).
     # Nâng 115.000 -> 130.000 ở vòng 48. GATE: GHICHU không nằm trong route

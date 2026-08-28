@@ -426,7 +426,12 @@ def bao(ten, ok, chi_tiet=""):
         loi.append(ten)
 
 
-LOI_DOC = []  # (đường dẫn, lý do) các file KHÔNG ĐỌC ĐƯỢC trong lượt chạy;
+LOI_DOC = []
+# số mục quan sát được mà chưa vào sổ (X4 dòng 2). KHÔNG phải lệch - đó là
+# lời mời, không phải vi phạm - nhưng cũng KHÔNG được kết là "hệ sạch":
+# phiên AI đọc dòng KẾT QUẢ sẽ ghi NHATKY "sổ khớp thực tế" trong khi hồ sơ
+# đang nằm ngoài sổ, và vòng rà quý sau đếm từ chính dòng đó (vòng 17)
+CHO_VAO_SO = []  # (đường dẫn, lý do) các file KHÔNG ĐỌC ĐƯỢC trong lượt chạy;
               # phép 0f báo một dòng LỆCH đích danh thay vì chết traceback (v24)
 
 
@@ -940,6 +945,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
             f" HÀNG và kho là thư mục đồng bộ, file đã đi ra mọi máy công ty."
             f" Chuyển ra ngoài kho; cần phân tích thì lấy bản đã che. Mức C")
     if de_xuat:
+        CHO_VAO_SO.append(len(de_xuat))
         print("        ĐỀ XUẤT _INBOX (bản hiện hành quan sát được, chưa vào sổ, ghi mức A):")
         for d in de_xuat[:15]:
             print(f"          - {d}")
@@ -2225,6 +2231,10 @@ def main(goc):
     if loi:
         print(f"KẾT QUẢ: {len(loi)} lệch. Xuất vào báo cáo RA_SOAT, chưa sửa gì.")
         sys.exit(1)
+    if CHO_VAO_SO:
+        print(f"KẾT QUẢ: sạch về ràng buộc, nhưng {sum(CHO_VAO_SO)} mục chờ vào"
+              f" sổ (X4 dòng 2). CHƯA nói được \"sổ khớp thực tế\".")
+        sys.exit(3)
     print("KẾT QUẢ: hệ sạch theo các phép kiểm máy.")
 
 

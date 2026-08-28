@@ -62,7 +62,8 @@ phần quan sát file 1, 2, 4 bị bỏ qua), đọc kết quả để dựng b�
 cho người dùng - dòng PASS là việc của máy, người dùng chỉ đọc bảng lệch;
 không có Python thì kiểm tay đúng các dòng đó. Máy chỉ báo cáo, không sửa.
 Xuất bảng `| # | Loại lệch | Đối tượng | Chi tiết | Đề xuất |`. Sạch thì một dòng
-"sổ khớp thực tế <ngày>".
+"sổ khớp thực tế <ngày>" - nhưng CHỈ khi máy thoát mã 0. Máy thoát mã 3 nghĩa
+là sạch về ràng buộc mà còn mục chờ vào sổ (dòng 2): chưa được nói câu đó.
 
 Mỗi lần rà xong ghi MỘT dòng NHATKY tóm tắt các loại lệch (mức A); vòng quý
 đếm từ các dòng đó, không từ trí nhớ. Lượt tạo file NHATKY quý mới (X5 mục

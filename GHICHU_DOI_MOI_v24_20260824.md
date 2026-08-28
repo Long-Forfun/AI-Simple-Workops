@@ -31,6 +31,37 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 49: ngưỡng vào lưới, và máy hết nói hai điều trái nhau cùng lúc
+
+(q) MỌI HẰNG NGƯỠNG ĐỨNG NGOÀI LƯỚI. Chỉ NGAN_SACH có phép 9b canh - khai ở
+BENCHMARK, đối chiếu với hằng trong mã. Sáu ngưỡng RUNTIME thì không ai canh:
+hội đồng vòng 17 nới `n > 500` thành `n > 500000`, `<= 4200` thành `<= 420000`,
+trần đầu ra 2.700 thành 270.000, và CẢ SÁU con sống sót trọn bộ kiểm. Nới trần
+là lối "vá" rẻ nhất khi bộ đỏ, và không có gì cản. Đối chứng của chính giám
+khảo cho thấy khuôn 9b hiệu lực thật (nới một trần trong NGAN_SACH thì bị bắt
+ngay), nên vòng này chỉ NHÂN RỘNG đúng khuôn đó: phép 9c, sáu ngưỡng runtime
+khai ở BENCHMARK và đối chiếu với mã. Đo lại: 6/6 bị bắt, trước là 0/6.
+
+(r) MÁY VỪA NÓI "HỆ SẠCH" VỪA NÓI "CÓ FILE NGOÀI SỔ". X4 dặn "Sạch thì một
+dòng sổ khớp thực tế <ngày>", nhưng máy in ĐỀ XUẤT _INBOX rồi vẫn kết "hệ
+sạch" với mã thoát 0. Phiên AI đọc dòng KẾT QUẢ, hay CI đọc mã thoát, sẽ ghi
+NHATKY "sổ khớp thực tế" trong khi phụ lục hợp đồng đang nằm ngoài sổ - và
+vòng rà quý sau đếm từ chính các dòng NHATKY đó nên sai theo. Nay ba trạng
+thái, ba câu, ba mã thoát: 0 hệ sạch · 3 sạch về ràng buộc nhưng còn N mục chờ
+vào sổ · 1 có lệch. Bàn thử 3/3. X4 nói rõ chỉ mã 0 mới được viết câu đó.
+
+Kèm một lỗi của chính vòng này, bắt được nhờ danh mục trạng thái: bộ đếm mục
+chờ vào sổ KHÔNG được đặt lại giữa hai lượt chạy trong CÙNG tiến trình, nên
+mọi fixture chạy hai lượt đọc ra con số gấp đôi. Phép 15 đỏ ngay lượt đầu vì
+nó ghim KẾT LUẬN chứ không ghim mỗi dòng ĐỀ XUẤT - ghim dòng ĐỀ XUẤT thì hoàn
+nguyên "hệ sạch" vẫn xanh.
+
+BACKLOG còn: (f) MIEN_TRU 16 phép chưa ai canh · (i) phần hành vi của phép 14 ·
+(j) vòng đời _inbox và _da_nap · (k) cache _quan_sat_truoc.json giả mạo được ·
+(n) schema @DUAN.PHANMEM chưa có ô khai nhánh CI/CD tự deploy · (s) tách mục
+vòng <= 25 của GHICHU ra file lưu trữ, đo được giảm 43.029 ký tự tức 37% thứ
+mọi công ty phải chép về kho · (a) (b) (c) (e) (g) (h) như cũ.
+
 ## Vòng 48: trả nợ backlog - secret vào kho bằng hai lối chưa ai soi
 
 Vòng vá thuần backlog, không chờ hội đồng mới. Bốn mục nặng nhất của backlog
