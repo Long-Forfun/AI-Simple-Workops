@@ -2803,6 +2803,7 @@ def main(goc):
         _host_pm = []   # GIÁ TRỊ nơi chạy thật, để 7g đọc lại
         _nhanh_pm = []  # GIÁ TRỊ nhánh tự deploy, cũng để 7g đọc lại
         _db_pm = []     # tên ĐÍCH DANH CSDL chạy thật (rubric 03)
+        _pt_pm = []     # tên NGƯỜI phụ trách vận hành - 7g nêu thẳng ai gật
         for _i, _dg in enumerate(_dong_pm):
             # KHÔNG đòi 2-6 ký tự HOA: không văn bản nào của bộ khai luật
             # đó, mà mã ngoài khuôn ngầm làm công ty khai ĐÚNG bị 7d và
@@ -2832,6 +2833,13 @@ def main(goc):
                 _host_pm += [_h.rstrip(".,;·") for _h in re.findall(
                     r"[A-Za-z0-9][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_-]+)+",
                     _mh.group(1))]
+            _mpt = re.search(r"(?:ph[ụu] tr[áa]ch(?:\s+v[ậa]n h[àa]nh)?"
+                             r"|owner|on-?call)\s*:?\s*([^·\n]+)",
+                             _khoi_pm, re.I)
+            if _mpt and not re.search(r"(?i)ch[ưu]a r[õo]", _mpt.group(1)):
+                _ten_pt = _mpt.group(1).strip().rstrip(".,;·")
+                if _ten_pt:
+                    _pt_pm.append(_ten_pt[:30])
             _mdb = re.search(r"(?:csdl|c[ơo] s[ởo] d[ữu] li[ệe]u"
                              r"|kho d[ữu] li[ệe]u|database|\bdb\b)"
                              r"\s*(?:ch[ạa]y\s+th[ậa]t)?\s*:?\s*([^·\n]+)",
@@ -2866,7 +2874,13 @@ def main(goc):
                        # 1 mà máy không có neo nào nếu không hỏi tên (rubric 03)
                        ("CSDL/kho dữ liệu chạy thật",
                         r"csdl|cơ sở dữ liệu|co so du lieu|kho dữ liệu"
-                        r"|kho du lieu|database|\bdb\b")]
+                        r"|kho du lieu|database|\bdb\b"),
+                       # lượt mức C mà không biết hỏi AI GẬT thì "plan và cái
+                       # gật TRƯỚC" là cái gật của không ai cả (vế TỔ CHỨC
+                       # của phạm vi phần mềm - hạ tầng và dữ liệu đã có neo)
+                       ("người phụ trách vận hành",
+                        r"phụ trách|phu trach|owner|chịu trách nhiệm"
+                        r"|chiu trach nhiem|on-?call")]
             # Bỏ đoạn "repo ..." ra trước khi dò BỐN trường còn lại: khai
             # báo phân đoạn bằng dấu ·, mà dò từ khóa trên TRỌN dòng thì
             # trường này ăn ké chữ của trường kia - `repo git.cty.vn/app` một
@@ -2971,8 +2985,10 @@ def main(goc):
             f" chạy thật khai ở X0 C2"
             f"{' (' + _liet(_host_pm[:2]) + ')' if _host_pm else ''} mà lượt"
             f" ghi KHÔNG ở mức C. X5 mục 1 MẶC ĐỊNH ĐÓNG: chạm chạy thật cần"
-            f" plan và cái gật TRƯỚC. Việc trên staging hay đã có plan thì sửa"
-            f" ô Mức về C và nối mã plan; [AI: không tự hạ mức]")
+            f" plan và cái gật TRƯỚC"
+            f"{' của ' + _liet(_pt_pm[:2]) if _pt_pm else ''}. Việc trên"
+            f" staging hay đã có plan thì sửa ô Mức về C và nối mã plan;"
+            f" [AI: không tự hạ mức]")
         # Lưới MỀM cho động từ chưa vào danh sách: hai vòng rubric liền phát
         # hiện lớp lỗ này bằng động từ MỚI (gop, phat hanh, squash...). Câu
         # mức A/B nhắc ĐÍCH DANH host/nhánh đã khai mà máy không nhận ra động

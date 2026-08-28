@@ -78,7 +78,7 @@ NGAN_SACH = {
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 185000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 195000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -1423,6 +1423,36 @@ def phep_fuzz(goc, phu_them=()):
 
     thu3("phat hanh lên host chạy thật mà ghi mức B", _ca_7g_phat_hanh, "7g.")
 
+    def _ca_7d_phutrach(k, i, so, G, sua):
+        """Khai đủ BẢY trường hạ tầng + dữ liệu mà thiếu NGƯỜI PHỤ TRÁCH:
+        7d phải đòi - không biết ai gật thì mức C là cái gật của không ai."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He du trach · repo github.com/cty/dt · web · dev may"
+               " doi, staging stg.dt.vn, chạy thật dt.bacha.vn" + NL
+             + "        · secret o Vault · nhánh tự deploy main"
+               " · CSDL chua ro ·" + _s[_m.end():])
+
+    thu3("khai đủ hạ tầng mà thiếu người phụ trách vận hành", _ca_7d_phutrach,
+         "7d.")
+
+    def _ca_7d_csdl(k, i, so, G, sua):
+        """Khai đủ mọi trường kể cả phụ trách mà thiếu CSDL: 7d phải đòi -
+        thiếu nó thì update dữ liệu khách không có neo nào (rubric 03)."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He kho van · repo github.com/cty/tkv · web · dev may"
+               " doi, staging stg.tkv.vn, chạy thật tkv.bacha.vn" + NL
+             + "        · secret o Vault · nhánh tự deploy main"
+               " · phụ trách vận hành: anh Bo ·" + _s[_m.end():])
+
+    thu3("khai đủ kể cả phụ trách mà thiếu CSDL chạy thật", _ca_7d_csdl,
+         "7d.")
+
     def _ca_7g_csdl(k, i, so, G, sua):
         """Khai CSDL chạy thật đích danh, rồi ghi update dữ liệu trên đúng
         CSDL đó mức A. X5 mục 1 định nghĩa đây là mức C mà trước vòng 85 máy
@@ -1656,7 +1686,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 74 if _os_dem.name == "nt" else 73   # ca 9d chỉ có trên NTFS
+    _i3_mong = 76 if _os_dem.name == "nt" else 75   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 33, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 33,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"

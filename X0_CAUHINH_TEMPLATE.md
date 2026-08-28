@@ -97,16 +97,17 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
            (vault, secret manager, hay "chưa rõ") · nhánh tự deploy chạy thật
            (nhánh merge vào là ra production, hay "không có auto-deploy")
            · CSDL chạy thật (tên ĐÍCH DANH máy neo mức C, hay "CSDL chưa rõ")
-  Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
-  KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
-  Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
-  commit hay PR. Một phần mềm nhiều repo: mỗi repo một vế trên cùng dòng.
-  Đặc tả, tài liệu sống cùng code nằm trong repo, TAILIEU trỏ dạng "Repo"
-  theo C1. Mức từng thao tác repo, SECRET, dữ liệu khách trong dump và log,
-  bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
+           · phụ trách vận hành <tên - người GẬT lượt mức C, hay "chưa rõ">
+  Repo là NGUỒN SỰ THẬT của code: code KHÔNG chép vào kho, KHÔNG qua
+  _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành. Chạm code vẫn
+  ghi VIEC, QUYETDINH, cột Liên kết trỏ commit hay PR. Một phần mềm nhiều
+  repo: mỗi repo một vế cùng dòng. Đặc tả sống cùng code trong repo,
+  TAILIEU trỏ dạng "Repo" (C1). Mức từng thao tác repo, SECRET, dữ liệu
+  khách trong dump và log, bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp
+  khi có dự án phần mềm).
   Ví dụ dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
-  · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
-  GitHub Actions · nhánh tự deploy chạy thật main. Mục nào chưa rõ: trả lời
+  · web + máy chủ · dev máy đội, chạy thật app.cty.vn · secret ở
+  GitHub Actions · nhánh tự deploy main. Mục nào chưa rõ: trả lời
   "chưa rõ, hỏi đội kỹ thuật", AI ghi dấu chưa điền vào C12.
   Nhánh tự deploy là dữ kiện X5 mục 1b CẦN để xử lượt merge: merge vào đúng
   nhánh đó là chạm CHẠY THẬT nên mức C, dù câu ghi không nhắc chữ nào về

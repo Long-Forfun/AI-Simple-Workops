@@ -9,6 +9,31 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 78: trường thứ tám - NGƯỜI PHỤ TRÁCH VẬN HÀNH (vế TỔ CHỨC)
+
+Phạm vi phần mềm sau vòng 77 phủ HẠ TẦNG (repo, môi trường, host, nhánh tự
+deploy) và DỮ LIỆU (CSDL chạy thật) - nhưng "phạm vi TỔ CHỨC" còn một vế
+chưa trả lời: CON NGƯỜI. Lượt mức C mà không biết hỏi AI thì "plan và cái
+gật TRƯỚC" của X5 mục 1 là cái gật của không ai cả.
+
+Trường thứ tám của @DUAN.PHANMEM: "phụ trách vận hành <tên - người GẬT lượt
+mức C, hay 'chưa rõ'>". Máy giữ hai tầng: 7d ĐÒI trường (ca I3 khai đủ bảy
+trường kia mà thiếu phụ trách -> 7d kêu); giá trị đích danh được 7g nhắc
+THẲNG TÊN trong thông điệp mức C - "cần plan và cái gật TRƯỚC của chị Trân"
+- người dùng biết đi xin ai, không chỉ biết mình sai (lab xác nhận tên chảy
+vào thông điệp).
+
+Đo đột biến lộ thêm một lỗ đối xứng: "7d bỏ đòi CSDL" cũng đang SỐNG - ca
+vòng 77 khai "CSDL chua ro" nên gỡ mục CSDL khỏi danh sách đòi không ca nào
+thấy. Thêm ca khai-đủ-trừ-CSDL; lượt đầu ca này tự dính bẫy của chính nó
+(tên fixture "He thieu db" chứa chữ db nên pattern CSDL tự khớp) - đo lại
+2/2 mutant CHẾT.
+
+X0 giữ trần 20000: trường mới trả chỗ bằng cắt chữ thừa cùng khối C2 (hai
+lượt). Trần kiem_van_hanh 185000 -> 195000 (file dev; trần THẬT là 13b/13c
+trên đầu ra, cả hai xanh). BẤT BIẾN I1 7, I2 33, I3 76(nt)/75. Đang chờ
+rubric vòng chấm 04. BACKLOG: (e) sổ CSV (đang CẤM).
+
 ## Vòng 77: rubric vòng chấm 03 - 91/100, vá cả chín khoản
 
 Giám khảo chấm bản vòng 44, seed đột biến 44 chiếu thẳng vào VÙNG MÃ MỚI chưa
