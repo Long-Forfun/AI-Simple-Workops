@@ -1295,6 +1295,41 @@ def phep_fuzz(goc, phu_them=()):
     thu("file MẪU .example và .sample khai cấu hình (X5 mục 1b cho phép)",
         _ca_lanh_mau, False)
 
+    def _ca_7g_khong_dau(k, i, so, G, sua):
+        """Khai nhánh tự deploy, rồi ghi lượt GỘP KHÔNG DẤU vào đúng nhánh đó
+        ở mức B. Động từ "gop nhanh" đã nằm trong _dv từ vòng 19; neo nhánh
+        không nhận thì kiểu gõ phổ biến nhất lọt (giám khảo rubric 01)."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He dat hang · repo github.com/cty/dathang" + NL
+             + "        · web · dev may doi, chạy thật dathang.bacha.vn" + NL
+             + "        · secret o Vault · nhánh tự deploy main ·" + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-11 | 2026-08-28 | CUA1.1300.ab | B |"
+             " Gop nhanh feature/dat-hang vao main sau review |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+
+    thu3("gộp KHÔNG DẤU vào nhánh tự deploy mà ghi mức B", _ca_7g_khong_dau,
+         "7g.")
+
+    def _ca_8e_het_han(k, i, so, G, sua):
+        """Chứng thư hết hạn 2020-01-01 (quá khứ vĩnh viễn - ca không hỏng
+        theo thời gian thật) mà bảng vẫn "bàn sạch": 8e phải đỏ. Ca này ghim
+        SỐNG bộ đếm hết hạn của dem_qua_han - đột biến m08 của giám khảo
+        rubric giết được nó mà không phép nào kêu."""
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "ct.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-088 | Chung thu so | v01 | 2019-01-20 |"
+               " Kho 03_Phap_ly/ct.md | HIỆN HÀNH | NHÁP | 2019-01-20 | qs |"
+               " noi bo | 2020-01-01 | | | " + G + " |" + NL)
+
+    thu3("chứng thư hết hạn mà bảng vẫn bàn sạch", _ca_8e_het_han, "8e.")
+
     def _ca_7g(k, i, so, G, sua):
         """Khai đủ phạm vi phần mềm (có nơi chạy thật), rồi ghi một lượt
         deploy CHÍNH cái host đó ở mức A. Đây là ca chứng minh GIÁ TRỊ khai
@@ -1389,7 +1424,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 62 if _os_dem.name == "nt" else 61   # ca 9d chỉ có trên NTFS
+    _i3_mong = 64 if _os_dem.name == "nt" else 63   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 28, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 28,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
@@ -2439,6 +2474,11 @@ def main(goc):
         r = chay_email(nk=P("<a@x>", pay=dict(PAY, thao_tac=[t1, dict(t1)])) + "\n"
                        + C("<a@x>") + "\n", reg=["<a@x>"])
         ca.append(("operation_id trùng trong một mail bị bắt", r.get(TEN_12H) is False))
+        # operation_id SAI KIỂU (số): fixture cũ chỉ thử THIẾU trường, nên
+        # đột biến isinstance->and sống sót (giám khảo rubric 01, mutant m05)
+        r = chay_email(nk=P("<a@x>", pay=dict(PAY, thao_tac=[dict(t1, operation_id=123)]))
+                       + "\n" + C("<a@x>") + "\n", reg=["<a@x>"])
+        ca.append(("operation_id sai kiểu (số) bị bắt", r.get(TEN_12H) is False))
         # thiếu cấu hình @NHIP.HOPTHU khi EMAIL đã chạy: LỆCH, không BỎ QUA
         r = chay_email(nk=SACH, reg=["<a@x>"], x0_hop=None)
         ca.append(("thiếu @NHIP.HOPTHU thành LỆCH cấu hình", r.get(TEN_12E) is False))
@@ -2691,8 +2731,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 99,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 99: bớt ca là"
+             not hong and len(ca) == 100,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 100: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

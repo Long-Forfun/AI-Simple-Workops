@@ -2855,7 +2855,11 @@ def main(goc):
             "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm]
         # merge vào ĐÚNG nhánh tự deploy là chạm chạy thật, dù câu ghi không
         # nhắc chữ nào về production - đó là cả lý do trường này tồn tại
-        _neo += [r"(?:merge|gộp)[^·]*?(?<![\w.-])" + re.escape(_b) + r"(?![\w.-])"
+        # nhận cả KHÔNG DẤU: danh sách động từ _dv cố ý nhận "gop nhanh"
+        # mà neo nhánh lại đòi "gộp" có dấu - kiểu gõ phổ biến nhất lọt mức
+        # thấp ở đúng lượt merge vào nhánh tự deploy (giám khảo rubric 01)
+        _neo += [r"(?:merge|g[ộo]p|đ[ẩa]y l[êe]n|day len)[^·]*?(?<![\w.-])"
+                 + re.escape(_b) + r"(?![\w.-])"
                  for _b in _nhanh_pm]
         _sx = []
         for _r in hang_nk:

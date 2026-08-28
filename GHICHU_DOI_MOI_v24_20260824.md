@@ -9,6 +9,40 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 72: lần chấm RUBRIC CỐ ĐỊNH đầu tiên - 95/100, vá cả ba khoản trừ
+
+Từ vòng này có HAI thước tách bạch: điểm đối kháng /10 (la bàn tìm lỗi, chĩa
+vào mã mới nhất, NÊN thấp) và RUBRIC CỐ ĐỊNH /100 chấm CẢ BỘ - 10 mục, trọng
+số ghim, giám khảo độc lập chấm bằng bằng chứng chạy thật, ca đặt tên để vòng
+sau lặp lại được. Lần chấm đầu trên bản vòng 70: 95/100 (ĐÚNG 15/15 · KHÔNG
+BÁO OAN 15/15 · KHÔNG MISS 15/15 · LƯỚI TỰ GIỮ 7/10 · PHẠM VI PHẦN MỀM 8/10 ·
+CÀI ĐƯỢC 10/10 · VẬN HÀNH TUẦN GIẢ LẬP 10/10 · THUẾ PHIÊN 5/5 · HIỂU ĐƯỢC 5/5
+· LỜI KHAI = MÁY 5/5). Ba khoản trừ, vá hết trong vòng này:
+
+1. 7g LỌT MERGE KHÔNG DẤU (trừ 2 ở PHẠM VI PHẦN MỀM): neo merge-vào-nhánh
+   chỉ nhận "merge|gộp" CÓ dấu trong khi danh sách động từ của chính phép này
+   cố ý nhận "gop nhanh" không dấu từ vòng 19. "Gop nhanh feature vao main
+   sau review" - kiểu gõ phổ biến nhất - lọt mức B ở đúng lượt merge vào
+   nhánh tự deploy. Neo mới nhận g[ộo]p và đẩy lên/day len; ca I3 ghim.
+
+2. Đột biến m08 SỐNG (trừ ở LƯỚI TỰ GIỮ): lật `len(r) > 11` thành `<=` là bộ
+   đếm "hết hạn" chết hẳn - đúng kịch bản chứng-thư-hết-hạn-mà-bàn-sạch của
+   hội đồng vòng 18 - mà không phép nào của kiem_tra_bo kêu. Ca I3 mới: dòng
+   TAILIEU hết hạn 2020-01-01 (quá khứ vĩnh viễn, không hỏng theo thời gian
+   thật) trên bảng "bàn sạch" thì 8e PHẢI đỏ.
+
+3. Đột biến m05 SỐNG: operation_id SAI KIỂU (số 123) qua được kiem_payload
+   khi lật isinstance->and, vì fixture 12h chỉ thử THIẾU trường. Thêm ca sai
+   kiểu; fixture quan sát 99 -> 100 ca, số khai sửa cùng lượt.
+
+TÁI ĐO cả ba mutant sau vá: 3/3 BẮT (m05 <- phép 11, m08 <- phép 13, neo 7g
+lùi về có dấu <- phép 13). Ghi chú "sdfish trong .gitignore" của giám khảo
+KHÔNG tái hiện trên repo - không nhận.
+
+BẤT BIẾN I1 7, I2 28, I3 64(nt)/63. NHẬT KÝ RUBRIC: vòng chấm 01 (bản vòng
+70) = 95/100; trần khả dĩ sau vá ước ~99 theo chính giám khảo. BACKLOG: (j)
+vòng đời _inbox · (a) hash QUYETDINH · (c) khuôn bản sao · (e) sổ CSV.
+
 ## Vòng 71: trả nốt bốn món MISS của hội đồng vòng 22
 
 Không chờ hội đồng vòng 23 về đủ: bốn mục backlog mà giám khảo vòng 22 đã
