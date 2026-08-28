@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 60 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 61 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,36 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 61: hai lối đi mà luật quên mở
+
+Hai mục cuối của hội đồng vòng 19, cùng một hình dạng: nghiệp vụ có thật, luật
+không có ô nào cho nó, nên người dùng phải chọn giữa ôm lệch vĩnh viễn và khai
+sai sự thật.
+
+(z4) NHATKY VƯỢT 500 DÒNG TRONG MỘT QUÝ. Phép 6 kêu, nhưng X5 mục 5 cố định
+NHATKY theo QUÝ còn mục 7 bước 1 chỉ cho tách "theo khối hoặc năm" - không vế
+nào áp được cho một quý. Tôi đo lại ba lối trên kho 519 dòng:
+    chưa tách                             -> phép 6 kêu   (đúng)
+    NHATKY_2026Q3_p2.md cạnh sổ sống      -> 0b, 0j, 3e   (bẫy)
+    _lich_su/NHATKY_2026Q3.md CÙNG TÊN    -> SẠCH
+Tức CƠ CHẾ ĐÃ CÓ SẴN và chạy đúng - loc_ban_chinh, 3c, 3d, 3e, 3f, 3g, 7, 12l
+đều đọc `_lich_su`, còn phép 6 thì cố ý không. Thứ thiếu chỉ là một câu nói cho
+người dùng biết, và họ đọc nó ở ĐẦU SỔ chứ không ở X5 (X5 cũng chỉ còn 24 ký tự
+headroom). Ghi vào NHATKY_TEMPLATE, kèm luôn việc NN được phép vượt hai chữ số.
+
+(z3) DỰ ÁN NGỪNG CÒN NGHĨA VỤ BẢO HÀNH. Thanh lý hợp đồng, dự án đóng, nhưng
+bảo hành chạy tiếp 12 tháng. X0 C2 chỉ cho hai lối: chuyển việc sang HỦY, hay
+bàn giao dự án khác - cả hai đều SAI SỰ THẬT, vì việc bảo hành vẫn còn và không
+có dự án nào khác để giao. Lối duy nhất đi được là giữ dự án "đang chạy" suốt
+thời gian bảo hành, tức bàn làm việc ôm một dự án đã xong cả năm.
+Lối thứ ba, đúng sự thật và CÓ HẠN RÕ: khai `NGỪNG (bảo hành tới YYYY-MM-DD)`.
+7b thôi tố tới ngày ấy, và tố LẠI sau ngày ấy - vì lúc đó nghĩa vụ đã hết, việc
+còn mở mới thật sự là việc bị bỏ quên. Bàn thử 4/4, gồm ca hạn đã qua.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(a) hash QUYETDINH · (b) phép 5 đối chiếu số cột với X5 mục 4 · (c) khuôn bản
+sao · (e) bản rà cho sổ CSV.
 
 ## Vòng 60: hai luật BẤT KHẢ THI
 
@@ -1668,8 +1698,8 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17015 token
-CHAT không EMAIL ~18710 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17123 token
+CHAT không EMAIL ~18819 token
 CHAT có EMAIL (kèm X3E) ~22708 token
 CHAT nạp cả X9 và X4 ~23070 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
@@ -1975,6 +2005,9 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
+án khác. Còn nghĩa vụ sau thanh lý (bảo hành, bảo lãnh): khai
+"NGỪNG (bảo hành tới YYYY-MM-DD)" và GIỮ các việc đó mở - rà thôi tố tới
+ngày ấy, sau ngày ấy tố lại. Phần còn lại của dòng cũ:
 án khác, sổ giữ nguyên tra lịch sử, bàn làm việc và digest lọc bỏ.
 Dự án mới: thêm dòng ở đây (mức B), dựng folder con trong các folder chức năng cần
 dùng, rồi mới mở việc đầu tiên.
@@ -3461,7 +3494,13 @@ FILE: _so/NHATKY_TEMPLATE.md
 Một dòng mỗi LƯỢT GHI, mọi mức A B C. Chỉ thêm; hai ngoại lệ: sửa ô Trạng thái
 ĐANG GHI sang XONG (và đổi mã dòng MÌNH khi trùng, X5 mục 3), và thay giá
 trị theo XÓA PHÁP LÝ (X5 mục 7b).
-Mã ghi dạng G-<YYYYMMDD>-<CỬA>-<NN>, CỬA theo X0 C1.
+Mã ghi dạng G-<YYYYMMDD>-<CỬA>-<NN>, CỬA theo X0 C1; NN chạy từ 01 và
+ĐƯỢC PHÉP vượt hai chữ số khi một cửa ghi hơn 99 lượt trong ngày.
+Quý này vượt 500 dòng: CHUYỂN các dòng cũ nhất sang
+`_so\_lich_su\NHATKY_<năm>Q<quý>.md` - ĐÚNG TÊN ĐÓ, giữ nguyên khung
+bảng. Đừng đặt `_p2` hay hậu tố nào cạnh sổ sống: máy đọc chúng là bản
+sao hỏng. Mọi phép truy vết đều đọc cả `_lich_su`, riêng phép đếm
+ngưỡng 500 dòng thì không - nên tách xong là hết kêu.
 
 | Mã ghi | Ngày | Phiên | Mức | Làm gì | Chạm sổ nào | File ra | Trạng thái | Chờ ai |
 |---|---|---|---|---|---|---|---|---|

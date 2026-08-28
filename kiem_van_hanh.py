@@ -2559,6 +2559,24 @@ def main(goc):
         _da_khai = {m.group(1) for m in re.finditer(r"@DUAN\.([A-Z0-9]+)", _c2)
                     if m.group(1) != "PHANMEM"}
         _ngung = {m.group(1) for m in re.finditer(r"@DUAN\.([A-Z0-9]+)[^\n]*NGỪNG", _c2)}
+        # NGỪNG (bảo hành tới <ngày>): dự án đã thanh lý mà nghĩa vụ còn chạy.
+        # Không có lối này thì công ty phải chọn giữa hai lời khai SAI - chuyển
+        # việc bảo hành sang HỦY, hay giữ dự án "đang chạy" cả năm sau khi xong
+        # (hội đồng vòng 19). Hết hạn bảo hành thì 7b tố lại, vì lúc đó việc
+        # còn mở mới thật sự là việc bị bỏ quên.
+        import datetime as _dt62
+        _bao_hanh = {}
+        for _m62 in re.finditer(r"@DUAN\.([A-Z0-9]+)[^\n]*NGỪNG[^\n]*?"
+                                r"b[ảa]o h[àa]nh[^\n]*?(\d{4})-(\d{2})-(\d{2})",
+                                _c2):
+            try:
+                _bao_hanh[_m62.group(1)] = _dt62.date(
+                    *map(int, _m62.group(2, 3, 4)))
+            except ValueError:
+                pass
+        _hom_nay62 = _dt62.date.today()
+        _ngung = {_d for _d in _ngung
+                  if not (_d in _bao_hanh and _bao_hanh[_d] >= _hom_nay62)}
         _la_cua = {c for m in ma_g if (c := cua_cua(m)) and c not in _cua_khai}
         # ô "Phiên" (<CỬA>.<giờ phút>.<hậu tố>, X5 mục 3 bước 1) và dòng watermark
         # của bảng (bước 6) cũng mang tên cửa: gõ nhầm ở đó sinh đúng cái "lane
@@ -2593,7 +2611,9 @@ def main(goc):
             " (X0 C1), đừng gỡ trắng: mã G cũ nằm trong NHATKY chỉ-thêm nên"
             " không xóa được. Gõ nhầm một ký tự cũng sinh cửa ma và một lane"
             " watermark giả; dự án NGỪNG còn việc mở thì việc đó rơi khỏi bàn"
-            " làm việc mà không ai đóng (X0 C2)")
+            " làm việc mà không ai đóng (X0 C2) - còn nghĩa vụ bảo hành thì"
+            " khai \"NGỪNG (bảo hành tới YYYY-MM-DD)\", đừng chuyển việc sang"
+            " HỦY cho im")
 
     if not chua_cai:
         bdk = doc(so / "BANG_DIEU_KHIEN.md")

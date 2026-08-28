@@ -9,6 +9,36 @@ Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 61: hai lối đi mà luật quên mở
+
+Hai mục cuối của hội đồng vòng 19, cùng một hình dạng: nghiệp vụ có thật, luật
+không có ô nào cho nó, nên người dùng phải chọn giữa ôm lệch vĩnh viễn và khai
+sai sự thật.
+
+(z4) NHATKY VƯỢT 500 DÒNG TRONG MỘT QUÝ. Phép 6 kêu, nhưng X5 mục 5 cố định
+NHATKY theo QUÝ còn mục 7 bước 1 chỉ cho tách "theo khối hoặc năm" - không vế
+nào áp được cho một quý. Tôi đo lại ba lối trên kho 519 dòng:
+    chưa tách                             -> phép 6 kêu   (đúng)
+    NHATKY_2026Q3_p2.md cạnh sổ sống      -> 0b, 0j, 3e   (bẫy)
+    _lich_su/NHATKY_2026Q3.md CÙNG TÊN    -> SẠCH
+Tức CƠ CHẾ ĐÃ CÓ SẴN và chạy đúng - loc_ban_chinh, 3c, 3d, 3e, 3f, 3g, 7, 12l
+đều đọc `_lich_su`, còn phép 6 thì cố ý không. Thứ thiếu chỉ là một câu nói cho
+người dùng biết, và họ đọc nó ở ĐẦU SỔ chứ không ở X5 (X5 cũng chỉ còn 24 ký tự
+headroom). Ghi vào NHATKY_TEMPLATE, kèm luôn việc NN được phép vượt hai chữ số.
+
+(z3) DỰ ÁN NGỪNG CÒN NGHĨA VỤ BẢO HÀNH. Thanh lý hợp đồng, dự án đóng, nhưng
+bảo hành chạy tiếp 12 tháng. X0 C2 chỉ cho hai lối: chuyển việc sang HỦY, hay
+bàn giao dự án khác - cả hai đều SAI SỰ THẬT, vì việc bảo hành vẫn còn và không
+có dự án nào khác để giao. Lối duy nhất đi được là giữ dự án "đang chạy" suốt
+thời gian bảo hành, tức bàn làm việc ôm một dự án đã xong cả năm.
+Lối thứ ba, đúng sự thật và CÓ HẠN RÕ: khai `NGỪNG (bảo hành tới YYYY-MM-DD)`.
+7b thôi tố tới ngày ấy, và tố LẠI sau ngày ấy - vì lúc đó nghĩa vụ đã hết, việc
+còn mở mới thật sự là việc bị bỏ quên. Bàn thử 4/4, gồm ca hạn đã qua.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(a) hash QUYETDINH · (b) phép 5 đối chiếu số cột với X5 mục 4 · (c) khuôn bản
+sao · (e) bản rà cho sổ CSV.
+
 ## Vòng 60: hai luật BẤT KHẢ THI
 
 Hai mục còn lại của hội đồng vòng 19 thuộc loại nặng nhất về nghiệp vụ: không

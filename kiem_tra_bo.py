@@ -617,6 +617,21 @@ def phep_fuzz(goc, phu_them=()):
              + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
              " x | x | x | x | MỚI | |" + NL), "7c.")
 
+    def _ca_baohanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: dự án đã thanh lý mà nghĩa vụ bảo hành còn chạy - giữ
+        việc mở là ĐÚNG SỰ THẬT, chuyển sang HỦY mới là khai sai."""
+        sua(i / "X0_CAUHINH_FUZ.md",
+            "@DUAN.DA1        Du an mot                    đang chạy",
+            "@DUAN.DA1        Du an mot                    đang chạy" + NL
+            + "@DUAN.BVH        Benh vien Hoa Lu             NGỪNG"
+              " (bảo hành tới 2099-12-31)")
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| BVH | V-BVH-008 | Bao hanh he thong | kiem dinh ky | toi | |"
+               " 2099-12-31 | ĐANG LÀM | | " + G + " |" + NL)
+
+    thu("dự án NGỪNG còn bảo hành, việc mở (không được kêu)", _ca_baohanh, False)
+
     def _ca_khocu(k, i, so, G, sua):
         """ĐÚNG LUẬT: tài liệu ở KHO CŨ khai dạng thứ năm - kho cũ chỉ tra lịch
         sử và có thể offline nên 7f, 9, 10a, 10b đều phải im. Trước vòng 61
@@ -934,8 +949,8 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 12, 38):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 12,"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 38):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 13,"
                     f" I3 38 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
