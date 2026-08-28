@@ -2397,6 +2397,28 @@ def main(goc):
     bao("0r. _inbox sang _da_nap sạch vòng đời", not _loi0r,
         "; ".join(_loi0r) + ". Mức A")
 
+    # Neo BÀN GIAO (vế TỔ CHỨC): @NHIP.BANGIAO tự hứa "rà một lượt việc đang
+    #     mở và plan treo sang người mới" mà không máy nào nhắc - người cũ đã
+    #     nghỉ, việc vẫn gán tên họ và trôi vô chủ (giám khảo rubric 04). Chỉ
+    #     LƯU Ý: việc ĐÚNG là của người cũ cho tới khi rà xong.
+    if not chua_cai and x0s:
+        # neo ĐẦU DÒNG: văn xuôi C6 cũng nhắc "@NHIP.BANGIAO đổi khi bàn
+        # giao" và re.search không neo vớ nhầm câu đó thay vì dòng khai C9
+        _mbg = re.search(r"^@NHIP\.BANGIAO\s+([^\n<]+)", doc(x0s[0]), re.M)
+        _v_bg = (_mbg.group(1).strip() if _mbg else "")
+        if _v_bg and not re.match(r"(?i)ch[ưu]a c[óo]", _v_bg):
+            _ten_cu = _v_bg.split(",")[0].strip()[:30]
+            if _ten_cu:
+                _viec_cu = [
+                    (_r[1] or "?").strip()[:12]
+                    for _r in dong_bang(doc(so / "VIEC.md"))
+                    if len(_r) > 7 and _r[7].strip() not in ("XONG", "HỦY")
+                    and bo_dau(_ten_cu) in bo_dau(_r[4] if len(_r) > 4 else "")]
+                if _viec_cu:
+                    print(f"        LƯU Ý  bàn giao: {len(_viec_cu)} việc đang"
+                          f" mở còn gán {_ten_cu} ({_liet(_viec_cu[:3])}) -"
+                          f" @NHIP.BANGIAO dặn rà sang người mới, mức B")
+
     # 0p. Sổ lõi còn KHUNG, không chỉ còn TÊN. Đồng bộ mây hay một lượt AI
     #     ghi đè để lại file 0 byte thì phép 0 vẫn PASS vì nó chỉ hỏi
     #     is_file() - rồi phiên sau nối dòng vào file KHÔNG có header và cột

@@ -33,8 +33,10 @@ C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
 2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
    thì khai các cửa)
 3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
-   là PHẦN MỀM thì hỏi thêm phạm vi tổ chức theo X0 C2 @DUAN.PHANMEM: repo,
-   thành phần, môi trường, nơi chạy thật, nơi giữ secret)
+   là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức theo X0 C2
+   @DUAN.PHANMEM: repo · thành phần · môi trường · nơi chạy thật · nơi giữ
+   secret · nhánh tự deploy · CSDL chạy thật · người phụ trách vận hành -
+   hỏi thiếu là 7d đỏ ngay sau khi người dùng trả lời đúng câu hỏi)
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:

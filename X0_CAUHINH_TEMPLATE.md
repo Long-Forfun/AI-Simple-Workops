@@ -114,11 +114,11 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   production. Không có auto-deploy thì khai "không có auto-deploy"
 ```
 
-Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
-án khác. Còn nghĩa vụ sau thanh lý (bảo hành, bảo lãnh): khai
+Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao
+dự án khác; sổ giữ nguyên để tra lịch sử, bàn làm việc và digest lọc bỏ.
+Còn nghĩa vụ sau thanh lý (bảo hành, bảo lãnh): khai
 "NGỪNG (bảo hành tới YYYY-MM-DD)" và GIỮ các việc đó mở - rà thôi tố tới
-ngày ấy, sau ngày ấy tố lại. Phần còn lại của dòng cũ:
-án khác, sổ giữ nguyên tra lịch sử, bàn làm việc và digest lọc bỏ.
+ngày ấy, sau ngày ấy tố lại.
 Dự án mới: thêm dòng ở đây (mức B), dựng folder con trong các folder chức năng cần
 dùng, rồi mới mở việc đầu tiên.
 

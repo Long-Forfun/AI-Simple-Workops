@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 78 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 79 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,39 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 79: rubric vòng chấm 04 - 93/100, vá nốt các khoản còn lại
+
+Giám khảo chấm bản vòng 46 (b3f8834): 93/100 (95 · 96 · 91 · 93). Lần đầu
+CẢ BA mục chạy-thật (cài được, vận hành tuần, thuế phiên) cùng tối đa, chín
+vá vòng 03 giữ trọn, 10/10 mutant seed 45 trong mẫu chết. Khoản trừ dồn vào
+hai vùng mới mở - và vòng 78 (sau ảnh chấm) đã vá sẵn phần lớn tầng CON
+NGƯỜI, giám khảo tự ghi nhận "working tree đang vá đúng hướng". Phần còn
+lại, vá trong vòng này:
+
+1. X9 CÂU 3 KHAI 5/8 TRƯỜNG: kênh cài đặt hỏi thiếu (thiếu nhánh tự deploy,
+   CSDL, phụ trách - ba trường vào schema sau khi X9 viết câu hỏi), nên
+   người dùng trả lời ĐÚNG câu hỏi xong vẫn ăn 7d đỏ. Kênh hỏi nay khớp đủ
+   TÁM trường; luật-grep phép 12 siết theo bản mới.
+
+2. NEO BÀN GIAO: @NHIP.BANGIAO tự hứa "rà một lượt việc đang mở và plan treo
+   sang người mới" mà không máy nào nhắc - người cũ nghỉ, việc trôi vô chủ.
+   Nay khai tên ở C9 mà VIEC còn việc ĐANG MỞ gán tên đó thì in LƯU Ý (chỉ
+   nhắc - việc ĐÚNG là của người cũ tới khi rà xong). Bug lượt đầu: regex
+   không neo đầu dòng nên vớ nhầm câu văn xuôi C6 nhắc "@NHIP.BANGIAO" -
+   ca đầu-ra bắt được trước khi lên bản.
+
+3. BA MUTANT NGOÀI MẪU: lưới mềm 7g (tính năng vòng 76) tắt được mà bộ vẫn
+   xanh - thêm ca đầu-ra "LƯU Ý 7g" theo khuôn chụp stdout của 13b; lách gõ
+   Mức "c" thường (comment 3g tự khai từ lâu) - ca I3 ghim; vế CSDL của 7d
+   đã được ca vòng 78 giết sẵn.
+
+4. HIỂU ĐƯỢC: xác câu cũ "án khác," (vá vòng 61 để sót) trong đoạn Đóng dự
+   án của X0 C2 - viết lại trọn đoạn, câu đứt biến mất.
+
+Tái đo: m6 <- 11, n6 <- 13, bàn giao <- 11 - 3/3 CHẾT. Fixture 104 ca.
+BẤT BIẾN I1 7, I2 33, I3 77(nt)/76. NHẬT KÝ RUBRIC: 95 · 96 · 91 · 93.
+BACKLOG: (e) sổ CSV (đang CẤM).
 
 ## Vòng 78: trường thứ tám - NGƯỜI PHỤ TRÁCH VẬN HÀNH (vế TỔ CHỨC)
 
@@ -1711,7 +1744,7 @@ CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17177 token
 CHAT không EMAIL ~18872 token
 CHAT có EMAIL (kèm X3E) ~22870 token
 CHAT nạp cả X9 và X4 ~23232 token
-(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
+(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4409 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -2015,11 +2048,11 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   production. Không có auto-deploy thì khai "không có auto-deploy"
 ```
 
-Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
-án khác. Còn nghĩa vụ sau thanh lý (bảo hành, bảo lãnh): khai
+Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao
+dự án khác; sổ giữ nguyên để tra lịch sử, bàn làm việc và digest lọc bỏ.
+Còn nghĩa vụ sau thanh lý (bảo hành, bảo lãnh): khai
 "NGỪNG (bảo hành tới YYYY-MM-DD)" và GIỮ các việc đó mở - rà thôi tố tới
-ngày ấy, sau ngày ấy tố lại. Phần còn lại của dòng cũ:
-án khác, sổ giữ nguyên tra lịch sử, bàn làm việc và digest lọc bỏ.
+ngày ấy, sau ngày ấy tố lại.
 Dự án mới: thêm dòng ở đây (mức B), dựng folder con trong các folder chức năng cần
 dùng, rồi mới mở việc đầu tiên.
 
@@ -3221,8 +3254,10 @@ C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
 2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
    thì khai các cửa)
 3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
-   là PHẦN MỀM thì hỏi thêm phạm vi tổ chức theo X0 C2 @DUAN.PHANMEM: repo,
-   thành phần, môi trường, nơi chạy thật, nơi giữ secret)
+   là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức theo X0 C2
+   @DUAN.PHANMEM: repo · thành phần · môi trường · nơi chạy thật · nơi giữ
+   secret · nhánh tự deploy · CSDL chạy thật · người phụ trách vận hành -
+   hỏi thiếu là 7d đỏ ngay sau khi người dùng trả lời đúng câu hỏi)
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:

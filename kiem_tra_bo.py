@@ -74,7 +74,7 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 190000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 200000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
@@ -1423,6 +1423,11 @@ def phep_fuzz(goc, phu_them=()):
 
     thu3("phat hanh lên host chạy thật mà ghi mức B", _ca_7g_phat_hanh, "7g.")
 
+    thu3("ô Mức gõ chữ c thường (lách mà comment 3g tự khai)",
+         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
+                                      "| A | mo viec V-DA1-001 |",
+                                      "| c | mo viec V-DA1-001 |"), "3g.")
+
     def _ca_7d_phutrach(k, i, so, G, sua):
         """Khai đủ BẢY trường hạ tầng + dữ liệu mà thiếu NGƯỜI PHỤ TRÁCH:
         7d phải đòi - không biết ai gật thì mức C là cái gật của không ai."""
@@ -1686,7 +1691,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 76 if _os_dem.name == "nt" else 75   # ca 9d chỉ có trên NTFS
+    _i3_mong = 77 if _os_dem.name == "nt" else 76   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 33, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 33,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
@@ -2574,6 +2579,62 @@ def main(goc):
         ca.append(("payload thao_tac rỗng bị từ chối",
                    any("thao_tac" in l for l in
                        _kv26.kiem_payload(dict(_pl_dung, thao_tac=[]), _khoa_pl))))
+        # LƯỚI MỀM 7g phải IN LƯU Ý: tính năng vòng 45-46 không ca nào ghim
+        # (giám khảo rubric 04, mutant m6 tắt nó mà bộ vẫn xanh). Dựng kho
+        # khai host, ghi mức B động từ LẠ + chữ prod, chụp stdout.
+        with tempfile.TemporaryDirectory() as _td7g:
+            _kho7, _idx7, _so7, _G7 = _kho_song(goc, _td7g)
+            _p7 = _idx7 / "X0_CAUHINH_FUZ.md"
+            _s7 = _p7.read_text(encoding="utf-8")
+            _m7 = re.search(r"^@DUAN\.PHANMEM.*$", _s7, re.M)
+            _ghi(_p7, _s7[:_m7.end()] + NL
+                 + "  DA1  He mem · repo github.com/cty/m · web · dev may"
+                   " doi, chạy thật mem.bacha.vn · secret o Vault ·"
+                 + _s7[_m7.end():])
+            _nk7 = _so7 / "NHATKY_2026Q3.md"
+            _ghi(_nk7, _nk7.read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| G-20260828-CUA1-16 | 2026-08-28 | CUA1.2200.st | B |"
+                 " push ban moi len prod | VIEC V-DA1-001 | khong | XONG |"
+                 " khong |" + NL)
+            import contextlib as _cl7, io as _io7
+            _buf7, _argv7 = _io7.StringIO(), sys.argv
+            try:
+                sys.argv = ["kvh", str(_idx7), str(_kho7)]
+                with _cl7.redirect_stdout(_buf7):
+                    try:
+                        _kv26.main(_idx7)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argv7
+            ca.append(("lưới mềm 7g in LƯU Ý với động từ lạ + chữ prod",
+                       "LƯU Ý  7g" in _buf7.getvalue()))
+        # neo BÀN GIAO phải NHẮC: người cũ trong @NHIP.BANGIAO còn việc đang
+        # mở gán tên - lời hứa "rà sang người mới" nay có máy (rubric 04)
+        with tempfile.TemporaryDirectory() as _tdbg:
+            _khob, _idxb, _sob, _Gb = _kho_song(goc, _tdbg)
+            _pb = _idxb / "X0_CAUHINH_FUZ.md"
+            _ghi(_pb, _pb.read_text(encoding="utf-8").replace(
+                '@NHIP.BANGIAO    <điền: tên người cũ, người mới, ngày bàn giao, hoặc "chưa có">',
+                "@NHIP.BANGIAO    Long, Trân, 2026-08-20", 1))
+            _ghi(_sob / "VIEC.md",
+                 (_sob / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| DA1 | V-DA1-002 | Van hanh he A | b | Long | |"
+                   " 2099-12-31 | ĐANG LÀM | | " + _Gb + " |" + NL)
+            import contextlib as _clb, io as _iob
+            _bufb, _argvb = _iob.StringIO(), sys.argv
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("neo bàn giao nhắc việc mở còn gán người cũ",
+                       "LƯU Ý  bàn giao" in _bufb.getvalue()))
+
         # BA QUYẾT ĐỊNH của rà 0d, 0g, 0i (hội đồng vòng 13: vùng rà soát từng
         # có mutation score 0% vì main() không hàm nào gọi được; ba hàm này nay
         # ở tầng module nên fixture kẹp thẳng)
@@ -3003,8 +3064,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 102,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 102: bớt ca là"
+             not hong and len(ca) == 104,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 104: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
@@ -3057,7 +3118,7 @@ def main(goc):
         # phần mềm cần nắm rõ phạm vi tổ chức để các vận hành liên quan
         # chính xác hơn"), nên nó phải do MÁY giữ chứ không do lời khai.
         ("README có mục riêng cho công ty phần mềm, kèm LÝ DO phải khai", "## Công ty có phần mềm" in docs["README.md"] and "KHAI RÕ PHẠM VI TỔ" in docs["README.md"] and "vận hành liên quan mới chính xác" in docs["README.md"]),
-        ("X9 hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm", "là PHẦN MỀM thì hỏi thêm phạm vi tổ chức" in docs["X9_CAIDAT.md"] and "nơi giữ secret" in docs["X9_CAIDAT.md"]),
+        ("X9 hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm", "là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức" in docs["X9_CAIDAT.md"] and "người phụ trách vận hành" in docs["X9_CAIDAT.md"]),
         ("X0 C2 khai đủ NĂM trường phạm vi tổ chức phần mềm", all(t in docs["X0_CAUHINH_TEMPLATE.md"] for t in ["@DUAN.PHANMEM", "repo <URL hay đường dẫn>", "thành phần chính", "môi trường", "nơi chạy thật", "nơi giữ secret"])),
         ("repo là nguồn sự thật của code, code KHÔNG chép vào kho", "Repo là NGUỒN SỰ THẬT" in docs["X0_CAUHINH_TEMPLATE.md"] and "code KHÔNG chép vào kho" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("X5 mục 1b có gate, bảng mức repo, luật SECRET và dữ liệu khách", "# 1b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi dự án thuộc X0 C2" in docs["X5_HESO_TEMPLATE.md"] and "SECRET" in docs["X5_HESO_TEMPLATE.md"] and "dữ liệu khách" in docs["X5_HESO_TEMPLATE.md"]),

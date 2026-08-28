@@ -90,7 +90,7 @@ CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17177 token
 CHAT không EMAIL ~18872 token
 CHAT có EMAIL (kèm X3E) ~22870 token
 CHAT nạp cả X9 và X4 ~23232 token
-(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
+(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4409 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
 

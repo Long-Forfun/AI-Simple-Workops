@@ -9,6 +9,39 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 79: rubric vòng chấm 04 - 93/100, vá nốt các khoản còn lại
+
+Giám khảo chấm bản vòng 46 (b3f8834): 93/100 (95 · 96 · 91 · 93). Lần đầu
+CẢ BA mục chạy-thật (cài được, vận hành tuần, thuế phiên) cùng tối đa, chín
+vá vòng 03 giữ trọn, 10/10 mutant seed 45 trong mẫu chết. Khoản trừ dồn vào
+hai vùng mới mở - và vòng 78 (sau ảnh chấm) đã vá sẵn phần lớn tầng CON
+NGƯỜI, giám khảo tự ghi nhận "working tree đang vá đúng hướng". Phần còn
+lại, vá trong vòng này:
+
+1. X9 CÂU 3 KHAI 5/8 TRƯỜNG: kênh cài đặt hỏi thiếu (thiếu nhánh tự deploy,
+   CSDL, phụ trách - ba trường vào schema sau khi X9 viết câu hỏi), nên
+   người dùng trả lời ĐÚNG câu hỏi xong vẫn ăn 7d đỏ. Kênh hỏi nay khớp đủ
+   TÁM trường; luật-grep phép 12 siết theo bản mới.
+
+2. NEO BÀN GIAO: @NHIP.BANGIAO tự hứa "rà một lượt việc đang mở và plan treo
+   sang người mới" mà không máy nào nhắc - người cũ nghỉ, việc trôi vô chủ.
+   Nay khai tên ở C9 mà VIEC còn việc ĐANG MỞ gán tên đó thì in LƯU Ý (chỉ
+   nhắc - việc ĐÚNG là của người cũ tới khi rà xong). Bug lượt đầu: regex
+   không neo đầu dòng nên vớ nhầm câu văn xuôi C6 nhắc "@NHIP.BANGIAO" -
+   ca đầu-ra bắt được trước khi lên bản.
+
+3. BA MUTANT NGOÀI MẪU: lưới mềm 7g (tính năng vòng 76) tắt được mà bộ vẫn
+   xanh - thêm ca đầu-ra "LƯU Ý 7g" theo khuôn chụp stdout của 13b; lách gõ
+   Mức "c" thường (comment 3g tự khai từ lâu) - ca I3 ghim; vế CSDL của 7d
+   đã được ca vòng 78 giết sẵn.
+
+4. HIỂU ĐƯỢC: xác câu cũ "án khác," (vá vòng 61 để sót) trong đoạn Đóng dự
+   án của X0 C2 - viết lại trọn đoạn, câu đứt biến mất.
+
+Tái đo: m6 <- 11, n6 <- 13, bàn giao <- 11 - 3/3 CHẾT. Fixture 104 ca.
+BẤT BIẾN I1 7, I2 33, I3 77(nt)/76. NHẬT KÝ RUBRIC: 95 · 96 · 91 · 93.
+BACKLOG: (e) sổ CSV (đang CẤM).
+
 ## Vòng 78: trường thứ tám - NGƯỜI PHỤ TRÁCH VẬN HÀNH (vế TỔ CHỨC)
 
 Phạm vi phần mềm sau vòng 77 phủ HẠ TẦNG (repo, môi trường, host, nhánh tự
