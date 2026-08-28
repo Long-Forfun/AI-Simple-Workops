@@ -56,6 +56,10 @@ BÁO ĐỘNG GIẢ do vòng 40 sinh, nay đóng:
    nên mỗi dòng lưu trữ ĐÚNG LUẬT đẻ một mã lệch không bao giờ dọn được, tích
    lũy từ ngày thứ 31. 3e cũng mù y hệt với NHATKY quý cũ. Nay cả hai đọc
    `_lich_su`, và X5 mục 5 nói rõ chuyển lịch sử không được làm mất dấu mã G.
+4b. 0g ở PHA vừa clone: hai giám khảo vòng 14 chốt NGƯỢC nhau (một đòi cảnh
+   báo ngay vì .git chắc chắn còn, một khen vì không đá người dùng ở bước 1
+   của README). Chỗ gặp: kho CHƯA cài thì in LƯU Ý (chưa có sổ nào để mất, và
+   bước cài của X9 sẽ xóa .git); kho ĐÃ cài mà còn .git mới là LỆCH.
 4. 8b suýt lặp lại lớp lỗi ngay khi vừa viết: bảng "bàn sạch" là dạng RÚT GỌN
    mà INSTRUCTION mục 2 khai tường minh, đòi đủ sáu bộ đếm ở đó là báo oan. Bắt
    được ở chính lượt tự kiểm trước khi commit.

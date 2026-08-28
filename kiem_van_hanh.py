@@ -1326,7 +1326,15 @@ def main(goc):
     # KHÔNG chốt theo chua_cai: kho vừa clone, X0 còn rev 0, là đúng khoảnh khắc
     # .git chắc chắn còn và cần cảnh báo nhất (hội đồng vòng 14)
     vung_git = tim_vung_git(goc)
-    if vung_git is not None:
+    if vung_git is not None and chua_cai:
+        # kho VỪA CLONE, chưa cài: chưa có sổ nào để mất, nên đây là LỜI NHẮC
+        # chứ không phải lệch - đá người dùng ở bước 1 của README là báo động
+        # giả. Cài xong (X9 mục 1 xóa .git) thì im; còn .git sau khi cài mới
+        # là LỆCH thật. Hai giám khảo vòng 14 chốt ngược nhau, đây là chỗ gặp.
+        print(f"  LƯU Ý  0g: còn thư mục ẩn .git ở {vung_git}. Chưa hại gì vì kho"
+              f" chưa có sổ; bước cài đặt của X9 mục 1 sẽ xóa nó. Sau khi cài mà"
+              f" còn thì thành LỆCH: git pull hay git stash sẽ nuốt dòng sổ")
+    elif vung_git is not None:
         bao("0g. kho đang chạy không nằm trong bản làm việc git", False,
             f"thấy thư mục ẩn tên .git ở {vung_git} (thư mục này, hay THƯ MỤC CHA"
             f" của kho). Sổ sách của công ty đang nằm trong vùng git quản. Nói"
