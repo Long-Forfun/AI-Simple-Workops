@@ -118,18 +118,22 @@ CHỨC của từng phần mềm ngay từ đầu - AI hỏi ở phiên cài đ�
 3), giá trị nằm ở X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
 
 ```
-repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở đâu)
-· nơi chạy thật · nơi giữ secret
+HẠ TẦNG   repo · thành phần chính · môi trường (dev, staging, prod)
+          · nơi chạy thật (host, kể cả máy chủ nội bộ) · nơi giữ secret
+          · nhánh tự deploy (merge vào là ra production)
+DỮ LIỆU   CSDL/kho dữ liệu chạy thật (tên đích danh)
+CON NGƯỜI người phụ trách vận hành - ai GẬT các lượt rủi ro
 ```
 
-Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch và nêu đích danh trường còn
-thiếu, và báo cả khi công ty làm phần mềm mà chưa khai dòng nào. Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
-của code (không chép vào kho), secret không vào kho hay sổ, và mọi thao
-tác chạm môi trường CHẠY THẬT đều là việc rủi ro cần bạn duyệt - việc trên
-dev, staging là việc nhẹ AI tự làm. Chi tiết mức duyệt từng thao tác: X5
-mục 1b; phát hành bản build có bảng kiểm riêng (X2); dump, log mang dữ
-liệu khách có phạm vi riêng. Mục nào chưa rõ cứ trả lời "chưa rõ, hỏi
-đội kỹ thuật".
+Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch nêu đích danh trường thiếu,
+báo cả khi làm phần mềm mà chưa khai dòng nào. Khai đủ thì
+các vận hành liên quan mới chính xác: repo là nguồn sự thật của code
+(không chép vào kho), secret không vào kho, sổ; thao tác chạm CHẠY THẬT (host,
+nhánh tự deploy, CSDL đã khai) là việc rủi ro cần đúng NGƯỜI PHỤ TRÁCH
+duyệt - việc trên dev, staging là việc nhẹ AI tự làm; người phụ trách
+nghỉ thì bàn giao có máy nhắc. Chi tiết mức duyệt: X5 mục 1b; phát hành
+bản build: X2; dump, log mang dữ liệu khách có phạm vi riêng. Mục nào
+chưa rõ cứ trả lời "chưa rõ, hỏi đội kỹ thuật".
 
 ## Trong repo có gì
 
