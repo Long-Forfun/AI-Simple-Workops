@@ -73,7 +73,7 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 165000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 180000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
@@ -502,9 +502,29 @@ def phep_fuzz(goc, phu_them=()):
     def _sua(f, cu, moi):
         _ghi(f, f.read_text(encoding="utf-8").replace(cu, moi))
 
+    def _san_tam():
+        """Sân tạm DỌN ĐƯỢC cả đường dẫn quá 260 ký tự.
+
+        TemporaryDirectory dọn bằng rmtree trần nên gãy WinError 145 ở ca thư
+        mục sâu quá MAX_PATH - đúng ca mà phép 9 (gốc dài) cần tới."""
+        import contextlib as _cl, os as _os, shutil as _sh, tempfile as _tf
+
+        @_cl.contextmanager
+        def _ct():
+            _td = _tf.mkdtemp()
+            try:
+                yield _td
+            finally:
+                _p = _td
+                if _os.name == "nt" and not _td.startswith("\\\\"):
+                    _p = "\\\\?\\" + _os.path.abspath(_td)
+                _sh.rmtree(_p, ignore_errors=True)
+
+        return _ct()
+
     def thu(ten, sua, mat_dau):
         _dem["I1" if mat_dau else "I2"] += 1
-        with tempfile.TemporaryDirectory() as td:
+        with _san_tam() as td:
             kho, idx, so, G = _kho_song(goc, td)
             if _ra_soat(idx, kho):
                 hong.append(ten + ": KHO LÀNH đã lệch sẵn, ca không tin được")
@@ -634,6 +654,182 @@ def phep_fuzz(goc, phu_them=()):
                " | |" + NL + "~~~" + NL)
 
     thu("ví dụ bảng bọc trong ~~~ (không được kêu)", _ca_tilde, False)
+
+    def _ca_dong_info(k, i, so, G, sua):
+        """ĐÚNG LUẬT: trong khối ``` có một dòng ```bash - CommonMark nói dòng
+        ĐÓNG không được mang info string, nên nó là RUỘT chứ không phải dòng
+        đóng. Máy nào cho nó đóng sớm thì ruột ví dụ lòi ra thành dòng thật."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "```" + NL + "```bash" + NL
+             + "| DA1 | V-DA1-001 | Viec mau, dung chep | b | ai | |"
+               " 2020-01-01 | ĐANG LÀM | | |" + NL + "```" + NL)
+
+    thu("dòng ```bash nằm trong khối ``` (không được kêu)", _ca_dong_info,
+        False)
+
+    def _ca_mo_nhay(k, i, so, G, sua):
+        """ĐÚNG LUẬT: dòng văn xuôi mở đầu bằng ```ma`lenh``` - info string
+        của fence nháy KHÔNG được chứa nháy (CommonMark 4.5), nên dòng này là
+        chữ thường. Máy nào coi nó là dòng MỞ thì khối ví dụ ngay dưới bị lộn
+        ngược: dấu mở thành dấu đóng và ruột ví dụ lộ ra."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "```ma`lenh``` la cach go lenh trong dong" + NL * 2
+             + "```" + NL
+             + "| DA1 | V-DA1-001 | Viec mau, dung chep | b | ai | |"
+               " 2020-01-01 | ĐANG LÀM | | |" + NL + "```" + NL)
+
+    thu("dòng chữ ```ma`lenh``` đứng trước khối ví dụ (không được kêu)",
+        _ca_mo_nhay, False)
+
+    def _ca_duongdan_truoc(k, i, so, G, sua):
+        """ĐÚNG LUẬT: ô Ở đâu trỏ thư mục kết thúc `\\` gõ sát dấu ngăn (ứng
+        viên TRƯỚC), ô Căn cứ mang `\\|` thoát THẬT (ứng viên SAU). Chọn đúng
+        phải nhờ điểm ưu-tiên-đường-dẫn, vì hoà thì lấy phía sau là SAI."""
+        (k / "10_HoSo").mkdir(exist_ok=True)
+        (k / "10_HoSo" / "NhanSu").mkdir(exist_ok=True)
+        _ghi(k / "10_HoSo" / "NhanSu" / "b.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-082 | Bien ban hop | v01 | 2026-08-20 |"
+               " Kho 10_HoSo/NhanSu\\|HIỆN HÀNH | NHÁP | 2026-08-20 |"
+               " qs \\| mail | noi bo | | | | " + G + " |" + NL)
+
+    thu("đường dẫn sát dấu TRƯỚC, `\\|` chữ SAU (không được kêu)",
+        _ca_duongdan_truoc, False)
+
+    def _ca_hoa_phia_sau(k, i, so, G, sua):
+        """ĐÚNG LUẬT: ô Tài liệu mang `\\|` thoát THẬT mà chữ trước nó cũng
+        trông như đường dẫn (Mau C:\\Bieu), ô Ở đâu trỏ thư mục sát dấu ngăn.
+        Hai ứng viên CÙNG điểm - hoà phải lấy phía SAU mới ra ô Ở đâu đúng."""
+        (k / "10_HoSo").mkdir(exist_ok=True)
+        (k / "10_HoSo" / "NhanSu").mkdir(exist_ok=True)
+        _ghi(k / "10_HoSo" / "NhanSu" / "c.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-083 | Mau C:\\Bieu \\| loi cu | v01 | 2026-08-20 |"
+               " Kho 10_HoSo/NhanSu\\|HIỆN HÀNH | NHÁP | 2026-08-20 | qs |"
+               " noi bo | | | | " + G + " |" + NL)
+
+    thu("hai ứng viên cùng điểm, ứng viên đúng ở SAU (không được kêu)",
+        _ca_hoa_phia_sau, False)
+
+    def _ca_bang_long_muc(k, i, so, G, sua):
+        """Bảng lồng trong MỘT MỤC danh sách: Markdown vẫn render ra bảng, mà
+        thụt bốn dấu cách nên dong_bang và mọi bộ đếm KHÔNG thấy. Giám khảo
+        vòng 23 đòi MIỄN ca này; tôi giữ 5b kêu, vì miễn là để một dòng sổ
+        THẬT đặt ở đó mất im lặng. Chỉ lời khuyên được sửa."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "- Mức A" + NL
+             + "  - ví dụ bảng con:" + NL * 2
+             + "    | Mã | Việc |" + NL
+             + "    |---|---|" + NL
+             + "    | V-900 | x |" + NL)
+
+    thu3("bảng lồng trong mục danh sách (vẫn tàng hình với bộ đếm)",
+         _ca_bang_long_muc, "5b.")
+
+    def _ca_nga_trong_nhay(k, i, so, G, sua):
+        """ĐÚNG LUẬT: khối ``` có RUỘT là một dòng ~~~ (ghi chú dạy nhau cách
+        mở khối bằng dấu ngã). ngoai_fence xử đúng, nhưng 5e đếm ký tự nên
+        thấy dấu ~ LẺ và báo oan - hai bộ đọc fence bằng hai luật khác nhau."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "```" + NL + "~~~" + NL + "```" + NL)
+
+    thu("khối ``` có ruột là một dòng ~~~ (không được kêu)", _ca_nga_trong_nhay,
+        False)
+
+    def _ca_bon_nhay(k, i, so, G, sua):
+        """ĐÚNG LUẬT: CommonMark 4.5 đòi fence ĐÓNG dài KHÔNG KÉM fence MỞ, nên
+        muốn dán ví dụ có chứa ``` thì bắt buộc bọc ngoài bằng bốn nháy. So
+        mỗi KÝ TỰ mà quên ĐỘ DÀI thì dòng ``` bên trong đóng sớm, ruột ví dụ
+        lòi ra thành dòng bảng thật và ăn lệch mã trùng."""
+        _dong = ("| DA1 | V-DA1-001 | Viec mau, dung chep | b | ai | |"
+                 " 2020-01-01 | ĐANG LÀM | | |")
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "````" + NL + "```" + NL + _dong + NL + "```" + NL
+             + "````" + NL)
+
+    thu("ví dụ bọc bốn nháy, ruột có ``` (không được kêu)", _ca_bon_nhay,
+        False)
+
+    def _ca_thoat_va_thumuc(k, i, so, G, sua):
+        """ĐÚNG LUẬT HAI LẦN trong MỘT dòng: ô Tài liệu mang dấu | viết theo
+        GFM là `\|`, ô Ở đâu trỏ BỘ HỒ SƠ nên kết thúc bằng `\` (X0 C1) và gõ
+        SÁT dấu ngăn. Tách trọn GFM hụt một ô, tách trọn THÔ dôi một ô - lối
+        được-ăn-cả-ngã-về-không của vòng 38 bó tay (hội đồng vòng 23)."""
+        (k / "10_HoSo").mkdir(exist_ok=True)
+        (k / "10_HoSo" / "NhanSu").mkdir(exist_ok=True)
+        _ghi(k / "10_HoSo" / "NhanSu" / "a.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-081 | Bao cao Q1 \\| Q2 | v01 | 2026-08-20 |"
+               " Kho 10_HoSo/NhanSu\\|HIỆN HÀNH | NHÁP | 2026-08-20 | qs |"
+               " noi bo | | | | " + G + " |" + NL)
+
+    thu("một dòng vừa có `\\|` thoát vừa trỏ thư mục (không được kêu)",
+        _ca_thoat_va_thumuc, False)
+
+    def _ca_thoat_that(k, i, so, G, sua):
+        """ĐÚNG LUẬT: ô mang dấu | viết theo GFM là `\|` - cách DUY NHẤT hợp lệ.
+        Tách THÔ thì dòng dôi một ô và phép 5 tố oan, nên lối GFM phải còn."""
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-078 | Bao gia A \\| B | v01 | 2026-08-20 |"
+               " Kho 03_Thuong_mai/bg.md | HIỆN HÀNH | NHÁP | 2026-08-20 | qs |"
+               " noi bo | | | | " + G + " |" + NL)
+        (k / "03_Thuong_mai").mkdir(exist_ok=True)
+        _ghi(k / "03_Thuong_mai" / "bg.md", "x")
+
+    thu("ô mang dấu | thoát theo GFM (không được kêu)", _ca_thoat_that, False)
+
+    def _ca_fence_long(k, i, so, G, sua):
+        """ĐÚNG LUẬT: ví dụ bọc trong ~~~ vì bên trong CÓ dòng ```. Đóng khối
+        bằng ký tự bất kỳ thì ``` cắt sớm, phần đuôi lòi ra thành dòng bảng."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "~~~" + NL + "```" + NL
+             + "| VD | V-998 | Viec vi du | b | ai | | 2020-01-01 |"
+               " ĐANG LÀM | | |" + NL
+             + "```" + NL + "~~~" + NL)
+
+    thu("ví dụ ~~~ có ``` lồng bên trong (không được kêu)", _ca_fence_long,
+        False)
+
+    def _ca_fence_le_doi(k, i, so, G, sua):
+        """MỘT dấu ``` và MỘT dấu ~~~ : đếm CHUNG thì thành 2 - chẵn - và cả
+        phần đuôi sổ tàng hình mà 5e im. Đếm RIÊNG theo ký tự mới thấy lẻ."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "```" + NL + "~~~" + NL)
+
+    thu3("một dấu ``` và một dấu ~~~ (mỗi loại đều lẻ)", _ca_fence_le_doi,
+         "5e.")
+
+    def _ca_duong_dai(k, i, so, G, sua):
+        """Đường dẫn vượt 260 ký tự: Windows đòi tiền tố đường dẫn dài, thiếu
+        nó thì phép 9 tuyên file ĐÃ MẤT trong khi tầng quan sát THẤY nó - hai
+        lời khai ngược nhau trong MỘT lượt chạy (hội đồng vòng 22)."""
+        import os as _os
+        sau = "d" * 60
+        rel = "/".join([sau] * 4)
+        goc = k
+        if _os.name == "nt" and not str(k).startswith("\\\\"):
+            goc = Path("\\\\?\\" + str(Path(k).resolve()))
+        (goc / rel).mkdir(parents=True, exist_ok=True)
+        (goc / rel / "sau.md").write_text("x", encoding="utf-8", newline=NL)
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-079 | Ho so sau | v01 | 2026-08-20 | Kho " + rel
+             + "/sau.md | HIỆN HÀNH | NHÁP | 2026-08-20 | qs | noi bo | | | | "
+             + G + " |" + NL)
+
+    thu("file thật ở đường dẫn quá 260 ký tự (không được kêu)", _ca_duong_dai,
+        False)
 
     def _ca_thumuc_sat(k, i, so, G, sua):
         """ĐÚNG LUẬT: dòng trỏ BỘ HỒ SƠ kết thúc bằng \\ (X0 C1 BẮT BUỘC), bảng
@@ -1112,9 +1308,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 16, 56):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 16,"
-                    f" I3 56 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 26, 58):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 26,"
+                    f" I3 58 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của

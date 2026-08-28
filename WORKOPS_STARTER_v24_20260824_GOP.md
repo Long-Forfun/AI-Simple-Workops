@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 69 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 70 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -250,9 +250,54 @@ Các vòng xếp mới nhất ở trên; vòng 9 (v10) từng qua thêm một l�
 nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 
 
-Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
+Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 70: một máy fence duy nhất, và tach_o mở dần từng ngăn
+
+Giám khảo báo-oan của hội đồng vòng 23 chấm 3/10 - thấp là ĐÚNG, vì đề bài
+chĩa thẳng vào ba bản vá mới nhất của vòng 69 và cả bốn phát hiện đều tái hiện
+được bằng ca chạy thật trước khi vá:
+
+1. 5e đếm KÝ TỰ fence còn ngoai_fence chạy máy trạng thái - hai bộ đọc một thứ
+   bằng hai luật, và chúng lệch thật: khối ``` có ruột là một dòng ~~~ bị 5e tố
+   "thiếu dòng đóng", trong khi lời tố lại chính là lời 5b khuyên người dùng
+   làm. Nghe lời máy sửa thì dòng hỏng thật phía sau tàng hình.
+
+2. ngoai_fence thiếu ba luật CommonMark 4.5: fence ĐÓNG phải dài KHÔNG KÉM
+   fence mở, dòng đóng không được mang info string, info string của fence nháy
+   không được chứa nháy. Thiếu vế độ dài thì khối BỐN NHÁY - cách duy nhất hợp
+   chuẩn để dán ví dụ chứa ``` - bị dòng ``` bên trong cắt sớm, ruột ví dụ lòi
+   ra thành dòng thật và ăn lệch "mã trùng" chỉ thẳng vào dòng sổ THẬT.
+
+   Vá gốc cho cả 1 lẫn 2: MỘT máy trạng thái `_quet_fence` theo CommonMark cho
+   cả ngoai_fence LẪN 5e. Từ nay không còn hai bộ đọc fence.
+
+3. tach_o vòng 69 được-ăn-cả-ngã-về-không: dòng vừa mang `\|` thoát vừa trỏ
+   thư mục kết thúc `\` thì tách trọn GFM hụt một ô, tách trọn THÔ dôi một ô.
+   Nay mở DẦN từng ngăn nghi ngờ tới khi đủ cột; chọn tổ hợp thì ưu tiên ngăn
+   có ô đứng trước TRÔNG NHƯ ĐƯỜNG DẪN (chỉ dòng trỏ BỘ HỒ SƠ mới được kết
+   thúc bằng `\` theo X0 C1), hoà thì lấy phía sau; chặn nổ tổ hợp ở 12 ngăn.
+
+4. Phát hiện thứ tư (5b tố bảng lồng trong mục danh sách) KHÔNG nhận toàn
+   phần: giám khảo đề nghị miễn, nhưng miễn là để một dòng sổ THẬT đặt ở đó
+   mất im lặng - đúng cái giá vòng 66 đã trả. Giữ 5b kêu, chỉ sửa LỜI KHUYÊN:
+   bọc fence đứng TRƯỚC, "kéo về sát lề" chỉ dành cho dòng sổ thật, vì kéo một
+   dòng ví dụ ra lề là nạp mã ma vào sổ. Ca I3 ghim quyết định này.
+
+ĐO ĐỘT BIẾN vùng mã mới: lượt đầu 6/10 - bốn mutant sống là bốn luật
+CommonMark chưa có ca ghim (đóng-mang-info, mở-nhay-trong-info, điểm ưu tiên
+đường dẫn, hoà-lấy-phía-sau). Thêm bốn ca I2 nhắm từng con: 10/10, không con
+nào sống. Bài học đứng vững từ vòng 69: mỗi nhánh logic phải có ca RIÊNG chứng
+minh nó cần tồn tại, không thì nó chỉ là lời hứa.
+
+Trần kiem_tra_bo.py nâng 165000 -> 180000: file dev ngoài mọi route, không
+phải thuế phiên; cái phình là 12 ca bất biến mới. Trần ĐẦU RA giữ nguyên.
+
+BẤT BIẾN I1 7, I2 26, I3 58. BACKLOG: ngày không ISO làm câm bộ đếm · junction
+99_Goc · đường dẫn lệch hoa thường · 10d khớp 7 chuỗi cứng · (j) vòng đời
+_inbox · (a) hash nội dung QUYETDINH · (c) khuôn bản sao · (e) sổ CSV.
 
 ## Vòng 69: bốn hồi quy do CHÍNH BẢN VÁ CỦA TÔI đẻ ra
 
@@ -1321,574 +1366,6 @@ và ba trong bốn nằm trong bản vá của chính ba vòng liền trước. 
 đi từ TRẠNG THÁI (bộ fuzz) phát hiện hai lớp lỗi khác nhau và KHÔNG thay nhau
 được. Bộ đã có lưới thứ nhất; thứ còn thiếu là một danh mục TRẠNG THÁI HỎNG độc
 lập với danh sách phép hiện hữu. Đó là bản vá đáng giá nhất còn lại.
-
-## Vòng 45: phạm vi tổ chức phần mềm thành thứ MÁY GIỮ
-
-Yêu cầu nghiệp vụ gốc của người dùng có hai vế: hội đồng chấm tới 99/100, VÀ
-"công ty có dự án phần mềm cần nắm rõ phạm vi tổ chức các phần mềm để các vận
-hành liên quan nó chính xác hơn". Vế thứ hai đã có mặt từ vòng 24-37 và trải
-đủ năm chặng - README mục riêng, X9 mục 1 câu 3, X0 C2 @DUAN.PHANMEM năm
-trường, X5 mục 1b bảng mức repo, X2 phát hành phần mềm - nhưng RÀ LẠI vòng này
-phát hiện cả chuỗi đó chỉ được giữ bằng MỘT luật ghim yếu. Nghĩa là nó tồn tại
-nhờ lời khai, không nhờ máy. Đúng thứ mà chính bộ này cấm.
-
-1. SÁU LUẬT GHIM giữ trọn chuỗi (phép 12 lên 73 luật): README phải có mục
-   riêng KÈM LÝ DO ("khai đủ thì các vận hành liên quan mới chính xác") · X9
-   phải hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm, kèm nơi
-   giữ secret · X0 C2 phải khai đủ NĂM trường · phải giữ luật "repo là NGUỒN
-   SỰ THẬT của code, code KHÔNG chép vào kho" · X5 mục 1b phải còn gate, bảng
-   mức repo, luật SECRET và dữ liệu khách · X2 phải còn bảng kiểm phát hành
-   phần mềm. Gỡ bất kỳ mắt xích nào là bộ FAIL, không đóng gói được.
-
-2. PHÉP 7d CƯỠNG CHẾ NỘI DUNG, không chỉ sự có mặt của chữ. Dự án phần mềm
-   khai thiếu trường nào thì rà nêu ĐÍCH DANH trường đó, kèm hậu quả vận hành
-   cụ thể: không rõ repo thì code có thể bị chép vào kho; không rõ đâu là môi
-   trường CHẠY THẬT thì deploy đáng lẽ mức C bị hạ nhầm xuống A theo X5 mục
-   1b; không rõ nơi giữ secret thì secret rơi vào sổ hay _INBOX. Kèm 7d2: dòng
-   TAILIEU dùng dạng "Repo" mà công ty chưa khai phần mềm nào là lệch.
-   Đây là chỗ vế thứ hai của yêu cầu chuyển từ TÀI LIỆU sang VẬN HÀNH: trước
-   đây khai thiếu vẫn chạy, nay khai thiếu là rà đỏ.
-
-3. NHẬN CẢ BẢN CÓ DẤU LẪN KHÔNG DẤU. Bàn thử bắt được bản vá đầu tiên của
-   chính vòng này báo oan một công ty khai ĐỦ nhưng gõ "chay that" thay vì
-   "chạy thật" - đúng lớp lỗi phạt-người-làm-đúng, lần này bị chặn TRƯỚC khi
-   commit thay vì sau ba vòng. Nay mọi khuôn nhận cả hai kiểu gõ.
-
-4. Ca I3 cho 7d vào phép 13 trong CÙNG lượt vá, đúng quy tắc vòng 44 vừa dựng
-   thành máy. Phép 14b làm đúng việc của nó hai lần trong vòng này: báo 7d
-   chưa có ca, rồi báo ca đầu tiên tôi viết KHÔNG kích hoạt được phép (khối
-   tiếp nối nuốt nhầm dòng định nghĩa cú pháp nên đủ từ khóa oan).
-
-Trạng thái: 24 phép của kiem_tra_bo, 38 phép của kiem_van_hanh (vòng 47 đếm lại: dòng này từng khai 21 và 37, SAI), 91 fixture, 73
-luật ghim, phép 13 với 7 ca I1 + 4 ca I2 + 13 ca I3, phép 14 và 14b điểm danh
-hai chiều.
-
-## Vòng 44: quy tắc tự viết ba vòng liền, nay thành MÁY
-
-Điểm THÔNG MINH vòng 15b: 7,8/10 (vòng 13: 9,0). Tất định ĐẠT tuyệt đối - ép
-qua PYTHONHASHSEED, bốn locale kể cả tr_TR (bẫy chữ I), đường dẫn có dấu,
-junction: mọi lượt chạy giống nhau từng byte. Điểm tụt vì vòng 43 mở một bề
-mặt lời khai rất lớn (phép 13, 14, "lưới của lưới") mà bề mặt đó yếu hơn lời
-khai, cộng hai defect vận hành mới.
-
-HAI DEFECT NẶNG, đều do CHÍNH bản vá vòng 43 gây ra:
-1. 3c mù TRỌN DÒNG. Vòng 43 thêm `if "đã xóa theo Q-" in cham: continue` để
-   thôi phạt người thi hành lệnh xóa pháp lý - nhưng X5 mục 7b chỉ dặn GỠ TÊN
-   SỔ đó khỏi ô, nghĩa là phép đã tự loại đúng sổ bị xóa rồi, cái continue vừa
-   thừa vừa MỞ LẠI ĐÚNG LỖ VÒNG 41 ĐÃ ĐÓNG: ghi đè ô "Ghi lần" của sổ CÒN LẠI
-   đi im hoàn toàn, và chỉ cần gõ chuỗi đó vào ô là được, mã Q- không cần có
-   thật. Nay chỉ bỏ qua khi ô thay TRỌN, và mã Q- phải có ở QUYETDINH.
-2. 00_Index chỉ lọc ở TẦNG ĐẦU. Một bản sao lưu 00_Index lồng trong kho - thao
-   tác sao lưu bình thường - đẩy trọn 14 file LUẬT của chính bộ thành ứng viên
-   vào TAILIEU; qua junction thì thành 93 và đệ quy tới khi MAX_PATH cắt, tức
-   chỉ giới hạn Windows chặn chứ không phải thiết kế. Nay lọc MỌI TẦNG như
-   "_so" đã làm, và không đi xuyên junction hay symlink.
-
-PHÉP 14b - quy tắc thành máy. Ba vòng liền bộ tự viết một quy tắc rồi không
-thi hành ngay trong lượt đó: vòng 40 "mỗi bản vá phải đi kèm lưới của chính
-nó", vòng 41 "phép kiểm mới nguy hiểm ngang một luật mới", vòng 43 "phép mới
-phải kèm một ca I1 và một ca I2 của chính nó". Hậu quả đo được: 27/36 phép của
-kiem_van_hanh xóa trọn được mà bộ vẫn in "sạch, đóng gói được" - gồm 8b mà mục
-Vòng 43 nêu đích danh là đã vá, và 0k, 7c, 8c, 3d do CHÍNH vòng 43 đẻ ra.
-Nay kiem_van_hanh mang DANH BẠ PHEP_VH (dữ liệu, không phải nhãn) và phép 14b
-đối chiếu danh bạ đó với tập phép mà phép 13 THẬT SỰ ép được trạng thái vi
-phạm. Phép mới không kèm ca của chính nó thì 14b đỏ NGAY LƯỢT VÁ ĐÓ. Nó chứng
-minh giá trị ngay lần chạy đầu: nêu đích danh 3d chưa có ca nào canh, và ca
-đó đã được thêm trong cùng lượt. MIEN_TRU còn 20 phép, phải rỗng dần - đó là
-danh sách nợ công khai, không còn là vùng mù im lặng.
-
-LƯỚI CỦA LƯỚI, khâu tiếp: tắt vế I2 hay I3 của phép 13 trước đây vẫn "sạch"
-(CA MỒI chỉ canh vế I1) - nay SỐ CA là khẳng định (7/4/12) nên tắt vế nào cũng
-đỏ · hong.pop() mù từng nuốt được thông điệp "KHO LÀNH đã lệch sẵn", nay có
-điều kiện · thu3 nay cũng kiểm kho lành trước khi ép, hết ca đúng-một-cách-rỗng
-· "68 luật" vẫn là NHÃN và đếm thật là 67, nay là khẳng định · phép 13c đo
-trần đầu ra trên kho ĐANG LỆCH (kho toàn PASS là ca dễ nhất, mà RA_SOAT chỉ
-chạy khi kho CÓ vấn đề: đo được 3.832 ký tự, vượt trần cũ 60 phần trăm).
-
-BA CA CỦA PHÉP 13 SAI BẢN CHẤT, nay sửa: hai ca I1 không hề mất dấu mã G (cắt
-byte cuối dòng trong khi mã nằm ô đầu - thực chất là hỏng schema do phép 5
-bắt; và bản conflicted chỉ THÊM file, không xóa gì) nay đổi tên cho đúng bản
-chất; một ca I2 khai "chuyển việc ĐÃ XONG sang _lich_su" mà dữ liệu là ĐANG
-LÀM - lưới đang KHẲNG ĐỊNH rằng đem việc dở dang vào lịch sử là đúng luật, nay
-sửa thành XONG.
-
-Khâu nhỏ: 8c đọc ĐÚNG dòng watermark (một dòng văn xuôi mang chuỗi "CUA2=" là
-đủ đánh lừa nó) · tên phép 2c khai đúng dung sai thật (0 cho dòng CỘNG, 2%
-trên 5.000, 10% còn lại) thay vì "10%".
-
-BACKLOG: (a) hash QUYETDINH · (b) phép 5 đối chiếu số cột với X5 mục 4 · (c)
-khuôn bản sao (đã hạ mức) · (d) tách bản LUẬT thuần khỏi bản gộp, ĐƯỜNG GĂNG ·
-(e) chuyển sổ sang CSV/SQLite còn CẤM chứ chưa có bản rà · (f) MIEN_TRU của
-phép 14b còn 20 phép chưa ai canh · (g) loc_ban_chinh tất định nhờ sorted mà
-không phép nào ghim - đổi hệ file thì im lặng đổi hành vi · (h) phép 7c chưa
-soi PLANNING và DUKIEN, phép 9b bỏ qua hai trần script.
-
-## Vòng 43: hội đồng vòng 15 - lưới phải có lưới của chính nó
-
-Điểm vòng 15: TOKEN 9,4 (13: 9,3) · ĐƠN GIẢN 8,9 (8,8) · KHÔNG MISS 8,5 (14:
-8,0) · KHÔNG SAI 7,1 (6,8) · VẬN HÀNH 6,5 (7,0). Năm giám khảo XÁC NHẬN mọi
-phát hiện cũ đã đóng, không cái nào tái phát. Đo được: mutation score vùng cũ
-52 lên 74 phần trăm; tỉ lệ trạng thái mất dấu đi im 14,2 xuống 4,1 phần trăm
-(358 ca đột biến, 21 họ); 14/14 số route khớp tuyệt đối; pipeline EMAIL 0/14 im.
-
-BA DEFECT NẶNG, đều là lớp lỗi PHẠT NGƯỜI LÀM ĐÚNG, lần thứ ba và thứ tư:
-1. 3f phạt MỌI plan mức C đang mở (VẬN HÀNH). Ô "Mã ghi" trống ở PLANNING là
-   THIẾT KẾ - X5 mục 2 cho bốn trạng thái chưa chốt, X5 mục 3 đặt điểm ghi mức
-   C ở "khi chốt" - và phép 4 cách đó mười dòng chỉ đòi mã G cho plan ĐÃ GHI.
-   Phép do chính vòng 41 viết đã đỏ lưới trên mọi việc rủi ro suốt hai vòng.
-2. 3d mù _so\_lich_su\ (KHÔNG MISS). X5 mục 5 BẮT chuyển plan ĐÃ GHI quá 30
-   ngày vào đó; làm đúng thì 3d lệch vĩnh viễn. Đúng lớp lỗi vòng 41 vừa đóng
-   cho 3c và 3e, tái phát lần thứ tư ở phép thứ ba cùng họ.
-3. Làm ĐÚNG X5 mục 7b đẻ 3c lệch vĩnh viễn (VẬN HÀNH): lệnh xóa pháp lý gỡ
-   dòng một sổ, mà lối thoát 7b lại gate ở "mất dấu ở MỌI sổ" nên không dùng
-   được. Nay 7b cấp lối cho ca mất dấu MỘT sổ, và 3c nhận dấu "đã xóa theo Q-".
-
-LƯỚI PHẢI CÓ LƯỚI CỦA CHÍNH NÓ (KHÔNG SAI, phát hiện sâu nhất chiến dịch):
-xóa trọn phép 13 - sản phẩm đầu bảng của vòng 42 - mà bộ vẫn in "sạch, đóng
-gói được", dòng của nó chỉ lặng lẽ biến mất. Cùng lớp: xóa 3f, 7b, 8b, 1a khỏi
-kiem_van_hanh cũng "sạch"; "88 ca" và "67 luật" là NHÃN chứ không phải khẳng
-định; và vế I2 của phép 13 đúng một cách VÒNG TRÒN vì kho lành dựng C12 bằng
-CHÍNH hàm mà rà 0i sẽ chấm - nên con bug NẶNG của vòng 40 tái nhập được mà
-phép 13 im. Vá: phép 14 ĐIỂM DANH (thiếu phép nào là lệch) · bất biến I3 (mỗi
-phép phải kêu ĐÚNG TÊN mình trên một trạng thái mẫu) · CA MỒI tự tố cáo nếu vế
-I1 bị tắt · số ca và số luật thành khẳng định · fixture ghim trên CHÍNH
-template, và kho lành dựng C12 bằng bản quét ĐỘC LẬP.
-
-NEO NGOÀI _so (KHÔNG MISS, kịch bản thảm họa chưa ai nghĩ tới): mọi nhân chứng
-- NHATKY, sáu sổ, hai view - đều nằm TRONG _so, nên một lần khôi phục nhầm hay
-rollback đám mây TRỌN thư mục đó xóa sạch bằng chứng cùng lúc: kho đã ghi 500
-lượt trông y hệt kho vừa cài và máy in "hệ sạch". Nay X5 mục 3 bước 6 nối mã G
-vào 00_Index\_moc_ghi.txt (ngoài _so), và phép 0k lấy nó làm nhân chứng cuối.
-
-PHÉP MỚI: 0k (neo ngoài _so) · 7c (liên kết trỏ mã không tồn tại - X4 dòng 12
-hứa máy dò từ lâu mà máy chưa cài) · 8c (bảng khai lane watermark cho MỌI cửa;
-lane rụng thì cửa đó mất mốc và lượt sau cấp lại mã đã dùng) · 9b (bảng trần
-khớp NGAN_SACH) · 13b (trần ĐẦU RA của kiem_van_hanh - bảng này DÁN VÀO phiên
-RA_SOAT nên là context thật, đã phình 16,9 phần trăm mà không ai giữ) · 14
-(điểm danh). Mở rộng: 3e soi cả X0_INDEX · 0j soi xuống _so một tầng · 7b đọc
-thêm PLANNING, ô Phiên và dòng watermark · 8b đòi nhãn watermark · muc_con_trong
-thôi ép tham số của profile CHƯA BẬT vào C12 (8/34 mục với công ty LITE).
-
-THÔNG ĐIỆP THÔI NÓI TIẾNG MÁY (ĐƠN GIẢN): hết phun cú pháp Python vào mắt
-người dùng; "version history" nay có lối đi được cho kho Ổ MÁY ĐƠN - cấu hình
-README khai là được hỗ trợ mà với nó version history KHÔNG TỒN TẠI, nên chỉ
-dẫn cũ là bất khả thi; 3f thôi gợi ý "gỡ dòng đó", chính là thao tác nó sinh ra
-để chặn; lệnh cho AI tách khỏi câu người dùng đọc bằng nhãn [AI: ...]; X4 cấm
-dán nguyên đầu ra của máy cho người dùng.
-
-TOKEN: 2c bắt MỌI lần xuất hiện của nhãn (một số stale nấp ở dòng thứ hai
-cùng nhãn) và dung sai 0 cho dòng thuế thường trực · bảng thuế nay tự cân ·
-cắt bỏ X9 và X4 khai đúng công của nó (~4193 token, 19,2 phần trăm, không phải
-"gần 3.000") · thêm lối CHAT HOI/BAN không nạp X3.
-
-Watchlist trần (nâng X5 20.000, kiem_van_hanh 104.000, kiem_tra_bo 100.000 -
-hai script ngoài mọi route, chỉ vào bản gộp): bản gộp là mục cần xử SỚM, nhịp
-phình 17.310 ký tự mỗi vòng nên chỉ còn khoảng hai vòng nữa là chạm trần.
-
-BACKLOG cập nhật: (a) hash nội dung QUYETDINH · (b) phép 5 đối chiếu số cột
-với schema X5 mục 4 · (c) khuôn bản sao " (n)" - hội đồng vòng 15 đo lại thấy
-0b ĐÃ bắt, hạ mức · (d) TÁCH BẢN LUẬT THUẦN khỏi bản gộp, nay lên đường găng ·
-(e) chuyển sổ sang CSV/SQLite: vòng này mới CẤM chuyển khi lưới chưa theo kịp,
-chưa viết bản rà đọc được định dạng đó · (f) phép 13 mới phủ 10/32 phép, chưa
-phủ 0, 0f, 2, 8b - bốn phép mà hội đồng đo được là "người canh DUY NHẤT" của
-một trạng thái.
-
-Bài học vòng này: quy tắc vòng 41 tự viết - "phép kiểm mới nguy hiểm ngang một
-luật mới" - vẫn chưa thành máy, nên 3f ra đời với một báo động giả phủ trọn
-nhánh mức C mà không ai thấy suốt hai vòng. Từ vòng sau, mỗi phép kiểm mới
-phải kèm ít nhất MỘT ca I1 và MỘT ca I2 của chính nó trong phép 13, trước khi
-commit.
-
-## Vòng 42: phép 13 FUZZ - lưới thường trực cho lớp lỗi đã tái phát ba vòng
-
-Ba vòng liên tiếp (38, 40, 41) đều đẻ ra cùng MỘT lớp lỗi khi đang vá lớp lỗi
-đó: phép kiểm mới quay ra PHẠT NGƯỜI DÙNG VÌ LÀM ĐÚNG. Mỗi lần đều phải có
-giám khảo chạy tay cả buổi mới thấy. Vòng này biến phát hiện đó thành MÁY.
-
-Phép 13 khẳng định HAI bất biến đối xứng, đo bằng cách ép trạng thái thật trên
-một kho lành dựng từ chính bộ mẫu:
-  I1  mọi trạng thái làm MẤT dấu mã G phải sinh ÍT NHẤT MỘT lệch
-  I2  mọi trạng thái ĐÚNG LUẬT không được sinh lệch nào
-Vế I2 là vế mà ba vòng vừa rồi vi phạm; hội đồng vòng 14 đề nghị đúng cặp này.
-
-Sáu ca I1 (xóa trọn file NHATKY quý · xóa dòng NHATKY · xóa ô Ghi lần · xóa
-trọn dòng sổ · cắt cụt dòng ở mức byte · bản conflicted rụng dòng) và bốn ca I2
-(tách NHATKY quý cũ vào _lich_su theo X5 mục 7 · chuyển dòng VIEC đã xong sang
-_lich_su theo X5 mục 5 · điền lần đầu rồi đánh dấu [x] ở C12 theo C11 ngoại lệ
-2 · lượt hai nối thêm mã vào ô Ghi lần theo X5 mục 3 bước 3).
-
-Phép 13 gọi TRỌN main() của kiem_van_hanh, không gọi hàm helper: hội đồng vòng
-14 đo được 12/25 đột biến lọt vì fixture chỉ khẳng định giá trị trả về của hàm
-mà không ai kẹp CHỖ GỌI.
-[ĐÍNH CHÍNH vòng 43, ĐO LẠI ở vòng 44: câu "tắt một phép ở chỗ gọi là phép
- 13 kêu ngay" KHAI QUÁ NET - và bản đính chính của vòng 43 CŨNG khai quá net.
- Đo trọn 36 mã phép của kiem_van_hanh (49 nếu kể 12a-12l), tắt từng phép một:
- vế I1 và I2 của vòng 42 bắt 3 (3c, 3e, 5), KHÔNG phải 4/32; 0b bị chính bản
- mở rộng "0j soi xuống _so" của vòng 43 che mất. I3 của vòng 43 thêm 0h, 0i,
- 0j, 1a, 3f, 7b, thành 9/36. Vòng 44 thêm phép 14b nên con số này không còn
- là lời khai nữa mà là thứ MÁY tự đối chiếu mỗi lượt chạy.]
-
-Kiểm chứng bằng hai đột biến, chạy thật trên bản sao:
-- gỡ đúng bản vá _lich_su của vòng 41 (một dòng) thì phép 13 FAIL với
-  "I2 chuyển dòng VIEC đã xong sang _lich_su: ĐÚNG LUẬT mà bị báo 3c" - tức
-  lưới này TỰ BẮT được defect NẶNG mà giám khảo VẬN HÀNH phải chạy trọn một
-  pilot mới tìm ra.
-- tắt cả 0d lẫn 3e thì phép 13 FAIL với "I1 xóa trọn file NHATKY quý: mất dấu
-  mã G mà KHÔNG phép nào kêu" và "I1 xóa dòng NHATKY".
-Hai chiều đều bắt, và trên bộ hiện tại phép 13 PASS.
-
-BACKLOG: mục (e) ĐÓNG. Còn (a) ô chốt hash cho nội dung QUYETDINH, (b) phép 5
-đối chiếu số cột với schema X5 mục 4, (c) khuôn bản sao " (n)" bị bỏ im lặng
-(bản vá đã soạn, chưa áp), (d) tách bản LUẬT thuần khỏi bản gộp.
-
-## Vòng 41: hội đồng vòng 14 - vá chính bản vá vòng 40
-
-Điểm vòng 14: KHÔNG MISS 8,0 · VẬN HÀNH 7,0 · KHÔNG SAI 6,8. Ba giám khảo
-XÁC NHẬN mọi đầu vá vòng 40 chạy thật (0d, 0g, 0h, 3e, 0i, 0j, 1e, phép 8 hai
-chiều đều dựng lại được và đều bắt). Nhưng vòng 40 tái phạm ĐÚNG lớp lỗi nó
-đang chữa: đẻ ra BÁO ĐỘNG GIẢ trên đường đi của mọi công ty. Mutation score
-của vùng vừa vá đo được 52% (12/25 đột biến lọt).
-
-BÁO ĐỘNG GIẢ do vòng 40 sinh, nay đóng:
-1. 0i BẪY VĨNH VIỄN (NẶNG, 3 giám khảo cùng bắt). Phép mới đếm cả dòng ĐỊNH
-   NGHĨA CÚ PHÁP của template (`@DUAN.<MÃ DA>`, `@NGUON.<LOẠI>`), cả văn xuôi
-   mang dấu ngoặc, cả ô ĐÃ điền (`@TEN.PROJECT`), lại bỏ sót C13 mà X9 câu 11
-   hỏi đích danh. Kho cài ĐÚNG X9 bị tố "lách ngoại lệ C11" ngay lệnh rà đầu
-   tiên, và ba lối ra đều hỏng - máy chỉ chấp nhận một C12 mà luật gọi là vi
-   phạm. Nay: X0 khai LUẬT VIẾT DẤU (ô chưa điền dùng đúng một khuôn), template
-   tuân đúng luật đó, và phép quét tách thành hàm dùng chung `muc_con_trong()`
-   để AI cài đặt với rà 0i không thể tính ra hai tập khác nhau. Đo lại: 44 ô
-   trống trên template, kho cài từ zero SẠCH.
-2. 0i mù ô xuống dòng (VỪA-NẶNG). Quét theo DÒNG nên 20/32 khóa tàng hình, gồm
-   cả nhóm khóa và sáu tham số EMAIL. Nay quét theo KHỐI THAM SỐ.
-3. 3c mù `_so\_lich_su\` (NẶNG). X5 mục 5 bắt chuyển việc XONG quá 30 ngày vào
-   lịch sử, phép 6 CƯỠNG BỨC khi sổ vượt 500 dòng - mà 3c không đọc thư mục đó,
-   nên mỗi dòng lưu trữ ĐÚNG LUẬT đẻ một mã lệch không bao giờ dọn được, tích
-   lũy từ ngày thứ 31. 3e cũng mù y hệt với NHATKY quý cũ. Nay cả hai đọc
-   `_lich_su`, và X5 mục 5 nói rõ chuyển lịch sử không được làm mất dấu mã G.
-4b. 0g ở PHA vừa clone: hai giám khảo vòng 14 chốt NGƯỢC nhau (một đòi cảnh
-   báo ngay vì .git chắc chắn còn, một khen vì không đá người dùng ở bước 1
-   của README). Chỗ gặp: kho CHƯA cài thì in LƯU Ý (chưa có sổ nào để mất, và
-   bước cài của X9 sẽ xóa .git); kho ĐÃ cài mà còn .git mới là LỆCH.
-4. 8b suýt lặp lại lớp lỗi ngay khi vừa viết: bảng "bàn sạch" là dạng RÚT GỌN
-   mà INSTRUCTION mục 2 khai tường minh, đòi đủ sáu bộ đếm ở đó là báo oan. Bắt
-   được ở chính lượt tự kiểm trước khi commit.
-
-LỖ CÒN LẠI, nay đóng: 0g hết chốt theo pha rev 0 (kho vừa clone là lúc .git
-chắc chắn còn) · 0j bắt cả THƯ MỤC lạ · 1a đúng MỘT bản INSTRUCTION, chọn bản
-v lớn nhất · 3c đòi dấu ở ĐÚNG các sổ đã khai chạm, không phải "ít nhất một"
-(X5 hứa "3c lệch mãi" mà thực tế im) · 3f MỚI: mọi dòng sổ phải mang mã G, xóa
-hay dán dòng ngoài lượt ghi hết đi im · 3a xét trọn mọi dòng, không bỏ dòng
-đầu · 7b MỚI: từ vựng sổ phải khai ở X0 (cửa ma sinh lane watermark giả; dự án
-NGỪNG còn việc mở làm việc VÔ HÌNH) · 8b MỚI: bảng đủ bộ đếm · X9 mục 4 hết
-dạy XÓA dòng C12 trong khi C11 cấm · nâng cấp chở thêm DOC_TRUOC, BENCHMARK,
-GHICHU, bản gộp, và đọc mục 3c CỦA BẢN MỚI · DOC_TRUOC mang MỐC VÒNG VÁ nên
-@NHIP.BANMOI mới có gì để so, kèm @NHIP.BANMOI.DAKIEM · 1e hết báo oan
-`_quan_sat_bo.txt` và hết áp lên KHO CÔNG TY.
-
-LƯỚI: 60 lên 67 luật ghim, thêm bảy luật CHỐNG ĐỘT BIẾN mà hội đồng chứng minh
-được là lưới cũ cho qua (nhóm (b) của nâng cấp bị rút còn một file vẫn "sạch";
-thân CHỐT CHỐNG LÁCH bị đảo ngược vẫn "sạch"). Mốc vòng vá ở DOC_TRUOC phải
-khớp vòng mới nhất của GHICHU - lưới tự bắt nếu quên tăng.
-
-Watchlist trần (nâng X0 18.500 lên 20.000 và bản gộp 340k lên 400k, cả hai đều
-có gate đã khai: X0 đọc theo mục, bản gộp không nạp vào phiên nào; X9 7.500 lên
-8.500 vì nay đứng ngoài MỌI route): X5 18.021/19.000 (94,8%) · README
-8.463/9.000 (94,0%) · X3_CUAVAO 92,5% · X3E 92,3% · X9 92,3% · X0 92,4%.
-
-BACKLOG, cập nhật thẳng: (a) QUYETDINH sửa nội dung không ai bắt - nay hẹp hơn
-vì 3f bắt được XÓA dòng, còn SỬA ô thì vẫn hở, cần ô chốt hash · (b) phép 5
-chưa đối chiếu số cột với schema X5 mục 4 - cùng họ với 7b, vá một lượt · (d)
-bản gộp nên tách bản LUẬT thuần ~30k cho người đánh giá · (e) BỘ FUZZ: giám
-khảo KHÔNG MISS đã tự viết và chạy 400 lượt, đo được 14,2% trạng thái mất mã G
-đi im; giám khảo VẬN HÀNH đề nghị thêm vế đối xứng "mọi trạng thái ĐÚNG LUẬT
-không được sinh LỆCH nào" - chính vế đó là thứ vòng 40 và 41 vi phạm hai lần.
-Hai vế này là ưu tiên cao nhất cho vòng sau. Mục (c) khuôn bản sao đã có bản vá
-soạn sẵn, chưa áp.
-
-Bài học vòng này, đắt hơn vòng trước: vòng 40 tự viết "mỗi bản vá phải đi kèm
-lưới của chính nó" rồi KHÔNG làm - và đúng chỗ đó thủng. Một phép kiểm mới
-nguy hiểm ngang một luật mới: nó có thể phạt người dùng vì làm đúng. Từ vòng
-này, phép mới nào cũng phải trả lời được hai câu: bắt được cái sai nào, và
-KHÔNG bắt oan cái đúng nào.
-
-## Vòng 40: hội đồng vòng 13 chấm PILOT - vá chính bản vá vòng 38
-
-Điểm vòng 13: TOKEN 9,3 · THÔNG MINH 9,0 · ĐƠN GIẢN 8,8 · KHÔNG MISS 8,6 ·
-KHÔNG SAI 7,6 · VẬN HÀNH 6,8. Điểm TỤT MẠNH so với 96,8 đọc-tĩnh, và tụt
-đúng lý do đáng mừng: sáu giám khảo lần này CHẠY hệ thay vì đọc, mỗi người
-một đường chưa ai đi (LITE không phần mềm, kho có sẵn file, bàn giao, hai
-phiên cùng cửa, mất mát, mutation). Ba defect NẶNG là do CHÍNH bản vá vòng
-38 sinh ra: vá một BÁO ĐỘNG GIẢ bằng cách đổi lấy ba lời BÁO SẠCH GIẢ.
-
-MÁY (kiem_van_hanh v35), tất cả đều dựng lại được trước khi vá:
-1. 0d quét thiếu (NẶNG, 3 giám khảo độc lập). v34 chỉ soi 5 sổ lõi, bỏ
-   THU.md và BANG_DIEU_KHIEN - hai nơi mã G ĐẬU theo đúng X5 mục 3-4. Kho
-   mất NHATKY mà bảng còn `sinh_boi: G-...` in "hệ sạch". Nay
-   loc_dau_vet_ghi quét MỌI sổ và view trong _so.
-2. 0g mù thư mục CHA (NẶNG, 3 giám khảo). `(goc/".git").exists()` chỉ soi
-   một tầng; clone vào chính `<gốc>` thì `git stash` vẫn nuốt trọn sổ mà
-   lưới im. Nay tim_vung_git dò kho VÀ mọi tổ tiên, bắt cả .git dạng file
-   (worktree, submodule).
-3. 0h MỚI (NẶNG). Cờ `rev 0` một mình tắt 0d, 2, 3, 4, 8: X0 bị đồng bộ mây
-   trả về bản cũ thì máy KHẲNG ĐỊNH "chưa có lượt ghi nào" trong khi NHATKY
-   nằm ngay đó. Nay có dấu vết ghi thì cấm tự nhận "chưa cài".
-4. 3e MỚI (NẶNG). 3c chỉ đi MỘT chiều NHATKY sang sổ. Mất TRỌN một file quý,
-   hay hai phiên cùng cửa ghi đè cả file NHATKY, đều không phép nào thấy.
-   3e đi chiều ngược: mã G đậu ở sổ hay bảng phải có dòng NHATKY.
-5. Phép 8 tách hai chiều lệch. Bảng MỚI HƠN mọi dòng NHATKY nghĩa là NHATKY
-   mất dòng; câu cũ xui người dùng "sinh lại bảng", tức xóa nốt bằng chứng
-   cuối cùng. Nay hai chiều nói hai câu khác nhau.
-6. 0i, 0j MỚI. 0i: C12 phải khai ĐÚNG tập mục còn dấu chưa điền (chống lách
-   ngoại lệ C11 bằng cách thêm bớt dòng C12). 0j: file lạ trong 00_Index -
-   vùng bị loại khỏi quan sát nghiệp vụ nên tài liệu lỡ lưu vào đây KHÔNG
-   phép nào nhặt, mà `git status` từng là lưới cuối thì vòng 38 vừa gỡ.
-   3a bắt thêm dòng CỤT (đứt lượt ghi ở mức byte, ô Trạng thái mất chữ).
-
-LUẬT:
-7. Ngoại lệ C11 (2) phủ 2/29 mục (NẶNG, VẬN HÀNH đếm được). Neo cũ đòi
-   ĐỒNG THỜI `<chưa điền>` VÀ có dòng ở C12, trong khi template viết
-   `<điền...>`, `<N>`, và nhóm C không bao giờ được đưa vào C12. Nay neo là
-   "CHƯA TỪNG mang giá trị, còn bất kỳ dấu chưa điền nào"; X9 mục 1 bắt
-   buộc quét X0 đưa MỌI mục trống vào C12 khi cài (pilot mới liệt 27 mục);
-   dòng C12 khi điền thì ĐÁNH DẤU `[x]` chứ không xóa, vì dấu đó là bằng
-   chứng duy nhất phân biệt điền-lần-đầu với đổi-giá-trị. Thêm CHỐT CHỐNG
-   LÁCH: C11 và C12 tự nằm trong nhóm khóa, đưa mục đã điền trở lại C12 là
-   mức C.
-8. Nâng cấp không chở lưới (NẶNG). X9 3c chỉ bảo chép `_TEMPLATE`, mà
-   kiem_van_hanh, kiem_tra_bo, INSTRUCTION, README đều KHÔNG mang
-   `_TEMPLATE`: mọi công ty cài trước vòng 38 nâng cấp đúng luật vẫn vĩnh
-   viễn không có 0g và vẫn dính 0d báo động giả. Vá vòng 38 không có đường
-   giao hàng. Nay 3c chép HAI nhóm, nhóm (b) đè thẳng năm file đó.
-9. Một cửa MỘT phiên đang ghi là luật CORE, không riêng PARALLEL (công ty
-   LITE mở hai tab là ca thường nhất). Ô "Ghi lần" khai rõ là danh sách
-   CHỈ-THÊM (ghi đè làm lượt cũ mất dấu, 3c lệch kinh niên mỗi tuần).
-   @VANHANH.NGUOI có thật ở C6 (thủ tục bàn giao đang trỏ tới một tham số
-   không tồn tại). @NHIP.BANMOI có thật ở C9 (sau khi gỡ .git thì KHÔNG ai
-   sở hữu việc biết bộ đã cũ). Lượt ghi ĐẦU TIÊN của kho hết bị nhắc vòng
-   quý oan. X9 3b nói rõ phải quét HAI lần và tên gốc vào ô có thật.
-   README có lối thoát `git stash pop` bằng tiếng người.
-
-LƯỚI: phép 1e MỚI - phép BÙ của phép 1, bắt file THỪA (lưới là allow-list
-nên rác vô hình theo cấu trúc: lọt hai commit liên tiếp, vòng 37 và 38).
-Dung sai 2c siết theo bậc (2% cho số trên 5.000: 10% trên dòng CHAT che tới
-2.000 token). Phép 10 hết mù tham chiếu bị xuống dòng. Luật ghim 52 lên 60,
-gồm ba luật CHỐNG ĐỘT BIẾN mà hội đồng chứng minh được là lưới cũ cho qua:
-README không được khuyên ngược, mức ĐIỀN LẦN ĐẦU phải khớp cả ba nơi, số
-ngoại lệ C11 phải bằng số liệt kê. Fixture 82 lên 88: ba quyết định của 0d,
-0g, 0i lên tầng module nên fixture kẹp thẳng - vùng rà soát trước đây có
-mutation score 0% vì main() không hàm nào gọi được.
-
-TOKEN: X9 và X4 KHÔNG nạp vào phiên CHAT nữa (X9 đọc một lần khi cài, X4
-chỉ khi RA_SOAT mà pilot đo được RA_SOAT thực tế trả 0 token vì chạy
-script): CHAT 20.314 xuống 17.335, cắt 14,7%. BENCHMARK khai thẳng ĐỘ BẤT
-ĐỊNH của hệ số ký-tự/3 (đối chứng T5 cho 2,1x, là TRẦN TRÊN) và thôi gọi số
-pilot là "đo được" - cái đo được là file nào thật sự đọc, không phải token.
-Cả 14 số route dán lại từ máy trong cùng commit.
-
-Watchlist trần (nâng X0 16.500 lên 18.500, X9 6.500 lên 7.500, X5 18.000
-lên 19.000, X3E 12.000 lên 13.000 - mọi mục nâng đều có gate đã khai và đã
-được do_route trừ): X9 7.407/7.500 (98,8%) · X5 17.812/19.000 (93,7%) · X0
-17.707/18.500 (95,7%) · X3E 11.995/13.000 (92,3%) · README 8.398/9.000
-(93,3%) · _GOP 91,9%.
-
-BACKLOG CÒN LẠI, khai thẳng (không vá vòng này, đều có địa chỉ rõ):
-(a) QUYETDINH tự khai "không sửa nội dung" nhưng KHÔNG có cưỡng chế nào -
-    sửa tay ô "Đánh đổi" không phép nào bắt; cần ô chốt hash mỗi dòng, là
-    đổi schema sổ nên để riêng một vòng.
-(b) Phép 5 chỉ kiểm bảng nhất quán NỘI BỘ, chưa đối chiếu số cột với schema
-    X5 mục 4, nên schema sổ trôi âm thầm được.
-(c) File trúng khuôn bản sao " (n)" bị bỏ IM LẶNG khi quét kho, trong khi
-    khuôn OneDrive được in đích danh - kho có sẵn file thì bản " (1)" có
-    thể là bản mới hơn mà vô hình.
-(d) _GOP 102k token, 71% là hai script và GHICHU; nên tách bản LUẬT thuần
-    ~30k cho người đánh giá.
-(e) Chưa có bộ sinh trạng thái đứt gãy (fuzz) khẳng định bất biến "mọi
-    trạng thái mất mã G phải sinh ít nhất một LỆCH".
-
-Lượt kiểm chứng đầu-cuối của chính vòng 40 (clone từ link công khai, cài từ
-zero, chạy máy) bắt thêm một lỗi trong chính phép 1e vừa viết: nó chỉ đọc
-được dòng .gitignore không có đường dẫn, nên báo oan `_so/_quan_sat_truoc.json`
-- cache mà kiem_van_hanh vừa tự sinh - với MỌI người dùng chạy rà trước khi tự
-kiểm. Đã vá bằng khuôn fnmatch đọc trọn .gitignore, và giữ đối chứng: thả một
-file lạ vào bộ thì 1e vẫn bắt.
-
-Bài học vòng này: đọc-tĩnh bão hòa ở 96,8 là thật, nhưng con số đó đo cái
-BỘ ĐÃ ĐƯỢC ĐỌC, không đo cái bộ CHẠY. Một buổi chạy ra nhiều defect hơn
-mười hai vòng đọc. Và bản vá viết vội ở vòng 38 tự nó sinh ba lỗ NẶNG -
-bằng chứng đắt giá rằng mỗi bản vá phải đi kèm lưới của chính nó.
-
-## Vòng 39: PILOT EMAIL - luật tả bằng văn xuôi, máy đòi schema
-
-Pilot tiếp phần chưa ai đi: thực thi X3E mục 1 BẰNG TAY, chỉ theo CHỮ trong
-luật, cố ý không đọc kiem_van_hanh.py, rồi để máy chấm. Kết quả: máy TỪ CHỐI
-sản phẩm của người thực thi đúng luật.
-
-1. GỐC (VỪA-nặng). X3E tả payload PREPARED bằng văn xuôi tiếng Việt ("convId,
-   người gửi, thời điểm UTC, tiêu đề, đường dẫn staging, sha256 của .eml...")
-   trong khi kiem_payload đòi một SCHEMA JSON chính xác không được khai ở
-   đâu trong bộ: conv_id, nguoi_gui, thoi_diem, tieu_de, eml_sha256, staging,
-   dinh_kem, thao_tac. Năm trên bảy tên trường tôi suy ra từ luật đều SAI, và
-   trớ trêu nhất: tên khóa DUY NHẤT mà luật có ghi nguyên văn - `convId` - lại
-   chính là tên máy không nhận (`conv_id`). Đường dẫn staging cũng lửng: luật
-   nói "tương đối, nằm trong _so\_thu_staging", máy đòi chuỗi bắt đầu đúng
-   `_so/_thu_staging/<sha256(khóa)>` tính từ GỐC KHO. Hậu quả dây chuyền: 12h
-   từ chối payload, nên 12k coi cả ba mục index là "thừa" - ba dòng LỆCH cho
-   một lượt nạp làm ĐÚNG luật.
-2. VÁ: X3E thêm mục 1b "Schema file máy sinh, tên trường ĐÚNG NGUYÊN VĂN" -
-   khai trọn ba file máy sinh (nhật ký ndjson, index, registry) dưới dạng
-   JSON mẫu; văn xuôi mục 1 trỏ về đó và bỏ tên `convId` sai. Trần X3E giữ
-   nguyên 12.000 bằng BÙ: cắt hai đoạn văn xuôi nay đã trùng schema (11.995).
-3. MÁY GIỮ LỜI: hai fixture mới (bộ 82 ca) dựng payload ĐÚNG THEO SCHEMA khai
-   trong X3E rồi gọi thẳng kiem_payload - phải trả RỖNG; và payload dùng tên
-   cũ `convId`, `thoi_diem_utc` - phải bị từ chối đúng hai lỗi. Từ nay schema
-   trong luật không thể trôi khỏi schema máy thực thi mà không ai biết. Thêm
-   luật ghim 52: X3E phải chứa nguyên văn cả bảy tên trường.
-4. KIỂM CHỨNG SAU VÁ: chạy lại pilot EMAIL với schema mục 1b - nạp một công
-   văn trọn bốn bước (staging, PREPARED, áp ba thao tác THU/VIEC/TAILIEU kèm
-   index, COMMITTED, registry dựng từ COMMITTED) - kho qua SẠCH toàn bộ
-   12a-12l. Trước vá: 2 lệch; sau vá: 0.
-
-Ghi thêm hai quan sát của pilot (không trừ điểm, là bằng chứng lưới chạy
-đúng): (a) tôi quên sinh lại BANG_DIEU_KHIEN sau lượt ghi thứ hai - rà 8 bắt
-ngay bằng watermark, đúng vai lưới an toàn cho lỗi THAO TÁC của người vận
-hành; (b) đường "điền lần đầu C9 khi đụng <chưa điền>" vá ở vòng 38 chạy trơn
-trong pilot này: điền @NHIP.* là mức B, rev 2 lên 3, xóa dòng khỏi C12, không
-phải mở plan C.
-
-Trạng thái sau 39 vòng vá: bốn gate token, 82 fixture, 52 luật ghim, 13 số
-BENCHMARK máy giữ, 4 defect trạng-thái do pilot bắt.
-
-## Vòng 38: vá theo PILOT VẬN HÀNH THẬT (nguồn phát hiện mới)
-
-Hội đồng vòng 12 nhất trí 6/6: điểm đọc-tĩnh bão hòa quanh 96,8, nguồn phát
-hiện còn lại là PILOT thật. Vòng này CHẠY pilot đó thay vì chấm tiếp: dựng một
-công ty giả lập có dự án PHẦN MỀM (REGULATED + EMAIL), clone bộ như người dùng
-thật, chạy X9 cài từ zero, vòng thử mức A, rồi dựng bản phát hành mới ở
-upstream và nâng cấp. Ba defect lộ ra - không vòng đọc-tĩnh nào trong 12 vòng
-thấy được, vì cả ba chỉ tồn tại ở TRẠNG THÁI, không ở chữ:
-
-1. BÁO ĐỘNG GIẢ NGAY SAU KHI CÀI (VỪA). Cài đúng X9 xong, lệnh kiểm đầu tiên
-   mà README bảo chạy in "trục sự thật đã biến mất: khôi phục mức C, cấm cấp
-   mã G mới" - trong khi kho vừa cài chưa ghi lần nào, NHATKY quý CHỈ sinh ở
-   lượt ghi đầu theo đúng X5 mục 3 bước 1. Hệ tự khóa mình ngay sau khi cài.
-   Vá: 0d chỉ báo khi CÓ dấu vết đã từng ghi (mã G còn ở sổ, hay nhật ký
-   EMAIL) mà NHATKY vắng; kho vừa cài in một dòng BỎ QUA nói rõ vì sao. Thông
-   điệp lệch thật nay nêu đích danh sổ còn mang dấu.
-2. MÂU THUẪN Ở ĐƯỜNG ĐI CỦA MỌI CÔNG TY MỚI (VỪA-nặng). X9 mục 2 và 4 dạy điền
-   nhóm B (C5 tới C8) giữa chừng rồi "làm tiếp"; nhưng C5 tới C8 đều thuộc nhóm
-   khóa C11, mà ngoại lệ chỉ sống ở rev 0 - "từ rev 1 luật này hiệu lực". Đọc
-   chặt thì mỗi câu trả lời nhóm B là một plan C kèm QUYETDINH (phá lời hứa
-   "vào việc được sau bốn câu"); đọc lỏng thì AI lặng lẽ phá C11. Không văn bản
-   nào gỡ. Vá: C11 thêm ngoại lệ (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 là
-   mức B, tăng rev, xóa dòng khỏi C12, không plan không QUYETDINH - đó là phần
-   cài đặt HOÃN LẠI, không phải đổi giá trị đang có hiệu lực; ĐỔI giá trị ĐÃ
-   điền vẫn C kèm QUYETDINH. Đồng bộ INSTRUCTION mục 6 và X5 mục 1 (hết "ngoại
-   lệ duy nhất").
-3. NÂNG CẤP BỘ LÀM MẤT DÒNG SỔ (NẶNG, dựng lại được). `git pull` - đúng lệnh
-   X9 mục 3c và README dặn - DỪNG trên kho đang chạy vì `_so\` là sổ sống mà
-   git đang quản; người dùng làm theo lời khuyên `git stash` mà chính git in
-   ra thì dòng VIEC BIẾN MẤT khỏi bản làm việc. Pilot dựng lại nguyên vẹn chuỗi
-   này. Lưới cũ có bắt hậu quả (rà 3c, 2, 8 cùng lệch) nhưng không ai chặn
-   trước. Vá: X9 mục 1 thêm bước XÓA `00_Index\.git` khi cài; mục 3c viết lại,
-   CẤM pull/stash/checkout trong kho, nâng cấp là tải bản mới ra THƯ MỤC KHÁC
-   rồi chép _TEMPLATE vào; README nói bằng tiếng người kèm lối thoát
-   `git stash pop`; rà 0g MỚI của kiem_van_hanh v34 chặn ngay trạng thái đó.
-   Trần X9 giữ nguyên 6.500 bằng BÙ (cắt hai chỗ diễn đạt trùng), không nâng.
-   [ĐÍNH CHÍNH vòng 40, theo hội đồng vòng 13 - BA lời khai trên sai:
-    (a) "README kèm lối thoát git stash pop" - README KHÔNG có câu đó, lối
-    thoát chỉ nằm ở X9 mục 3c, file người dùng không đọc; vá ở vòng 40.
-    (b) "đồng bộ INSTRUCTION" - sót mục 5, chỗ đó vẫn viết "ngoại lệ duy
-    nhất" trong khi mục 6 đã nói "ba ngoại lệ"; vá ở vòng 40.
-    (c) "trần X9 giữ nguyên bằng BÙ" - đúng về TRẦN nhưng bù THIẾU: file
-    phình +6%, còn đúng 14 ký tự headroom, và vòng 38 là vòng đầu tiên
-    trong 10 vòng KHÔNG có dòng Watchlist trần, tắt đèn đúng lúc cần nhất.
-    Ngoài ra vòng 38 để lọt assets/ (669 KB, ảnh của dự án khác) vào chính
-    commit của mình - tái phát lớp lỗi .codex_audit_mutant của vòng 37 -
-    và không dán lại 9/13 số route sau khi sửa X0, X5, X9, INSTRUCTION.]
-4. README VÀO LƯỚI. File người dùng đọc ĐẦU TIÊN lại đứng ngoài mọi phép kiểm
-   (không ký tự cấm, không tham chiếu chéo, không _GOP) - lỗi ở đó hại nhất mà
-   được bảo vệ ít nhất. Nay README nằm trong FILE_BAT_BUOC, qua sạch cả bốn
-   phép ngay lần đầu. Phép 12 lên 51 luật (thêm luật điền-lần-đầu và luật
-   kho-không-phải-bản-làm-việc-git).
-
-BENCHMARK có mục "Phiên thật đã đo" đầu tiên: cài đặt ~11,8k token thật, 6 lượt
-đọc file, không đọc thừa, không sai; RA_SOAT thực tế trả 0 token đọc X4 vì
-script tự đủ nghĩa. Cột "phiên thật" hết trống - bắt đầu có số.
-
-Trạng thái sau 12 vòng chấm - 38 vòng vá: bốn gate token, 80 fixture, 51 luật
-ghim, 13 số BENCHMARK máy giữ, 3 defect trạng-thái do pilot bắt. Bài học ghi
-lại: đọc-tĩnh bão hòa ở 96,8 là thật, và cách vượt qua nó cũng là thật - chạy
-hệ, đừng đọc thêm.
-
-## Vòng 37: khâu theo hội đồng vòng 12 (96,8/100)
-
-Điểm vòng 12: KHÔNG MISS 9,9 · ĐƠN GIẢN 9,9 · TOKEN 9,8 · VẬN HÀNH 9,6 ·
-KHÔNG SAI 9,5 · THÔNG MINH 9,4. Mọi phát hiện đều THẤP, hội tụ về một rổ
-việc nhỏ trên chính đường nối vòng 36; plateau đọc-tĩnh giữ nguyên. Vá:
-
-1. 12l so mã Q ĐÚNG Ô (kiem_van_hanh v33): BỐN giám khảo cùng chứng minh
-   bằng chạy thật rằng vế "Q phải có dòng trong QUYETDINH" mới chỉ là so
-   chuỗi con toàn văn - Q là TIỀN TỐ của mã thật (Q-2026 ăn theo
-   Q-20260826-01) và Q chỉ được nhắc trong ghi chú của dòng khác ("cân
-   nhắc, không ban hành") đều được miễn hash oan. Nay so đúng Ô qua
-   dong_bang; hai fixture ghim đúng hai ca lọt, bộ 80 ca.
-2. X3 5b khâu bốn khe chat còn lại: mốc chống dán lặp thêm NGÀY (chat
-   nhiều ngày hết mù ngày); nhánh khối-không-chứa-tin-mốc chốt biên "tin
-   CÙNG phút mốc coi như ĐÃ NẠP, nghi sót thì dán lại cả khối chứa tin
-   mốc"; chặng 2 gặp trùng event_id tin chat thì SO NỘI DUNG trước khi bỏ
-   qua (khử đụng khóa xuyên khối cùng phút-cùng-NN); từ hai kênh chat trở
-   lên mỗi kênh một dòng VIEC + mã kênh -chat-<kênh>-<NN>; ngày lấy theo
-   header GẦN NHẤT phía trên (export nhiều ngày); header X3 nhắc gate 5b
-   theo đúng quy ước header X5. Luật ghim 934/936 ghim thêm "Bước tiếp
-   theo", "VỊ TRÍ", "SO NỘI DUNG".
-3. Số LITE vào lưới 2c: nhãn thứ 13 "CUA_VAO thường của LITE" ~1025 token
-   máy đo - hết số tay đứng ngoài lưới trong BENCHMARK.
-4. Nâng trần theo quy ước: X3 5.500 (phần tăng nằm TRỌN trong 5b gated,
-   route thường không đổi ~2554) · X5 18.000 chủ động (headroom 98,1% là
-   nợ được giám khảo ĐƠN GIẢN đòi xử trước khi phát nổ). BENCHMARK rewrap
-   các dòng gãy giữa câu; số CHAT dán lại từ máy trong cùng commit.
-
-Watchlist trần: X3 ~5,09k/5.500 (92,5%) · X5 17,16k/18.000 (95,3%) · X0
-96,9% · X3E 92,8%. Trạng thái sau 12 vòng chấm - 37 vòng vá: bốn gate
-token, 80 fixture, 49 luật ghim, 13 số BENCHMARK máy giữ. Hội đồng nhất
-trí 6/6: nguồn phát hiện còn lại là PILOT vận hành thật 2-4 tuần, điền
-cột "phiên thật" của BENCHMARK; điểm đọc-tĩnh 96,8 đã sát trần phương
-pháp.
-
-## Vòng 36: vá theo hội đồng vòng 11 (96/100, plateau xác nhận)
-
-Điểm vòng 11: KHÔNG MISS 9,8 · ĐƠN GIẢN 9,8 · TOKEN 9,7 · KHÔNG SAI 9,5 ·
-THÔNG MINH 9,5 · VẬN HÀNH 9,3 (trừ đúng: defect VỪA event_id là do vòng 35
-sinh). BỐN giám khảo độc lập cùng bắt một defect - hội tụ chưa từng có. CẢ
-SÁU giám khảo cùng kết luận: điểm đọc-tĩnh đã bão hòa quanh 96, các vòng
-sau chỉ dao động quanh nhiễu; nguồn phát hiện duy nhất còn lại là PILOT
-vận hành thật 2-4 tuần. Vá:
-
-1. event_id tin chat: <YYYYMMDD-HHMM>-chat-<NN> (NN thứ tự tin trong khối
-   dán - hai tin cùng phút hết trùng khóa, chặng 2 hết nuốt tin im lặng);
-   ngày lấy theo header ngày trong đoạn dán, thiếu mới rơi về ngày phiên;
-   mốc chống dán lặp về MỘT nhà (ô "Bước tiếp theo" của dòng VIEC theo dõi
-   chat - cột có thật, bền phiên); "SAU mốc" chốt nghĩa theo VỊ TRÍ trong
-   khối. Luật ghim phép 12 (49 luật).
-2. Mục 5b lên GATE "CHỈ đọc khi người dùng dán chat hay export" (tiền lệ
-   gate thứ tư): route CUA_VAO thường về ~2554 (LITE không dán chat khỏi
-   trả thuế 5b); trần X3 nâng 5.000 KÈM GATE theo quy ước - thoát cảnh
-   99,8% mà không thành thuế chung.
-3. kiem_van_hanh v32: 12l đòi khuôn TRỌN "[đã xóa theo Q-<mã>]" (chuỗi
-   lửng hết được miễn oan) VÀ mã Q phải có dòng trong QUYETDINH (Q ma bị
-   bắt) - hai fixture mới, bộ 78 ca; tự vệ vế SÁU (thư mục tồn tại nhưng
-   không dấu vết cài đặt = LỖI CÁCH DÙNG exit 2).
-4. Khâu chữ: CỘNG thuế thường trực vào lưới 2c (khớp phép làm tròn của
-   phép 9 - hết nit 1 token); số LITE cập nhật; cột ma cuối "ghi chú
-   TAILIEU" về ô "Căn cứ trạng thái" có thật; C4 rewrap; 1d khớp _thu_
-   theo path segment.
-
-Watchlist trần: X3 ~4,7k/5.000 (94%) · X5 17,16k/17.500 (98,1%) · X0
-~15,99k/16.500 (96,9%) · X3E 92,8%. Trạng thái sau 12 vòng chấm - 36 vòng
-vá: bốn gate token (1b, 7b, 1c, 5b), 78 fixture, 49 luật ghim, 12 số
-BENCHMARK máy giữ. Hội đồng khuyến nghị nhất trí: bước kế tiếp là PILOT
-thật, điền cột "phiên thật" của BENCHMARK.
 
 ════════════════════════════════════════
 FILE: BENCHMARK_TOKEN.md

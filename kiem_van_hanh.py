@@ -196,6 +196,7 @@
 # bảng, không so chuỗi toàn văn, có hash nội dung thì đối chiếu thêm.
 
 import hashlib
+import itertools
 import json
 import re
 import sys
@@ -506,27 +507,44 @@ def cat_muc(nd, n):
     return nd[m.start():m.end() + ke.start()] if ke else nd[m.start():]
 
 
+def _quet_fence(nd):
+    """Máy trạng thái fence theo CommonMark 4.5, dùng CHUNG cho `ngoai_fence`
+    và phép 5e. Trả (danh sách (dòng, đang-trong-khối), số dòng MỞ còn treo).
+
+    Ba luật mà bản vòng 38 thiếu:
+      · fence ĐÓNG phải cùng KÝ TỰ và DÀI KHÔNG KÉM fence mở - thiếu vế độ dài
+        thì khối bốn nháy (cách DUY NHẤT hợp chuẩn để dán ví dụ chứa ```) bị
+        dòng ``` bên trong đóng sớm, ruột ví dụ lòi ra thành dòng bảng thật;
+      · dòng ĐÓNG không được mang info string;
+      · fence mở bằng dấu nháy thì info string không được chứa dấu nháy.
+
+    Vòng 38 để 5e đếm ký tự còn ngoai_fence chạy máy trạng thái - hai bộ đọc
+    một thứ bằng hai luật thì sớm muộn cũng lệch, và chúng lệch thật: khối ```
+    có ruột là một dòng ~~~ bị 5e tố thiếu dòng đóng (hội đồng vòng 23)."""
+    ra, mo, dai, n_mo = [], None, 0, 0
+    for _i, d in enumerate(nd.splitlines(), 1):
+        m = re.match(r"[ ]{0,3}(`{3,}|~{3,})(.*)$", d)
+        if m:
+            ky, n, duoi = m.group(1)[0], len(m.group(1)), m.group(2)
+            if mo is None:
+                if not (ky == "`" and "`" in duoi):
+                    mo, dai, n_mo = ky, n, _i
+                    ra.append((d, True))
+                    continue
+            elif ky == mo and n >= dai and not duoi.strip():
+                mo = None
+                ra.append((d, True))
+                continue
+        ra.append((d, mo is not None))
+    return ra, (n_mo if mo is not None else 0)
+
+
 def ngoai_fence(nd):
-    """Các dòng NẰM NGOÀI mọi khối ```. Dùng CHUNG cho dong_bang và phép 5b:
+    """Các dòng NẰM NGOÀI mọi khối fence. Dùng CHUNG với phép 5b và phép 5e:
     vòng 62 dựng 5b biết fence mà quên dạy dong_bang, nên người dùng làm ĐÚNG
     lời khuyên của chính 5b ("bọc ví dụ trong ```") thì ăn ba dòng lệch - lớp
-    phạt-người-làm-đúng lần thứ mười hai (hội đồng vòng 21). Một hàm cho cả
-    hai để chúng không lệch nhau lần nữa."""
-    ra, mo = [], None
-    for d in nd.splitlines():
-        _m = re.match(r"\s*(`{3,}|~{3,})", d)
-        if _m:
-            _ky = _m.group(1)[0]
-            if mo is None:
-                mo = _ky
-                ra.append("")
-                continue
-            if _ky == mo:      # chỉ ĐÓNG bằng đúng ký tự đã mở, nên ``` nằm
-                mo = None      # trong khối ~~~ không tắt cờ sớm
-                ra.append("")
-                continue
-        ra.append("" if mo is not None else d)
-    return ra
+    phạt-người-làm-đúng lần thứ mười hai (hội đồng vòng 21)."""
+    return ["" if trong else d for d, trong in _quet_fence(nd)[0]]
 
 
 def tach_o(d, so_cot=None):
@@ -539,11 +557,36 @@ def tach_o(d, so_cot=None):
     # đúng HAI luật cùng lúc không được ăn lệch (hội đồng vòng 22).
     loi = d.strip().strip("|")
     ra = [o.replace("\\|", "|").strip() for o in re.split(r"(?<!\\)\|", loi)]
-    if so_cot is not None and len(ra) != so_cot:
-        tho = [o.strip() for o in loi.split("|")]
-        if len(tho) == so_cot:
-            return tho
-    return ra
+    if so_cot is None or len(ra) == so_cot:
+        return ra
+    # Đổi TRỌN dòng sang tách thô (bản vòng 38) thì dòng vừa mang `\|` thoát
+    # VỪA trỏ thư mục ăn oan cả hai bản: GFM hụt một ô, thô dôi một ô. Nên mở
+    # DẦN từng ngăn nghi ngờ cho tới khi đủ cột (hội đồng vòng 23).
+    _chac = [_m.start() for _m in re.finditer(r"(?<!\\)\|", loi)]
+    _mo_ho = [_m.start() + 1 for _m in re.finditer(r"\\\|", loi)]
+    _k = so_cot - 1 - len(_chac)
+    if not 1 <= _k <= len(_mo_ho) or len(_mo_ho) > 12:
+        return ra                       # chặn nổ tổ hợp trên dòng rác
+
+    def _cat_tai(_chon):
+        _tr, _thu = 0, []
+        for _v in sorted(_chac + list(_chon)):
+            _thu.append(loi[_tr:_v])
+            _tr = _v + 1
+        _thu.append(loi[_tr:])
+        return _thu
+
+    # Ngăn nào là THẬT thì ô đứng trước nó kết thúc bằng `\`, mà theo X0 C1 chỉ
+    # dòng trỏ BỘ HỒ SƠ mới được vậy - nên ưu tiên tổ hợp có nhiều ô-trước
+    # TRÔNG NHƯ ĐƯỜNG DẪN nhất. Hoà thì lấy tổ hợp ở phía SAU.
+    _tot, _diem_tot = None, -1
+    for _chon in itertools.combinations(_mo_ho, _k):
+        _thu = _cat_tai(_chon)
+        _diem = sum(1 for _o in _thu[:-1]
+                    if _o.endswith("\\") and re.search(r"[\\/]", _o[:-1]))
+        if _diem >= _diem_tot:
+            _tot, _diem_tot = _thu, _diem
+    return [o.replace("\\|", "|").strip() for o in _tot]
 
 
 def dong_bang(nd):
@@ -2474,19 +2517,14 @@ def main(goc):
     #     HÌNH, mà sổ chỉ-thêm nên số dòng bị nuốt tăng dần (vòng 22).
     _fence_le = []
     for p in sorted(so.glob("*.md")) + sorted((so / "_lich_su").glob("*.md")):
-        _dem_f = {}
-        for _d in doc(p).splitlines():
-            _m = re.match(r"\s*(`{3,}|~{3,})", _d)
-            if _m:
-                _k = _m.group(1)[0]
-                _dem_f[_k] = _dem_f.get(_k, 0) + 1
-        _le = [k for k, v in _dem_f.items() if v % 2]
-        if _le:
-            _fence_le.append(f"{p.name} (dấu {_liet(_le)})")
+        _treo = _quet_fence(doc(p))[1]
+        if _treo:
+            _fence_le.append(f"{p.name} dòng {_treo}")
     bao("5e. dấu fence trong sổ đóng đủ cặp", not _fence_le,
-        f"{_liet(_fence_le[:4])}: thiếu dòng đóng thì MỌI dòng phía sau TÀNG"
+        f"{_liet(_fence_le[:4])} mở khối mà chưa đóng: MỌI dòng phía sau TÀNG"
         f" HÌNH với 3f, 3g, 5, 6, 7, 7b, 7f và bộ đếm quá hạn, trong khi"
-        f" Markdown vẫn hiện chúng. Thêm dòng đóng, mức A")
+        f" Markdown vẫn hiện chúng. Thêm dòng đóng ĐÚNG dấu và dài không kém"
+        f" dòng mở, mức A")
 
     # 5d. Mọi bảng trong CÙNG một sổ phải cùng thứ tự cột. X5 cho nhiều khối
     #     `## <KHỐI>` mỗi khối một bảng - đó là cách bộ dặn tách dự án - nhưng
@@ -2506,7 +2544,8 @@ def main(goc):
     bao("5d. bảng trong một sổ cùng thứ tự cột", not _lech_hdr,
         f"{_liet(_lech_hdr[:4])}: các phép đọc sổ theo VỊ TRÍ cột, nên khối"
         f" đảo cột làm bộ đếm quá hạn và từ vựng đọc nhầm ô trong khi phép 5"
-        f" vẫn xanh (mọi dòng cùng SỐ ô). Đưa các khối về cùng header, mức A")
+        f" vẫn xanh (mọi dòng cùng SỐ ô). Đưa các khối về cùng header; nếu đó"
+        f" là bảng VÍ DỤ thì bọc nó trong ``` hay ~~~, mức A")
 
     # 5b. Dòng thụt SÂU (>=4 dấu cách hay tab) mà trông như dòng bảng: GFM coi
     #     đó là khối code, nên dong_bang KHÔNG đọc nó - và docstring của
@@ -2519,10 +2558,11 @@ def main(goc):
             if re.match(r"^(?: {4,}|\t)", _d) and _d.count("|") >= 2:
                 _thut_sau.append(f"{p.name}:{_n}")
     bao("5b. không dòng bảng nào bị thụt sâu", not _thut_sau,
-        f"{_liet(_thut_sau[:5])}: thụt từ bốn dấu cách trở lên là KHỐI CODE"
-        f" theo Markdown, nên mọi phép đọc sổ BỎ QUA dòng đó trong khi người và"
-        f" AI vẫn đọc thấy. Kéo dòng về sát lề trái; muốn dán ví dụ bảng thì"
-        f" bọc trong ``` hay ~~~ (phép 5e canh chúng đóng đủ cặp)")
+        f"{_liet(_thut_sau[:5])}: thụt từ bốn dấu cách trở lên thì mọi phép"
+        f" đọc sổ BỎ QUA dòng đó trong khi người và AI vẫn đọc thấy - kể cả khi"
+        f" nó lồng trong một mục danh sách. Là VÍ DỤ thì bọc trong ``` hay ~~~"
+        f" (5e canh chúng đóng đủ cặp); là dòng sổ THẬT thì mới kéo về sát lề"
+        f" trái, vì kéo một dòng ví dụ ra lề là nạp mã ma vào sổ")
 
     vuot = []
     for p in sorted(so.glob("*.md")):
