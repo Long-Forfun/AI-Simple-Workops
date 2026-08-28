@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 50 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 51 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -275,6 +275,46 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 51: tầng HẠN vào lưới - bảng hết khai "bàn sạch" hộ sổ
+
+Backlog (t) và (u), hai mục nặng nhất còn lại của hội đồng vòng 18. Đo trên kho
+pilot của giám khảo, ngày 28/8/2026:
+
+  việc V-002 quá hạn 3 ngày · dữ kiện D-002 quá mốc rà lại 119 ngày · chứng
+  thư số ký điện tử T-003 HẾT HẠN 59 ngày · mục _INBOX kẹt 9 ngày (ngưỡng
+  công ty tự khai là 3)
+
+và cùng lượt chạy đó: 35 PASS, 0 LỆCH, "hệ sạch", bảng ghi "bàn sạch".
+
+Nguyên nhân: 8b chỉ đếm NHÃN có mặt, và ở dạng rút gọn "bàn sạch" chỉ đòi hai
+nhãn - không một giá trị nào bị đối chiếu với sổ. Mà bảng là mặt phẳng DUY NHẤT
+banner mở phiên đọc, và nó do AI tự sinh từ trí nhớ. X4 xếp chín dòng rà (7-11,
+13-15, 21) vào nhóm "kiểm tay" trong khi cả chín đều là SO NGÀY trên đúng những
+cột mà dong_bang đã parse sẵn cho 3g và 7c - 29% danh mục rà là số học tầm
+thường mà vẫn giao cho trí nhớ con người.
+
+PHÉP 8e: đếm bốn họ quá ngưỡng từ sổ (việc quá hạn · dữ kiện quá mốc rà lại ·
+giấy tờ hết hạn hay sắp hết trong ngưỡng cảnh báo · mục _INBOX chưa nạp quá
+ngưỡng), ngưỡng đọc từ X0 C9. Bảng khai "bàn sạch" mà sổ còn mục nào là LỆCH;
+bảng khai số khác số thật cũng là LỆCH. Bàn thử 8/8: bắt cả bốn họ, và im với
+bốn ca đúng luật gồm việc quá hạn nhưng ĐÃ XONG và mục _INBOX vừa ghi hôm nay.
+
+TẤT ĐỊNH - một khoản nợ vòng này phải trả trước khi vay: hàm đếm nhận `hom_nay`
+để fixture tiêm ngày giả, đúng khuôn `bay_gio` mà quet_ho đã dùng từ trước. Và
+ngày trong fixture đổi từ 2026-12-31 sang 2099-12-31: giữ nguyên thì sang năm
+sau nó thành QUÁ KHỨ và ca thử hỏng dần theo thời gian thật - loại nợ tất định
+mà bộ đã đo 8/8 trục sạch ở các vòng trước, không nên tự đẻ lại.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(k) cache _quan_sat_truoc.json giả mạo được · (n) schema @DUAN.PHANMEM chưa có
+ô khai nhánh CI/CD tự deploy · (s) tách lịch sử GHICHU (đo được giảm 37%) ·
+(v) backup theo X5 mục 7 nằm TRONG _so nên chết cùng lượt rollback mà 0k2 lấy
+làm lý do tồn tại; X0 không có tham số nào khai nơi sao lưu NGOÀI kho · (w)
+file trùng tên khuôn " (n)" bị loại lặng lẽ, bộ chỉ người dùng vào bản CŨ NHẤT
+trong khi hai bản mới hơn bị giấu · (x) manifest dọn staging không ai mở file
+bằng chứng ra xem · (y) đính kèm của mail đã COMMITTED có thể không để lại dấu
+nào ở sổ · (a) (b) (c) (e) (g) (h) như cũ.
 
 ## Vòng 50: hội đồng vòng 18 - lưới secret có lỗ to bằng chính thứ nó canh
 

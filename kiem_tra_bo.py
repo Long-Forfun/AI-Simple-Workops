@@ -247,8 +247,10 @@ def _kho_song(goc, td):
          " | A | mo viec V-DA1-001 | VIEC V-DA1-001 | khong | XONG | khong |" + NL)
     v = (so / "VIEC.md").read_text(encoding="utf-8")
     v = v.replace("<MÃ>", "FUZ").replace("## <KHỐI>", "## KHOI1").rstrip(NL)
+    # hạn 2099: ngày trong fixture phải là TƯƠNG LAI XA, không thì phép 8e
+    # (đếm quá hạn) đổi kết quả theo ngày chạy thật và ca hỏng dần (vòng 51)
     _ghi(so / "VIEC.md", v + NL + "| DA1 | V-DA1-001 | Viec mot | buoc sau | toi | |"
-         " 2026-12-31 | XONG | | " + G + " |" + NL)  # XONG: ca I2 chuyển _lich_su
+         " 2099-12-31 | XONG | | " + G + " |" + NL)  # XONG: ca I2 chuyển _lich_su
     # theo X5 mục 5 chỉ đúng luật với việc XONG hay HỦY (hội đồng vòng 15b)
     for t in ["DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md", "THU.md"]:
         _ghi(so / t, (so / t).read_text(encoding="utf-8").replace("<MÃ>", "FUZ"))
@@ -609,6 +611,26 @@ def phep_fuzz(goc, phu_them=()):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    def _ca_8e(k, i, so, G, sua):
+        """Bảng khai "bàn sạch" trong lúc sổ còn một việc quá hạn từ 2019.
+        Hội đồng vòng 18 dựng được kho có chứng thư số hết hạn 59 ngày, việc
+        quá hạn và dữ kiện quá mốc rà lại 119 ngày mà bảng vẫn "bàn sạch"."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | V-DA1-007 | Viec qua han | buoc | toi | | 2019-01-05 |"
+             " ĐANG LÀM | | " + G + " |" + NL)
+
+    thu3("bảng khai bàn sạch mà sổ còn việc quá hạn từ 2019", _ca_8e, "8e.")
+
+    def _ca_8e_lanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: việc còn hạn XA, bảng vẫn được khai bàn sạch."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | V-DA1-008 | Viec con han | buoc | toi | | 2099-12-31 |"
+             " ĐANG LÀM | | " + G + " |" + NL)
+
+    thu("việc còn hạn xa, bảng khai bàn sạch (X4 dòng 9)", _ca_8e_lanh, False)
+
     thu3("gõ CUA2 ở ô Phiên của kho MỘT CỬA (cửa ma)",
          lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
                                       "| CUA1.0900.a1b2 |", "| CUA2.0900.a1b2 |"),
@@ -772,9 +794,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 6, 29):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 6,"
-                    f" I3 29 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 7, 30):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 7,"
+                    f" I3 30 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của

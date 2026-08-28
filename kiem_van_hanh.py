@@ -218,6 +218,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
+           "8e.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -698,6 +699,58 @@ def _la_lien_ket(p):
             return p.is_symlink()
         except OSError:
             return False
+
+
+def dem_qua_han(so, x0nd, hom_nay=None):
+    """Đếm các mục QUÁ NGƯỠNG theo ngày, đọc ngưỡng từ X0 C9.
+
+    Trả dict {"quá hạn", "rà lại", "hết hạn", "_INBOX"} -> list mã. Đây là bốn
+    con số mà bảng điều khiển khai và banner mở phiên in ra, nhưng trước vòng
+    51 không ai đối chiếu chúng với sổ: hội đồng vòng 18 dựng được kho có
+    chứng thư số hết hạn 59 ngày mà bảng vẫn ghi "bàn sạch" (X4 dòng 8, 9, 11,
+    14, 15). hom_nay: tiêm ngày giả cho fixture, đúng khuôn bay_gio của
+    quet_ho - không có nó thì ca thử hỏng dần theo thời gian thật."""
+    import datetime
+    hom_nay = hom_nay or datetime.date.today()
+
+    def ngay(o):
+        m = re.search(r"(\d{4})-(\d{2})-(\d{2})", o or "")
+        try:
+            return datetime.date(*map(int, m.groups())) if m else None
+        except ValueError:
+            return None
+
+    def nguong(ten, mac_dinh):
+        m = re.search(rf"@NHIP\.{ten}\D*(\d+)", x0nd or "")
+        return int(m.group(1)) if m else mac_dinh
+
+    ra = {"quá hạn": [], "rà lại": [], "hết hạn": [], "_INBOX": []}
+    for r in dong_bang(doc(so / "VIEC.md")):
+        if len(r) > 7 and r[7].strip() not in ("XONG", "HỦY"):
+            h = ngay(r[6])
+            if h and h < hom_nay:
+                ra["quá hạn"].append(r[1].strip())
+    for r in dong_bang(doc(so / "DUKIEN.md")):
+        if len(r) > 9 and r[8].strip() not in ("HẾT HIỆU LỰC", "HỦY"):
+            h = ngay(r[9])
+            if h and h < hom_nay:
+                ra["rà lại"].append(r[1].strip())
+    _canh = nguong("HETHAN", 30)
+    for r in dong_bang(doc(so / "TAILIEU.md")):
+        if len(r) > 11 and "[đã xóa theo Q-" not in "|".join(r):
+            h = ngay(r[11])
+            if h and (h - hom_nay).days <= _canh:
+                ra["hết hạn"].append(r[1].strip())
+    _ib = nguong("INBOX", 3)
+    thu = so / "_inbox"
+    if thu.is_dir():
+        for f in sorted(thu.glob("*")):
+            if not f.is_file():
+                continue
+            d = ngay(re.sub(r"^(\d{4})(\d{2})(\d{2})", r"\1-\2-\3", f.name))
+            if d and (hom_nay - d).days > _ib:
+                ra["_INBOX"].append(f.name)
+    return ra
 
 
 def quet_secret(kho):
@@ -2238,6 +2291,30 @@ def main(goc):
             bao("8b. BANG_DIEU_KHIEN mang đủ sáu bộ đếm mà banner INSTRUCTION mục 2 in",
                 not _thieu_dem, f"thiếu nhãn {_thieu_dem}: bảng thiếu bộ đếm thì"
                 f" banner mở phiên in số bịa; sinh lại theo X5 mục 3 bước 6")
+            # 8e. Bộ đếm của bảng phải KHỚP SỔ, không chỉ có mặt tên. 8b chỉ
+            #     đếm NHÃN, và ở dạng "bàn sạch" chỉ đòi hai nhãn - nên kho có
+            #     chứng thư số hết hạn 59 ngày, việc quá hạn và dữ kiện quá mốc
+            #     rà lại 119 ngày vẫn khai "bàn sạch" và bộ vẫn in "hệ sạch"
+            #     (hội đồng vòng 18). Bảng là mặt phẳng DUY NHẤT banner mở phiên
+            #     đọc, mà nó do AI tự sinh từ trí nhớ.
+            _qh = dem_qua_han(so, doc(x0s[0]) if x0s else "")
+            _tong_qh = sum(len(v) for v in _qh.values())
+            _loi8e = []
+            if "bàn sạch" in bdk_nd and _tong_qh:
+                _loi8e.append("bảng khai \"bàn sạch\" mà sổ còn: "
+                              + "; ".join(f"{k} {len(v)} ({_liet(v[:3])})"
+                                          for k, v in _qh.items() if v))
+            else:
+                for _k, _v in _qh.items():
+                    _m8 = re.search(re.escape(_k) + r"\D{0,12}?(\d+)", bdk_nd)
+                    if _m8 and int(_m8.group(1)) != len(_v):
+                        _loi8e.append(f"{_k}: bảng khai {_m8.group(1)},"
+                                      f" sổ đếm {len(_v)} ({_liet(_v[:3])})")
+            bao("8e. bộ đếm của bảng khớp sổ (X4 dòng 8, 9, 11, 14, 15)",
+                not _loi8e, f"{'; '.join(_loi8e[:3])}. Bảng là mặt phẳng DUY"
+                f" NHẤT banner mở phiên đọc; khai sai là mọi phiên sau đọc sai."
+                f" Sinh lại bảng theo X5 mục 3 bước 6, ngưỡng ở X0 C9")
+
             # 8c. Bảng phải khai lane watermark cho MỌI cửa có lượt ghi: X5 mục
             #     3 bước 6 đặt watermark làm chỗ DUY NHẤT giữ mã cuối của cửa
             #     KHÁC. Lane rụng thì cửa đó mất mốc cao nhất và lượt sau có thể
