@@ -224,7 +224,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
-           "0i3.", "2b.", "10d.", "5d.", "5e.",
+           "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -1167,12 +1167,48 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     bay_gio = time.time() if bay_gio is None else bay_gio
     cache = so / "_quan_sat_truoc.json"
     truoc, luc_kho = nap_cache(cache, bay_gio)
+    # 0q. Không junction/symlink nào trong kho trỏ RA NGOÀI kho. Junction
+    #     Windows tạo được KHÔNG cần admin và KHÔNG phải symlink (is_symlink
+    #     trả False), nên `mklink /J 99_Goc D:\\ngoai` cho file ngoài kho qua
+    #     hết 9/10a/10b/10d - trong khi sao lưu kho và git không mang chúng
+    #     theo: "bản gốc bất biến" nằm ở chỗ không ai giữ (backlog vòng 22).
+    def _la_lienket(_p):
+        try:
+            if _p.is_symlink():
+                return True
+            _ij = getattr(_p, "is_junction", None)
+            return bool(_ij and _ij())
+        except OSError:
+            return False
+
+    _lk_ngoai = []
+    try:
+        _goc0q = Path(kho).resolve()
+        import os as _os0q
+        for _day, _thu_mucs, _ in _os0q.walk(kho):
+            for _t in list(_thu_mucs):
+                _p = Path(_day) / _t
+                if _la_lienket(_p):
+                    _thu_mucs.remove(_t)     # không đi VÀO link: tránh vòng lặp
+                    try:
+                        _dich = _p.resolve()
+                    except OSError:
+                        _dich = None
+                    if _dich is None or not str(_dich).startswith(str(_goc0q)):
+                        _lk_ngoai.append(_p.name)
+    except OSError:
+        pass
+    bao("0q. không link trỏ ra ngoài kho", not _lk_ngoai,
+        f"{_liet(_lk_ngoai[:4])}: file sau link vẫn qua 9/10a/10b nhưng sao"
+        f" lưu kho và git KHÔNG mang chúng - bản gốc nằm ở chỗ không ai giữ."
+        f" Chuyển dữ liệu THẬT vào kho rồi gỡ link, mức C")
+
     khoa_ho = None
     if loc_ho is not None:
         try:
             khoa_ho = giai_ho(kho, loc_ho)
         except ValueError as e:
-            bao("9-11. chế độ --ho giải được đúng một họ tài liệu", False, str(e))
+            bao("9-11. --ho giải đúng một họ tài liệu", False, str(e))
             return
     pv = f" [họ {khoa_ho[0]}/{khoa_ho[1]}]" if khoa_ho else ""
     lan_dau = not any(khoa_ho_cua(k) == khoa_ho for k in truoc) if khoa_ho else not truoc
@@ -1181,7 +1217,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     nhom, moi = quet_ho(kho, truoc, bo_them, khoa_ho, bay_gio)
     if khoa_ho:
         if not moi:
-            bao("9-11. chế độ --ho giải được đúng một họ tài liệu", False,
+            bao("9-11. --ho giải đúng một họ tài liệu", False,
                 f"không file nào thuộc họ '{khoa_ho[1]}' trong '{khoa_ho[0]}'")
             return
         # THAY đúng họ đang quét: bỏ mọi mục cũ của họ này rồi thêm tập hiện tại
@@ -1216,6 +1252,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
                     if khoa_ho_cua(h[5][4:].strip("` ").replace("\\", "/").strip("/")) == khoa_ho]
 
     mat, sua_bat_bien, lech_sha, khong_kiem = [], [], [], []
+    _lech_hoa = []
     for h in dong_kho:
         rel = h[5][4:].strip("` ").replace("\\", "/").strip("/")
         # gốc DÀI: vòng 67 thêm goc_dai cho quet_ho và quet_secret mà quên đây,
@@ -1238,6 +1275,21 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         if not duong.exists():
             mat.append((h[1], rel))
             continue
+        # 9d. Tên THẬT trên đĩa khác HOA-THƯỜNG với tên khai: NTFS cho qua
+        #     nên phép 9 im, nhưng đồng bộ sang Linux hay git checkout là
+        #     "mất file" hàng loạt (backlog vòng 22). resolve() trả đúng
+        #     casing trên Windows; so sau khi NFC hai vế để không dẫm lưới NFD.
+        try:
+            import unicodedata as _ud9d
+            _that9 = str(duong.resolve()).replace("\\", "/")
+            _duoi9 = _that9[-len(rel):] if len(_that9) >= len(rel) else _that9
+            _a9 = _ud9d.normalize("NFC", _duoi9)
+            _b9 = _ud9d.normalize("NFC", rel)
+            if _a9.lower() == _b9.lower() and _a9 != _b9:
+                _lech_hoa.append(f"{h[1].strip()}: sổ {rel[-30:]} / đĩa"
+                                 f" {_duoi9[-30:]}")
+        except OSError:
+            pass
         sha_so = next((o for o in h if re.fullmatch(r"[0-9a-f]{12,64}", o)), None)
         if sha_so and duong.is_file():
             sha_that = (moi.get(rel) or {}).get("sha") or sha_file(duong)
@@ -1261,10 +1313,17 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     #      99_Goc. Bản NHÁP chưa tới điểm đó thì không phạt.
     _thieu_sha = []
     for h in dong_kho:
-        _rel_h = h[5][4:].strip("` ").replace("\\", "/").strip("/")
-        if _rel_h.endswith("/") or "[đã xóa theo Q-" in "|".join(h):
+        # hỏi THƯ MỤC trên chuỗi CHƯA strip("/"): bản cũ strip xong mới hỏi
+        # endswith("/") nên nhánh này là mã chết, và bộ hồ sơ ĐÃ NỘP (X0 C1
+        # bắt bỏ trống sha) bị đòi sha oan (backlog vòng 22)
+        _tho_h = h[5].strip().strip("`").replace("\\", "/")
+        if _tho_h.endswith("/") or "[đã xóa theo Q-" in "|".join(h):
             continue          # dòng trỏ THƯ MỤC: X0 C1 bắt bỏ trống ô sha
-        if not (any(t in h for t in BAT_BIEN)
+        _rel_h = _tho_h[4:].strip("/ ")
+        # cùng LUẬT ĐỌC MỐC với 10a (bo_dau + chú thích kèm): so tuyệt đối thì
+        # "Da ky" hay "ĐÃ KÝ (bản scan 19/8)" được 10a coi là mốc nhưng 10d
+        # cho qua - thiếu sha ở đúng bản đã ký mà sổ vẫn xanh (vòng 22)
+        if not (any(bo_dau(t) in bo_dau(o) for t in BAT_BIEN for o in h)
                 or _rel_h.lower().startswith("99_goc/")):
             continue
         if not any(re.fullmatch(r"[0-9a-f]{12,64}", o) for o in h):
@@ -1273,7 +1332,10 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         f"{_liet(_thieu_sha[:5])}: thiếu sha thì 10a và 10b BỎ QUA trọn dòng,"
         f" tức bản đã ký hay đã nộp không còn lưới toàn vẹn nào (X4 dòng 5)."
         f" Chạy lại lượt ghi để đóng sha, mức A")
-    bao("9. file khai 'Kho' trong TAILIEU còn trên kho" + pv, not mat,
+    bao("9d. tên khai đúng hoa thường với đĩa" + pv, not _lech_hoa,
+        f"{_liet(_lech_hoa[:3])}: NTFS cho qua nhưng đồng bộ Linux, git hay"
+        f" rsync coi là MẤT FILE. Sửa sổ theo tên thật trên đĩa, mức A")
+    bao("9. file khai 'Kho' còn trên kho" + pv, not mat,
         f"{mat[:5]}"
         + (": tài liệu nằm ở KHO CŨ thì khai dạng \"KhoCu <đường dẫn từ"
            " @KHO.CU>\" (X0 C1) - dạng đó không bị kiểm tồn tại vì kho cũ chỉ"
@@ -1309,7 +1371,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
               " _lich_su; là FILE THẬT khác nội dung thì cứ ghi TAILIEU như thường:")
         for d, goc_ng in nghi_ban_sao[:10]:
             print(f"          - {d} (tiền tố gây nghi: {goc_ng})")
-    bao("11. không họ nào cùng vN mà khác nội dung" + pv, not xung_dot,
+    bao("11. không họ nào cùng vN khác nội dung" + pv, not xung_dot,
         str(xung_dot[:3]))
     if lan_dau:
         print(f"        LƯU Ý: lần quét ĐẦU của phạm vi này, chưa file nào đạt luật ổn"
@@ -1965,7 +2027,7 @@ def main(goc):
         print("  BỎ QUA  1: " + ("X0 tên chưa chuẩn, đổi tên theo 0c rồi chạy lại"
               if ung_vien_tho else "chưa cài đặt, chưa có X0 để so instruction_yeu_cau"))
     else:
-        bao("1. instruction_yeu_cau khớp bản INSTRUCTION",
+        bao("1. instruction_yeu_cau khớp INSTRUCTION",
             bool(yc and iv and yc.group(1) == iv.group(1)),
             f"X0={yc and yc.group(1)} INSTR={iv and iv.group(1)}")
 
@@ -1978,9 +2040,9 @@ def main(goc):
     chua_cai = ((bool(rev and rev.group(1) == "0") or (not x0s and co_template))
                 and not dau_vet_ghi)
     if rev and rev.group(1) == "0" and dau_vet_ghi:
-        bao("0h. rev của X0 khớp trạng thái sổ đã ghi", False,
-            f"X0 còn rev 0 (nghĩa là CHƯA cài) mà sổ đã mang dấu mã G"
-            f" ({_liet(dau_vet_ghi[:3])}): X0 bị khôi phục nhầm về bản cũ hay mất dòng"
+        bao("0h. rev X0 khớp trạng thái sổ đã ghi", False,
+            f"X0 còn rev 0 (CHƯA cài) mà sổ đã mang dấu mã G"
+            f" ({_liet(dau_vet_ghi[:3])}): X0 bị khôi phục nhầm bản cũ hay mất dòng"
             f" rev. Phục hồi rev đúng, mức C, từ {BAN_CU} TRƯỚC khi ghi tiếp."
             f" [AI: cấm cấp mã G mới khi chưa có lại]")
     if chua_cai:
@@ -2027,13 +2089,12 @@ def main(goc):
               f" còn thì thành LỆCH: git pull hay git stash sẽ nuốt dòng sổ")
     elif vung_git is not None:
         bao("0g. kho chạy không nằm trong bản git", False,
-            f"thấy thư mục ẩn tên .git ở {vung_git} (thư mục này, hay THƯ MỤC CHA"
-            f" của kho). Sổ sách của công ty đang nằm trong vùng git quản. Nói"
-            f" với AI \"xóa .git giúp tôi\" - sổ trên đĩa không suy suyển gì; muốn"
-            f" tự làm thì bật hiện file ẩn trong File Explorer (tab View, tick"
-            f" Hidden items) rồi xóa. TUYỆT ĐỐI đừng gõ git pull hay git stash ở"
-            f" đây: lỡ gõ rồi mà sổ trống thì chạy git stash pop lấy lại ngay."
-            f" Nâng cấp bộ theo X9 mục 3c")
+            f"thấy thư mục ẩn .git ở {vung_git} (thư mục này hay THƯ MỤC CHA"
+            f" của kho): sổ công ty đang nằm trong vùng git quản. Nói với AI"
+            f" \"xóa .git giúp tôi\" - sổ trên đĩa không suy suyển gì; tự làm"
+            f" thì bật Hidden items trong File Explorer rồi xóa. TUYỆT ĐỐI"
+            f" đừng gõ git pull hay git stash ở đây; lỡ gõ mà sổ trống thì git"
+            f" stash pop lấy lại ngay. Nâng cấp bộ theo X9 mục 3c")
 
     # 0k. NEO NGOÀI _so: mọi nhân chứng (NHATKY, sáu sổ, hai view) đều nằm
     #     TRONG _so, nên một lần khôi phục nhầm hay rollback đám mây TRỌN thư
@@ -2057,9 +2118,9 @@ def main(goc):
                                                           list(so.glob("NHATKY_*.md"))
                                                           + list((so / "_lich_su")
                                                                  .glob("NHATKY_*.md"))))))
-            bao("0k. mã G ở _moc_ghi.txt đều còn dòng NHATKY", not _mat,
-                f"{_liet(_mat[:5])}: neo ngoài _so còn mã mà NHATKY không có -"
-                f" thư mục _so đã bị LÙI hay khôi phục nhầm. Khôi phục mức C từ"
+            bao("0k. mã G _moc_ghi.txt còn dòng NHATKY", not _mat,
+                f"{_liet(_mat[:5])}: neo ngoài _so còn mã mà NHATKY không có:"
+                f" _so đã bị LÙI hay khôi phục nhầm. Khôi phục mức C từ"
                 f" {BAN_CU}. [AI: cấm cấp mã G mới khi chưa có lại]")
 
     # 0i. C12 phải khai ĐÚNG tập mục còn trống. Ngoại lệ C11 (2) cho phép "điền
@@ -2095,7 +2156,7 @@ def main(goc):
 
         _lc = lech_c12(doc(x0s[0]))
         if _lc:
-            bao("0i. C12 khai đúng tập mục còn <chưa điền>", False,
+            bao("0i. C12 khai đúng tập mục <chưa điền>", False,
                 f"lệch {_liet(_lc[:5])}: mục biến khỏi C12 mà giá trị vẫn trống là lách"
                 f" ngoại lệ C11 (2); ngược lại là mục đã điền còn kẹt ở C12."
                 f" Đồng bộ C12 rồi sinh lại X0_INDEX")
@@ -2132,7 +2193,7 @@ def main(goc):
             f" thì chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ thì khai"
             f" vào _so\\_quan_sat_bo.txt và để NGOÀI 00_Index")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
-        bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
+        bao("0e. THU.md tồn tại khi EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
 
     bdk_nd = doc(so / "BANG_DIEU_KHIEN.md")
@@ -2227,7 +2288,7 @@ def main(goc):
                 _moi_nhat = max((f.stat().st_mtime for f in _slp.rglob("*")
                                  if f.is_file()), default=0)
                 _ngay = int((_t0m.time() - _moi_nhat) / 86400) if _moi_nhat else 9999
-                bao("0m. nơi sao lưu ngoài kho còn được cập nhật", _ngay <= 7,
+                bao("0m. nơi sao lưu ngoài kho còn cập nhật", _ngay <= 7,
                     f"{_sl_d}: bản mới nhất cách đây {_ngay} ngày - đây là bản"
                     f" DUY NHẤT sống sót một lượt rollback trọn _so. Sao lại, mức A")
 
@@ -2258,7 +2319,7 @@ def main(goc):
                                   f" ({_tuonglai[0][:40]}...)")
         except ValueError:
             _loi0n.append("không đọc được JSON")
-        bao("0n. cache quan sát không mang mốc tương lai",
+        bao("0n. cache quan sát không mốc tương lai",
             not _loi0n, f"{'; '.join(_loi0n[:2])}: luật ổn định hai lượt dựa"
             f" trọn vào file này, mốc sai làm bộ công nhận HIỆN HÀNH một file"
             f" có thể đang ghi dở. Xóa {_cache_p.name} để đặt lại quan sát"
@@ -2465,6 +2526,42 @@ def main(goc):
             f"{_liet(_tv[:5])}: giá trị ngoài từ vựng làm chính dòng đó TÀNG HÌNH"
             f" với 3c, 3d và mọi bộ đếm của bảng. Sửa về đúng từ vựng X5 mục 2,"
             f" mục 4 và X0 C7; [AI: tuyệt đối không gỡ dòng]")
+
+        # 3h. Ô ngày TRÔNG NHƯ NGÀY mà dem_qua_han KHÔNG đọc được: `30/06/2026`
+        #     hay `2026-13-01` làm ngay() trả None và dòng rơi LẶNG LẼ khỏi cả
+        #     ba bộ đếm quá hạn / rà lại / hết hạn - hợp đồng trễ 60 ngày mà
+        #     bảng vẫn "bàn sạch". Chỉ soi đúng BA CỘT bộ đếm đọc, không đụng
+        #     chữ tự do (backlog hội đồng vòng 22).
+        import datetime as _dt3h
+
+        def _iso_ok(_o):
+            _m = re.search(r"(\d{4})-(\d{2})-(\d{2})", _o)
+            if not _m:
+                return False
+            try:
+                _dt3h.date(*map(int, _m.groups()))
+                return True
+            except ValueError:
+                return False
+
+        _ngay_mu = []
+        for _t3, _c3 in (("VIEC.md", 6), ("DUKIEN.md", 9), ("TAILIEU.md", 11)):
+            for _r in dong_bang(doc(so / _t3)):
+                if len(_r) <= _c3 or not _r[_c3].strip():
+                    continue
+                _o = _r[_c3].strip()
+                if _iso_ok(_o):
+                    continue
+                if re.search(r"\d{1,2}[/.]\d{1,2}[/.]\d{2,4}"
+                             r"|\d{1,2}-\d{1,2}-\d{4}"
+                             r"|\d{4}[/.]\d{1,2}[/.]\d{1,2}"
+                             r"|\d{4}-\d{2}-\d{2}", _o):
+                    _ngay_mu.append(f"{_t3}:{(_r[1] or '?').strip()[:12]}"
+                                    f" ô {_o[:16]}")
+        bao("3h. ô ngày đọc được theo ISO", not _ngay_mu,
+            f"{_liet(_ngay_mu[:5])}: máy chỉ đọc YYYY-MM-DD nên dòng này rơi"
+            f" LẶNG LẼ khỏi bộ đếm quá hạn / rà lại / hết hạn trong khi người"
+            f" vẫn thấy ngày. Ghi lại theo ISO, mức A")
 
         # 3d (X4 dòng 23): lượt NHATKY mức C phải khớp một plan mang đúng mã G đó
         # X5 mục 5 BẮT chuyển plan ĐÃ GHI quá 30 ngày vào _lich_su: không đọc
@@ -2730,7 +2827,7 @@ def main(goc):
                     _repo_mo_coi.append((_r[1] if len(_r) > 1 else "?").strip()
                                         + (f" (Repo {_pm_o[0]})" if _pm_o else ""))
         if _repo_mo_coi:
-            bao("7d2. dòng Repo thuộc dự án có khai phần mềm",
+            bao("7d2. Repo thuộc dự án có khai phần mềm",
                 False, f"{_liet(_repo_mo_coi[:3])}: cột \"Ở đâu\" dạng Repo chỉ"
                 f" cho dòng thuộc dự án ĐÃ khai @DUAN.PHANMEM (X0 C1)."
                 f" Đang khai: {_liet(_ma_pm) or 'chưa dự án nào'}. Khai phạm vi"
@@ -2790,7 +2887,7 @@ def main(goc):
                                      (_r[0] or "?").strip())
                         _lo.append(f"{_t}:{_ma_d[:20]}")
                         break
-        bao("7e. secret không lọt vào sổ (X5 mục 1b)", not _lo,
+        bao("7e. secret không lọt vào sổ", not _lo,
             f"{_liet(sorted(set(_lo))[:5])}: X5 mục 1b cấm secret nằm trong kho"
             f" đồng bộ, trong sổ và trong _INBOX. THU HỒI và xoay khóa TRƯỚC, gỡ"
             f" khỏi sổ sau; sổ chỉ mô tả LOẠI secret và hệ liên quan, không bao"
@@ -2851,7 +2948,7 @@ def main(goc):
                         _sot.append(f"{_t7}:{(_r[0] or '?').strip()[:14]}"
                                     f" còn trỏ {_mm}")
                         break
-    bao("7b2. xóa pháp lý lan tới mọi dòng trỏ nó",
+    bao("7b2. xóa pháp lý lan mọi dòng trỏ nó",
         not _sot, f"{_liet(_sot[:4])}: dòng đó vẫn giữ dữ liệu của khách -"
         f" tên đối tác, tiêu đề luồng, Message-ID, sha256 - trong khi công ty"
         f" đã trả lời là đã xóa. Trung hòa NỐT theo X5 mục 7b, giữ khung dòng"
@@ -3072,7 +3169,7 @@ def main(goc):
             _wm_khai = set(re.findall(r"\b(CUA\d+)\s*=",
                                       _wmd.group(1) if _wmd else ""))
             _thieu_lane = sorted(cc for cc in wm if cc not in _wm_khai)
-            bao("8c. bảng khai watermark cho mọi cửa có ghi",
+            bao("8c. bảng khai watermark mọi cửa có ghi",
                 not _thieu_lane, f"thiếu lane {_liet(_thieu_lane)}: cửa đó mất mốc"
                 f" cao nhất, lượt sau có thể cấp lại mã đã dùng. Sinh lại bảng"
                 f" theo X5 mục 3 bước 6")
@@ -3080,7 +3177,7 @@ def main(goc):
                                      _wmd.group(1) if _wmd else ""))
             _lane_sai = sorted(f"{c}: bảng={_wm_gt.get(c) or 'thiếu'} NHATKY={m}"
                                for c, m in wm.items() if _wm_gt.get(c) != m)
-            bao("8d. watermark khớp mã cao nhất của cửa đó",
+            bao("8d. watermark khớp mã cao nhất cửa đó",
                 not _lane_sai, f"{_liet(_lane_sai[:3])}: lane LÙI hay khai sai thì"
                 f" lượt sau cấp lại mã ĐÃ DÙNG; 8c chỉ đếm TÊN lane nên mù giá trị")
             khac = [f"{k}={v}" for k, v in sorted(wm.items()) if k != c and v[2:10] > (gb or '')[2:10]]
@@ -3090,7 +3187,7 @@ def main(goc):
     try:
         args_thuong, loc_ho = tach_tham_so(sys.argv[1:])
     except ValueError as e:
-        bao("9-11. chế độ --ho giải được đúng một họ tài liệu", False, str(e))
+        bao("9-11. --ho giải đúng một họ tài liệu", False, str(e))
         args_thuong, loc_ho = [], None
     if len(args_thuong) > 1:
         kho_arg = Path(args_thuong[1])
@@ -3107,7 +3204,7 @@ def main(goc):
         else:
             quan_sat_kho(goc, so, kho_arg, loc_ho)
     elif loc_ho is not None:
-        bao("9-11. chế độ --ho giải được đúng một họ tài liệu", False,
+        bao("9-11. --ho giải đúng một họ tài liệu", False,
             "--ho cần cả <gốc kho> đứng trước")
     else:
         print("  BỎ QUA  9-11. không truyền <gốc kho>, không quan sát file nghiệp vụ")

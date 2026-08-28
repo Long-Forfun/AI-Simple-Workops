@@ -655,6 +655,86 @@ def phep_fuzz(goc, phu_them=()):
 
     thu("ví dụ bảng bọc trong ~~~ (không được kêu)", _ca_tilde, False)
 
+    import os as _os_ca
+    if _os_ca.name == "nt":
+        def _ca_hoa_thuong(k, i, so, G, sua):
+            """Đĩa có HopDong.md, sổ khai hopdong.md: NTFS cho qua nên 9 im,
+            đồng bộ sang Linux hay git checkout là mất file (vòng 22)."""
+            (k / "03_Phap_ly").mkdir(exist_ok=True)
+            _ghi(k / "03_Phap_ly" / "HopDong.md", "x")
+            _ghi(so / "TAILIEU.md",
+                 (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL)
+                 + NL + "| DA1 | T-087 | Hop dong C | v01 | 2026-08-20 |"
+                   " Kho 03_Phap_ly/hopdong.md | HIỆN HÀNH | NHÁP |"
+                   " 2026-08-20 | qs | noi bo | | | | " + G + " |" + NL)
+
+        thu3("sổ khai hopdong.md, đĩa là HopDong.md (NTFS cho qua)",
+             _ca_hoa_thuong, "9d.")
+
+    def _ca_junction_goc(k, i, so, G, sua):
+        """99_Goc là junction (nt) / symlink (posix) trỏ RA NGOÀI kho: file
+        sau link qua hết 9/10a/10b nhưng sao lưu và git không mang chúng."""
+        import os as _os, subprocess as _sp
+        ngoai = k.parent / "ngoai_kho"
+        ngoai.mkdir(exist_ok=True)
+        _ghi(ngoai / "goc.md", "x")
+        dich = k / "99_Goc"
+        if _os.name == "nt":
+            _sp.run(["cmd", "/c", "mklink", "/J", str(dich), str(ngoai)],
+                    capture_output=True)
+        else:
+            _os.symlink(ngoai, dich)
+
+    thu3("99_Goc là junction trỏ ra ngoài kho", _ca_junction_goc, "0q.")
+
+    def _dong_tl2(so, G, k, o_dau, trang_thai, sha=""):
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "hd.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-085 | Hop dong B | v01 | 2026-08-20 | " + o_dau
+             + " | HIỆN HÀNH | " + trang_thai + " | 2026-08-20 | qs |"
+               " noi bo | | | " + sha + " | " + G + " |" + NL)
+
+    thu3("mốc ghi 'ĐÃ KÝ (bản scan 19/8)' mà ô sha trống",
+         lambda k, i, so, G, sua: _dong_tl2(so, G, k, "Kho 03_Phap_ly/hd.md",
+                                            "ĐÃ KÝ (bản scan 19/8)"), "10d.")
+
+    def _ca_bo_ho_so_nop(k, i, so, G, sua):
+        """ĐÚNG LUẬT: BỘ HỒ SƠ đã nộp thầu - dòng trỏ THƯ MỤC kết thúc `\\`,
+        X0 C1 bắt BỎ TRỐNG ô sha. Đòi sha ở đây là bắt người dùng làm trái
+        luật của chính bộ."""
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        (k / "03_Phap_ly" / "ThauA").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "ThauA" / "x.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-086 | Bo ho so thau A | v01 | 2026-08-20 |"
+               " Kho 03_Phap_ly/ThauA\\ | HIỆN HÀNH | ĐÃ NỘP | 2026-08-20 |"
+               " qs | noi bo | | | | " + G + " |" + NL)
+
+    thu("bộ hồ sơ ĐÃ NỘP trỏ thư mục, sha trống (không được kêu)",
+        _ca_bo_ho_so_nop, False)
+
+    def _dong_tl(so, G, k, het_han):
+        (k / "03_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "03_Phap_ly" / "gp.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-084 | Giay phep con | v01 | 2026-08-20 |"
+               " Kho 03_Phap_ly/gp.md | HIỆN HÀNH | NHÁP | 2026-08-20 | qs |"
+               " noi bo | " + het_han + " | | | " + G + " |" + NL)
+
+    thu3("ô Hết hạn ghi 30/06/2027 kiểu Việt (bộ đếm câm)",
+         lambda k, i, so, G, sua: _dong_tl(so, G, k, "30/06/2027"), "3h.")
+
+    def _ca_iso_kem_chu(k, i, so, G, sua):
+        """ĐÚNG LUẬT: ô mang ngày ISO kèm ghi chú - dem_qua_han đọc bằng
+        re.search nên vẫn THẤY ngày; 3h không được tố."""
+        _dong_tl(so, G, k, "2098-01-31 (gia hạn)")
+
+    thu("ô ngày ISO kèm ghi chú chữ (không được kêu)", _ca_iso_kem_chu, False)
+
     def _ca_dong_info(k, i, so, G, sua):
         """ĐÚNG LUẬT: trong khối ``` có một dòng ```bash - CommonMark nói dòng
         ĐÓNG không được mang info string, nên nó là RUỘT chứ không phải dòng
@@ -758,7 +838,7 @@ def phep_fuzz(goc, phu_them=()):
         False)
 
     def _ca_thoat_va_thumuc(k, i, so, G, sua):
-        """ĐÚNG LUẬT HAI LẦN trong MỘT dòng: ô Tài liệu mang dấu | viết theo
+        r"""ĐÚNG LUẬT HAI LẦN trong MỘT dòng: ô Tài liệu mang dấu | viết theo
         GFM là `\|`, ô Ở đâu trỏ BỘ HỒ SƠ nên kết thúc bằng `\` (X0 C1) và gõ
         SÁT dấu ngăn. Tách trọn GFM hụt một ô, tách trọn THÔ dôi một ô - lối
         được-ăn-cả-ngã-về-không của vòng 38 bó tay (hội đồng vòng 23)."""
@@ -775,7 +855,7 @@ def phep_fuzz(goc, phu_them=()):
         _ca_thoat_va_thumuc, False)
 
     def _ca_thoat_that(k, i, so, G, sua):
-        """ĐÚNG LUẬT: ô mang dấu | viết theo GFM là `\|` - cách DUY NHẤT hợp lệ.
+        r"""ĐÚNG LUẬT: ô mang dấu | viết theo GFM là `\|` - cách DUY NHẤT hợp lệ.
         Tách THÔ thì dòng dôi một ô và phép 5 tố oan, nên lối GFM phải còn."""
         _ghi(so / "TAILIEU.md",
              (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
@@ -1308,10 +1388,12 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 26, 58):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 26,"
-                    f" I3 58 - bớt ca là bớt lưới; đổi số thì sửa con số này"
-                    f" trong CÙNG lượt vá")
+    import os as _os_dem
+    _i3_mong = 62 if _os_dem.name == "nt" else 61   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 28, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 28,"
+                    f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
+                    f" này trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
     #      CHÍNH kiem_tra_bo, nên xóa một phép khỏi kiem_van_hanh vẫn "sạch".

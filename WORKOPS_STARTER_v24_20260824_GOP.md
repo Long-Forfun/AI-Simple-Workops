@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 70 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 71 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,44 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 71: trả nốt bốn món MISS của hội đồng vòng 22
+
+Không chờ hội đồng vòng 23 về đủ: bốn mục backlog mà giám khảo vòng 22 đã
+chứng minh bằng ca chạy thật, vá hết trong một vòng.
+
+1. Phép 3h - Ô NGÀY TRÔNG NHƯ NGÀY MÀ MÁY KHÔNG ĐỌC ĐƯỢC. `30/06/2026` hay
+   `2026-13-01` làm ngay() trả None và dòng rơi LẶNG LẼ khỏi cả ba bộ đếm
+   quá hạn / rà lại / hết hạn - hợp đồng trễ 60 ngày mà bảng vẫn "bàn sạch".
+   Chỉ soi đúng BA CỘT bộ đếm đọc để không tố oan chữ tự do; ô mang ngày ISO
+   hợp lệ kèm ghi chú thì tha (ca I2 ghim).
+
+2. Phép 10d vá HAI LỖI. Một: strip("/") xong mới hỏi endswith("/") - nhánh
+   nhận diện THƯ MỤC là mã chết, bộ hồ sơ ĐÃ NỘP (X0 C1 bắt bỏ trống sha) bị
+   đòi sha oan. Hai: so mốc bằng chuỗi TUYỆT ĐỐI trong khi 10a so bo_dau -
+   `ĐÃ KÝ (bản scan 19/8)` được 10a coi là mốc nhưng 10d cho qua, thiếu sha ở
+   đúng bản đã ký mà sổ vẫn xanh. Hai phép cùng đọc một ô nay cùng luật.
+
+3. Phép 0q - JUNCTION/SYMLINK TRỎ RA NGOÀI KHO. `mklink /J 99_Goc D:\ngoai`
+   không cần admin, không phải symlink (is_symlink trả False), cho file ngoài
+   kho qua hết 9/10a/10b/10d - trong khi sao lưu kho và git KHÔNG mang chúng:
+   "bản gốc bất biến" nằm ở chỗ không ai giữ. Đi os.walk không theo link, hỏi
+   cả is_junction lẫn is_symlink, chỉ tố link trỏ RA NGOÀI.
+
+4. Phép 9d - TÊN KHAI LỆCH HOA-THƯỜNG VỚI ĐĨA. NTFS cho qua nên phép 9 im,
+   nhưng đồng bộ sang Linux, git checkout hay rsync coi là MẤT FILE hàng
+   loạt. resolve() trả đúng casing trên Windows; so sau khi NFC hai vế để
+   không dẫm lưới NFD. Ca I3 chỉ đăng ký trên NTFS - trên POSIX khai sai hoa
+   thường nghĩa là mất file thật và phép 9 đã bắt sẵn - nên SỐ CA I3 khai
+   THEO NỀN (62 nt / 61 posix), lần đầu con số này có điều kiện.
+
+Trần đầu ra GIỮ NGUYÊN cả vòng: trả chỗ cho ba nhãn mới bằng cắt gọn thông
+điệp 0g, 0h, 0k và mười nhãn - tổng bảng CẬN XẤU đúng 5.200/5.200. Token đầu
+ra kho lành 806 -> 824, khai lại ở BENCHMARK theo số đo thật. Dọn nốt hai
+SyntaxWarning docstring của chính kiem_tra_bo.
+
+BẤT BIẾN I1 7, I2 28, I3 62(nt)/61. BACKLOG còn: (j) vòng đời _inbox ·
+(a) hash nội dung QUYETDINH · (c) khuôn bản sao · (e) sổ CSV.
 
 ## Vòng 70: một máy fence duy nhất, và tach_o mở dần từng ngăn
 
@@ -1483,7 +1521,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~806
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~824
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
