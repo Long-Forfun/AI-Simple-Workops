@@ -617,6 +617,19 @@ def phep_fuzz(goc, phu_them=()):
              + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
              " x | x | x | x | MỚI | |" + NL), "7c.")
 
+    def _ca_khocu(k, i, so, G, sua):
+        """ĐÚNG LUẬT: tài liệu ở KHO CŨ khai dạng thứ năm - kho cũ chỉ tra lịch
+        sử và có thể offline nên 7f, 9, 10a, 10b đều phải im. Trước vòng 61
+        KHÔNG dạng nào hợp lệ: mọi công ty vừa chuyển kho hoặc ôm lệch vĩnh
+        viễn hoặc nhân đôi kho (hội đồng vòng 19)."""
+        _p = so / "TAILIEU.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-091 | Hop dong 2022 | v1 | 2022-03-04 |"
+             " KhoCu 01_Phap_ly\\HD_2022.pdf | HIỆN HÀNH | ĐÃ KÝ | 2022-03-04 |"
+             " doi tac | doi tac | | | | " + G + " |" + NL)
+
+    thu("tài liệu ở kho cũ khai dạng KhoCu (không được kêu)", _ca_khocu, False)
+
     def _ca_7h(k, i, so, G, sua):
         """Phiên hẹn giờ tự chốt mức C và GỬI công văn ra ngoài công ty."""
         sua(i / "X0_CAUHINH_FUZ.md", "  [ ] AUTOMATED", "  [x] AUTOMATED")
@@ -921,8 +934,8 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 11, 38):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 11,"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 12, 38):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 12,"
                     f" I3 38 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
@@ -1327,7 +1340,7 @@ def main(goc):
     #     Khuôn y hệt 9b - thứ DUY NHẤT đã chứng minh hiệu lực bằng đột biến:
     #     nới một trần trong NGAN_SACH thì 9b bắt, còn nới `n > 500` hay
     #     `<= 4200` thì không ai kêu (hội đồng vòng 17, 6/6 đột biến sống sót).
-    NGUONG_RT = [("X0 runtime", 22000, r"_n_x0 <= (\d+)", "kiem_van_hanh"),
+    NGUONG_RT = [("X0 runtime", 28000, r"_n_x0 <= (\d+)", "kiem_van_hanh"),
                  ("BANG_DIEU_KHIEN runtime", 4200, r"len\(bdk_nd\) <= (\d+)",
                   "kiem_van_hanh"),
                  ("X0_INDEX runtime", 2400, r"len\(idx_rt\) <= (\d+)",

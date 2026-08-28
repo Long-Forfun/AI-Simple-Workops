@@ -1022,6 +1022,9 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         ghi_cache(cache, bay_gio, moi)
 
     hang = dong_bang(doc(so / "TAILIEU.md"))
+    # "KhoCu " là kho đã NGỪNG (X0 C1 @KHO.CU): chỉ tra lịch sử, có thể
+    # offline, nên phép 9, 10a, 10b không soi - startswith("Kho ") có dấu cách
+    # nên tự loại "KhoCu " rồi, ghi ra đây để vòng sau đừng nới nhầm
     dong_kho_all = [h for h in hang if len(h) > 5 and h[5].startswith("Kho ")]
     # v19: phạm vi ĐÃ VÀO SỔ luôn tính trên TOÀN BỘ TAILIEU, kể cả ở chế độ --ho.
     # Một dòng trỏ THƯ MỤC bao phủ mọi file con; lọc theo họ trước khi tính bao
@@ -1054,7 +1057,12 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
                 _o_kd = [bo_dau(o) for o in h]
                 (sua_bat_bien if any(bo_dau(t) in o for t in BAT_BIEN
                                      for o in _o_kd) else lech_sha).append(h[1])
-    bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat, str(mat[:5]))
+    bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat,
+        f"{mat[:5]}"
+        + (": tài liệu nằm ở KHO CŨ thì khai dạng \"KhoCu <đường dẫn từ"
+           " @KHO.CU>\" (X0 C1) - dạng đó không bị kiểm tồn tại vì kho cũ chỉ"
+           " tra lịch sử và có thể offline; ĐỪNG chép file sang kho mới, X5"
+           " mục 6 bắt bản cuối chỉ nằm MỘT kho" if mat else ""))
     bao("10a. mốc chính thức không bị sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
     bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha, str(lech_sha[:5]))
     if khong_kiem:
@@ -1891,7 +1899,7 @@ def main(goc):
     #     (18.969 LITE, 19.059 REGULATED+EMAIL) không bị kêu oan.
     if x0s:
         _n_x0 = len(doc(x0s[0]))
-        bao("1d. X0 đang chạy trong trần runtime 22.000 ký tự", _n_x0 <= 22000,
+        bao("1d. X0 đang chạy trong trần runtime 28.000 ký tự", _n_x0 <= 28000,
             f"{_n_x0} ký tự: X0 là file phiên CHAT nạp NGUYÊN VẸN mỗi lượt, nên"
             f" nó phình là thuế thường trực phình theo. Chuyển phần liệt kê dài"
             f" xuống sổ, giữ X0 là nơi khai THAM SỐ")
@@ -2482,7 +2490,9 @@ def main(goc):
             continue          # ô TRỐNG là dòng chưa đặt chỗ; tombstone là thứ
             # X5 mục 7b BẮT ghi vào đúng ô này khi tên file mang dữ liệu cá
             # nhân - 8e và 12k đã miễn nó, 7f quên (hội đồng vòng 19)
-        if not re.match(r"(Kho|Project|Drive|Repo) \S", _o):
+        # so bằng \s sau TÊN DẠNG: bản cũ để "Kho cũ E:\..." lách vào dạng
+        # "Kho" rồi bị phép 9 tố mất file (hội đồng vòng 19)
+        if not re.match(r"(Kho|KhoCu|Project|Drive|Repo)\s\S", _o):
             _sai_khuon.append(f"{(_r[1] if len(_r) > 1 else '?').strip()[:14]}:"
                               f" {_o[:30]}")
     bao("7f. ô \"Ở đâu\" của TAILIEU thuộc bốn dạng X0 C1", not _sai_khuon,

@@ -9,6 +9,45 @@ Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 60: hai luật BẤT KHẢ THI
+
+Hai mục còn lại của hội đồng vòng 19 thuộc loại nặng nhất về nghiệp vụ: không
+phải "máy im" mà là "làm đúng thì máy chặn".
+
+(z1) TRẦN 1d 22.000 BẤT KHẢ THI. Tôi đặt con số đó ở vòng 48 bằng phép tính
+"trần template cộng 10%" mà CHƯA HỀ ĐO một kho REGULATED cài đúng - đúng thói
+quen mà cả chiến dịch này đi diệt ở chỗ khác. Giám khảo đo: template rỗng đã
+19.614 ký tự = 89% trần; trả lời TRỌN nhóm B của X9 mục 2 (phạm vi và từ cấm,
+các bên và vai, nguồn thẩm quyền, thuật ngữ) là 22.497; cộng ~1.216 ký tự dấu
+`[x] ... điền lần đầu` mà C11 CẤM xóa thì kho cài xong đúng luật nằm khoảng
+23.700. Nghĩa là MỌI công ty REGULATED làm đúng đều nhận LỆCH vĩnh viễn ngay
+phiên soạn tài liệu đầu tiên. Lời khuyên của chính phép ("chuyển phần liệt kê
+dài xuống sổ") lại mâu thuẫn với C11 và C14: @BEN.VAI, @PHAMVI.CAM,
+@NGUON.LOAI là nhóm khóa mà X1 và X2 phải đọc TẠI CHỖ, không chép đi đâu.
+Trần mới 28.000, và phép 9c bắt tôi khai nó ở CẢ HAI nơi kèm lý do - đúng việc
+9c sinh ra để làm.
+
+(z2) @KHO.CU KHÔNG CÓ DẠNG "Ở ĐÂU" NÀO HỢP LỆ. X0 C1 dựng ô @KHO.CU cho kho đã
+ngừng "chỉ tra lịch sử", nhưng cột "Ở đâu" chỉ nhận bốn dạng và cả ba lối người
+dùng thử đều hỏng: `Kho ..\KhoCu\...` bị phép 9 tố mất file · `KhoCu E:\...`
+bị 7f tố sai dạng · `Kho cũ E:\...` lọt 7f rồi vẫn bị 9 tố. Lối DUY NHẤT máy
+chấp nhận là CHÉP file sang kho mới, mà làm vậy là phá X5 mục 6 "bản cuối một
+tài liệu chỉ nằm một kho". Mọi công ty vừa chuyển kho hoặc ôm lệch vĩnh viễn
+hoặc nhân đôi kho, và hồ sơ 5 năm không vào được sổ nào.
+Dạng thứ NĂM `KhoCu <đường dẫn từ @KHO.CU>`; phép 9, 10a, 10b không soi nó vì
+kho cũ có thể offline.
+
+Một chỗ tôi KHÔNG vá dù giám khảo nêu: `Kho cũ E:\...` vẫn qua được 7f. Đó là
+"Kho" cộng một đường dẫn tên "cũ ...", và 7f không có cách nào phân biệt nó với
+một đường dẫn tương đối hợp lệ bắt đầu bằng chữ "cũ" - bắt 7f đoán là mở đường
+cho báo oan. Phép 9 bắt đúng ca này; việc cần làm là thông điệp của 9 chỉ sang
+dạng KhoCu, vì đó mới là chỗ người dùng thật sự đọc khi gặp nó.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(z3) dự án NGỪNG còn nghĩa vụ bảo hành 12 tháng: X0 C2 chỉ cho HỦY hay bàn giao
+dự án khác, cả hai đều sai sự thật · (z4) NHATKY vượt 500 dòng trong MỘT quý
+chưa có lối tách nào được luật mô tả · (a) (b) (c) (e) như cũ.
+
 ## Vòng 59: lưu trữ hết là vùng khuất, header hết tắt lưới trong im lặng
 
 (z5) 3c, 3d, 3e, 7 và 12l đều đã học đọc `_so\_lich_su\` qua các vòng 41, 15 và

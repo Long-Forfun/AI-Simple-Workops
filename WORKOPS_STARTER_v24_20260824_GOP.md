@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 59 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 60 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,45 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 60: hai luật BẤT KHẢ THI
+
+Hai mục còn lại của hội đồng vòng 19 thuộc loại nặng nhất về nghiệp vụ: không
+phải "máy im" mà là "làm đúng thì máy chặn".
+
+(z1) TRẦN 1d 22.000 BẤT KHẢ THI. Tôi đặt con số đó ở vòng 48 bằng phép tính
+"trần template cộng 10%" mà CHƯA HỀ ĐO một kho REGULATED cài đúng - đúng thói
+quen mà cả chiến dịch này đi diệt ở chỗ khác. Giám khảo đo: template rỗng đã
+19.614 ký tự = 89% trần; trả lời TRỌN nhóm B của X9 mục 2 (phạm vi và từ cấm,
+các bên và vai, nguồn thẩm quyền, thuật ngữ) là 22.497; cộng ~1.216 ký tự dấu
+`[x] ... điền lần đầu` mà C11 CẤM xóa thì kho cài xong đúng luật nằm khoảng
+23.700. Nghĩa là MỌI công ty REGULATED làm đúng đều nhận LỆCH vĩnh viễn ngay
+phiên soạn tài liệu đầu tiên. Lời khuyên của chính phép ("chuyển phần liệt kê
+dài xuống sổ") lại mâu thuẫn với C11 và C14: @BEN.VAI, @PHAMVI.CAM,
+@NGUON.LOAI là nhóm khóa mà X1 và X2 phải đọc TẠI CHỖ, không chép đi đâu.
+Trần mới 28.000, và phép 9c bắt tôi khai nó ở CẢ HAI nơi kèm lý do - đúng việc
+9c sinh ra để làm.
+
+(z2) @KHO.CU KHÔNG CÓ DẠNG "Ở ĐÂU" NÀO HỢP LỆ. X0 C1 dựng ô @KHO.CU cho kho đã
+ngừng "chỉ tra lịch sử", nhưng cột "Ở đâu" chỉ nhận bốn dạng và cả ba lối người
+dùng thử đều hỏng: `Kho ..\KhoCu\...` bị phép 9 tố mất file · `KhoCu E:\...`
+bị 7f tố sai dạng · `Kho cũ E:\...` lọt 7f rồi vẫn bị 9 tố. Lối DUY NHẤT máy
+chấp nhận là CHÉP file sang kho mới, mà làm vậy là phá X5 mục 6 "bản cuối một
+tài liệu chỉ nằm một kho". Mọi công ty vừa chuyển kho hoặc ôm lệch vĩnh viễn
+hoặc nhân đôi kho, và hồ sơ 5 năm không vào được sổ nào.
+Dạng thứ NĂM `KhoCu <đường dẫn từ @KHO.CU>`; phép 9, 10a, 10b không soi nó vì
+kho cũ có thể offline.
+
+Một chỗ tôi KHÔNG vá dù giám khảo nêu: `Kho cũ E:\...` vẫn qua được 7f. Đó là
+"Kho" cộng một đường dẫn tên "cũ ...", và 7f không có cách nào phân biệt nó với
+một đường dẫn tương đối hợp lệ bắt đầu bằng chữ "cũ" - bắt 7f đoán là mở đường
+cho báo oan. Phép 9 bắt đúng ca này; việc cần làm là thông điệp của 9 chỉ sang
+dạng KhoCu, vì đó mới là chỗ người dùng thật sự đọc khi gặp nó.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(z3) dự án NGỪNG còn nghĩa vụ bảo hành 12 tháng: X0 C2 chỉ cho HỦY hay bàn giao
+dự án khác, cả hai đều sai sự thật · (z4) NHATKY vượt 500 dòng trong MỘT quý
+chưa có lối tách nào được luật mô tả · (a) (b) (c) (e) như cũ.
 
 ## Vòng 59: lưu trữ hết là vùng khuất, header hết tắt lưới trong im lặng
 
@@ -1611,7 +1650,12 @@ Sáu ngưỡng dưới đây trước vòng 49 đứng NGOÀI mọi lưới: n�
 ai kêu, mà nới trần là lối "vá" rẻ nhất khi bộ đỏ. Nay chúng khai ở đây và
 phép 9c đối chiếu với hằng trong mã, đúng khuôn phép 9b đã dùng cho NGAN_SACH.
 
-X0 runtime 22.000 ký tự · BANG_DIEU_KHIEN runtime 4.200 · X0_INDEX runtime
+X0 runtime 28.000 ký tự (nâng ở vòng 61: con số 22.000 của vòng 48 đặt
+bằng phép tính "template cộng 10%" mà chưa đo kho thật, và mọi công ty
+REGULATED cài ĐÚNG đều vượt - đo được 22.497 sau khi trả lời trọn nhóm B
+của X9, cộng ~1.216 ký tự dấu C12 mà C11 cấm xóa. Gate không đổi: COWORK
+đọc X0 THEO MỤC, thuế thường trực thật là X0_INDEX) · BANG_DIEU_KHIEN
+runtime 4.200 · X0_INDEX runtime
 2.400 · một sổ tối đa 500 dòng · đầu ra kho lành 2.700 ký tự · đầu ra kho cận
 xấu 5.200 ký tự. Đổi một con số thì phải đổi CẢ HAI nơi trong cùng lượt vá.
 
@@ -1892,9 +1936,11 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 ```
 
 Cột "Ở đâu" của sổ TAILIEU chỉ nhận: "Kho <đường dẫn tương đối từ gốc kho>" ·
+"KhoCu <đường dẫn tương đối từ @KHO.CU>" (chỉ khi @KHO.CU khác "không có"; kho
+cũ chỉ tra lịch sử nên máy không kiểm tồn tại hay sha) ·
 "Project <đường dẫn doc>" · "Drive <ID folder>" · "Repo <mã PM> <đường dẫn
 trong repo>@<commit hay tag>" (chỉ cho dòng thuộc dự án @DUAN.PHANMEM, ô
-sha256 bỏ trống vì repo tự giữ lịch sử). Ngoài bốn dạng đó là cấm.
+sha256 bỏ trống vì repo tự giữ lịch sử). Ngoài năm dạng đó là cấm.
 Trỏ tới MỘT FILE thì ghi tới tận tên file; trỏ tới cả BỘ HỒ SƠ thì ghi đường dẫn
 thư mục kết thúc bằng dấu \ và bỏ trống ô sha256 (bộ quan sát chỉ đối chiếu sha
 cho dòng trỏ file).

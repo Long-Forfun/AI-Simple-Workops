@@ -67,7 +67,12 @@ Sáu ngưỡng dưới đây trước vòng 49 đứng NGOÀI mọi lưới: n�
 ai kêu, mà nới trần là lối "vá" rẻ nhất khi bộ đỏ. Nay chúng khai ở đây và
 phép 9c đối chiếu với hằng trong mã, đúng khuôn phép 9b đã dùng cho NGAN_SACH.
 
-X0 runtime 22.000 ký tự · BANG_DIEU_KHIEN runtime 4.200 · X0_INDEX runtime
+X0 runtime 28.000 ký tự (nâng ở vòng 61: con số 22.000 của vòng 48 đặt
+bằng phép tính "template cộng 10%" mà chưa đo kho thật, và mọi công ty
+REGULATED cài ĐÚNG đều vượt - đo được 22.497 sau khi trả lời trọn nhóm B
+của X9, cộng ~1.216 ký tự dấu C12 mà C11 cấm xóa. Gate không đổi: COWORK
+đọc X0 THEO MỤC, thuế thường trực thật là X0_INDEX) · BANG_DIEU_KHIEN
+runtime 4.200 · X0_INDEX runtime
 2.400 · một sổ tối đa 500 dòng · đầu ra kho lành 2.700 ký tự · đầu ra kho cận
 xấu 5.200 ký tự. Đổi một con số thì phải đổi CẢ HAI nơi trong cùng lượt vá.
 

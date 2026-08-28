@@ -74,9 +74,11 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 ```
 
 Cột "Ở đâu" của sổ TAILIEU chỉ nhận: "Kho <đường dẫn tương đối từ gốc kho>" ·
+"KhoCu <đường dẫn tương đối từ @KHO.CU>" (chỉ khi @KHO.CU khác "không có"; kho
+cũ chỉ tra lịch sử nên máy không kiểm tồn tại hay sha) ·
 "Project <đường dẫn doc>" · "Drive <ID folder>" · "Repo <mã PM> <đường dẫn
 trong repo>@<commit hay tag>" (chỉ cho dòng thuộc dự án @DUAN.PHANMEM, ô
-sha256 bỏ trống vì repo tự giữ lịch sử). Ngoài bốn dạng đó là cấm.
+sha256 bỏ trống vì repo tự giữ lịch sử). Ngoài năm dạng đó là cấm.
 Trỏ tới MỘT FILE thì ghi tới tận tên file; trỏ tới cả BỘ HỒ SƠ thì ghi đường dẫn
 thư mục kết thúc bằng dấu \ và bỏ trống ô sha256 (bộ quan sát chỉ đối chiếu sha
 cho dòng trỏ file).
