@@ -223,7 +223,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
-           "0i3.", "2b.",
+           "0i3.", "2b.", "10d.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -286,6 +286,10 @@ MAU_SECRET = re.compile(
     r"(?i)(api[_-]?key|secret|password|passwd|token|private[_-]?key"
     r"|m[ậa]t\s*kh[ẩa]u|matkhau|m[ãa]\s*pin|kh[óo]a\s*api"
     r"|kh[óo]a\s*b[íi]\s*m[ậa]t|m[ãa]\s*kh[óo]a)"
+    # cho HẬU TỐ giữa từ khóa và dấu phân cách: AWS_SECRET_ACCESS_KEY=,
+    # SECRET_KEY= (Django), TOKEN_GITHUB=, api_key_prod= đều trượt khuôn cũ
+    # vì nó đòi dấu :/= NGAY sau từ khóa (hội đồng vòng 21)
+    r"[A-Za-z0-9_.-]{0,24}"
     r"\s*[:=]\s*(?=\S*\d)\S{12,}"
     r"|\b(sk|pk|ghp|xox[abpr])_[A-Za-z0-9_]{16,}"
     r"|[a-z+]+://[^\s/@]+:[^\s/@]+@"
@@ -413,7 +417,10 @@ def bang_moi_hon(gb, c, wm):
     CHIỀU của lời dặn: cờ này không đổi phán quyết (phán quyết là
     wm.get(c) == gb) mà chọn giữa HAI lời dặn TRÁI NGƯỢC, nên đảo nó vẫn
     lọt mọi lưới cũ - hội đồng vòng 15 đảo được cả hai chiều."""
-    return bool(gb and c and gb > (wm.get(c) or ""))
+    def _khoa(m):
+        return (m[2:10], int(m.split("-")[-1])) if re.fullmatch(MAU_G, m or "") \
+            else ("", -1)
+    return bool(gb and c and _khoa(gb) > _khoa(wm.get(c) or ""))
 
 
 def _liet_cap(x, khuon="{0} {1}"):
@@ -467,6 +474,59 @@ def sha_file(p):
         return ""
 
 
+def goc_dai(kho):
+    """Gốc kho ở dạng duyệt được đường dẫn DÀI. Trên Windows, `Path.rglob`
+    nuốt OSError khi đường vượt MAX_PATH (260 ký tự) nên nó DỪNG ĐI XUỐNG ở
+    đúng chỗ đó - im lặng tuyệt đối, cả một nhánh kho tàng hình cùng secret và
+    dump khách nằm trong (hội đồng vòng 21). Kho thầu tiếng Việt vượt 260 ký
+    tự là chuyện thường. Tiền tố \\?\ gỡ giới hạn; nền khác trả nguyên gốc."""
+    import os as _os_gd
+    try:
+        p = Path(kho).resolve()
+        if _os_gd.name == "nt" and not str(p).startswith("\\\\"):
+            return Path("\\\\?\\" + str(p))
+        return p
+    except OSError:
+        return Path(kho)
+
+
+def cat_muc(nd, n):
+    """Nội dung mục "# Cn." của X0, cắt theo DÒNG chứ không theo `str.find`.
+
+    `find("# C3.")` trả vị trí ĐẦU TIÊN của chuỗi đó ở BẤT KỲ đâu, nên một câu
+    trỏ chéo trong mục trước - "Folder khối của kho: xem # C3. bên dưới", đúng
+    tinh thần C14 - làm lát cắt RỖNG. Mà cả ba nhánh của 7b bọc `if ... and
+    _da_khai`, nên phép TỰ TẮT không kêu, kéo theo 7d, 7d2 và vế dự án của 2b
+    (hội đồng vòng 21). Trả "" khi thiếu mục - phép 0i2 lo phần báo thiếu."""
+    m = re.search(rf"^# C{n}\. ", nd, re.M)
+    if not m:
+        return ""
+    ke = re.search(r"^# C\d+\. ", nd[m.end():], re.M)
+    return nd[m.start():m.end() + ke.start()] if ke else nd[m.start():]
+
+
+def ngoai_fence(nd):
+    """Các dòng NẰM NGOÀI mọi khối ```. Dùng CHUNG cho dong_bang và phép 5b:
+    vòng 62 dựng 5b biết fence mà quên dạy dong_bang, nên người dùng làm ĐÚNG
+    lời khuyên của chính 5b ("bọc ví dụ trong ```") thì ăn ba dòng lệch - lớp
+    phạt-người-làm-đúng lần thứ mười hai (hội đồng vòng 21). Một hàm cho cả
+    hai để chúng không lệch nhau lần nữa."""
+    ra, trong = [], False
+    for d in nd.splitlines():
+        if d.lstrip().startswith("```"):
+            trong = not trong
+            continue
+        ra.append("" if trong else d)
+    return ra
+
+
+def tach_o(d):
+    """Tách ô của một dòng bảng. `\\|` là cách DUY NHẤT hợp lệ theo GFM để viết
+    dấu | trong ô; tách thô làm dòng đó lệch ô và bị 3g, 5 tố oan (vòng 21)."""
+    return [o.replace("\\|", "|").strip()
+            for o in re.split(r"(?<!\\)\|", d.strip().strip("|"))]
+
+
 def dong_bang(nd):
     """Các dòng dữ liệu bảng (bỏ header và dòng kẻ), mỗi dòng là list ô.
 
@@ -477,11 +537,11 @@ def dong_bang(nd):
     vẫn render nó và người vẫn đọc thấy (hội đồng vòng 19). Thụt SÂU hơn ba là
     khối code, không phải bảng - phép 5b báo riêng chỗ đó."""
     lines = [d.strip() if re.match(r"^[ \t]{1,3}\|", d) else d
-             for d in nd.splitlines()]
+             for d in ngoai_fence(nd)]
     headers, so_cot = set(), {}
     for i, d in enumerate(lines[:-1]):
         if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
-            _h = tuple(o.strip() for o in d.strip("|").split("|"))
+            _h = tuple(tach_o(d))
             headers.add(_h)
             so_cot[i] = len(_h)
     ket, _dang_mo = [], 0
@@ -495,7 +555,7 @@ def dong_bang(nd):
         if re.match(r"^\|[\s:|-]+\|$", d):
             continue                          # dòng kẻ
         if d.startswith("|"):
-            r = [o.strip() for o in d.strip().strip("|").split("|")]
+            r = tach_o(d)
         elif _dang_mo:
             # GFM cho bỏ dấu | ĐẦU và CUỐI ở dòng THÂN. Không nhận thì 11 phép
             # cùng mù, y hệt lớp thụt lề của vòng 58 - Prettier và
@@ -503,7 +563,7 @@ def dong_bang(nd):
             # ĐÒI ĐÚNG SỐ CỘT: nhận rộng hơn thì rác đứng trước dấu | đầu bị
             # đọc thành một ô, cả dòng lệch một ô, và 3g tố oan - bản vá chống
             # báo oan suýt tự đẻ ra báo oan.
-            r = [o.strip() for o in d.strip().strip("|").split("|")]
+            r = tach_o(d)
             if len(r) != _dang_mo:
                 continue
         else:
@@ -525,8 +585,13 @@ def watermark(ma):
         c = cua_cua(m)
         if c is None:
             continue  # mã cũ không cửa: không tính watermark, báo riêng ở 3b2
-        k = (m[2:10], m.split("-")[-1])
-        if c not in wm or k > (wm[c][2:10], wm[c].split("-")[-1]):
+        # so NN theo SỐ, không theo chuỗi: "99" > "100" làm kho vượt 99 lượt
+        # một cửa một ngày vừa lọt lưới (lane lùi được tuyên sạch) vừa bị tố
+        # oan (kho khai ĐÚNG bị bảo "sinh lại bảng", tức kéo lane về -99 -
+        # đúng thao tác gây cấp lại mã ĐÃ DÙNG). Vòng 58 nới MAU_G cho NN vượt
+        # hai chữ số mà quên chỗ SO SÁNH này (hội đồng vòng 21).
+        k = (m[2:10], int(m.split("-")[-1]))
+        if c not in wm or k > (wm[c][2:10], int(wm[c].split("-")[-1])):
             wm[c] = m
     return wm
 
@@ -864,13 +929,14 @@ def quet_secret(kho):
     lưới cho cả một thư mục (hội đồng vòng 18). Danh sách loại trừ của công ty
     là để bớt ồn khi quan sát TÀI LIỆU, không phải để tự miễn luật X5 mục 1b."""
     bo, dump = [], []
-    for f in sorted(kho.rglob("*")):
+    _goc_d = goc_dai(kho)
+    for f in sorted(_goc_d.rglob("*")):
         try:
             if not f.is_file():
                 continue
         except OSError:
             continue
-        rel = str(f.relative_to(kho)).replace("\\", "/")
+        rel = str(f.relative_to(_goc_d)).replace("\\", "/")
         if any(seg == t or seg.startswith((t + " ", t + "_", t + "-",
                                            t + ".", t + "("))
                for seg in rel.split("/") for t in (".git", "__pycache__")):
@@ -927,11 +993,14 @@ def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
         thu_muc = kho if tm in ("", ".") else kho / tm
         nguon = sorted(thu_muc.iterdir()) if thu_muc.is_dir() else []
     else:
-        nguon = sorted(kho.rglob("*"))
+        nguon = sorted(goc_dai(kho).rglob("*"))
     for f in nguon:
         if not f.is_file() or f.suffix.lower() in DUOI_BO or f.name.startswith("."):
             continue
-        rel = str(f.relative_to(kho)).replace("\\", "/")
+        try:
+            rel = str(f.relative_to(kho)).replace("\\", "/")
+        except ValueError:
+            rel = str(f.relative_to(goc_dai(kho))).replace("\\", "/")
         # BỎ lọc tiền tố "9" (v10): 98_Assets và 99_Goc là vùng NGHIỆP VỤ phải
         # quét (X4 kiểm sha 99_Goc); chỉ loại đích danh kho lưu trữ 99_Archive
         if rel.startswith(("_", ".")) or "/_" in rel:
@@ -1070,6 +1139,18 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         rel = h[5][4:].strip("` ").replace("\\", "/").strip("/")
         duong = kho / rel
         if not duong.exists():
+            # NFD (đĩa macOS, iCloud, Dropbox) và NFC là CÙNG MỘT tên. Không
+            # thử lại thì dòng bị coi là MẤT FILE rồi `continue`, tức 10a và
+            # 10b cũng thôi kiểm sha bản ĐÃ NỘP đó - mất lưới toàn vẹn ngay
+            # trên hồ sơ đã nộp thầu. Docstring của chuan_hoa_ho từ vòng 17 đã
+            # KHAI là phép 9 được vá chỗ này, mà nó chưa từng được vá.
+            import unicodedata as _ud9
+            for _dang in ("NFC", "NFD"):
+                _thu = kho / _ud9.normalize(_dang, rel)
+                if _thu.exists():
+                    duong = _thu
+                    break
+        if not duong.exists():
             mat.append((h[1], rel))
             continue
         sha_so = next((o for o in h if re.fullmatch(r"[0-9a-f]{12,64}", o)), None)
@@ -1087,6 +1168,26 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
                 _o_kd = [bo_dau(o) for o in h]
                 (sua_bat_bien if any(bo_dau(t) in o for t in BAT_BIEN
                                      for o in _o_kd) else lech_sha).append(h[1])
+    # 10d. Ô sha256 BỎ TRỐNG là lối tắt hợp lệ ra khỏi 10a và 10b: không có
+    #      sha thì cả dòng bị bỏ qua, nên bản ĐÃ KÝ / ĐÃ NỘP / ĐÃ CẤP mất trọn
+    #      lưới toàn vẹn mà sổ vẫn xanh - AI cũng chỉ cần bỏ trống một ô là hết
+    #      bị 10a tố. X4 dòng 5 liệt việc này mà chưa phép nào canh (vòng 21).
+    #      CHỈ đòi ở dòng đã tới điểm đóng sha: mốc chính thức, hay file trong
+    #      99_Goc. Bản NHÁP chưa tới điểm đó thì không phạt.
+    _thieu_sha = []
+    for h in dong_kho:
+        _rel_h = h[5][4:].strip("` ").replace("\\", "/").strip("/")
+        if _rel_h.endswith("/") or "[đã xóa theo Q-" in "|".join(h):
+            continue          # dòng trỏ THƯ MỤC: X0 C1 bắt bỏ trống ô sha
+        if not (any(t in h for t in BAT_BIEN)
+                or _rel_h.lower().startswith("99_goc/")):
+            continue
+        if not any(re.fullmatch(r"[0-9a-f]{12,64}", o) for o in h):
+            _thieu_sha.append((h[1] if len(h) > 1 else "?").strip())
+    bao("10d. mốc chính thức và 99_Goc có sha256" + pv, not _thieu_sha,
+        f"{_liet(_thieu_sha[:5])}: thiếu sha thì 10a và 10b BỎ QUA trọn dòng,"
+        f" tức bản đã ký hay đã nộp không còn lưới toàn vẹn nào (X4 dòng 5)."
+        f" Chạy lại lượt ghi để đóng sha, mức A")
     bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat,
         f"{mat[:5]}"
         + (": tài liệu nằm ở KHO CŨ thì khai dạng \"KhoCu <đường dẫn từ"
@@ -1384,7 +1485,7 @@ def kiem_email(goc, so):
     thu_nd = doc(so / "THU.md")
     co_du_lieu_thu = bool(dong_bang(thu_nd))
     if not nk_p.is_file() and not reg_p.is_file() and not co_du_lieu_thu:
-        print("  BỎ QUA  12. profile EMAIL chưa chạy (chưa có nhật ký, registry hay dòng THU)")
+        print("  BỎ QUA  12. profile EMAIL chưa chạy")
         return ket
 
     # 12a. đã chạy EMAIL thì nhật ký VÀ registry phải cùng tồn tại
@@ -1978,7 +2079,7 @@ def main(goc):
         _m_pf = re.search(r"profile:\s*(.+)", idx_rt)
         _pf_iv = set(re.findall(r"\b(REGULATED|PARALLEL|AUTOMATED|EMAIL)\b",
                                 _m_pf.group(1) if _m_pf else ""))
-        _c2b = _x0nd2[_x0nd2.find("# C2."):_x0nd2.find("# C3.")]
+        _c2b = cat_muc(_x0nd2, 2)
         _da_x0 = {m.group(1) for m in re.finditer(
             r"@DUAN\.([A-Z0-9]+)[^\n]*đang chạy", _c2b) if m.group(1) != "PHANMEM"}
         _m_da = re.search(r"du_an:\s*(.+)", idx_rt)
@@ -2096,7 +2197,7 @@ def main(goc):
             _p0p = so / _t0p
             if _p0p.is_file() and _neo0p not in doc(_p0p):
                 _mat_khung.append(_t0p)
-        bao("0p. sổ lõi còn khung bảng", not _mat_khung,
+        bao("0p. sổ lõi còn khung", not _mat_khung,
             f"{_liet(_mat_khung[:5])}: file còn trên đĩa nhưng mất header bảng"
             f" hay khối khai - rất có thể bị đồng bộ hay một lượt ghi đè cắt"
             f" cụt. Lượt sau nối dòng vào file không header là cột mất nghĩa"
@@ -2131,7 +2232,7 @@ def main(goc):
             and (len(h) < so_o_dau or not (h[7].strip() if len(h) > 7 else "x")
                  or any(o.strip().startswith("ĐANG") and
                         o.strip() != "ĐANG GHI" for o in h))]
-        bao("3a. không dòng NHATKY còn ĐANG GHI hay dòng cụt", not treo, str(treo))
+        bao("3a. không dòng NHATKY cụt hay ĐANG GHI", not treo, str(treo))
         trung = sorted({m for m in ma_g if ma_g.count(m) > 1})
         bao("3b. không mã G trùng ở cột Mã ghi", not trung, str(trung))
         cu = [m for m in ma_g if cua_cua(m) is None]
@@ -2271,7 +2372,7 @@ def main(goc):
                 if _gt not in _hl:
                     _tv.append(f"{_t}:{(_r[0] or '?').strip()[:12]}"
                                f" ô {_gt[:14] or '(rỗng)'}")
-        bao("3g. ô Mức và Trạng thái thuộc từ vựng X5", not _tv,
+        bao("3g. ô Mức, Trạng thái đúng từ vựng", not _tv,
             f"{_liet(_tv[:5])}: giá trị ngoài từ vựng làm chính dòng đó TÀNG HÌNH"
             f" với 3c, 3d và mọi bộ đếm của bảng. Sửa về đúng từ vựng X5 mục 2,"
             f" mục 4 và X0 C7; [AI: tuyệt đối không gỡ dòng]")
@@ -2301,15 +2402,19 @@ def main(goc):
 
     lech = []
     for p in sorted(so.glob("*.md")):
-        lines = doc(p).splitlines()
+        # CÙNG hàm tách ô và cùng luật fence với dong_bang: đếm bằng
+        # d.count("|") thì ô chứa `\|` thoát (cách DUY NHẤT hợp lệ theo GFM để
+        # viết dấu | trong ô) bị tính dôi một cột và phép 5 tố oan. Hai chỗ đọc
+        # bảng bằng hai luật khác nhau thì sớm muộn cũng lệch (hội đồng vòng 21)
+        lines = ngoai_fence(doc(p))
         for i, d in enumerate(lines[:-1]):
             if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
-                so_cot = d.count("|") - 1
-                if lines[i + 1].count("|") - 1 != so_cot:
+                so_cot = len(tach_o(d))
+                if len(tach_o(lines[i + 1])) != so_cot:
                     lech.append((p.name, "dòng kẻ"))
                 j = i + 2
                 while j < len(lines) and lines[j].startswith("|"):
-                    if lines[j].count("|") - 1 != so_cot:
+                    if len(tach_o(lines[j])) != so_cot:
                         lech.append((p.name, f"dòng dữ liệu {j + 1}"))
                     j += 1
     bao("5. schema bảng: mọi dòng cùng số cột",
@@ -2322,13 +2427,7 @@ def main(goc):
     #     đi diệt, do chính vòng 58 phạm (hội đồng vòng 20).
     _thut_sau = []
     for p in sorted(so.glob("*.md")) + sorted((so / "_lich_su").glob("*.md")):
-        _trong_fence = False
-        for _n, _d in enumerate(doc(p).splitlines(), 1):
-            if _d.lstrip().startswith("```"):
-                _trong_fence = not _trong_fence
-                continue
-            if _trong_fence:
-                continue
+        for _n, _d in enumerate(ngoai_fence(doc(p)), 1):
             if re.match(r"^(?: {4,}|\t)", _d) and _d.count("|") >= 2:
                 _thut_sau.append(f"{p.name}:{_n}")
     bao("5b. không dòng bảng nào bị thụt sâu", not _thut_sau,
@@ -2389,7 +2488,7 @@ def main(goc):
                 for _m in re.findall(r"\b[VDTQP]-[A-Za-z0-9-]+\b", _r[_cot]):
                     if _m not in _ma_that:
                         _treo.append(f"{_t}:{_m}")
-        bao("7c. liên kết trong sổ trỏ mã có thật (X4 dòng 12)", not _treo,
+        bao("7c. liên kết trong sổ trỏ mã có thật", not _treo,
             f"{_liet(_treo[:5])}: ô Liên kết, Thay bởi hay Việc liên quan trỏ mã"
             f" không tồn tại ở sổ nào; sửa mã hay gỡ tham chiếu")
 
@@ -2401,7 +2500,7 @@ def main(goc):
     #     Đây là lý do bộ bắt khai ngay ở phiên cài đặt, X9 mục 1 câu 3.
     if not chua_cai and x0s:
         _x0c2 = doc(x0s[0])
-        _c2 = _x0c2[_x0c2.find("# C2."):_x0c2.find("# C3.")]
+        _c2 = cat_muc(_x0c2, 2)
         _pm = _c2[_c2.find("@DUAN.PHANMEM"):] if "@DUAN.PHANMEM" in _c2 else ""
         _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
         _host_pm = []   # GIÁ TRỊ nơi chạy thật, để 7g đọc lại
@@ -2542,7 +2641,7 @@ def main(goc):
                 continue
             if any(re.search(_n, _lg, re.I) for _n in _neo):
                 _sx.append(f"{(_r[0] or '?').strip()[:22]} (mức {_muc or 'trống'})")
-        bao("7g. lượt chạm CHẠY THẬT phải ghi mức C (X5 mục 1b)", not _sx,
+        bao("7g. chạm CHẠY THẬT phải ghi mức C", not _sx,
             f"{_liet(_sx[:4])}: ô \"Làm gì\" có động từ sản xuất GIAO với nơi"
             f" chạy thật khai ở X0 C2"
             f"{' (' + _liet(_host_pm[:2]) + ')' if _host_pm else ''} mà lượt"
@@ -2705,8 +2804,8 @@ def main(goc):
     #     việc và digest nên thành VIỆC VÔ HÌNH) - hội đồng vòng 14.
     if x0s and not chua_cai:
         _x0nd = doc(x0s[0])
-        _c1 = _x0nd[_x0nd.find("# C1."):_x0nd.find("# C2.")]
-        _c2 = _x0nd[_x0nd.find("# C2."):_x0nd.find("# C3.")]
+        _c1 = cat_muc(_x0nd, 1)
+        _c2 = cat_muc(_x0nd, 2)
         _cua_khai = set(re.findall(r"\b(CUA\d+)\b", _c1))
         _da_khai = {m.group(1) for m in re.finditer(r"@DUAN\.([A-Z0-9]+)", _c2)
                     if m.group(1) != "PHANMEM"}

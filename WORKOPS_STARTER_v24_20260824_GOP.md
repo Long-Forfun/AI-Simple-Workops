@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 65 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 66 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,64 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 66: sáu lỗ của hội đồng vòng 21, hai trong đó là lời tôi tự hứa
+
+Hội đồng vòng 21: KHÔNG MISS 6,0 (lên từ 4,0). Cả TÁM vá vòng 62-63 đứng vững
+dưới tấn công trực diện, không cái nào lách được - kể cả hai chỗ rất dễ tự đẻ
+báo oan là miễn-trừ-theo-đường-dẫn của quét secret và đòi-đúng-số-cột của dòng
+thân bỏ pipe.
+
+LỚP "PHẠT NGƯỜI DÙNG VÌ LÀM ĐÚNG", LẦN THỨ MƯỜI HAI, DO CHÍNH BẢN VÁ VÒNG 62
+CỦA TÔI ĐẺ RA. Phép 5b in ra lời khuyên "muốn dán ví dụ bảng thì bọc trong ```
+để phép này bỏ qua đúng cách". Người dùng làm ĐÚNG NGUYÊN VĂN câu đó và ăn BA
+dòng lệch: 5b biết fence, `dong_bang` thì KHÔNG. Một việc VÍ DỤ "V-999" chui
+vào bộ đếm quá hạn, 3f tố "dòng vào sổ ngoài lượt ghi", 7b tố dự án ma - và 3f
+dặn "TUYỆT ĐỐI không gỡ dòng sổ", tức lối thoát duy nhất bị chính lưới cấm. Nay
+`dong_bang`, phép 5 và 5b DÙNG CHUNG một hàm tách fence và một hàm tách ô, để
+ba chỗ đọc bảng không lệch nhau lần nữa. Cùng hàm đó xử `\|` thoát - cách DUY
+NHẤT hợp lệ theo GFM để viết dấu | trong ô, mà trước đây làm 3g và 5 tố oan.
+
+LỜI KHAI VƯỢT CÁI MÁY LÀM, LẦN THỨ HAI TRONG BỘ: docstring của `chuan_hoa_ho`
+viết nguyên văn "...và phép 9 báo oan khi sổ ghi NFC mà đĩa giữ NFD (hội đồng
+vòng 17)". Vòng 17 chỉ vá `chuan_hoa_ho`, KHÔNG vá phép 9. Hậu quả kép: dòng bị
+coi là mất file rồi `continue`, tức 10a và 10b cũng thôi kiểm sha bản ĐÃ NỘP -
+mất lưới toàn vẹn ngay trên hồ sơ đã nộp thầu.
+
+WATERMARK SO NN THEO CHUỖI: "99" > "100". Hai chiều cùng sai, và chiều thứ hai
+là báo oan tệ nhất từ trước tới nay: kho LÀM ĐÚNG (lane khai -100) bị 8 và 8d
+tố, và lời dặn của chúng là "sinh lại bảng" - tức kéo lane về -99, ĐÚNG THAO
+TÁC gây ra "lượt sau cấp lại mã ĐÃ DÙNG" mà 8d tồn tại để chặn. Bộ vừa tố người
+làm đúng vừa dạy họ làm hỏng. Vòng 58 nới MAU_G cho NN vượt hai chữ số mà quên
+chỗ SO SÁNH.
+
+MỘT CÂU TRỎ CHÉO TẮT TRỌN BỐN PHÉP: `_x0nd.find("# C3.")` trả vị trí ĐẦU TIÊN,
+nên một dòng văn xuôi trong C1 như "Folder khối của kho: xem # C3. bên dưới" -
+đúng tinh thần C14 - làm lát cắt C2 RỖNG. Cả ba nhánh của 7b bọc `if ... and
+_da_khai` nên phép TỰ TẮT, kéo theo 7d, 7d2 và vế dự án của 2b. Nay có hàm
+`cat_muc` neo `^# Cn. ` theo dòng.
+
+Ô sha256 BỎ TRỐNG là lối tắt hợp lệ ra khỏi 10a và 10b - AI cũng chỉ cần bỏ
+trống một ô là hết bị tố. Phép 10d đòi sha ở mốc chính thức và file 99_Goc,
+KHÔNG đòi ở bản nháp hay dòng trỏ thư mục.
+
+MAX_PATH LÀM CẢ KHO CON TÀNG HÌNH: `Path.rglob` nuốt OSError nên dừng đi xuống
+ở chỗ vượt 260 ký tự, im lặng tuyệt đối. Đường dẫn gói thầu tiếng Việt vượt 260
+là chuyện thường. Nay duyệt qua tiền tố đường dẫn dài; bàn thử bắt được secret
+sau một đường 356 ký tự (và chính lệnh TẠO thư mục cũng cần tiền tố đó - bằng
+chứng giới hạn này có thật trên nền đang chạy).
+
+MAU_SECRET đòi dấu `:`/`=` NGAY sau từ khóa, nên `AWS_SECRET_ACCESS_KEY=` -
+khóa AWS phổ biến nhất thế giới - `SECRET_KEY=` của Django, `TOKEN_GITHUB=`
+đều trượt. Vá vòng 63 mở đúng đường cho deploy_prod.py vào lưới, nhưng lưới
+không bắt được thứ nằm TRONG nó.
+
+Bàn thử 8/8, gồm năm ca ĐÚNG LUẬT: ví dụ bảng trong fence, ô có `\|` thoát,
+lane khai đúng ở NN 100, "Nơi giữ secret: 1Password", file NFD trên đĩa.
+
+BACKLOG còn: hai bảng khác THỨ TỰ CỘT trong một sổ (dem_qua_han đọc theo vị
+trí cứng) · (j) vòng đời _inbox và _da_nap · (a) hash QUYETDINH · (c) khuôn bản
+sao · (e) bản rà cho sổ CSV.
 
 ## Vòng 65: MIEN_TRU từ 16 xuống 3, và ba mục còn lại có lý do THẬT
 
@@ -1853,7 +1911,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~805
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~789
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
