@@ -175,16 +175,28 @@ def main(goc):
     #     trúc. .codex_audit_mutant lọt commit vòng 37, assets\ lọt vòng 38, cả hai
     #     qua sạch phép 1. Bộ ship "NGUYÊN TRẠNG" nên rác ở đây hạ cánh vào
     #     00_Index của MỌI công ty, nơi 0j của kiem_van_hanh mới nhặt lên được.
-    bo_qua = {"__pycache__", ".git", ".venv", ".idea", ".vscode"}
-    for l in gi_nd.splitlines():
-        l = l.strip().rstrip("/")
-        if l and not l.startswith(("#", "!")) and "/" not in l and "*" not in l:
-            bo_qua.add(l)
+    #     File MÁY SINH đã khai ở .gitignore không tính là thừa: khuôn được đọc
+    #     ĐẦY ĐỦ (cả dòng có đường dẫn lẫn dòng có *), nếu không thì mọi người
+    #     dùng chạy kiem_van_hanh trước kiem_tra_bo đều bị báo oan cache của
+    #     chính máy (bắt được ở lượt kiểm chứng đầu-cuối vòng 40).
+    import fnmatch
+    khuon_bo = ["__pycache__", ".git", ".venv", ".idea", ".vscode"] + [
+        l.strip().rstrip("/") for l in gi_nd.splitlines()
+        if l.strip() and not l.strip().startswith(("#", "!"))]
+
+    def da_khai_bo(rel):
+        for k in khuon_bo:
+            if fnmatch.fnmatch(rel, k) or fnmatch.fnmatch(rel, k + "/*"):
+                return True
+            if any(fnmatch.fnmatch(seg, k) for seg in rel.split("/")):
+                return True
+        return False
+
     cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {".gitignore"}
     thua = []
     for f in goc.rglob("*"):
         rel = str(f.relative_to(goc)).replace("\\", "/")
-        if not f.is_file() or rel.split("/")[0] in bo_qua:
+        if not f.is_file() or da_khai_bo(rel):
             continue
         if rel not in cho_phep and not re.fullmatch(
                 r"INSTRUCTION_WORKOPS_v\d+\.md|GHICHU_DOI_MOI_v.*\.md"

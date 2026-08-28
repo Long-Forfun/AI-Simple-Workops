@@ -125,6 +125,13 @@ BACKLOG CÒN LẠI, khai thẳng (không vá vòng này, đều có địa chỉ
 (e) Chưa có bộ sinh trạng thái đứt gãy (fuzz) khẳng định bất biến "mọi
     trạng thái mất mã G phải sinh ít nhất một LỆCH".
 
+Lượt kiểm chứng đầu-cuối của chính vòng 40 (clone từ link công khai, cài từ
+zero, chạy máy) bắt thêm một lỗi trong chính phép 1e vừa viết: nó chỉ đọc
+được dòng .gitignore không có đường dẫn, nên báo oan `_so/_quan_sat_truoc.json`
+- cache mà kiem_van_hanh vừa tự sinh - với MỌI người dùng chạy rà trước khi tự
+kiểm. Đã vá bằng khuôn fnmatch đọc trọn .gitignore, và giữ đối chứng: thả một
+file lạ vào bộ thì 1e vẫn bắt.
+
 Bài học vòng này: đọc-tĩnh bão hòa ở 96,8 là thật, nhưng con số đó đo cái
 BỘ ĐÃ ĐƯỢC ĐỌC, không đo cái bộ CHẠY. Một buổi chạy ra nhiều defect hơn
 mười hai vòng đọc. Và bản vá viết vội ở vòng 38 tự nó sinh ba lỗ NẶNG -
