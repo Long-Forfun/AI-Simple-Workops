@@ -79,7 +79,10 @@ CHỐT        người dùng gõ "chốt", "ok", hoặc xác nhận không sửa
             coi là CHỐT, plan sang ĐÃ GHI, không treo. Nhiều plan
             CHỜ CHỐT: lệnh chốt phải nêu mã, không nêu thì hỏi kèm danh sách.
             Bỏ sang việc khác: plan giữ CHỜ CHỐT, không ghi, phiên sau nhắc
-KHÔNG NGƯỜI (profile AUTOMATED) phiên hẹn giờ, không ai trả lời: A làm và ghi
+KHÔNG NGƯỜI (profile AUTOMATED) phiên hẹn giờ, không ai trả lời: lượt của phiên
+không người ghi ô "Phiên" dạng <CỬA>.AUTO.<giờ phút>.<hậu tố> - đó là dấu DUY
+NHẤT phân biệt việc máy tự làm với việc người duyệt, thiếu nó thì luật này không
+kiểm được sau việc. A làm và ghi
             như thường; B và C chỉ CHUẨN BỊ, xếp bảng chờ duyệt, mở dòng VIEC
             hạn phiên sau; ngoài dòng đó không ghi sổ, không gửi, không update
             ngược X0. Người dùng về duyệt một lượt
@@ -117,7 +120,9 @@ Mở plan ở `_so\PLANNING.md` TRƯỚC khi chạm file. Mã `P-<YYYYMMDD>-<NN>
 ```
 
 Trạng thái `MỚI` `ĐANG LÀM` `CHỜ CHỐT` `ĐÃ GHI` `HỦY`. Cột "Sẽ đổi dòng nào" ghi
-mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn làm việc.
+mã cụ thể, không để trống. Cột "Mã ghi" của plan CHƯA chốt để TRỐNG là
+ĐÚNG, không phải dòng dán tay: rà 3f miễn cho PLANNING ngoài trạng thái ĐÃ
+GHI, rà 4 canh vế ĐÃ GHI. Plan ĐANG LÀM quá 7 ngày: lên bàn làm việc.
 
 # 3. Ghi sổ, trình tự DUY NHẤT
 
@@ -153,7 +158,10 @@ mã cụ thể, không để trống. Plan ĐANG LÀM quá 7 ngày: lên bàn l�
    (ghi đè thì lượt cũ mất dấu và rà 3c lệch mãi)
 4  update ngược X0 nếu có, sinh lại X0_INDEX khi rev tăng
 5  NHATKY sang XONG; mức C: plan sang ĐÃ GHI, điền mã G
-6  sinh lại BANG_DIEU_KHIEN thì header ghi sinh_boi = mã lượt vừa xong của CHÍNH
+6  nối mã G vừa xong vào `00_Index\_moc_ghi.txt` (chỉ-thêm, một dòng một mã):
+   file này nằm NGOÀI `_so\` nên một lần khôi phục nhầm hay rollback đám mây
+   TRỌN thư mục `_so` không đụng tới nó, rà 0k lấy nó làm nhân chứng cuối.
+   Sinh lại BANG_DIEU_KHIEN thì header ghi sinh_boi = mã lượt vừa xong của CHÍNH
    cửa mình, kèm dòng watermark: mã cuối của TỪNG cửa (giữa các cửa không có thứ
    tự thời gian tin được, "mới nhất" chỉ có nghĩa trong một cửa). Bảng có thêm:
    khối "Tài liệu đang hoạt động" (tên, vN hiện hành, trạng thái, ở đâu, của các
@@ -260,8 +268,13 @@ do, không XONG.
 không mở cả file. BANG_DIEU_KHIEN và X0_INDEX đọc cả file vì chúng phải ngắn.
 Chuyển `_so\_lich_su\`: việc XONG, HỦY quá 30 ngày · dữ kiện ĐÃ THAY · tài liệu
 đã thay không còn viện dẫn · plan ĐÃ GHI quá 30 ngày. QUYETDINH chia theo năm,
-NHATKY theo quý. Chuyển lịch sử KHÔNG được làm mất dấu mã G: file trong
-`_so\_lich_su\` giữ nguyên ô "Ghi lần", và rà 3c, 3e đọc cả thư mục đó.
+NHATKY theo quý. CHUYỂN ĐỊNH DẠNG SỔ (CSV, SQLite): đầu file Markdown giữ đúng
+khuôn `NGUON_SU_THAT: <tên file>`, và CHƯA có bản rà đọc được định dạng đó thì
+CẤM chuyển sổ đó - dừng ở bước tách theo khối hay năm là hết. Chuyển mà lưới
+không theo thì mỗi mã G cũ đẻ một dòng 3c lệch vĩnh viễn, đồng thời 3f, 7 và 7b
+hóa mù cho sổ đó trong khi bộ vẫn báo "hệ sạch" - vùng mù nguy hơn báo oan.
+Chuyển lịch sử KHÔNG được làm mất dấu mã G: file trong
+`_so\_lich_su\` giữ nguyên ô "Ghi lần", và rà 3c, 3d, 3e đọc cả thư mục đó.
 
 # 6. Folder và tên file
 
@@ -299,10 +312,16 @@ KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): q
 con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
 CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
 giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
-mất hết dấu "Ghi lần": ô "Chạm sổ nào" thay "không, đã xóa theo Q-<mã>".
+mất dấu "Ghi lần" ở MỘT sổ vì lệnh này vừa xóa dòng sổ đó: ô "Chạm sổ nào" của
+dòng NHATKY ấy GỠ TÊN SỔ ĐÓ ra và ghi thêm "(một sổ đã xóa theo Q-<mã>)"; mất
+dấu ở MỌI sổ thì thay trọn ô bằng "không, đã xóa theo Q-<mã>". Đây là ngoại lệ
+thứ ba của luật chỉ-thêm NHATKY: bỏ bước này thì rà 3c đòi dấu ở đúng cái sổ mà
+lệnh xóa vừa gỡ, lệch đó tích lũy vĩnh viễn.
 Dòng TAILIEU, THU trỏ file đã xóa: KHÔNG là đích index _thu_ap_dung thì XÓA
 DÒNG trong plan C này; ĐANG là đích index (mail đã COMMITTED) thì GIỮ khung
-và mã dòng, thay ô dữ liệu bằng "[đã xóa theo Q-<mã>]" (12k, 12l đối chiếu
+và mã dòng, thay ô dữ liệu bằng "[đã xóa theo Q-<mã>]" (ô "Ghi lần" và ô
+Trạng thái KHÔNG bị thay: chúng là KHUNG, không phải dữ liệu bị yêu cầu xóa;
+thay chúng thì rà 3f kêu oan dòng vừa xử đúng lệnh) (12k, 12l đối chiếu
 mã còn đứng; mục index có ô hash: máy miễn so hash cho dòng tombstone). VIEC, DUKIEN, PLANNING: xóa dòng hay trung hòa, liên kết trỏ
 mã đã xóa thay cùng cách. Staging liên quan: XÓA, ghi manifest dọn lý do
 Q-<mã>; cache _quan_sat_truoc.json: xóa, tự dựng lại; mục đính kèm trong payload và manifest của mail đã COMMITTED thay bằng

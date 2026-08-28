@@ -31,6 +31,82 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 43: hội đồng vòng 15 - lưới phải có lưới của chính nó
+
+Điểm vòng 15: TOKEN 9,4 (13: 9,3) · ĐƠN GIẢN 8,9 (8,8) · KHÔNG MISS 8,5 (14:
+8,0) · KHÔNG SAI 7,1 (6,8) · VẬN HÀNH 6,5 (7,0). Năm giám khảo XÁC NHẬN mọi
+phát hiện cũ đã đóng, không cái nào tái phát. Đo được: mutation score vùng cũ
+52 lên 74 phần trăm; tỉ lệ trạng thái mất dấu đi im 14,2 xuống 4,1 phần trăm
+(358 ca đột biến, 21 họ); 14/14 số route khớp tuyệt đối; pipeline EMAIL 0/14 im.
+
+BA DEFECT NẶNG, đều là lớp lỗi PHẠT NGƯỜI LÀM ĐÚNG, lần thứ ba và thứ tư:
+1. 3f phạt MỌI plan mức C đang mở (VẬN HÀNH). Ô "Mã ghi" trống ở PLANNING là
+   THIẾT KẾ - X5 mục 2 cho bốn trạng thái chưa chốt, X5 mục 3 đặt điểm ghi mức
+   C ở "khi chốt" - và phép 4 cách đó mười dòng chỉ đòi mã G cho plan ĐÃ GHI.
+   Phép do chính vòng 41 viết đã đỏ lưới trên mọi việc rủi ro suốt hai vòng.
+2. 3d mù _so\_lich_su\ (KHÔNG MISS). X5 mục 5 BẮT chuyển plan ĐÃ GHI quá 30
+   ngày vào đó; làm đúng thì 3d lệch vĩnh viễn. Đúng lớp lỗi vòng 41 vừa đóng
+   cho 3c và 3e, tái phát lần thứ tư ở phép thứ ba cùng họ.
+3. Làm ĐÚNG X5 mục 7b đẻ 3c lệch vĩnh viễn (VẬN HÀNH): lệnh xóa pháp lý gỡ
+   dòng một sổ, mà lối thoát 7b lại gate ở "mất dấu ở MỌI sổ" nên không dùng
+   được. Nay 7b cấp lối cho ca mất dấu MỘT sổ, và 3c nhận dấu "đã xóa theo Q-".
+
+LƯỚI PHẢI CÓ LƯỚI CỦA CHÍNH NÓ (KHÔNG SAI, phát hiện sâu nhất chiến dịch):
+xóa trọn phép 13 - sản phẩm đầu bảng của vòng 42 - mà bộ vẫn in "sạch, đóng
+gói được", dòng của nó chỉ lặng lẽ biến mất. Cùng lớp: xóa 3f, 7b, 8b, 1a khỏi
+kiem_van_hanh cũng "sạch"; "88 ca" và "67 luật" là NHÃN chứ không phải khẳng
+định; và vế I2 của phép 13 đúng một cách VÒNG TRÒN vì kho lành dựng C12 bằng
+CHÍNH hàm mà rà 0i sẽ chấm - nên con bug NẶNG của vòng 40 tái nhập được mà
+phép 13 im. Vá: phép 14 ĐIỂM DANH (thiếu phép nào là lệch) · bất biến I3 (mỗi
+phép phải kêu ĐÚNG TÊN mình trên một trạng thái mẫu) · CA MỒI tự tố cáo nếu vế
+I1 bị tắt · số ca và số luật thành khẳng định · fixture ghim trên CHÍNH
+template, và kho lành dựng C12 bằng bản quét ĐỘC LẬP.
+
+NEO NGOÀI _so (KHÔNG MISS, kịch bản thảm họa chưa ai nghĩ tới): mọi nhân chứng
+- NHATKY, sáu sổ, hai view - đều nằm TRONG _so, nên một lần khôi phục nhầm hay
+rollback đám mây TRỌN thư mục đó xóa sạch bằng chứng cùng lúc: kho đã ghi 500
+lượt trông y hệt kho vừa cài và máy in "hệ sạch". Nay X5 mục 3 bước 6 nối mã G
+vào 00_Index\_moc_ghi.txt (ngoài _so), và phép 0k lấy nó làm nhân chứng cuối.
+
+PHÉP MỚI: 0k (neo ngoài _so) · 7c (liên kết trỏ mã không tồn tại - X4 dòng 12
+hứa máy dò từ lâu mà máy chưa cài) · 8c (bảng khai lane watermark cho MỌI cửa;
+lane rụng thì cửa đó mất mốc và lượt sau cấp lại mã đã dùng) · 9b (bảng trần
+khớp NGAN_SACH) · 13b (trần ĐẦU RA của kiem_van_hanh - bảng này DÁN VÀO phiên
+RA_SOAT nên là context thật, đã phình 16,9 phần trăm mà không ai giữ) · 14
+(điểm danh). Mở rộng: 3e soi cả X0_INDEX · 0j soi xuống _so một tầng · 7b đọc
+thêm PLANNING, ô Phiên và dòng watermark · 8b đòi nhãn watermark · muc_con_trong
+thôi ép tham số của profile CHƯA BẬT vào C12 (8/34 mục với công ty LITE).
+
+THÔNG ĐIỆP THÔI NÓI TIẾNG MÁY (ĐƠN GIẢN): hết phun cú pháp Python vào mắt
+người dùng; "version history" nay có lối đi được cho kho Ổ MÁY ĐƠN - cấu hình
+README khai là được hỗ trợ mà với nó version history KHÔNG TỒN TẠI, nên chỉ
+dẫn cũ là bất khả thi; 3f thôi gợi ý "gỡ dòng đó", chính là thao tác nó sinh ra
+để chặn; lệnh cho AI tách khỏi câu người dùng đọc bằng nhãn [AI: ...]; X4 cấm
+dán nguyên đầu ra của máy cho người dùng.
+
+TOKEN: 2c bắt MỌI lần xuất hiện của nhãn (một số stale nấp ở dòng thứ hai
+cùng nhãn) và dung sai 0 cho dòng thuế thường trực · bảng thuế nay tự cân ·
+cắt bỏ X9 và X4 khai đúng công của nó (~4193 token, 19,2 phần trăm, không phải
+"gần 3.000") · thêm lối CHAT HOI/BAN không nạp X3.
+
+Watchlist trần (nâng X5 20.000, kiem_van_hanh 104.000, kiem_tra_bo 100.000 -
+hai script ngoài mọi route, chỉ vào bản gộp): bản gộp là mục cần xử SỚM, nhịp
+phình 17.310 ký tự mỗi vòng nên chỉ còn khoảng hai vòng nữa là chạm trần.
+
+BACKLOG cập nhật: (a) hash nội dung QUYETDINH · (b) phép 5 đối chiếu số cột
+với schema X5 mục 4 · (c) khuôn bản sao " (n)" - hội đồng vòng 15 đo lại thấy
+0b ĐÃ bắt, hạ mức · (d) TÁCH BẢN LUẬT THUẦN khỏi bản gộp, nay lên đường găng ·
+(e) chuyển sổ sang CSV/SQLite: vòng này mới CẤM chuyển khi lưới chưa theo kịp,
+chưa viết bản rà đọc được định dạng đó · (f) phép 13 mới phủ 10/32 phép, chưa
+phủ 0, 0f, 2, 8b - bốn phép mà hội đồng đo được là "người canh DUY NHẤT" của
+một trạng thái.
+
+Bài học vòng này: quy tắc vòng 41 tự viết - "phép kiểm mới nguy hiểm ngang một
+luật mới" - vẫn chưa thành máy, nên 3f ra đời với một báo động giả phủ trọn
+nhánh mức C mà không ai thấy suốt hai vòng. Từ vòng sau, mỗi phép kiểm mới
+phải kèm ít nhất MỘT ca I1 và MỘT ca I2 của chính nó trong phép 13, trước khi
+commit.
+
 ## Vòng 42: phép 13 FUZZ - lưới thường trực cho lớp lỗi đã tái phát ba vòng
 
 Ba vòng liên tiếp (38, 40, 41) đều đẻ ra cùng MỘT lớp lỗi khi đang vá lớp lỗi
@@ -51,7 +127,11 @@ _lich_su theo X5 mục 5 · điền lần đầu rồi đánh dấu [x] ở C12 
 
 Phép 13 gọi TRỌN main() của kiem_van_hanh, không gọi hàm helper: hội đồng vòng
 14 đo được 12/25 đột biến lọt vì fixture chỉ khẳng định giá trị trả về của hàm
-mà không ai kẹp CHỖ GỌI. Nay tắt một phép ở chỗ gọi là phép 13 kêu ngay.
+mà không ai kẹp CHỖ GỌI.
+[ĐÍNH CHÍNH vòng 43: câu "tắt một phép ở chỗ gọi là phép 13 kêu ngay" KHAI
+ QUÁ NET. Vòng 42 chỉ kiểm bằng hai đột biến; hội đồng vòng 15 đo trọn 32
+ phép thì phép 13 bắt 4/32 (0b, 3c, 3e, 5) - 12 phần trăm. Vòng 43 thêm bất
+ biến I3 nên nay phủ thêm 0h, 0i, 0j, 1a, 3f, 7b; vẫn CHƯA phủ hết.]
 
 Kiểm chứng bằng hai đột biến, chạy thật trên bản sao:
 - gỡ đúng bản vá _lich_su của vòng 41 (một dòng) thì phép 13 FAIL với

@@ -252,7 +252,8 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.BANMOI     <điền: nơi phát hành bộ (URL repo hay thư mục) và chu kỳ
                  kiểm, mặc định mỗi quý>. Kho chạy KHÔNG có .git (X9 mục 1)
                  nên không tự biết có bản mới; người giữ nhịp mở nơi phát
-                 hành, so số VÒNG VÁ ở đó với @NHIP.BANMOI.DAKIEM dưới đây,
+                 hành, so số VÒNG VÁ ở DÒNG ĐẦU file DOC_TRUOC.md của nơi
+                 phát hành với @NHIP.BANMOI.DAKIEM dưới đây,
                  mới hơn thì nâng cấp theo X9 mục 3c
 @NHIP.BANMOI.DAKIEM  <điền: YYYYMMDD lần kiểm cuối và số vòng vá của bản
                  đang chạy; cập nhật ngay sau mỗi lượt kiểm, mức A>

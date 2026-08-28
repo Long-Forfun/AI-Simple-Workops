@@ -66,12 +66,14 @@ NGAN_SACH = {
     "X1_CAM_TEMPLATE.md": 3200,
     "X2_PHATHANH_TEMPLATE.md": 4200,
     "X3_CUAVAO_TEMPLATE.md": 5500,   # 5b gate khi dán chat; nâng vòng 37: phần tăng nằm trọn trong 5b gated
-    "X3E_EMAIL_TEMPLATE.md": 13000,  # gate: chỉ nạp khi bật EMAIL; nâng vòng 40 (headroom còn 5 ký tự)
+    "X3E_EMAIL_TEMPLATE.md": 13000,  # gate: chỉ nạp khi bật EMAIL; nay 92,3% trần
     "X4_RASOAT_TEMPLATE.md": 5500,  # chỉ đọc khi RA_SOAT, không phải thuế thường trực
-    "X5_HESO_TEMPLATE.md": 19000,  # mục 1b và 7b đều gate; nâng vòng 40 (headroom còn 188 ký tự) (headroom 98,1% là nợ)
+    "X5_HESO_TEMPLATE.md": 20000,  # mục 1b và 7b đều gate; nâng vòng 43 theo quy ước (headroom 98,1% là nợ)
     "X9_CAIDAT.md": 8500,  # gate: đọc MỘT LẦN mỗi công ty, KHÔNG nạp vào CHAT, ngoài mọi route
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 400000,  # bản gộp để đánh giá, KHÔNG nạp vào phiên nào
+    "kiem_tra_bo.py": 100000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
+    "kiem_van_hanh.py": 104000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
@@ -124,6 +126,14 @@ def do_route(docs):
         "NOI_BO mức A": t(x5m1 + x1m34),
         "CUA_VAO thường": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1),
         "CUA_VAO thường của LITE": t(_muc(x3, 1, '5b')),
+        "X0_INDEX": len(docs["_so/X0_INDEX.md"]) // 3,
+        "BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn)":
+            len(docs["_so/BANG_DIEU_KHIEN.md"]) // 3,
+        # ba dòng thành phần phải cộng ĐÚNG ra dòng CỘNG: vòng 42 lệch 63 token
+        # mà không ai biết vì hai dòng này đứng ngoài lưới (hội đồng vòng 15)
+        "cắt bỏ X9 và X4": t(len(docs["X9_CAIDAT.md"]) + len(x4)),
+        "CHAT HOI, BAN, soạn nháp (không X3, X4, X9)":
+            t(tong_bo - len(docs["X9_CAIDAT.md"]) - len(x4) - len(x3)),
         # LITE không EMAIL: chỉ X3 mục 1 tới 5; 5b vẫn gate riêng khi dán chat
         # 5b gate: chỉ đọc khi dán chat, không phải thuế mọi lượt cửa vào
         "CUA_VAO mail": t(_muc(x3, 1, 6) - _muc(x3, '5b', 6) + x5m1 + len(x3e)
@@ -148,7 +158,14 @@ TRANG_THAI_HOP_LE = {
 loi = []
 
 
+DA_KIEM = []
+PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
+                 "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b."]
+# phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
+
+
 def kiem(ten, dieu_kien, chi_tiet=""):
+    DA_KIEM.append(ten)
     if dieu_kien:
         print(f"  PASS  {ten}")
     else:
@@ -187,8 +204,33 @@ def _kho_song(goc, td):
     x0 = x0.replace(
         "                 CUA1 = <điền: đường dẫn gốc trên máy 1> · thiết bị <điền: tên>",
         "                 CUA1 = " + str(kho) + " · thiet bi MAY1")
+    # KHÔNG dựng C12 bằng muc_con_trong: dùng chính hàm mà rà 0i sẽ chấm thì
+    # vế I2 luôn ĐÚNG bất kể hàm sai thế nào - hội đồng vòng 15 tái nhập được
+    # nguyên con bug NẶNG của vòng 40 mà phép 13 vẫn im. Tập này dựng ĐỘC LẬP
+    # theo LUẬT VIẾT DẤU khai ở đầu X0: dòng khai "@KEY " mang <điền hay <N.
+    _vung = x0[:x0.index("# C12.")] + x0[x0.index("# C13."):]
+    _kh, _tron, _khoi = None, [], {}
+    for _dg in _vung.splitlines():
+        if re.match(r"# C\d+\.", _dg):
+            _kh = None          # tiêu đề mục đóng khối: văn xuôi của mục KHÔNG
+            continue            # có tham số (C11...) không thuộc khối nào
+        _m = re.match(r"\s*(@[A-Z][A-Z0-9._]*)\s", _dg)
+        if _m:
+            _kh = _m.group(1)
+            _khoi.setdefault(_kh, [])
+        if _kh:
+            _khoi[_kh].append(_dg)
+    _bat = set(re.findall(r"\[x\]\s+(REGULATED|PARALLEL|AUTOMATED|EMAIL)", x0))
+    for _k, _dong in _khoi.items():
+        _t = NL.join(_dong)
+        _pf = set(re.findall(r"\((?:profile )?(REGULATED|PARALLEL|AUTOMATED|EMAIL)\)", _t))
+        if _pf and not (_pf & _bat):
+            continue  # X0 C0: profile chưa bật thì không hỏi, nên không vào C12
+        if (re.search(r"<(?:chưa )?điền|<N>", _t) and "chỉ khai khi" not in _t
+                and "(cú pháp)" not in _t and not re.search(r"@[A-Z][A-Z0-9._]*<", _t)):
+            _tron.append(_k)
     x0 = x0.replace("[ ] <X9 liệt kê mọi mục chưa trả lời được vào đây>",
-                    NL.join("[ ] " + k for k in sorted(K.muc_con_trong(x0))))
+                    NL.join("[ ] " + k for k in sorted(_tron)))
     _ghi(x0p, x0)
     G = "G-20260828-CUA1-01"
     nk = (so / "NHATKY_TEMPLATE.md").read_text(encoding="utf-8")
@@ -306,8 +348,68 @@ def phep_fuzz(goc):
         sua(so / "BANG_DIEU_KHIEN.md", "watermark: CUA1=" + G, "watermark: CUA1=" + G2)
     thu("lượt hai nối thêm mã vào ô Ghi lần (X5 mục 3 bước 3)", _them_luot, False)
 
-    kiem("13. fuzz hai bất biến: mất dấu phải kêu, đúng luật không được kêu",
-         not hong, "; ".join(hong[:4]))
+    # I3: mỗi phép KHÔNG dính mã G cũng phải có một trạng thái mẫu vi phạm, và
+    #     rà soát phải sinh ĐÚNG TÊN phép đó. I1 và I2 chỉ nói về mã G nên theo
+    #     định nghĩa không với tới 0h, 0i, 0j, 1a, 3f, 7b - hội đồng vòng 15 đo
+    #     được 14/16 đột biến vào vùng đó lọt.
+    def thu3(ten, sua, ten_phep):
+        with tempfile.TemporaryDirectory() as td:
+            kho, idx, so, G = _kho_song(goc, td)
+            sua(kho, idx, so, G, _sua)
+            if not any(l.startswith(ten_phep) for l in _ra_soat(idx, kho)):
+                hong.append("I3 " + ten + ": " + ten_phep + " không kêu ở CHỖ GỌI")
+
+    thu3("C12 rụng dòng mà giá trị vẫn trống",
+         lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md", "[ ] @NHIP.MUIGIO", ""), "0i.")
+    thu3("file lạ rơi vào 00_Index",
+         lambda k, i, so, G, sua: _ghi(i / "rac_la.md", "x"), "0j.")
+    thu3("X0 tụt về rev 0 mà sổ đã mang dấu",
+         lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md", "rev 1 · 20260828",
+                                      "rev 0 · 20260828"), "0h.")
+    thu3("hai bản INSTRUCTION cùng nằm trong 00_Index",
+         lambda k, i, so, G, sua: shutil.copy(i / "INSTRUCTION_WORKOPS_v11.md",
+                                              i / "INSTRUCTION_WORKOPS_v9.md"), "1a.")
+    thu3("dòng dán tay vào sổ, không mã G",
+         lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8")
+             + "| DA1 | V-DA1-009 | dan tay | x | toi | | 2026-12-31 | MỚI | | |" + NL), "3f.")
+    thu3("cửa ma sinh lane watermark giả",
+         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md", "CUA1-01", "CUAX-01"), "7b.")
+
+    # CA MỒI: kho LÀNH khai nhầm là "mất dấu". Nếu vế I1 bị tắt thì ca này im,
+    # và phép 13 tự tố cáo mình chỉ còn là trang trí (hội đồng vòng 15).
+    _n = len(hong)
+    thu("CA MỒI: kho LÀNH khai nhầm là mất dấu", lambda *a: None, True)
+    if len(hong) == _n:
+        hong.append("CA MỒI không kêu: vế I1 đã bị tắt, phép 13 chỉ còn trang trí")
+    else:
+        hong.pop()
+
+    kiem("13. fuzz ba bất biến: mất dấu phải kêu, đúng luật không được kêu,"
+         " mỗi phép phải kêu đúng tên mình", not hong, "; ".join(hong[:4]))
+
+    # 13b. Trần ĐẦU RA: bảng kiem_van_hanh được DÁN VÀO phiên RA_SOAT nên là
+    #      context thật, dù file .py đứng ngoài mọi route. Đo được 1.762 ký tự
+    #      ở vòng 42 và 1.506 ở vòng 39: đang phình mà không phép nào giữ.
+    import contextlib
+    import io as _io3
+    with tempfile.TemporaryDirectory() as td:
+        kho, idx, so, G = _kho_song(goc, td)
+        buf, argv = _io3.StringIO(), sys.argv
+        import kiem_van_hanh as K3
+        try:
+            sys.argv = ["kvh", str(idx), str(kho)]
+            with contextlib.redirect_stdout(buf):
+                try:
+                    K3.main(idx)
+                except SystemExit:
+                    pass
+        finally:
+            sys.argv = argv
+        n_ra = len(buf.getvalue())
+    kiem("13b. bảng kết quả kiem_van_hanh trong trần đầu ra 2.400 ký tự",
+         n_ra <= 2400, f"{n_ra} ký tự ~{n_ra // 3} token: đầu ra này DÁN VÀO"
+         f" phiên RA_SOAT, là context thật của người dùng")
 
 
 def main(goc):
@@ -395,14 +497,25 @@ def main(goc):
     bm = docs["BENCHMARK_TOKEN.md"]
     lech_bm = []
     for nhan, gia_tri in do.items():
-        m_rt = re.search(re.escape(nhan) + r"([^\n]*)", bm)
-        cac_so = [int(x) for x in re.findall(r"~(\d+)", m_rt.group(1))] if m_rt else []
-        if not cac_so:
+        # MỌI dòng mang nhãn, không chỉ dòng ĐẦU: vòng 42 để lọt "Route ~1506"
+        # vì một dòng khác cùng nhãn khớp trước (hội đồng vòng 15). Tổng của MỖI
+        # dòng là số lớn nhất trên dòng đó (các số nhỏ hơn là thành phần).
+        # ~1.059 (số có dấu nghìn) là số VĂN XUÔI hay snapshot, không phải số
+        # route: bỏ qua, nếu không "NOI_BO mức A" đọc nhầm thành ~1. Và bỏ dòng
+        # mang nhãn DÀI HƠN chứa nhãn này ("CUA_VAO thường" vs "... của LITE").
+        dai_hon = [k for k in do if k != nhan and nhan in k]
+        cac_max = [max(int(x) for x in re.findall(r"~(\d+)(?![\d.])", m.group(1)))
+                   for m in re.finditer(re.escape(nhan) + r"([^\n]*)", bm)
+                   if re.search(r"~\d+(?![\d.])", m.group(1))
+                   and not any(k in m.group(0) for k in dai_hon)]
+        if not cac_max:
             lech_bm.append(f"{nhan}: không thấy dòng trong BENCHMARK")
-        elif abs(max(cac_so) - gia_tri) > (0.02 if gia_tri > 5000 else 0.10) * gia_tri:
-            # số lớn siết 2%: 10% trên dòng CHAT ~20.000 là 2.000 token trôi mà máy vẫn im
-            # tổng của dòng là số LỚN NHẤT (các số nhỏ hơn là thành phần)
-            lech_bm.append(f"{nhan}: BENCHMARK ~{max(cac_so)}, đo thật ~{gia_tri}")
+        # dòng CỘNG là thuế thường trực, tính bằng // nên khớp TUYỆT ĐỐI được:
+        # dung sai 10% ở đó là 232 token trôi mà máy im (đo được +81 vòng 40-42)
+        nguong = 0 if "CỘNG" in nhan else (0.02 if gia_tri > 5000 else 0.10)
+        for _so in cac_max:
+            if abs(_so - gia_tri) > nguong * gia_tri:
+                lech_bm.append(f"{nhan}: BENCHMARK ~{_so}, đo thật ~{gia_tri}")
     kiem("2c. số route BENCHMARK khớp số đo thật (dung sai 10%)", not lech_bm,
          str(lech_bm) + " ; chạy --sinh-benchmark để lấy số mới")
     if "--sinh-benchmark" in sys.argv:
@@ -466,9 +579,33 @@ def main(goc):
     # 9. Ngân sách token: file vượt budget là FAIL (enforce bằng máy, không bằng cảm giác)
     vuot_ns = []
     for ten, tran in NGAN_SACH.items():
-        nd = docs["INSTRUCTION"] if ten == "INSTRUCTION" else docs.get(ten, "")
+        nd = (docs["INSTRUCTION"] if ten == "INSTRUCTION"
+              else docs.get(ten) or kem.get(ten, ""))
         if nd and len(nd) > tran:
             vuot_ns.append((ten, len(nd), tran))
+    # 9b. Bảng trần khai ở BENCHMARK phải khớp NGAN_SACH: vòng 13 phạt 9/13 số
+    #     route stale; không giữ thì lớp lỗi đó chỉ dời sang bảng trần.
+    TEN_BM = {"INSTRUCTION": "INSTRUCTION", "X0_CAUHINH_TEMPLATE.md": "X0",
+              "X5_HESO_TEMPLATE.md": "X5", "X3_CUAVAO_TEMPLATE.md": "X3",
+              "X3E_EMAIL_TEMPLATE.md": "X3E", "X9_CAIDAT.md": "X9",
+              "X4_RASOAT_TEMPLATE.md": "X4", "X2_PHATHANH_TEMPLATE.md": "X2",
+              "X1_CAM_TEMPLATE.md": "X1", "_so/X0_INDEX.md": "X0_INDEX",
+              "_so/BANG_DIEU_KHIEN.md": "BANG_DIEU_KHIEN", "README.md": "README",
+              "WORKOPS_STARTER_v24_20260824_GOP.md": "bản gộp _GOP"}
+    # chỉ đọc KHỐI "Trần từng file": chỗ khác cũng có "X0_INDEX 2.400" nhưng đó
+    # là trần RUNTIME của view, khác trần file mẫu ở NGAN_SACH
+    _bm = docs["BENCHMARK_TOKEN.md"]
+    _khoi_tran = _bm[_bm.find("## Trần từng file"):]
+    _khoi_tran = _khoi_tran[:_khoi_tran.find("\n## ", 5)] if "\n## " in _khoi_tran[5:] else _khoi_tran
+    lech_tran = []
+    for ten, tran in NGAN_SACH.items():
+        if ten not in TEN_BM:
+            continue
+        m_t = re.search(re.escape(TEN_BM[ten]) + r"\s+(\d{1,3}(?:\.\d{3})+)", _khoi_tran)
+        khai = int(m_t.group(1).replace(".", "")) if m_t else None
+        if khai != tran:
+            lech_tran.append(f"{TEN_BM[ten]}: BENCHMARK {khai}, NGAN_SACH {tran}")
+    kiem("9b. bảng trần ở BENCHMARK khớp NGAN_SACH", not lech_tran, str(lech_tran))
     kiem("9. mọi file trong ngân sách context", not vuot_ns,
          "; ".join(f"{t} {c} ký tự / trần {tr}" for t, c, tr in vuot_ns))
     print(f"        thuế thường trực (INSTRUCTION + X0_INDEX + BANG_DIEU_KHIEN mẫu): "
@@ -800,6 +937,26 @@ def main(goc):
                    _kv26.lech_c12(_x0) == []))
         ca.append(("0i: xóa dòng khỏi C12 mà giá trị vẫn trống thì lệch",
                    _kv26.lech_c12(_x0.replace("[ ] @A.BA\n", "")) == ["@A.BA"]))
+        # ghim trên CHÍNH template, không trên bản tổng hợp: bản tổng hợp không
+        # có dòng cú pháp lẫn khóa C13 nên con bug NẶNG của vòng 40 tái nhập
+        # được mà mọi lưới im (hội đồng vòng 15)
+        _tpl = (goc / "X0_CAUHINH_TEMPLATE.md").read_text(encoding="utf-8")
+        _mt = _kv26.muc_con_trong(_tpl)
+        ca.append(("0i trên CHÍNH template: 38 ô trống khi chưa bật profile nào,"
+                   " 44 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
+                   " đã điền; có khóa của C13",
+                   len(_mt) == 38 and len(_kv26.muc_con_trong(
+                       _tpl.replace("  [ ] EMAIL", "  [x] EMAIL")
+                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 44
+                   and not ({"@DUAN.", "@NGUON.", "@TEN.PROJECT"} & _mt)
+                   and "@MUC.NANG" in _mt))
+        # PH-5: ghim CHIỀU của lời dặn phép 8, thứ mà phán quyết không giữ
+        ca.append(("8: bảng mới hơn watermark thì lời dặn phải là CẤM sinh lại",
+                   _kv26.bang_moi_hon("G-20260828-CUA1-09", "CUA1",
+                                      {"CUA1": "G-20260828-CUA1-01"}) is True))
+        ca.append(("8: bảng cũ hơn watermark thì lời dặn phải là SINH LẠI",
+                   _kv26.bang_moi_hon("G-20260828-CUA1-01", "CUA1",
+                                      {"CUA1": "G-20260828-CUA1-09"}) is False))
         # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
         giu10, nghi10 = _kv26.loc_nghi_ban_sao(
             ["01_A/BC-KH-PHULUC-2026.docx"],
@@ -1154,7 +1311,11 @@ def main(goc):
         ca.append(("BAT_BIEN đủ mọi trạng thái từ ĐÃ GỬI DUYỆT trở đi", du_bb))
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
-        kiem(f"11. fixture bộ quan sát ({len(ca)} ca)", not hong, str(hong))
+        kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
+             not hong and len(ca) == 91,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 91: bớt ca là"
+                          f" bớt lưới không ai hay; đổi số thì sửa con số này"
+                          f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
         kiem("11. fixture bộ quan sát", False, f"lỗi chạy: {e}")
 
@@ -1219,6 +1380,7 @@ def main(goc):
         ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
         ("CHỐT CHỐNG LÁCH giữ nguyên vế khóa C11 và C12, không bị đảo ngược", "Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa" in docs["X0_CAUHINH_TEMPLATE.md"] and not re.search(r"C11 và C12 (KHÔNG|không) thuộc nhóm khóa", docs["X0_CAUHINH_TEMPLATE.md"])),
         ("X9 mục 4 ĐÁNH DẤU dòng C12, không xóa, khớp C11 ngoại lệ 2", "ĐÁNH DẤU dòng C12" in docs["X9_CAIDAT.md"] and "xóa dòng khỏi C12" not in docs["X9_CAIDAT.md"]),
+        ("KHÔNG chỗ nào khai nhóm (b) của nâng cấp là tùy chọn", not re.search(r"[Nn]hóm \(b\)[^.]{0,60}(TÙY CHỌN|tùy chọn|bỏ cũng được|không bắt buộc)", docs["X9_CAIDAT.md"])),
         ("nâng cấp đọc X9 mục 3c của BẢN MỚI, không đọc bản trong kho", "CỦA BẢN MỚI" in docs["X9_CAIDAT.md"] and "THƯ MỤC BẢN MỚI" in docs["README.md"]),
         ("mốc vòng vá ở DOC_TRUOC khớp vòng mới nhất của GHICHU", (lambda a, b: bool(a and b and int(a.group(1)) == max(int(x) for x in b)))(re.search(r"vòng vá (\d+)", docs["DOC_TRUOC.md"]), re.findall(r"## Vòng (\d+)", kem[ghichu[0].name]))),
         ("X0 khai luật viết dấu chưa điền để rà 0i đọc được", "Ô CHƯA ĐIỀN của X0 viết bằng ĐÚNG MỘT khuôn" in docs["X0_CAUHINH_TEMPLATE.md"]),
@@ -1229,9 +1391,10 @@ def main(goc):
         ("có chỗ khai nơi phát hành bộ để biết bản mới sau khi gỡ .git", "@NHIP.BANMOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.BANMOI" in docs["X5_HESO_TEMPLATE.md"]),
         ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git kể cả ở thư mục cha", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "THƯ MỤC CHA" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (67 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (68 luật)", not thieu_luat, str(thieu_luat))
 
     phep_fuzz(goc)
+
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
@@ -1268,6 +1431,16 @@ def main(goc):
     else:
         kiem("8. bản gộp _GOP tồn tại cạnh thư mục bộ", False,
              "không thấy; đóng gói bắt buộc có _GOP, hoặc truyền --skip-gop tường minh")
+
+    # 14. ĐIỂM DANH PHÉP, đặt CUỐI cùng: xóa trọn một phép thì bộ vẫn in "sạch,
+    #     đóng gói được" và dòng của nó chỉ lặng lẽ biến mất - hội đồng vòng 15
+    #     xóa được cả phép 13, sản phẩm đầu bảng của vòng 42.
+    _da = {t.split(" ")[0] for t in DA_KIEM}
+    thieu_phep = [pp for pp in PHEP_BAT_BUOC if pp not in _da]
+    kiem("14. điểm danh: đủ mọi phép bắt buộc đã chạy", not thieu_phep,
+         f"phép {thieu_phep} biến khỏi lượt chạy. Xóa một phép mà bộ vẫn 'sạch'"
+         f" là lưới tự mất không ai hay; thêm phép lại, hay khai vào"
+         f" PHEP_BAT_BUOC trong CÙNG lượt vá")
 
     print()
     if loi:

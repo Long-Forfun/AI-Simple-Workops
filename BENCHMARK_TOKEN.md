@@ -21,8 +21,8 @@ không tuyên bố kết quả runtime.
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
 | INSTRUCTION dán trong Project | 4148 | ~1924 |
-| Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
-| BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
+| Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX ~247 |
+| BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | ~145 |
 | CỘNG | ~6969 | ~2316 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
@@ -42,17 +42,17 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
 | NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1684 (thêm X5 mục 3 ~1262 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5518 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5756 + khối (không phần mềm trừ thêm mục 1b ~421) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2596 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6387 + khối | |
-| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1578 | |
+| RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1578 (X4) cộng bảng kết quả in ra | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3447 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3447 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
 INSTRUCTION 8.000 ký tự · X0 20.000 (đọc theo mục, thuế là X0_INDEX) · X5
-19.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
+20.000 (mục 1b và 7b đều có gate, không phải thuế chung) · X3 5.500 (mục 5b
 gate khi dán chat) · X3E 13.000 (chỉ nạp khi bật EMAIL) · X9 8.500 (đọc một
 lần mỗi công ty, không nạp vào CHAT) · X4 5.500 (chỉ đọc khi RA_SOAT) · X2
 4.200 · X1 3.200 · X0_INDEX 1.500 · BANG_DIEU_KHIEN 1.400 · README 9.000 ·
@@ -63,13 +63,16 @@ bản gộp _GOP 400.000 (không nạp vào phiên nào). Vượt trần là FAI
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0
 tới X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy
 hồi theo cơ chế riêng, xấu nhất là cả bộ:
-Phiên CHAT chỉ nên nạp X0 tới X5 (và X3E nếu bật EMAIL). GỠ X9 ra sau khi cài
-xong (đọc một lần mỗi công ty) và KHÔNG nạp X4 (chỉ đọc khi RA_SOAT, mà pilot đo
-được RA_SOAT thực tế trả 0 token vì bảng kiem_van_hanh.py tự đủ nghĩa):
-CHAT không EMAIL ~17663 token
-CHAT có EMAIL (kèm X3E) ~21662 token
-CHAT nạp cả X9 và X4 ~21857 token
-(ba số này máy giữ khớp qua phép 2c; bỏ X9 và X4 cắt gần 3.000 token mỗi phiên).
+Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9 sau khi
+cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
+KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
+không phải phiên ghi sổ:
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16321 token
+CHAT không EMAIL ~18144 token
+CHAT có EMAIL (kèm X3E) ~22142 token
+CHAT nạp cả X9 và X4 ~22334 token
+(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4193 token mỗi phiên,
+19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
 
 ## Phiên thật đã đo (PILOT 2026-08-28)
@@ -84,12 +87,16 @@ chưa đối chứng tokenizer nào (xem ĐỘ BẤT ĐỊNH ở đầu file).
 CÀI ĐẶT (X9 phiên đầu)   đọc thật INSTRUCTION + X9 + X0 + 9 mẫu sổ
                          32.924 ký tự đo tại commit, ~11,0k token ước lượng
                          6 lượt đọc file · đọc thừa: không · sai: không
-NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 token
+NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 token ĐO TẠI
+                         COMMIT vòng 39; mục 3 nay ~1262, xem bảng route
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
-RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng kết
-                         quả tự đủ nghĩa. Route ~1506 chỉ phải trả khi cần
-                         luật rà, không phải mỗi lượt rà
+RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~587
+                         token trên kho lành tối thiểu (kho có lệch lớn hơn),
+                         phình từ ~502 ở vòng 39 nên nay có trần riêng, phép
+                         13b. Route ~1578 chỉ phải trả khi cần luật rà, không
+                         phải mỗi lượt rà
 ```
 
 Bốn defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả

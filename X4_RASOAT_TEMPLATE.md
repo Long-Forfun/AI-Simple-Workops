@@ -58,7 +58,8 @@ EMAIL (profile EMAIL, máy dò bằng kiem_van_hanh phép 12)
 Phần dò được bằng máy (1, 2, 4 của FILE; 12, 17, 19, 22, 23; nhóm EMAIL 24
 tới 31; schema bảng; riêng 3 và 5 kiểm tay): có Python thì chạy từ gốc kho
 `python 00_Index\kiem_van_hanh.py 00_Index .` TRƯỚC (thiếu tham số gốc kho thì
-phần quan sát file 1, 2, 4 bị bỏ qua), dán kết quả vào báo cáo;
+phần quan sát file 1, 2, 4 bị bỏ qua), đọc kết quả để dựng bảng dưới; TUYỆT ĐỐI không dán nguyên đầu ra của máy
+cho người dùng - dòng PASS là việc của máy, người dùng chỉ đọc bảng lệch;
 không có Python thì kiểm tay đúng các dòng đó. Máy chỉ báo cáo, không sửa.
 Xuất bảng `| # | Loại lệch | Đối tượng | Chi tiết | Đề xuất |`. Sạch thì một dòng
 "sổ khớp thực tế <ngày>".
