@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 64 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 65 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,31 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 65: MIEN_TRU từ 16 xuống 3, và ba mục còn lại có lý do THẬT
+
+Backlog (i). Chú thích của MIEN_TRU tự khai "phải RỖNG DẦN: mỗi mục là một phép
+chưa ai canh". Vòng 50 đưa nó từ 16 xuống 8 bằng cách nối tập phủ của phép 15.
+Sáu mục còn lại đều DỰNG ĐƯỢC ca, chỉ là chưa ai viết: 3b (mã G trùng), 1b và
+1c (hai view vượt trần runtime), 0c (nhiều bản X0 đang chạy), 0e (THU.md vắng
+khi pipeline EMAIL đã có dấu vết). Năm ca mới, đo lại bằng đục ruột: 5/5 bị bắt
+- hội đồng vòng 17 đo vùng miễn trừ cũ là 8/8 LỌT.
+
+BA MỤC CÒN LẠI KHÔNG PHẢI NỢ ĐỌNG, và lý do ghi ngay tại chỗ để vòng sau đừng
+ép một ca giả rồi tưởng đã canh:
+  0f và 10c  cần KHÓA FILE ở tầng hệ điều hành nên ca phụ thuộc nền tảng -
+             dựng được trên Windows thì hỏng trên CI Linux. Và bộ CỐ Ý phân
+             biệt "chưa kiểm được" với "bị sửa"; ép chúng bắn là phá phân biệt
+             đó.
+  11.        chỉ so nội dung SAU khi file đạt luật ổn định HAI LƯỢT QUÉT, mà
+             bộ fuzz chạy rà soát một lượt. Ràng buộc của thiết kế.
+
+Tôi đã thử viết ca cho 11. và nó KHÔNG chạy được đúng như lý do trên - ghi lại
+việc thử đó ở đây thay vì lặng lẽ để danh sách dài thêm một dòng không giải
+thích.
+
+BACKLOG còn: (j) vòng đời _inbox và _da_nap · (a) hash nội dung QUYETDINH ·
+(c) khuôn bản sao · (e) bản rà cho sổ chuyển sang CSV.
 
 ## Vòng 64: 0j xuống lưu trữ, và chỉ lưu trữ
 

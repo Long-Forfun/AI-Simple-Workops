@@ -646,6 +646,30 @@ def phep_fuzz(goc, phu_them=()):
              "CUA1 = " + str(k) + " · thiet bi MAY1" + NL
              + "                 CUA1 = D:\\KHO_2024 · thiet bi MAY9"), "0i3.")
 
+    thu3("mã G trùng ở cột Mã ghi của NHATKY",
+         lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip(NL)
+             + NL + "| " + G + " | 2026-08-28 | CUA1.1100.zz | A | viec hai |"
+             " khong | khong | XONG | khong |" + NL), "3b.")
+
+    thu3("BANG_DIEU_KHIEN phình quá trần runtime",
+         lambda k, i, so, G, sua: _ghi(so / "BANG_DIEU_KHIEN.md",
+             (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+             + NL + "x" * 4300 + NL), "1b.")
+
+    thu3("X0_INDEX phình quá trần runtime",
+         lambda k, i, so, G, sua: _ghi(so / "X0_INDEX.md",
+             (so / "X0_INDEX.md").read_text(encoding="utf-8")
+             + NL + "y" * 2500 + NL), "1c.")
+
+    thu3("hai bản X0 đang chạy cùng lúc",
+         lambda k, i, so, G, sua: _ghi(i / "X0_CAUHINH_ABC.md",
+             (i / "X0_CAUHINH_FUZ.md").read_text(encoding="utf-8")), "0c.")
+
+    thu3("THU.md vắng khi pipeline EMAIL đã có dấu vết",
+         lambda k, i, so, G, sua: _ghi(so / "_thu_da_nap.json", "[]")
+             or (so / "THU.md").unlink(), "0e.")
+
     thu3("file lạ nấp trong _so/_lich_su",
          lambda k, i, so, G, sua: (so / "_lich_su").mkdir(exist_ok=True)
              or _ghi(so / "_lich_su" / "VIEC_2025.md.bak", "x"), "0j.")
@@ -1001,9 +1025,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 46):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 13, 51):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 13,"
-                    f" I3 46 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 51 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -1012,7 +1036,14 @@ def phep_fuzz(goc, phu_them=()):
     #      14b đỏ NGAY LƯỢT VÁ ĐÓ - quy tắc mà ba vòng liền tự viết rồi không
     #      thi hành, nay thành MÁY chứ không còn là lời dặn (vòng 15b).
     import kiem_van_hanh as K14
-    MIEN_TRU = ["0c.", "0e.", "0f.", "1b.", "1c.", "3b.", "10c.", "11."]
+    # còn ĐÚNG BA, mỗi mục kèm LÝ DO THẬT chứ không phải nợ đọng:
+    #   0f, 10c  cần KHÓA FILE ở tầng hệ điều hành nên ca phụ thuộc nền tảng -
+    #            dựng được trên Windows thì hỏng trên CI Linux; và bộ CỐ Ý
+    #            phân biệt "chưa kiểm được" với "bị sửa".
+    #   11.      chỉ so nội dung SAU khi file đạt luật ổn định HAI LƯỢT QUÉT,
+    #            mà bộ fuzz chạy rà soát một lượt. Ràng buộc của thiết kế.
+    # Vòng 50 đưa danh sách này từ 16 xuống 8, vòng 69 xuống 3.
+    MIEN_TRU = ["0f.", "10c.", "11."]
     # phải RỖNG DẦN: mỗi mục là một phép chưa ai canh. Vòng 16 bỏ "4." và "5.";
     # vòng 50 bỏ tiếp tám phép NGHIỆP VỤ NẶNG NHẤT (0, 1, 3a, 6, 7, 9, 10a,
     # 10b) vì phép 15 canh chúng thật - chỉ cần nối tập phủ của nó vào đây,
