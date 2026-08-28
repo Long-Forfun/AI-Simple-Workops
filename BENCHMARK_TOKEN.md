@@ -80,10 +80,10 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16739 token
-CHAT không EMAIL ~18434 token
-CHAT có EMAIL (kèm X3E) ~22432 token
-CHAT nạp cả X9 và X4 ~22794 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16864 token
+CHAT không EMAIL ~18559 token
+CHAT có EMAIL (kèm X3E) ~22557 token
+CHAT nạp cả X9 và X4 ~22919 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
@@ -105,7 +105,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~806
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~794
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả

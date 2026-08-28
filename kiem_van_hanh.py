@@ -218,7 +218,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.",
+           "8e.", "11b.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -753,6 +753,43 @@ def dem_qua_han(so, x0nd, hom_nay=None):
     return ra
 
 
+# khuôn Windows/Chrome đặt khi tải lại file CÙNG TÊN: "BC (1).docx".
+# Đây là tập CON của MAU_TAM: mọi file khớp nó vốn bị loại lặng lẽ.
+MAU_BAN_SAO_N = re.compile(r"^(?P<goc>.+?) (?:\((?P<n>\d+)\)|- ?[Cc]opy"
+                           r"(?: \d+)?|\(bản sao\))(?P<duoi>\.[^.]+)$")
+
+
+def quet_ban_sao_n(kho):
+    """File khuôn " (n)" mà nội dung KHÁC bản gốc cùng tên.
+
+    Trả (khac_noi_dung, mo_coi). Bộ quan sát loại mọi file khớp MAU_TAM một
+    cách LẶNG LẼ, nên bản thứ hai và thứ ba của một tài liệu - thứ Windows và
+    Chrome tự đặt tên mỗi lần tải lại đính kèm cùng tên - biến mất khỏi mọi
+    đầu ra, và người dùng được chỉ vào BẢN CŨ NHẤT (hội đồng vòng 18).
+    TRÙNG sha thì im: đó mới là bản sao đồng bộ thật."""
+    khac, mo_coi = [], []
+    for f in sorted(kho.rglob("*")):
+        try:
+            if not f.is_file():
+                continue
+        except OSError:
+            continue
+        m = MAU_BAN_SAO_N.match(f.name)
+        if not m:
+            continue
+        rel = str(f.relative_to(kho)).replace("\\", "/")
+        if any(seg == t or seg.startswith((t + " ", t + "_", t + "-", t + "."))
+               for seg in rel.split("/")
+               for t in THU_MUC_HE_THONG + (".git", "__pycache__")):
+            continue
+        goc_f = f.with_name(m.group("goc") + m.group("duoi"))
+        if not goc_f.is_file():
+            mo_coi.append(rel)
+        elif sha_file(f) != sha_file(goc_f):
+            khac.append((rel, goc_f.name))
+    return khac, mo_coi
+
+
 def quet_secret(kho):
     """Quét secret ĐỘC LẬP với quet_ho. Trả (list file secret, list dump prod).
 
@@ -966,7 +1003,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
                 (sua_bat_bien if any(bo_dau(t) in o for t in BAT_BIEN
                                      for o in _o_kd) else lech_sha).append(h[1])
     bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat, str(mat[:5]))
-    bao("10a. mốc chính thức (từ ĐÃ GỬI DUYỆT trở đi) không bị sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
+    bao("10a. mốc chính thức không bị sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
     bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha, str(lech_sha[:5]))
     if khong_kiem:
         bao("10c. sha kiểm được (file không bị khóa)" + pv, False,
@@ -996,7 +1033,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
               " _lich_su; là FILE THẬT khác nội dung thì cứ ghi TAILIEU như thường:")
         for d, goc_ng in nghi_ban_sao[:10]:
             print(f"          - {d} (tiền tố gây nghi: {goc_ng})")
-    bao("11. không họ tài liệu nào cùng vN mà khác nội dung (XUNG ĐỘT)" + pv, not xung_dot,
+    bao("11. không họ nào cùng vN mà khác nội dung" + pv, not xung_dot,
         str(xung_dot[:3]))
     if lan_dau:
         print(f"        LƯU Ý: lần quét ĐẦU của phạm vi này, chưa file nào đạt luật ổn"
@@ -1023,6 +1060,24 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
             False, f"{_liet(_dump_kho[:5])}: dump chạy thật mang dữ liệu KHÁCH"
             f" HÀNG và kho là thư mục đồng bộ, file đã đi ra mọi máy công ty."
             f" Chuyển ra ngoài kho; cần phân tích thì lấy bản đã che. Mức C")
+    # 11b. File khuôn " (n)" KHÁC nội dung bản gốc là TÀI LIỆU THẬT bị khuôn
+    #      tên che, không phải bản sao đồng bộ. Bộ quan sát loại chúng lặng lẽ
+    #      nên người dùng được chỉ vào BẢN CŨ NHẤT trong khi hai bản mới hơn
+    #      không xuất hiện một dòng nào (hội đồng vòng 18: chênh 86 triệu đi
+    #      vào DUKIEN mức nguồn A rồi ra hóa đơn).
+    _bs_khac, _bs_mo = quet_ban_sao_n(kho)
+    bao("11b. file khuôn \" (n)\" khác nội dung bản gốc",
+        not _bs_khac,
+        f"{_liet([f'{a} (khác {b})' for a, b in _bs_khac[:4]])}: khuôn này là"
+        f" thứ Windows và Chrome tự đặt khi tải lại file CÙNG TÊN, nên đây rất"
+        f" có thể là BẢN MỚI đối tác gửi lại chứ không phải bản sao. So nội"
+        f" dung rồi đổi tên chuẩn theo X0 C4 và nạp TAILIEU; trùng nội dung"
+        f" thì xóa bản thừa. Mức A")
+    if _bs_mo:
+        print(f"        LƯU Ý: {_liet(_bs_mo[:5])} mang khuôn \" (n)\" mà"
+              f" KHÔNG có bản gốc cùng tên - bộ quan sát bỏ qua chúng, nên"
+              f" chúng sẽ không bao giờ được mời vào sổ. Đổi tên chuẩn nếu là"
+              f" tài liệu thật")
     if de_xuat:
         CHO_VAO_SO.append(len(de_xuat))
         print("        ĐỀ XUẤT _INBOX (bản hiện hành quan sát được, chưa vào sổ, ghi mức A):")
@@ -1341,7 +1396,41 @@ def kiem_email(goc, so):
                               for t in ("purged_at", "eml_final_path", "sha256"))
                       and isinstance(mv.get("attachment_final_paths"), list))
             if k in committed and hop_le:
-                continue  # đã dọn đúng luật, có dấu vết
+                # MỞ FILE BẰNG CHỨNG RA XEM. Bản cũ chỉ kiểm manifest là chuỗi
+                # RỖNG HAY KHÔNG, nên một lượt dọn hỏng (đích chưa mkdir, đồng
+                # bộ mây chưa lên, đường dẫn gõ sai) xóa sạch nguyên văn thư mà
+                # 12j vẫn PASS - kho hết bằng chứng và không ai biết cho tới
+                # lúc ra tòa (hội đồng vòng 18). X3E chỉ cho dọn KHI file đã
+                # thật sự nằm ở vùng lưu chính.
+                def _giai(_d):
+                    """Đường dẫn bằng chứng tính từ GỐC KHO; nhận cả quy ước
+                    tính từ 00_Index để không báo oan kho đặt khác."""
+                    _r = str(_d).replace("\\", "/").strip()
+                    for _n in (goc.parent / _r, goc / _r):
+                        if _n.is_file():
+                            return _n
+                    return None
+
+                _thieu_bc = []
+                _fe = _giai(mv["eml_final_path"])
+                if _fe is None:
+                    _thieu_bc.append(f"eml_final_path {mv['eml_final_path']}"
+                                     f" KHÔNG có trên kho")
+                elif sha_file(_fe) != mv["sha256"]:
+                    _thieu_bc.append("nguyên văn thư ở vùng lưu chính KHÁC"
+                                     " sha256 mà manifest khai")
+                for _dk in mv.get("attachment_final_paths") or []:
+                    if not isinstance(_dk, str) or _giai(_dk) is None:
+                        _thieu_bc.append(f"đính kèm {str(_dk)[:40]} KHÔNG có"
+                                         f" trên kho")
+                if not _thieu_bc:
+                    continue  # đã dọn đúng luật, bằng chứng có thật
+                loi_staging.append(
+                    f"{k}: manifest dọn khai đã chuyển bằng chứng nhưng "
+                    + "; ".join(_thieu_bc[:2])
+                    + ". Staging đã xóa nên nguyên văn thư CHỈ CÒN ở nơi"
+                      " manifest trỏ; khôi phục từ hộp thư, mức C")
+                continue
             loi_staging.append(
                 f"{k}: staging vắng mà " +
                 ("chưa COMMITTED" if k not in committed else "không có manifest dọn hợp lệ"))
@@ -1802,7 +1891,7 @@ def main(goc):
             thieu = sorted(t for t in (can or set()) if ma not in ghi_lan_theo_so.get(t, set()))
             if thieu or (not can and ma not in ghi_lan):
                 khong_dau.append(f"{ma}{' thiếu ở ' + str(thieu) if thieu else ''}")
-        bao("3c. lượt ghi XONG để dấu mã G ở ĐÚNG các sổ đã khai chạm", not khong_dau,
+        bao("3c. lượt XONG để dấu mã G ở đúng sổ đã khai chạm", not khong_dau,
             str(khong_dau[:5]))
 
         # 3f. Mọi DÒNG DỮ LIỆU của sổ phải mang ít nhất một mã G ở ô "Ghi lần":
@@ -1874,7 +1963,7 @@ def main(goc):
                 if _gt not in _hl:
                     _tv.append(f"{_t}:{(_r[0] or '?').strip()[:12]}"
                                f" ô {_gt[:14] or '(rỗng)'}")
-        bao("3g. ô Mức, Trạng thái, Mức nguồn đều thuộc từ vựng X5", not _tv,
+        bao("3g. ô Mức và Trạng thái thuộc từ vựng X5", not _tv,
             f"{_liet(_tv[:5])}: giá trị ngoài từ vựng làm chính dòng đó TÀNG HÌNH"
             f" với 3c, 3d và mọi bộ đếm của bảng. Sửa về đúng từ vựng X5 mục 2,"
             f" mục 4 và X0 C7; [AI: tuyệt đối không gỡ dòng]")
@@ -1915,7 +2004,7 @@ def main(goc):
                     if lines[j].count("|") - 1 != so_cot:
                         lech.append((p.name, f"dòng dữ liệu {j + 1}"))
                     j += 1
-    bao("5. schema bảng: header, dòng kẻ, từng dòng dữ liệu cùng số cột",
+    bao("5. schema bảng: mọi dòng cùng số cột",
         not lech, str(lech[:5]))
 
     vuot = []
@@ -1982,6 +2071,7 @@ def main(goc):
         _pm = _c2[_c2.find("@DUAN.PHANMEM"):] if "@DUAN.PHANMEM" in _c2 else ""
         _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
         _host_pm = []   # GIÁ TRỊ nơi chạy thật, để 7g đọc lại
+        _nhanh_pm = []  # GIÁ TRỊ nhánh tự deploy, cũng để 7g đọc lại
         for _i, _dg in enumerate(_dong_pm):
             # KHÔNG đòi 2-6 ký tự HOA: không văn bản nào của bộ khai luật
             # đó, mà mã ngoài khuôn ngầm làm công ty khai ĐÚNG bị 7d và
@@ -2006,6 +2096,11 @@ def main(goc):
                             _khoi_pm)
             if _mh:
                 _host_pm.append(_mh.group(1).rstrip(".,;·"))
+            _mb = re.search(r"nh[áa]nh\s+t[ựu]\s+deploy[^·]*?"
+                            r"(?:th[ậa]t\s+)?([A-Za-z0-9][\w./-]*)\s*(?:·|$)",
+                            _khoi_pm)
+            if _mb and not re.search(r"(?i)kh[ôo]ng c[óo]", _mb.group(0)):
+                _nhanh_pm.append(_mb.group(1).rstrip(".,;"))
             # nhận CẢ bản có dấu lẫn không dấu: người Việt gõ cả hai kiểu, dò
             # mỗi bản có dấu là phạt oan công ty gõ "chay that" (bàn thử vòng 45)
             _can_pm = [("repo", r"repo\s*[:=]?\s*\S"),
@@ -2015,7 +2110,14 @@ def main(goc):
                        ("môi trường (dev, staging hay prod)",
                         r"dev|staging|prod|môi trường|moi truong"),
                        ("nơi chạy thật", r"chạy thật|chay that"),
-                       ("nơi giữ secret", r"secret|bí mật|bi mat")]
+                       ("nơi giữ secret", r"secret|bí mật|bi mat"),
+                       # X5 mục 1b BẮT phân biệt "merge vào nhánh mà CI/CD tự
+                       # deploy chạy thật là C", mà schema không có ô nào khai
+                       # nhánh đó: luật gác đúng chỗ hiểm nhưng phụ thuộc một
+                       # dữ kiện bộ không bao giờ hỏi, nên MỌI lượt merge rơi
+                       # về mức A theo mặc định thực tế (hội đồng vòng 18)
+                       ("nhánh tự deploy chạy thật",
+                        r"nhánh tự deploy|nhanh tu deploy|auto-?deploy")]
             # Bỏ đoạn "repo ..." ra trước khi dò BỐN trường còn lại: khai
             # báo phân đoạn bằng dấu ·, mà dò từ khóa trên TRỌN dòng thì
             # trường này ăn ké chữ của trường kia - `repo git.cty.vn/app` một
@@ -2085,6 +2187,10 @@ def main(goc):
                r"|thu hồi secret|thu hoi secret|feature flag|cấp quyền|cap quyen")
         _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
             "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm]
+        # merge vào ĐÚNG nhánh tự deploy là chạm chạy thật, dù câu ghi không
+        # nhắc chữ nào về production - đó là cả lý do trường này tồn tại
+        _neo += [r"(?:merge|gộp)[^·]*?(?<![\w.-])" + re.escape(_b) + r"(?![\w.-])"
+                 for _b in _nhanh_pm]
         _sx = []
         for _r in hang_nk:
             if len(_r) < 5:
@@ -2310,7 +2416,7 @@ def main(goc):
                     if _m8 and int(_m8.group(1)) != len(_v):
                         _loi8e.append(f"{_k}: bảng khai {_m8.group(1)},"
                                       f" sổ đếm {len(_v)} ({_liet(_v[:3])})")
-            bao("8e. bộ đếm của bảng khớp sổ (X4 dòng 8, 9, 11, 14, 15)",
+            bao("8e. bộ đếm của bảng khớp sổ",
                 not _loi8e, f"{'; '.join(_loi8e[:3])}. Bảng là mặt phẳng DUY"
                 f" NHẤT banner mở phiên đọc; khai sai là mọi phiên sau đọc sai."
                 f" Sinh lại bảng theo X5 mục 3 bước 6, ngưỡng ở X0 C9")

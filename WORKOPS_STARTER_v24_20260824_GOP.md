@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 51 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 52 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -275,6 +275,57 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 52: bản mới bị giấu, nhánh tự deploy, và manifest hết là tờ giấy
+
+Ba mục backlog nặng nhất còn lại của hội đồng vòng 18.
+
+(w) BỘ QUAN SÁT CHỈ NGƯỜI DÙNG VÀO BẢN CŨ NHẤT. Ba file cùng một biên bản
+nghiệm thu trong 04_Trao_doi: bản gốc, "BienBanNghiemThu (1).docx" (1,720 tỷ),
+"BienBanNghiemThu (2).docx" (đối tác đòi giảm 5%, còn 1,634 tỷ). Đầu ra: ĐỀ
+XUẤT đúng BẢN GỐC, hai bản mới không xuất hiện MỘT DÒNG NÀO - chúng khớp
+MAU_TAM nên bị loại lặng lẽ. Khuôn " (n)" là thứ Windows và Chrome tự đặt mỗi
+lần tải lại đính kèm cùng tên, tức chuyện tuần nào cũng xảy ra khi đối tác gửi
+bản sửa. Kế toán nạp bản 1,720 tỷ trong khi bản chốt là 1,634: chênh 86 triệu
+vào DUKIEN mức nguồn A rồi ra hóa đơn. Mỉa mai: khuôn anh em `-<TênMáy>` của
+OneDrive thì CÓ cảnh báo NGHI BẢN SAO từ vòng 6-8; riêng khuôn này thì im.
+Phép 11b so sha với bản gốc cùng tên: TRÙNG thì im (bản sao đồng bộ thật, giữ
+nguyên hành vi cũ), KHÁC thì báo. Bàn thử 4/4.
+
+(n) X5 MỤC 1b BẮT PHÂN BIỆT "MERGE VÀO NHÁNH MÀ CI/CD TỰ DEPLOY CHẠY THẬT LÀ
+C" - MÀ SCHEMA KHÔNG CÓ Ô NÀO KHAI NHÁNH ĐÓ. Trong pilot vòng 18, công ty khai
+đủ 5/5 trường mà vẫn không có căn cứ nào trong X0 để trả lời "merge PR 210 vào
+main là A hay C", nên lượt đó đi mức A và máy đồng ý. Merge PR là thao tác
+nhiều lần nhất trong ngày của công ty phần mềm và là lối vào production phổ
+biến nhất; luật gác đúng chỗ hiểm nhưng phụ thuộc một dữ kiện bộ KHÔNG BAO GIỜ
+HỎI, nên mọi lượt merge rơi về mức A theo mặc định thực tế - ngược hẳn "không
+dòng nào khớp thì lấy C" của X5 mục 1. Trường thứ SÁU của @DUAN.PHANMEM, và 7g
+đọc nó: merge vào đúng nhánh đó mà ghi khác mức C là lệch, dù câu ghi không
+nhắc chữ nào về production. Khai "không có auto-deploy" là hợp lệ và đúng hiện
+trạng phần lớn shop nhỏ. Bàn thử 4/4.
+
+(x) MANIFEST DỌN STAGING LÀ TỜ GIẤY. Mail đã COMMITTED, staging đã xóa,
+manifest khai `eml_final_path: 04_Trao_doi/m1.eml` - mà file đó KHÔNG hề tồn
+tại. Nguyên văn thư biến mất vĩnh viễn và 12j in PASS, vì nó chỉ kiểm manifest
+là CHUỖI RỖNG HAY KHÔNG, không bao giờ `.is_file()`. X3E chỉ cho dọn khi .eml
+đã chuyển sang vùng lưu chính; với profile REGULATED đây là nguyên văn thư của
+một hợp đồng đã ký. Một lượt dọn hỏng (đích chưa mkdir, đồng bộ mây chưa lên,
+đường dẫn gõ sai) xóa sạch bằng chứng mà bộ vẫn khai "hệ sạch" - kho hết bằng
+chứng và không ai biết cho tới lúc ra tòa. Nay 12j MỞ FILE RA XEM: đủ đường
+dẫn, đúng sha256, và từng đính kèm cũng phải có thật. Hai fixture cũ vốn đang
+ghim đúng cái luật yếu đó nay phải đặt file thật xuống đĩa, cộng hai ca âm mới.
+
+Trần kiem_tra_bo nâng 135.000 lên 150.000; gate không đổi: file này ngoài mọi
+route và từ vòng 46 không còn trong bản gộp, nên nó không tốn token của phiên
+nào. Trần ĐẦU RA (13b, 13c) - thứ người dùng thật sự gánh - KHÔNG nâng: bốn
+phép mới đẩy kho cận xấu lên 5.246/5.200, trả nợ bằng cắt đuôi nhãn tám phép,
+về 5.1xx.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(k) cache _quan_sat_truoc.json giả mạo được · (s) tách lịch sử GHICHU (giảm
+37%) · (v) backup theo X5 mục 7 nằm TRONG _so nên chết cùng lượt rollback mà
+0k2 lấy làm lý do tồn tại · (y) đính kèm của mail đã COMMITTED có thể không để
+lại dấu nào ở sổ · (a) (b) (c) (e) (g) (h) như cũ.
 
 ## Vòng 51: tầng HẠN vào lưới - bảng hết khai "bàn sạch" hộ sổ
 
@@ -2399,10 +2450,10 @@ Phiên CHAT chỉ nên nạp X0, X1, X2, X5 (và X3E nếu bật EMAIL). GỠ X9
 cài xong (đọc một lần mỗi công ty), KHÔNG nạp X4 (chỉ đọc khi RA_SOAT), và
 KHÔNG nạp X3 khi phiên CHAT không làm CUA_VAO - chính đoạn dưới đã chốt CHAT
 không phải phiên ghi sổ:
-CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16739 token
-CHAT không EMAIL ~18434 token
-CHAT có EMAIL (kèm X3E) ~22432 token
-CHAT nạp cả X9 và X4 ~22794 token
+CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~16864 token
+CHAT không EMAIL ~18559 token
+CHAT có EMAIL (kèm X3E) ~22557 token
+CHAT nạp cả X9 và X4 ~22919 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4317 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
@@ -2424,7 +2475,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~806
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~794
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
@@ -2680,7 +2731,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
 @DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
   <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
            (dev, staging, prod ở đâu) · nơi chạy thật · nơi giữ secret
-           (vault, secret manager, hoặc "chưa rõ")
+           (vault, secret manager, hoặc "chưa rõ") · nhánh tự deploy chạy thật
+           (tên nhánh mà merge vào là ra production, hoặc "không có auto-deploy")
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
@@ -2690,8 +2742,11 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
-  GitHub Actions. Mục nào chưa rõ: trả lời "chưa rõ, hỏi đội kỹ
-  thuật", AI ghi dấu chưa điền vào C12
+  GitHub Actions · nhánh tự deploy chạy thật main. Mục nào chưa rõ: trả lời
+  "chưa rõ, hỏi đội kỹ thuật", AI ghi dấu chưa điền vào C12.
+  Nhánh tự deploy là dữ kiện X5 mục 1b CẦN để xử lượt merge: merge vào đúng
+  nhánh đó là chạm CHẠY THẬT nên mức C, dù câu ghi không nhắc chữ nào về
+  production. Không có auto-deploy thì khai "không có auto-deploy"
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự

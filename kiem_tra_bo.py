@@ -73,7 +73,7 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 135000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 150000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
@@ -611,6 +611,25 @@ def phep_fuzz(goc, phu_them=()):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    def _ca_11b(k, i, so, G, sua):
+        """Đối tác gửi lại bản sửa; Chrome đặt tên " (1)". Bản MỚI bị loại
+        lặng lẽ và người dùng được chỉ vào bản CŨ NHẤT (hội đồng vòng 18)."""
+        (k / "04_Trao_doi").mkdir(exist_ok=True)
+        _ghi(k / "04_Trao_doi" / "BienBanNghiemThu.docx", "ban mot: 1.720 ty")
+        _ghi(k / "04_Trao_doi" / "BienBanNghiemThu (1).docx",
+             "ban hai: giam 5 phan tram, con 1.634 ty")
+
+    thu3("bản mới đối tác gửi mang khuôn \" (1)\" bị bỏ lặng lẽ", _ca_11b, "11b.")
+
+    def _ca_11b_lanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: bản sao đồng bộ THẬT - cùng tên, CÙNG nội dung."""
+        (k / "04_Trao_doi").mkdir(exist_ok=True)
+        _ghi(k / "04_Trao_doi" / "PhuLuc01.docx", "y het nhau")
+        _ghi(k / "04_Trao_doi" / "PhuLuc01 (1).docx", "y het nhau")
+
+    thu("bản sao đồng bộ thật, cùng nội dung (không được kêu)",
+        _ca_11b_lanh, False)
+
     def _ca_8e(k, i, so, G, sua):
         """Bảng khai "bàn sạch" trong lúc sổ còn một việc quá hạn từ 2019.
         Hội đồng vòng 18 dựng được kho có chứng thư số hết hạn 59 ngày, việc
@@ -794,9 +813,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 7, 30):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 7,"
-                    f" I3 30 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 8, 31):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 8,"
+                    f" I3 31 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -1592,10 +1611,15 @@ def main(goc):
         # 12k/12l đều phải xanh) - lớp lỗi ba vòng cùng họ, có lưới hồi quy riêng
         pay_xoa = dict(PAY, dinh_kem=[{"ten": "CV.pdf", "de_ngoai": True,
                                        "ly_do": "đã xóa theo Q-20260825-01"}])
-        don_xoa = {"<a@x>": {"purged_at": "2026-08-25", "eml_final_path": "x",
+        # bằng chứng phải NẰM THẬT trên đĩa: X3E chỉ cho dọn staging KHI .eml
+        # đã chuyển sang vùng lưu chính, và từ vòng 52 phép 12j mở file ra xem
+        don_xoa = {"<a@x>": {"purged_at": "2026-08-25",
+                             "eml_final_path": "04_Trao_doi/mail_a.eml",
                              "attachment_final_paths": [], "sha256": EML_SHA}}
         r = chay_email(nk=P("<a@x>", pay=pay_xoa) + "\n" + C("<a@x>") + "\n",
-                       reg=["<a@x>"], files={"_so/VIEC.md": "| V-001 | viec |\n"},
+                       reg=["<a@x>"],
+                       files={"_so/VIEC.md": "| V-001 | viec |\n",
+                              "04_Trao_doi/mail_a.eml": "eml"},
                        idx=IDX_SACH, don=don_xoa)
         ca.append(("kho sau XÓA PHÁP LÝ đúng luật phải sạch (12h, 12j, 12k, 12l)",
                    all(r.get(t) is not False
@@ -1769,8 +1793,24 @@ def main(goc):
                             "attachment_final_paths": ["04_Trao_doi/f.pdf"],
                             "sha256": EML_SHA}}
         r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH,
-                       files={"_so/VIEC.md": "| V-001 | viec |\n"}, don=DON_OK)
+                       files={"_so/VIEC.md": "| V-001 | viec |\n",
+                              "04_Trao_doi/mail_a.eml": "eml",
+                              "04_Trao_doi/f.pdf": "PDF"}, don=DON_OK)
         ca.append(("staging đã dọn có manifest hợp lệ là PASS", r.get(TEN_12J) is True))
+        # manifest KHAI đã chuyển bằng chứng mà file KHÔNG có trên kho: nguyên
+        # văn thư của một hợp đồng đã ký biến mất vĩnh viễn, mà bản cũ chỉ kiểm
+        # manifest là chuỗi RỖNG HAY KHÔNG nên in PASS (hội đồng vòng 18)
+        r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH,
+                       files={"_so/VIEC.md": "| V-001 | viec |\n"}, don=DON_OK)
+        ca.append(("manifest dọn khai file bằng chứng KHÔNG có trên kho bị bắt",
+                   r.get(TEN_12J) is False))
+        # đường dẫn đúng nhưng nội dung KHÁC sha256 manifest đã khai
+        r = chay_email(nk=SACH, reg=["<a@x>"], idx=IDX_SACH,
+                       files={"_so/VIEC.md": "| V-001 | viec |\n",
+                              "04_Trao_doi/mail_a.eml": "ĐÃ BỊ THAY RUỘT",
+                              "04_Trao_doi/f.pdf": "PDF"}, don=DON_OK)
+        ca.append(("bằng chứng ở vùng lưu chính khác sha256 manifest bị bắt",
+                   r.get(TEN_12J) is False))
         # staging vắng khi CHƯA COMMITTED: manifest cũng không cứu được
         r = chay_email(nk=P("<a@x>") + "\n", reg=[], don=DON_OK)
         ca.append(("staging vắng khi chưa COMMITTED vẫn lệch", r.get(TEN_12J) is False))
@@ -1936,8 +1976,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 94,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 94: bớt ca là"
+             not hong and len(ca) == 96,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 96: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

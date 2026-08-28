@@ -87,7 +87,8 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
 @DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
   <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
            (dev, staging, prod ở đâu) · nơi chạy thật · nơi giữ secret
-           (vault, secret manager, hoặc "chưa rõ")
+           (vault, secret manager, hoặc "chưa rõ") · nhánh tự deploy chạy thật
+           (tên nhánh mà merge vào là ra production, hoặc "không có auto-deploy")
   Repo là NGUỒN SỰ THẬT của code và lịch sử sửa: code KHÔNG chép vào kho,
   KHÔNG đi qua _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành.
   Việc chạm code vẫn ghi VIEC, QUYETDINH như thường, cột Liên kết trỏ
@@ -97,8 +98,11 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
   bàn giao source thuê ngoài: X5 mục 1b (chỉ nạp khi có dự án phần mềm).
   Ví dụ một dòng đã điền: APP  Ứng dụng đặt hàng · repo github.com/cty/app
   · web + máy chủ · dev máy đội kỹ thuật, chạy thật app.cty.vn · secret ở
-  GitHub Actions. Mục nào chưa rõ: trả lời "chưa rõ, hỏi đội kỹ
-  thuật", AI ghi dấu chưa điền vào C12
+  GitHub Actions · nhánh tự deploy chạy thật main. Mục nào chưa rõ: trả lời
+  "chưa rõ, hỏi đội kỹ thuật", AI ghi dấu chưa điền vào C12.
+  Nhánh tự deploy là dữ kiện X5 mục 1b CẦN để xử lượt merge: merge vào đúng
+  nhánh đó là chạm CHẠY THẬT nên mức C, dù câu ghi không nhắc chữ nào về
+  production. Không có auto-deploy thì khai "không có auto-deploy"
 ```
 
 Đóng dự án: đổi sang NGỪNG (mức B), việc đang mở chuyển HỦY hay bàn giao dự
