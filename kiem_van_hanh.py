@@ -223,7 +223,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "7h.", "5b.", "0p.",
-           "0i3.", "2b.", "10d.", "5d.",
+           "0i3.", "2b.", "10d.", "5d.", "5e.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -479,7 +479,8 @@ def goc_dai(kho):
     nuốt OSError khi đường vượt MAX_PATH (260 ký tự) nên nó DỪNG ĐI XUỐNG ở
     đúng chỗ đó - im lặng tuyệt đối, cả một nhánh kho tàng hình cùng secret và
     dump khách nằm trong (hội đồng vòng 21). Kho thầu tiếng Việt vượt 260 ký
-    tự là chuyện thường. Tiền tố \\?\ gỡ giới hạn; nền khác trả nguyên gốc."""
+    tự là chuyện thường. Tiền tố đường dẫn dài gỡ giới hạn đó; nền khác trả
+    nguyên gốc."""
     import os as _os_gd
     try:
         p = Path(kho).resolve()
@@ -511,20 +512,38 @@ def ngoai_fence(nd):
     lời khuyên của chính 5b ("bọc ví dụ trong ```") thì ăn ba dòng lệch - lớp
     phạt-người-làm-đúng lần thứ mười hai (hội đồng vòng 21). Một hàm cho cả
     hai để chúng không lệch nhau lần nữa."""
-    ra, trong = [], False
+    ra, mo = [], None
     for d in nd.splitlines():
-        if d.lstrip().startswith("```"):
-            trong = not trong
-            continue
-        ra.append("" if trong else d)
+        _m = re.match(r"\s*(`{3,}|~{3,})", d)
+        if _m:
+            _ky = _m.group(1)[0]
+            if mo is None:
+                mo = _ky
+                ra.append("")
+                continue
+            if _ky == mo:      # chỉ ĐÓNG bằng đúng ký tự đã mở, nên ``` nằm
+                mo = None      # trong khối ~~~ không tắt cờ sớm
+                ra.append("")
+                continue
+        ra.append("" if mo is not None else d)
     return ra
 
 
-def tach_o(d):
+def tach_o(d, so_cot=None):
     """Tách ô của một dòng bảng. `\\|` là cách DUY NHẤT hợp lệ theo GFM để viết
     dấu | trong ô; tách thô làm dòng đó lệch ô và bị 3g, 5 tố oan (vòng 21)."""
-    return [o.replace("\\|", "|").strip()
-            for o in re.split(r"(?<!\\)\|", d.strip().strip("|"))]
+    # Theo đúng GFM thì `\|` LÀ dấu thoát; không luật cú pháp nào phân biệt
+    # được "ô kết thúc bằng \ rồi tới dấu ngăn" với "dấu | thoát giữa ô". Thứ
+    # duy nhất phân biệt được là SỐ CỘT. X0 C1 BẮT BUỘC dòng trỏ BỘ HỒ SƠ kết
+    # thúc bằng `\`, mà bảng gõ SÁT dấu | là khuôn GFM hợp lệ - người dùng làm
+    # đúng HAI luật cùng lúc không được ăn lệch (hội đồng vòng 22).
+    loi = d.strip().strip("|")
+    ra = [o.replace("\\|", "|").strip() for o in re.split(r"(?<!\\)\|", loi)]
+    if so_cot is not None and len(ra) != so_cot:
+        tho = [o.strip() for o in loi.split("|")]
+        if len(tho) == so_cot:
+            return tho
+    return ra
 
 
 def dong_bang(nd):
@@ -555,7 +574,7 @@ def dong_bang(nd):
         if re.match(r"^\|[\s:|-]+\|$", d):
             continue                          # dòng kẻ
         if d.startswith("|"):
-            r = tach_o(d)
+            r = tach_o(d, _dang_mo or None)
         elif _dang_mo:
             # GFM cho bỏ dấu | ĐẦU và CUỐI ở dòng THÂN. Không nhận thì 11 phép
             # cùng mù, y hệt lớp thụt lề của vòng 58 - Prettier và
@@ -563,7 +582,7 @@ def dong_bang(nd):
             # ĐÒI ĐÚNG SỐ CỘT: nhận rộng hơn thì rác đứng trước dấu | đầu bị
             # đọc thành một ô, cả dòng lệch một ô, và 3g tố oan - bản vá chống
             # báo oan suýt tự đẻ ra báo oan.
-            r = tach_o(d)
+            r = tach_o(d, _dang_mo)
             if len(r) != _dang_mo:
                 continue
         else:
@@ -1156,7 +1175,11 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
     mat, sua_bat_bien, lech_sha, khong_kiem = [], [], [], []
     for h in dong_kho:
         rel = h[5][4:].strip("` ").replace("\\", "/").strip("/")
-        duong = kho / rel
+        # gốc DÀI: vòng 67 thêm goc_dai cho quet_ho và quet_secret mà quên đây,
+        # nên cùng một lượt chạy tầng quan sát THẤY file còn phép 9 tuyên nó
+        # ĐÃ MẤT - hai lời khai ngược nhau trong một báo cáo (vòng 22)
+        _goc9 = goc_dai(kho)
+        duong = _goc9 / rel
         if not duong.exists():
             # NFD (đĩa macOS, iCloud, Dropbox) và NFC là CÙNG MỘT tên. Không
             # thử lại thì dòng bị coi là MẤT FILE rồi `continue`, tức 10a và
@@ -1165,7 +1188,7 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
             # KHAI là phép 9 được vá chỗ này, mà nó chưa từng được vá.
             import unicodedata as _ud9
             for _dang in ("NFC", "NFD"):
-                _thu = kho / _ud9.normalize(_dang, rel)
+                _thu = _goc9 / _ud9.normalize(_dang, rel)
                 if _thu.exists():
                     duong = _thu
                     break
@@ -1203,17 +1226,17 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
             continue
         if not any(re.fullmatch(r"[0-9a-f]{12,64}", o) for o in h):
             _thieu_sha.append((h[1] if len(h) > 1 else "?").strip())
-    bao("10d. mốc chính thức và 99_Goc có sha256" + pv, not _thieu_sha,
+    bao("10d. mốc chính thức, 99_Goc có sha256" + pv, not _thieu_sha,
         f"{_liet(_thieu_sha[:5])}: thiếu sha thì 10a và 10b BỎ QUA trọn dòng,"
         f" tức bản đã ký hay đã nộp không còn lưới toàn vẹn nào (X4 dòng 5)."
         f" Chạy lại lượt ghi để đóng sha, mức A")
-    bao("9. file khai 'Kho' trong TAILIEU đều còn trên kho" + pv, not mat,
+    bao("9. file khai 'Kho' trong TAILIEU còn trên kho" + pv, not mat,
         f"{mat[:5]}"
         + (": tài liệu nằm ở KHO CŨ thì khai dạng \"KhoCu <đường dẫn từ"
            " @KHO.CU>\" (X0 C1) - dạng đó không bị kiểm tồn tại vì kho cũ chỉ"
            " tra lịch sử và có thể offline; ĐỪNG chép file sang kho mới, X5"
            " mục 6 bắt bản cuối chỉ nằm MỘT kho" if mat else ""))
-    bao("10a. mốc chính thức không bị sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
+    bao("10a. mốc chính thức không sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
     bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha, str(lech_sha[:5]))
     if khong_kiem:
         bao("10c. sha kiểm được (file không bị khóa)" + pv, False,
@@ -1889,7 +1912,7 @@ def main(goc):
                     key=lambda q: int(re.search(r"_v(\d+)\.md", q.name).group(1))
                     if re.search(r"_v(\d+)\.md", q.name) else 0, reverse=True)
     if len(instrs) > 1:
-        bao("1a. đúng MỘT bản INSTRUCTION trong 00_Index", False,
+        bao("1a. đúng MỘT INSTRUCTION trong 00_Index", False,
             f"{[q.name for q in instrs][:4]}: nâng cấp theo X9 mục 3c dặn XÓA bản"
             f" v* cũ, chỉ giữ MỘT. Hai bản thì phép 1 so nhầm bản và AI có thể nạp"
             f" nhầm luật; ở đây đang lấy bản v lớn nhất để so")
@@ -1960,7 +1983,7 @@ def main(goc):
               f" chưa có sổ; bước cài đặt của X9 mục 1 sẽ xóa nó. Sau khi cài mà"
               f" còn thì thành LỆCH: git pull hay git stash sẽ nuốt dòng sổ")
     elif vung_git is not None:
-        bao("0g. kho đang chạy không nằm trong bản làm việc git", False,
+        bao("0g. kho chạy không nằm trong bản git", False,
             f"thấy thư mục ẩn tên .git ở {vung_git} (thư mục này, hay THƯ MỤC CHA"
             f" của kho). Sổ sách của công ty đang nằm trong vùng git quản. Nói"
             f" với AI \"xóa .git giúp tôi\" - sổ trên đĩa không suy suyển gì; muốn"
@@ -1991,7 +2014,7 @@ def main(goc):
                                                           list(so.glob("NHATKY_*.md"))
                                                           + list((so / "_lich_su")
                                                                  .glob("NHATKY_*.md"))))))
-            bao("0k. mã G ở _moc_ghi.txt đều còn dòng trong NHATKY", not _mat,
+            bao("0k. mã G ở _moc_ghi.txt đều còn dòng NHATKY", not _mat,
                 f"{_liet(_mat[:5])}: neo ngoài _so còn mã mà NHATKY không có -"
                 f" thư mục _so đã bị LÙI hay khôi phục nhầm. Khôi phục mức C từ"
                 f" {BAN_CU}. [AI: cấm cấp mã G mới khi chưa có lại]")
@@ -2420,7 +2443,7 @@ def main(goc):
         thieu_g = [h[0] for h in hang_pl
                    if any(o == "ĐÃ GHI" for o in h) and not re.search(MAU_G, h[-1] or "")]
         cho_chot = [h[0] for h in hang_pl if any(o == "CHỜ CHỐT" for o in h)]
-        bao("4. plan ĐÃ GHI đều có mã G ở cột Mã ghi", not thieu_g, str(thieu_g))
+        bao("4. plan ĐÃ GHI có mã G ở cột Mã ghi", not thieu_g, str(thieu_g))
         print(f"        plan CHỜ CHỐT: {cho_chot or 'không'}")
 
     lech = []
@@ -2433,15 +2456,37 @@ def main(goc):
         for i, d in enumerate(lines[:-1]):
             if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
                 so_cot = len(tach_o(d))
-                if len(tach_o(lines[i + 1])) != so_cot:
+                if len(tach_o(lines[i + 1], so_cot)) != so_cot:
                     lech.append((p.name, "dòng kẻ"))
                 j = i + 2
                 while j < len(lines) and lines[j].startswith("|"):
-                    if len(tach_o(lines[j])) != so_cot:
+                    if len(tach_o(lines[j], so_cot)) != so_cot:
                         lech.append((p.name, f"dòng dữ liệu {j + 1}"))
                     j += 1
     bao("5. schema bảng: mọi dòng cùng số cột",
         not lech, str(lech[:5]))
+
+    # 5e. Dấu fence trong sổ phải đóng ĐỦ CẶP. `ngoai_fence` bật cờ và không
+    #     bao giờ tắt nếu thiếu dòng đóng, nên mọi dòng còn lại TÀNG HÌNH với
+    #     3f, 3g, 5, 5b, 5d, 6, 7, 7b, 7f và bộ đếm quá hạn - trong khi
+    #     Markdown vẫn render và người vẫn đọc thấy. Trước vòng 66 hỏng này
+    #     KHÔNG TỒN TẠI: bản vá fence đổi một lớp BÁO OAN lấy một lớp TÀNG
+    #     HÌNH, mà sổ chỉ-thêm nên số dòng bị nuốt tăng dần (vòng 22).
+    _fence_le = []
+    for p in sorted(so.glob("*.md")) + sorted((so / "_lich_su").glob("*.md")):
+        _dem_f = {}
+        for _d in doc(p).splitlines():
+            _m = re.match(r"\s*(`{3,}|~{3,})", _d)
+            if _m:
+                _k = _m.group(1)[0]
+                _dem_f[_k] = _dem_f.get(_k, 0) + 1
+        _le = [k for k, v in _dem_f.items() if v % 2]
+        if _le:
+            _fence_le.append(f"{p.name} (dấu {_liet(_le)})")
+    bao("5e. dấu fence trong sổ đóng đủ cặp", not _fence_le,
+        f"{_liet(_fence_le[:4])}: thiếu dòng đóng thì MỌI dòng phía sau TÀNG"
+        f" HÌNH với 3f, 3g, 5, 6, 7, 7b, 7f và bộ đếm quá hạn, trong khi"
+        f" Markdown vẫn hiện chúng. Thêm dòng đóng, mức A")
 
     # 5d. Mọi bảng trong CÙNG một sổ phải cùng thứ tự cột. X5 cho nhiều khối
     #     `## <KHỐI>` mỗi khối một bảng - đó là cách bộ dặn tách dự án - nhưng
@@ -2458,7 +2503,7 @@ def main(goc):
                 _hdrs.append(tuple(tach_o(_d)))
         if len(set(_hdrs)) > 1:
             _lech_hdr.append(f"{p.name}: {len(set(_hdrs))} thứ tự cột khác nhau")
-    bao("5d. mọi bảng trong một sổ cùng thứ tự cột", not _lech_hdr,
+    bao("5d. bảng trong một sổ cùng thứ tự cột", not _lech_hdr,
         f"{_liet(_lech_hdr[:4])}: các phép đọc sổ theo VỊ TRÍ cột, nên khối"
         f" đảo cột làm bộ đếm quá hạn và từ vựng đọc nhầm ô trong khi phép 5"
         f" vẫn xanh (mọi dòng cùng SỐ ô). Đưa các khối về cùng header, mức A")
@@ -2477,14 +2522,14 @@ def main(goc):
         f"{_liet(_thut_sau[:5])}: thụt từ bốn dấu cách trở lên là KHỐI CODE"
         f" theo Markdown, nên mọi phép đọc sổ BỎ QUA dòng đó trong khi người và"
         f" AI vẫn đọc thấy. Kéo dòng về sát lề trái; muốn dán ví dụ bảng thì"
-        f" bọc trong ``` để phép này bỏ qua đúng cách")
+        f" bọc trong ``` hay ~~~ (phép 5e canh chúng đóng đủ cặp)")
 
     vuot = []
     for p in sorted(so.glob("*.md")):
         n = len(dong_bang(doc(p)))
         if n > 500 or p.stat().st_size > 1_000_000:
             vuot.append((p.name, n, p.stat().st_size))
-    bao("6. không sổ nào vượt ngưỡng 500 dòng / 1 MB", not vuot, str(vuot))
+    bao("6. không sổ nào vượt 500 dòng / 1 MB", not vuot, str(vuot))
 
     trung_ma = []
     # khuôn mã phải phủ dạng có mã khối, ví dụ Q-DA2-001: khuôn cũ Q-\d+ bỏ sót
@@ -2900,7 +2945,7 @@ def main(goc):
         _loi7b = ([f"cửa không khai ở C1: {_la_cua}"] if _la_cua else []) \
             + ([f"dự án không khai ở C2: {_liet(sorted(_la_da)[:3])}"] if _la_da else []) \
             + ([f"dự án NGỪNG còn việc mở: {_liet(_mo_ngung[:3])}"] if _mo_ngung else [])
-        bao("7b. từ vựng của sổ (cửa, dự án) đều khai ở X0", not _loi7b,
+        bao("7b. từ vựng của sổ (cửa, dự án) khai ở X0", not _loi7b,
             "; ".join(_loi7b) + " - cửa THU HỒI thì khai xuống @KHO.CUA_NGUNG"
             " (X0 C1), đừng gỡ trắng: mã G cũ nằm trong NHATKY chỉ-thêm nên"
             " không xóa được. Gõ nhầm một ký tự cũng sinh cửa ma và một lane"
@@ -2923,13 +2968,13 @@ def main(goc):
             # (hội đồng vòng 13: phép cũ dẫn thẳng người dùng tới thao tác đó)
             moi_hon = bang_moi_hon(gb, c, wm)
             if not gb or not c:
-                bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó", False,
+                bao("8. BANG_DIEU_KHIEN sinh từ watermark cửa nó", False,
                     "bảng chưa khai sinh_boi hay watermark mang mã G có cửa:"
                     " bảng sinh TRƯỚC lượt ghi đầu tiên thì ghi \"cai dat\"; bảng"
                     " sinh SAU một lượt ghi mà thiếu hai giá trị này là bảng sửa"
                     " tay, sinh lại theo X5 mục 3 bước 6")
             else:
-             bao("8. BANG_DIEU_KHIEN sinh từ watermark của cửa nó",
+             bao("8. BANG_DIEU_KHIEN sinh từ watermark cửa nó",
                 bool(gb and c and wm.get(c) == gb),
                 (f"bảng={gb} MỚI HƠN mọi dòng NHATKY của cửa {c}"
                  f" ({wm.get(c) or 'không có dòng nào'}): bảng chứng minh lượt ghi"
@@ -2987,7 +3032,7 @@ def main(goc):
             _wm_khai = set(re.findall(r"\b(CUA\d+)\s*=",
                                       _wmd.group(1) if _wmd else ""))
             _thieu_lane = sorted(cc for cc in wm if cc not in _wm_khai)
-            bao("8c. bảng khai lane watermark cho mọi cửa có lượt ghi",
+            bao("8c. bảng khai watermark cho mọi cửa có ghi",
                 not _thieu_lane, f"thiếu lane {_liet(_thieu_lane)}: cửa đó mất mốc"
                 f" cao nhất, lượt sau có thể cấp lại mã đã dùng. Sinh lại bảng"
                 f" theo X5 mục 3 bước 6")
@@ -2995,7 +3040,7 @@ def main(goc):
                                      _wmd.group(1) if _wmd else ""))
             _lane_sai = sorted(f"{c}: bảng={_wm_gt.get(c) or 'thiếu'} NHATKY={m}"
                                for c, m in wm.items() if _wm_gt.get(c) != m)
-            bao("8d. lane watermark khớp mã cao nhất của chính cửa đó",
+            bao("8d. watermark khớp mã cao nhất của cửa đó",
                 not _lane_sai, f"{_liet(_lane_sai[:3])}: lane LÙI hay khai sai thì"
                 f" lượt sau cấp lại mã ĐÃ DÙNG; 8c chỉ đếm TÊN lane nên mù giá trị")
             khac = [f"{k}={v}" for k, v in sorted(wm.items()) if k != c and v[2:10] > (gb or '')[2:10]]

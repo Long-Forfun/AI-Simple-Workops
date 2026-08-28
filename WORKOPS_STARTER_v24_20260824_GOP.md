@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 68 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 69 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,54 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 35 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 69: bốn hồi quy do CHÍNH BẢN VÁ CỦA TÔI đẻ ra
+
+Hội đồng vòng 22 cho KHÔNG MISS 6,5 (lên từ 6,0) và xác nhận 8/8 bản vá vòng
+66-67 đứng vững. Bốn lỗ còn lại đều mang một chữ ký: bản vá chống BÁO OAN của
+tôi đẻ ra lớp hỏng mới.
+
+1. FENCE MỞ MÀ KHÔNG ĐÓNG NUỐT TRỌN PHẦN ĐUÔI SỔ. `ngoai_fence` bật cờ rồi
+   không bao giờ tắt, nên mọi dòng còn lại thành rỗng với 3f, 3g, 5, 5b, 5d, 6,
+   7, 7b, 7f và bộ đếm quá hạn - trong khi Markdown vẫn render và người vẫn đọc
+   thấy. Trước vòng 66 hỏng này KHÔNG TỒN TẠI: tôi đổi một lớp BÁO OAN lấy một
+   lớp TÀNG HÌNH, mà tàng hình nguy hơn, và sổ chỉ-thêm nên số dòng bị nuốt
+   tăng dần theo thời gian. Phép 5e đếm dấu fence, số LẺ là LỆCH.
+
+2. `~~~` LÀ FENCE HỢP LỆ NGANG ```. Người đọc kỹ luật rồi chọn `~~~` vì ví dụ
+   của họ CÓ chứa backtick - và ăn ba lệch, kèm chẩn đoán 7b xúi khai thêm một
+   dự án ma vào X0 C2. Bản vá đẩy người dùng đi làm bẩn cấu hình. Nay
+   `ngoai_fence` chỉ ĐÓNG bằng đúng ký tự đã MỞ.
+
+3. `tach_o` BÁO OAN Ô KẾT THÚC BẰNG `\` - khuôn mà X0 C1 BẮT BUỘC cho dòng trỏ
+   BỘ HỒ SƠ. Bảng gõ SÁT dấu | (khuôn GFM hợp lệ, thứ markdownlint --fix sinh
+   ra) làm nó thành `\|` và hai ô dính làm một. Người dùng làm ĐÚNG HAI luật
+   của bộ cùng lúc và ăn hai lệch, trong đó chẩn đoán của phép 9 dẫn thẳng sang
+   thao tác SAI. Lần thứ MƯỜI BA của lớp phạt-người-làm-đúng, lần thứ TƯ do
+   chính bản vá chống báo oan đẻ ra.
+
+   Cái khó thật: theo ĐÚNG GFM thì `\|` LÀ dấu thoát, không luật cú pháp nào
+   phân biệt được "ô kết thúc bằng \ rồi tới dấu ngăn" với "dấu | thoát nằm
+   giữa ô". Thứ DUY NHẤT phân biệt được là SỐ CỘT của header. Nên `tach_o` nay
+   nhận thêm tham số số cột: tách theo luật GFM trước, chỉ khi kết quả LỆCH số
+   cột mà tách THÔ lại KHỚP thì mới dùng bản thô. Lần vá đầu của tôi ở vòng này
+   dùng một biểu thức lookahead và KHÔNG chạy - ca I2 mới thêm bắt được ngay,
+   đó là lý do mỗi bản vá phải kèm ca riêng chứ không phải kèm lời hứa.
+
+4. `goc_dai` VÁ NỬA VỜI: vòng 67 dùng nó ở `quet_ho` và `quet_secret`, nhưng
+   phép 9, 10a, 10b, 10d vẫn `kho / rel`. Cùng MỘT lượt chạy: tầng quan sát
+   THẤY file, phép 9 tuyên nó ĐÃ MẤT - hai lời khai ngược nhau trong một báo
+   cáo.
+
+Kèm: docstring `goc_dai` có escape hỏng, mỗi lượt biên dịch in SyntaxWarning.
+
+TRẦN ĐẦU RA KHÔNG NỚI. Thêm phép 5e thì trả chỗ bằng cách viết nhãn ngắn lại
+(mười một nhãn, 8c, 8d, 0g, 0k, 9, 8, 7b, 6, 1a, 4, 10a), không phải bằng cách
+dời vạch 5.200 - đó là thứ người dùng TRẢ mỗi phiên RA_SOAT.
+
+BẤT BIẾN I2 nay 16 ca, I3 56 ca. BACKLOG còn: ngày không ISO làm câm bộ đếm ·
+junction ở 99_Goc · đường dẫn lệch hoa thường · (j) vòng đời _inbox và _da_nap ·
+(a) hash nội dung QUYETDINH · (c) khuôn bản sao · (e) sổ chuyển sang CSV.
 
 ## Vòng 68: lưới đúng mà thông điệp làm nó vô dụng
 

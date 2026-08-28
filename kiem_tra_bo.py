@@ -77,7 +77,7 @@ NGAN_SACH = {
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 170000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 185000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -617,6 +617,37 @@ def phep_fuzz(goc, phu_them=()):
              + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
              " x | x | x | x | MỚI | |" + NL), "7c.")
 
+    thu3("dấu ``` mở mà KHÔNG đóng (nuốt trọn phần đuôi sổ)",
+         lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "```" + NL
+             + "| DA1 | V-DA1-077 | Viec that | b | toi | | 2099-12-31 |"
+               " MỚI | | " + G + " |" + NL), "5e.")
+
+    def _ca_tilde(k, i, so, G, sua):
+        """ĐÚNG LUẬT: ví dụ bảng bọc trong ~~~ - fence GFM hợp lệ ngang ```,
+        và là khuôn BUỘC phải dùng khi nội dung bên trong có backtick."""
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL * 2
+             + "~~~" + NL
+             + "| VD | V-999 | Viec vi du | b | ai | | 2020-01-01 | ĐANG LÀM |"
+               " | |" + NL + "~~~" + NL)
+
+    thu("ví dụ bảng bọc trong ~~~ (không được kêu)", _ca_tilde, False)
+
+    def _ca_thumuc_sat(k, i, so, G, sua):
+        """ĐÚNG LUẬT: dòng trỏ BỘ HỒ SƠ kết thúc bằng \\ (X0 C1 BẮT BUỘC), bảng
+        gõ SÁT dấu | (khuôn GFM hợp lệ). Hai luật của bộ cùng lúc."""
+        (k / "03_Thuong_mai").mkdir(exist_ok=True)
+        _ghi(k / "03_Thuong_mai" / "a.md", "x")
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "|DA1|T-077|Bo ho so|v01|2026-08-20|Kho 03_Thuong_mai\\|"
+               "HIỆN HÀNH|NHÁP|2026-08-20|qs|noi bo||||" + G + "|" + NL)
+
+    thu("dòng trỏ thư mục, bảng gõ sát dấu | (không được kêu)",
+        _ca_thumuc_sat, False)
+
     thu3("dòng bảng thụt SÂU bốn dấu cách (Markdown coi là khối code)",
          lambda k, i, so, G, sua: _ghi(so / "VIEC.md",
              (so / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
@@ -1081,9 +1112,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 14, 55):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 14,"
-                    f" I3 55 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 16, 56):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 16,"
+                    f" I3 56 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
