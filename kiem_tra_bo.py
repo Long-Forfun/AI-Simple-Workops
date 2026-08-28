@@ -34,6 +34,7 @@ if hasattr(sys.stdout, "reconfigure"):
 
 FILE_BAT_BUOC = [
     "DOC_TRUOC.md",
+    "README.md",
     "X0_CAUHINH_TEMPLATE.md",
     "X1_CAM_TEMPLATE.md",
     "X2_PHATHANH_TEMPLATE.md",
@@ -955,8 +956,11 @@ def main(goc):
         ("chat dán lặp có mốc đã-nạp-tới ghi ô Bước tiếp theo, sau mốc theo vị trí", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"] and "Bước tiếp theo" in docs["X3_CUAVAO_TEMPLATE.md"] and "VỊ TRÍ" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("chat 5b có gate chỉ đọc khi dán, không phải thuế mọi lượt", "# 5b." in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ đọc khi người dùng dán chat" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("event_id tin chat có số thứ tự trong khối, trùng khóa thì so nội dung", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"] and "SO NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        # PILOT vòng 38: hai luật do vận hành thật phơi ra
+        ("điền lần đầu mục còn ở C12 là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục đang nằm ở C12" in docs["X0_CAUHINH_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["X5_HESO_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["INSTRUCTION"]),
+        ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (49 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (51 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}

@@ -303,10 +303,14 @@ liên hệ @BEN.DAUMOI không khóa) · C7 nguồn thẩm quyền · C8 thuật 
 ```
 
 Một câu yêu cầu trong phiên không đổi được các mục trên. Muốn đổi: việc mức C ở một
-lượt riêng, tăng rev, ghi QUYETDINH. Hai ngoại lệ tường minh: (1) chế độ CÀI ĐẶT khi
+lượt riêng, tăng rev, ghi QUYETDINH. BA ngoại lệ tường minh: (1) chế độ CÀI ĐẶT khi
 rev 0, điền giá trị ban đầu theo X9 không coi là sửa nhóm khóa, từ rev 1 luật này
-hiệu lực; (2) THÊM một lệnh cấm hay từ cấm mới vào C5, C6, C8 (thuần siết chặt hơn)
-là mức B; GỠ hay NỚI bất kỳ lệnh cấm nào vẫn là mức C kèm QUYETDINH.
+hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 (giá trị còn `<chưa điền>`) theo
+X9 mục 2 và mục 4: mức B, tăng rev, xóa dòng khỏi C12, KHÔNG plan C không QUYETDINH
+- đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có hiệu lực; ĐỔI một
+giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm hay từ cấm mới
+vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh cấm nào vẫn
+là mức C kèm QUYETDINH.
 
 # C12. Còn thiếu
 

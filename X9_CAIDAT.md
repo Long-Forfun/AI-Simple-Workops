@@ -17,15 +17,15 @@ _so\                     NĂM sổ lõi rỗng + PLANNING (mức C) + THU (chỉ
                          bật EMAIL) + hai view máy sinh, copy nguyên
 ```
 
-Người dùng làm trước: đưa bộ này về thành `<gốc>\00_Index\` (clone hay giải nén
-nguyên trạng, không chọn lọc, không đổi tên gì) · dán INSTRUCTION vào Project
-instructions · mở phiên Cowork đầu tiên. Mọi việc còn lại là của AI.
+Người dùng làm trước: đưa bộ về `<gốc>\00_Index\` (clone hay giải nén nguyên
+trạng, không đổi tên gì) · dán INSTRUCTION vào Project instructions · mở phiên
+Cowork đầu. Mọi việc còn lại là của AI.
 
 # 1. Phiên đầu tiên: ba câu bắt buộc, một câu profile
 
-AI nhận diện X0 còn `rev 0` thì tự chuyển sang chế độ CÀI ĐẶT. Khi rev 0, điền giá
-trị ban đầu KHÔNG coi là sửa nhóm khóa C11: không plan, không QUYETDINH; luật khóa
-chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
+AI nhận diện X0 còn `rev 0` thì tự chuyển sang chế độ CÀI ĐẶT: điền giá trị ban
+đầu không tính là sửa nhóm khóa, không plan, không QUYETDINH (ngoại lệ 1 của X0
+C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
 
 ```
 1  Mã công ty (3-4 ký tự A-Z hay số, không dấu) và tên đầy đủ? Công ty đóng vai gì trong công
@@ -48,7 +48,10 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
 
 Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, dựng _so\_inbox\
 và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
-rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
+Kho vừa clone bằng git: XÓA `00_Index\.git` - kho chạy không phải bản làm việc
+git, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c).
+TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
 thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B nếu mở folder mới).
@@ -108,14 +111,19 @@ khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới
 
-git pull (hay chép bản mới) xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
+CẤM `git pull`, `git stash`, `git checkout` trong kho đang chạy: `_so\` là sổ
+SỐNG, pull dừng vì local changes và `git stash` mà git khuyên làm DÒNG SỔ biến
+mất khỏi bản làm việc. Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép
+file _TEMPLATE mới vào `00_Index`.
+
+Chép xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
 mang mã: chúng là NGUỒN LUẬT, không phải bộ chạy. AI diff template mới với bản
 mang mã, áp phần LUẬT sang bản mã bằng MỘT plan mức C, QUYETDINH ghi version;
 X0 đã điền giữ nguyên giá trị, chỉ đối chiếu schema mục. instruction_yeu_cau
 tăng: NHẮC người dùng dán lại INSTRUCTION vào Project instructions TRƯỚC khi
 làm việc tiếp. File _TEMPLATE để nguyên trong 00_Index, không tính là "hai
-bản bộ X" của rà 18. Pull báo local changes ở _quan_sat_truoc.json hay
-_thu_*: file máy sinh, xóa đi rồi pull lại, không mất gì.
+bản bộ X" của rà 18. Lỡ giữ .git (rà 0g nhắc): xóa nó, sổ trên đĩa nguyên vẹn. Trót `git stash` mất
+dòng sổ: `git stash pop`, rồi rà 3c và 2 đối chiếu.
 
 # 4. Luật hỏi lại, áp mãi mãi về sau
 

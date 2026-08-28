@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v33 · 20260826
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v34 · 20260828
+# v34, theo PILOT vận hành thật: 0d hết báo động giả ngay sau khi cài (kho
+# vừa cài chưa ghi lần nào thì NHATKY CHƯA sinh là đúng luật X5 mục 3, cũ
+# báo 'trục sự thật đã biến mất, cấm cấp mã G') · 0g mới: 00_Index còn là
+# bản làm việc git thì sổ sống nằm trong vùng git quản, git pull sẽ đụng.
 # v33, theo hội đồng vòng 12: 12l so mã Q của tombstone ĐÚNG Ô trong
 # QUYETDINH (qua dong_bang, hết so chuỗi con toàn văn) - Q là tiền tố của
 # mã thật, hay Q chỉ được nhắc trong ghi chú của dòng khác, hết miễn oan.
@@ -1177,12 +1181,37 @@ def main(goc):
         co_nk = loc_ban_chinh(so.glob("NHATKY_*.md"), r"NHATKY_\d{4}Q[1-4]\.md")
         chi_conflict = (not co_nk and any(
             "TEMPLATE" not in q.name for q in so.glob("NHATKY_*.md")))
-        bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
-            ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
-             " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
-             if chi_conflict else
-             "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
-             " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại"))
+        # KHO VỪA CÀI, CHƯA GHI LẦN NÀO: NHATKY chưa sinh là ĐÚNG luật (X5 mục
+        # 3 bước 1 tạo file quý ở lượt ghi ĐẦU). Chỉ khi có DẤU VẾT đã từng ghi
+        # mà NHATKY vắng thì mới là mất trục sự thật (PILOT vòng 38: bản cũ dọa
+        # "cấm cấp mã G" ngay sau khi cài đúng X9, hệ tự khóa mình).
+        dau_vet_ghi = []
+        for _t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md"]:
+            if re.search(MAU_G, doc(so / _t)):
+                dau_vet_ghi.append(_t)
+        if (so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file():
+            dau_vet_ghi.append("nhật ký EMAIL")
+        if not co_nk and not chi_conflict and not dau_vet_ghi:
+            print("  BỎ QUA  0d: hệ đã cài nhưng CHƯA ghi lần nào; NHATKY quý sinh"
+                  " ở lượt ghi đầu theo X5 mục 3 bước 1, chưa có là đúng")
+        else:
+            bao("0d. NHATKY tồn tại khi hệ đã cài và đã có lượt ghi", bool(co_nk),
+                ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
+                 " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
+                 if chi_conflict else
+                 f"sổ còn dấu mã G ({dau_vet_ghi[:3]}) mà NHATKY vắng: trục sự thật"
+                 " để cấp mã, hòa giải trùng và chốt sổ đã biến mất; khôi phục mức C"
+                 " từ version history, cấm cấp mã G mới khi chưa có lại"))
+    # 0g. Kho ĐANG CHẠY không được là bản làm việc git: _so chứa sổ SỐNG, mà
+    #     sổ ship kèm bộ nên bị git quản; "git pull" sẽ dừng vì local changes và
+    #     làm theo lời khuyên "git stash" của git thì DÒNG SỔ BIẾN MẤT khỏi bản
+    #     làm việc (PILOT vòng 38 dựng lại được). Nâng cấp theo X9 mục 3c.
+    if not chua_cai and (goc / ".git").exists():
+        bao("0g. kho đang chạy không còn là bản làm việc git", False,
+            "00_Index còn thư mục .git: sổ sống nằm trong vùng git quản."
+            " XÓA 00_Index\\.git (sổ trên đĩa giữ nguyên), giữ bản clone để nâng"
+            " cấp ở thư mục KHÁC ngoài kho; nâng cấp theo X9 mục 3c."
+            " CẤM chạy git pull hay git stash trong kho đang chạy")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")

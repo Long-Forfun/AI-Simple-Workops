@@ -97,7 +97,7 @@ chốt, phiên không người: X5 mục 1.
 # 6. UPDATE NGƯỢC
 
 GIÁ TRỊ về X0: sửa đúng mục, tăng rev, sinh lại X0_INDEX; nhóm khóa cần QUYETDINH
-và là mức C. LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
+và là mức C (ba ngoại lệ ở X0 C11, gồm ĐIỀN LẦN ĐẦU mục còn ở C12: mức B). LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
 vòng chạy, không tự suy. Cấm giá trị sống lẻ ngoài X0.
 
 # 7. TRACE

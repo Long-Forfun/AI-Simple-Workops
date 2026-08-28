@@ -31,6 +31,57 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 38: vá theo PILOT VẬN HÀNH THẬT (nguồn phát hiện mới)
+
+Hội đồng vòng 12 nhất trí 6/6: điểm đọc-tĩnh bão hòa quanh 96,8, nguồn phát
+hiện còn lại là PILOT thật. Vòng này CHẠY pilot đó thay vì chấm tiếp: dựng một
+công ty giả lập có dự án PHẦN MỀM (REGULATED + EMAIL), clone bộ như người dùng
+thật, chạy X9 cài từ zero, vòng thử mức A, rồi dựng bản phát hành mới ở
+upstream và nâng cấp. Ba defect lộ ra - không vòng đọc-tĩnh nào trong 12 vòng
+thấy được, vì cả ba chỉ tồn tại ở TRẠNG THÁI, không ở chữ:
+
+1. BÁO ĐỘNG GIẢ NGAY SAU KHI CÀI (VỪA). Cài đúng X9 xong, lệnh kiểm đầu tiên
+   mà README bảo chạy in "trục sự thật đã biến mất: khôi phục mức C, cấm cấp
+   mã G mới" - trong khi kho vừa cài chưa ghi lần nào, NHATKY quý CHỈ sinh ở
+   lượt ghi đầu theo đúng X5 mục 3 bước 1. Hệ tự khóa mình ngay sau khi cài.
+   Vá: 0d chỉ báo khi CÓ dấu vết đã từng ghi (mã G còn ở sổ, hay nhật ký
+   EMAIL) mà NHATKY vắng; kho vừa cài in một dòng BỎ QUA nói rõ vì sao. Thông
+   điệp lệch thật nay nêu đích danh sổ còn mang dấu.
+2. MÂU THUẪN Ở ĐƯỜNG ĐI CỦA MỌI CÔNG TY MỚI (VỪA-nặng). X9 mục 2 và 4 dạy điền
+   nhóm B (C5 tới C8) giữa chừng rồi "làm tiếp"; nhưng C5 tới C8 đều thuộc nhóm
+   khóa C11, mà ngoại lệ chỉ sống ở rev 0 - "từ rev 1 luật này hiệu lực". Đọc
+   chặt thì mỗi câu trả lời nhóm B là một plan C kèm QUYETDINH (phá lời hứa
+   "vào việc được sau bốn câu"); đọc lỏng thì AI lặng lẽ phá C11. Không văn bản
+   nào gỡ. Vá: C11 thêm ngoại lệ (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 là
+   mức B, tăng rev, xóa dòng khỏi C12, không plan không QUYETDINH - đó là phần
+   cài đặt HOÃN LẠI, không phải đổi giá trị đang có hiệu lực; ĐỔI giá trị ĐÃ
+   điền vẫn C kèm QUYETDINH. Đồng bộ INSTRUCTION mục 6 và X5 mục 1 (hết "ngoại
+   lệ duy nhất").
+3. NÂNG CẤP BỘ LÀM MẤT DÒNG SỔ (NẶNG, dựng lại được). `git pull` - đúng lệnh
+   X9 mục 3c và README dặn - DỪNG trên kho đang chạy vì `_so\` là sổ sống mà
+   git đang quản; người dùng làm theo lời khuyên `git stash` mà chính git in
+   ra thì dòng VIEC BIẾN MẤT khỏi bản làm việc. Pilot dựng lại nguyên vẹn chuỗi
+   này. Lưới cũ có bắt hậu quả (rà 3c, 2, 8 cùng lệch) nhưng không ai chặn
+   trước. Vá: X9 mục 1 thêm bước XÓA `00_Index\.git` khi cài; mục 3c viết lại,
+   CẤM pull/stash/checkout trong kho, nâng cấp là tải bản mới ra THƯ MỤC KHÁC
+   rồi chép _TEMPLATE vào; README nói bằng tiếng người kèm lối thoát
+   `git stash pop`; rà 0g MỚI của kiem_van_hanh v34 chặn ngay trạng thái đó.
+   Trần X9 giữ nguyên 6.500 bằng BÙ (cắt hai chỗ diễn đạt trùng), không nâng.
+4. README VÀO LƯỚI. File người dùng đọc ĐẦU TIÊN lại đứng ngoài mọi phép kiểm
+   (không ký tự cấm, không tham chiếu chéo, không _GOP) - lỗi ở đó hại nhất mà
+   được bảo vệ ít nhất. Nay README nằm trong FILE_BAT_BUOC, qua sạch cả bốn
+   phép ngay lần đầu. Phép 12 lên 51 luật (thêm luật điền-lần-đầu và luật
+   kho-không-phải-bản-làm-việc-git).
+
+BENCHMARK có mục "Phiên thật đã đo" đầu tiên: cài đặt ~11,8k token thật, 6 lượt
+đọc file, không đọc thừa, không sai; RA_SOAT thực tế trả 0 token đọc X4 vì
+script tự đủ nghĩa. Cột "phiên thật" hết trống - bắt đầu có số.
+
+Trạng thái sau 12 vòng chấm - 38 vòng vá: bốn gate token, 80 fixture, 51 luật
+ghim, 13 số BENCHMARK máy giữ, 3 defect trạng-thái do pilot bắt. Bài học ghi
+lại: đọc-tĩnh bão hòa ở 96,8 là thật, và cách vượt qua nó cũng là thật - chạy
+hệ, đừng đọc thêm.
+
 ## Vòng 37: khâu theo hội đồng vòng 12 (96,8/100)
 
 Điểm vòng 12: KHÔNG MISS 9,9 · ĐƠN GIẢN 9,9 · TOKEN 9,8 · VẬN HÀNH 9,6 ·

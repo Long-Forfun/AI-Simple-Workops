@@ -4,6 +4,175 @@ Bản gộp mọi file của bộ khởi tạo vào một tài liệu, thứ t�
 Bộ chạy thật dùng các file rời trong zip cùng tên (ZIP chứa sẵn bản gộp này). v24 KHÔNG đổi luật: INSTRUCTION v11 và X0 tới X5 giữ nguyên từng chữ từ v22. Vòng này đóng nốt chế độ --ho trong kiem_van_hanh (nay là v19): phạm vi ĐÃ VÀO SỔ tính trên TOÀN BỘ TAILIEU nên một dòng trỏ thư mục vẫn bao phủ file con, hết đề xuất _INBOX oan mà v23 gây ra; chỉ phần kiểm file mất, sha và bất biến mới thu về đúng họ đang quét. Cache đời cũ không mang theo bằng chứng ổn định sai: bản thiếu dấu phiên bản chỉ có mốc chung toàn kho nên được đóng dấu lại, lần chạy đầu sau nâng cấp chờ đủ khoảng ổn định. Bộ tự kiểm (nay là v20) lên 66 ca, hai ca mới đều đã chạy ngược trên v23 để xác nhận bắt được lỗi thật.
 
 ════════════════════════════════════════
+FILE: README.md
+════════════════════════════════════════
+
+# WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
+
+Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
+Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM cũng dùng được (xem
+mục "Công ty có phần mềm" bên dưới). Bên trong: luật thường
+trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
+là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
+thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
+
+Việc tay duy nhất phải làm ĐÚNG là dán INSTRUCTION vào Project instructions.
+Mọi thứ khác: copy nguyên trạng hoặc để AI tự dựng. Mọi sổ sách là file văn bản
+thường (markdown) nằm trong kho CỦA BẠN, mở được bằng Notepad; ngừng dùng
+WORKOPS lúc nào cũng được, không mất gì, không bị nhốt.
+
+## Cài đặt: bốn bước (bước 3 tùy chọn)
+
+Cowork là loại phiên làm việc của Claude ĐỌC GHI ĐƯỢC file trên máy bạn
+(claude.ai/code hoặc app Claude cho máy tính). Việc cài đặt làm trên MÁY
+TÍNH, không làm được từ điện thoại. Trong ví dụ dưới, <gốc> là thư mục gốc
+công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công ty.
+
+```
+1  Đưa bộ về thành <gốc>\00_Index\ của công ty:
+
+     git clone https://github.com/Long-Forfun/AI-Simple-Workops.git "<gốc>\00_Index"
+
+   Không có git: bấm nút Code màu xanh trên trang GitHub, Download ZIP, giải
+   nén. LƯU Ý: giải nén ra thư mục AI-Simple-Workops-main; đổi tên CHÍNH thư
+   mục đó (thư mục chứa file README.md này) thành 00_Index rồi chuyển vào
+   <gốc>. NGUYÊN TRẠNG: không chọn lọc file, không đổi tên file nào.
+   Máy Mac: đường dẫn dùng dấu / thay cho \.
+   Dùng git clone: sau khi cài xong, AI xóa thư mục 00_Index\.git giúp bạn.
+   Kho đang chạy không phải bản làm việc git, vì _so\ là sổ sống của công ty.
+
+2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
+   Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
+   INSTRUCTION_WORKOPS_v11.md (mở file bằng Notepad, bấm Ctrl+A rồi
+   Ctrl+C; máy Mac dùng TextEdit, phím là Cmd+A, Cmd+C).
+   Không sửa chữ nào.
+
+3  (tùy chọn, chỉ khi sẽ chat trên web/điện thoại không chạm kho) Đưa X0
+   tới X5, X9, và X3E nếu bật profile EMAIL, vào tài liệu của Project để
+   phiên CHAT có luật mà đọc. Chỉ dùng Cowork thì bỏ qua.
+
+4  Mở phiên Cowork trên máy tính (claude.ai/code, hoặc app Claude chọn chế
+   độ Cowork), bấm nút gắn thư mục và chọn folder <gốc>. QUAN TRỌNG: gắn
+   folder GỐC (thư mục CHỨA 00_Index), không phải chính 00_Index. Gõ:
+   "cài đặt".
+   AI hỏi BỐN câu (mã, tên công ty và vai trò · kho ở đâu · dự án đầu tiên · chọn
+   profile, không rõ thì trả lời LITE), rồi tự làm phần còn lại: đổi tên
+   file theo mã, điền X0, dựng cây folder, chạy thử. TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+   Kho đã có sẵn đống file? Nói với AI, nó nạp hàng loạt theo X9 mục 3b.
+```
+
+## Ngày thường của bạn
+
+Mỗi lần làm việc: mở phiên Cowork, gắn folder gốc (PHIÊN NÀO CŨNG PHẢI GẮN,
+quên gắn thì AI không thấy kho và hệ có vẻ "hỏng"), rồi cứ nói việc bằng tiếng
+người. Vài câu tắt đáng nhớ:
+
+```
+điểm danh   xem bàn làm việc: việc quá hạn, chờ ai, mail đọng
+quét mail   xử thư trong phiên, ra bảng chờ duyệt      (khi bật EMAIL)
+rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa;
+            xem bảng xong muốn sửa mục nào thì nói, AI trình cách rồi làm
+chốt sổ     kết phiên an toàn, vét các lượt ghi dở
+đồng bộ quan sát   (nâng cao) sau khi quét kho, cho AI tự cập nhật sổ để
+            biết file nào là bản mới nhất, bản nào đã cũ
+```
+
+Kênh chat (Zalo, Messenger) chưa có pipeline quét tự động như mail, nhưng
+có lối bán thủ công: dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
+như mục đến ở cửa vào (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
+
+Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
+Chỉ vậy. Mã số, rev, trace, mức nguồn là việc của AI, bạn không cần hiểu.
+
+Khi AI báo chữ lạ:
+
+```
+rev lệch    bản luật dán trong Project cũ hơn bộ trong kho. Mở file
+            INSTRUCTION mới nhất, dán đè lại vào Project instructions
+XUNG ĐỘT    hai bản file cùng số hiệu khác nội dung. AI sẽ hỏi, bạn chọn bản đúng
+CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ được,
+            chỉ bị chặn khi đưa ra ngoài công ty
+```
+
+Cập nhật bộ về sau: tải bản mới về MỘT THƯ MỤC KHÁC (clone hay ZIP đều được),
+rồi nói với AI trong phiên Cowork "cập nhật bộ luật, bản mới ở <đường dẫn>".
+AI tự đối chiếu, áp phần luật và nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
+ĐỪNG chạy `git pull` trong 00_Index: sổ của bạn nằm trong đó, git sẽ dừng và
+lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ khỏi thư mục làm việc.
+
+Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
+trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
+X0 tới X5, AI route tới đúng mục đúng lúc.
+
+## Công ty có phần mềm
+
+Bộ xử được trọn vòng vận hành phần mềm, với điều kiện KHAI RÕ PHẠM VI TỔ
+CHỨC của từng phần mềm ngay từ đầu - AI hỏi ở phiên cài đặt (X9 mục 1 câu
+3), giá trị nằm ở X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
+
+```
+repo ở đâu · thành phần chính · môi trường (dev, staging, prod ở đâu)
+· nơi chạy thật · nơi giữ secret
+```
+
+Khai đủ thì các vận hành liên quan mới chính xác: repo là nguồn sự thật
+của code (không chép vào kho), secret không vào kho hay sổ, và mọi thao
+tác chạm môi trường CHẠY THẬT đều là việc rủi ro cần bạn duyệt - việc trên
+dev, staging là việc nhẹ AI tự làm. Chi tiết mức duyệt từng thao tác: X5
+mục 1b; phát hành bản build có bảng kiểm riêng (X2); dump, log mang dữ
+liệu khách có phạm vi riêng. Mục nào chưa rõ cứ trả lời "chưa rõ, hỏi
+đội kỹ thuật".
+
+## Trong repo có gì
+
+| File | Vai |
+|---|---|
+| [DOC_TRUOC.md](DOC_TRUOC.md) | Tổng quan bộ, đọc trước |
+| [INSTRUCTION_WORKOPS_v11.md](INSTRUCTION_WORKOPS_v11.md) | Luật thường trực, dán nguyên văn vào Project instructions |
+| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Nguồn duy nhất mọi tham số công ty; phiên đầu điền, rev 0 nghĩa là chưa cài |
+| [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm: ký tự, động từ, từ theo phạm vi |
+| [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành đầu ra rời công ty |
+| [X3_CUAVAO_TEMPLATE.md](X3_CUAVAO_TEMPLATE.md) | Luật cửa vào: file đến, hai chặng, bảng chờ duyệt |
+| [X3E_EMAIL_TEMPLATE.md](X3E_EMAIL_TEMPLATE.md) | Pipeline mail đầy đủ, chỉ nạp khi bật profile EMAIL |
+| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế, các câu tắt |
+| [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
+| [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
+| [_so/](_so) | Năm sổ lõi rỗng (VIEC, DUKIEN, TAILIEU, QUYETDINH, NHATKY) + PLANNING (mức C) + THU (chỉ dùng khi bật EMAIL) + hai view máy sinh |
+| [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ của công ty ĐANG CHẠY; RA_SOAT chạy nó trước |
+| [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
+| [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
+| [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
+| [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp nguyên văn mọi file, nạp một lần cho AI đánh giá |
+
+## Nguyên tắc vận hành
+
+```
+Luật ở INSTRUCTION và X1 tới X5 · tham số ở X0, nguồn duy nhất, không chép đi đâu
+· trạng thái ở _so · việc nhẹ AI tự làm tự ghi, việc đáng kể hỏi một câu, việc rủi
+ro mới cần plan và chốt · truy vết đầy đủ ở mọi mức, dồn về một dòng Trace cuối
+```
+
+Profile bật theo nhu cầu thật, mặc định LITE: REGULATED (phát hành chính thức,
+hồ sơ nhà nước) · PARALLEL (kho nhiều máy cùng ghi) · AUTOMATED (tác vụ hẹn
+giờ) · EMAIL (mail là kênh nghiệp vụ chính, mở sổ THU). Bật thêm sau được.
+
+## Hai script kiểm
+
+Cần Python 3, không thư viện ngoài, chạy được trên Windows, macOS, Linux.
+
+Kiểm bộ mẫu (chạy ở gốc repo, cho người bảo trì, sửa bộ xong phải PASS hết):
+
+```bash
+python kiem_tra_bo.py .
+```
+
+Kiểm kho công ty đang chạy (chạy định kỳ hoặc khi nghi sổ lệch thực tế):
+
+```bash
+python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
+```
+
+════════════════════════════════════════
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
@@ -97,6 +266,57 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 38: vá theo PILOT VẬN HÀNH THẬT (nguồn phát hiện mới)
+
+Hội đồng vòng 12 nhất trí 6/6: điểm đọc-tĩnh bão hòa quanh 96,8, nguồn phát
+hiện còn lại là PILOT thật. Vòng này CHẠY pilot đó thay vì chấm tiếp: dựng một
+công ty giả lập có dự án PHẦN MỀM (REGULATED + EMAIL), clone bộ như người dùng
+thật, chạy X9 cài từ zero, vòng thử mức A, rồi dựng bản phát hành mới ở
+upstream và nâng cấp. Ba defect lộ ra - không vòng đọc-tĩnh nào trong 12 vòng
+thấy được, vì cả ba chỉ tồn tại ở TRẠNG THÁI, không ở chữ:
+
+1. BÁO ĐỘNG GIẢ NGAY SAU KHI CÀI (VỪA). Cài đúng X9 xong, lệnh kiểm đầu tiên
+   mà README bảo chạy in "trục sự thật đã biến mất: khôi phục mức C, cấm cấp
+   mã G mới" - trong khi kho vừa cài chưa ghi lần nào, NHATKY quý CHỈ sinh ở
+   lượt ghi đầu theo đúng X5 mục 3 bước 1. Hệ tự khóa mình ngay sau khi cài.
+   Vá: 0d chỉ báo khi CÓ dấu vết đã từng ghi (mã G còn ở sổ, hay nhật ký
+   EMAIL) mà NHATKY vắng; kho vừa cài in một dòng BỎ QUA nói rõ vì sao. Thông
+   điệp lệch thật nay nêu đích danh sổ còn mang dấu.
+2. MÂU THUẪN Ở ĐƯỜNG ĐI CỦA MỌI CÔNG TY MỚI (VỪA-nặng). X9 mục 2 và 4 dạy điền
+   nhóm B (C5 tới C8) giữa chừng rồi "làm tiếp"; nhưng C5 tới C8 đều thuộc nhóm
+   khóa C11, mà ngoại lệ chỉ sống ở rev 0 - "từ rev 1 luật này hiệu lực". Đọc
+   chặt thì mỗi câu trả lời nhóm B là một plan C kèm QUYETDINH (phá lời hứa
+   "vào việc được sau bốn câu"); đọc lỏng thì AI lặng lẽ phá C11. Không văn bản
+   nào gỡ. Vá: C11 thêm ngoại lệ (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 là
+   mức B, tăng rev, xóa dòng khỏi C12, không plan không QUYETDINH - đó là phần
+   cài đặt HOÃN LẠI, không phải đổi giá trị đang có hiệu lực; ĐỔI giá trị ĐÃ
+   điền vẫn C kèm QUYETDINH. Đồng bộ INSTRUCTION mục 6 và X5 mục 1 (hết "ngoại
+   lệ duy nhất").
+3. NÂNG CẤP BỘ LÀM MẤT DÒNG SỔ (NẶNG, dựng lại được). `git pull` - đúng lệnh
+   X9 mục 3c và README dặn - DỪNG trên kho đang chạy vì `_so\` là sổ sống mà
+   git đang quản; người dùng làm theo lời khuyên `git stash` mà chính git in
+   ra thì dòng VIEC BIẾN MẤT khỏi bản làm việc. Pilot dựng lại nguyên vẹn chuỗi
+   này. Lưới cũ có bắt hậu quả (rà 3c, 2, 8 cùng lệch) nhưng không ai chặn
+   trước. Vá: X9 mục 1 thêm bước XÓA `00_Index\.git` khi cài; mục 3c viết lại,
+   CẤM pull/stash/checkout trong kho, nâng cấp là tải bản mới ra THƯ MỤC KHÁC
+   rồi chép _TEMPLATE vào; README nói bằng tiếng người kèm lối thoát
+   `git stash pop`; rà 0g MỚI của kiem_van_hanh v34 chặn ngay trạng thái đó.
+   Trần X9 giữ nguyên 6.500 bằng BÙ (cắt hai chỗ diễn đạt trùng), không nâng.
+4. README VÀO LƯỚI. File người dùng đọc ĐẦU TIÊN lại đứng ngoài mọi phép kiểm
+   (không ký tự cấm, không tham chiếu chéo, không _GOP) - lỗi ở đó hại nhất mà
+   được bảo vệ ít nhất. Nay README nằm trong FILE_BAT_BUOC, qua sạch cả bốn
+   phép ngay lần đầu. Phép 12 lên 51 luật (thêm luật điền-lần-đầu và luật
+   kho-không-phải-bản-làm-việc-git).
+
+BENCHMARK có mục "Phiên thật đã đo" đầu tiên: cài đặt ~11,8k token thật, 6 lượt
+đọc file, không đọc thừa, không sai; RA_SOAT thực tế trả 0 token đọc X4 vì
+script tự đủ nghĩa. Cột "phiên thật" hết trống - bắt đầu có số.
+
+Trạng thái sau 12 vòng chấm - 38 vòng vá: bốn gate token, 80 fixture, 51 luật
+ghim, 13 số BENCHMARK máy giữ, 3 defect trạng-thái do pilot bắt. Bài học ghi
+lại: đọc-tĩnh bão hòa ở 96,8 là thật, và cách vượt qua nó cũng là thật - chạy
+hệ, đừng đọc thêm.
 
 ## Vòng 37: khâu theo hội đồng vòng 12 (96,8/100)
 
@@ -1294,6 +1514,28 @@ CHAT có EMAIL (kèm X3E) ~23764 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
+## Phiên thật đã đo (PILOT 2026-08-28)
+
+Pilot dựng một công ty giả lập có dự án PHẦN MỀM (profile REGULATED + EMAIL):
+clone bộ, chạy X9 cài từ zero, vòng thử mức A của X9 mục 3, rồi rà máy. Đây là
+số ĐO ĐƯỢC của phiên thật đầu tiên, không phải ước lượng.
+
+```
+CÀI ĐẶT (X9 phiên đầu)   đọc thật INSTRUCTION + X9 + X0 + 9 mẫu sổ
+                         ~35,5k ký tự ~11,8k token · 6 lượt đọc file
+                         đọc thừa: không · sai: không
+NOI_BO mức A (vòng thử)  đọc thật X5 mục 3 ~2,4k ký tự ~0,8k token
+                         đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
+                         quả vì việc thuần nội bộ, không có đầu ra)
+RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng kết
+                         quả tự đủ nghĩa. Route ~1506 chỉ phải trả khi cần
+                         luật rà, không phải mỗi lượt rà
+```
+
+Ba defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả ngay
+sau khi cài · mâu thuẫn "điền nhóm B giữa chừng" với nhóm khóa C11 · `git pull`
+trên kho đang chạy làm mất dòng sổ. Đã vá ở vòng 38.
+
 ## Ghi chú profile
 
 Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED,
@@ -1404,7 +1646,7 @@ chốt, phiên không người: X5 mục 1.
 # 6. UPDATE NGƯỢC
 
 GIÁ TRỊ về X0: sửa đúng mục, tăng rev, sinh lại X0_INDEX; nhóm khóa cần QUYETDINH
-và là mức C. LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
+và là mức C (ba ngoại lệ ở X0 C11, gồm ĐIỀN LẦN ĐẦU mục còn ở C12: mức B). LUẬT về X1 tới X5: mức C. Chỉ ghi điều người dùng đã xác nhận trong
 vòng chạy, không tự suy. Cấm giá trị sống lẻ ngoài X0.
 
 # 7. TRACE
@@ -1748,10 +1990,14 @@ liên hệ @BEN.DAUMOI không khóa) · C7 nguồn thẩm quyền · C8 thuật 
 ```
 
 Một câu yêu cầu trong phiên không đổi được các mục trên. Muốn đổi: việc mức C ở một
-lượt riêng, tăng rev, ghi QUYETDINH. Hai ngoại lệ tường minh: (1) chế độ CÀI ĐẶT khi
+lượt riêng, tăng rev, ghi QUYETDINH. BA ngoại lệ tường minh: (1) chế độ CÀI ĐẶT khi
 rev 0, điền giá trị ban đầu theo X9 không coi là sửa nhóm khóa, từ rev 1 luật này
-hiệu lực; (2) THÊM một lệnh cấm hay từ cấm mới vào C5, C6, C8 (thuần siết chặt hơn)
-là mức B; GỠ hay NỚI bất kỳ lệnh cấm nào vẫn là mức C kèm QUYETDINH.
+hiệu lực; (2) ĐIỀN LẦN ĐẦU một mục đang nằm ở C12 (giá trị còn `<chưa điền>`) theo
+X9 mục 2 và mục 4: mức B, tăng rev, xóa dòng khỏi C12, KHÔNG plan C không QUYETDINH
+- đó là phần cài đặt hoãn lại chứ không phải đổi giá trị đang có hiệu lực; ĐỔI một
+giá trị ĐÃ điền vẫn là mức C kèm QUYETDINH; (3) THÊM một lệnh cấm hay từ cấm mới
+vào C5, C6, C8 (thuần siết chặt hơn) là mức B; GỠ hay NỚI bất kỳ lệnh cấm nào vẫn
+là mức C kèm QUYETDINH.
 
 # C12. Còn thiếu
 
@@ -2315,15 +2561,17 @@ Ba mức A B C khai ở INSTRUCTION mục 5. Danh mục chi tiết:
 
 ```
 C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản đã gửi, đã nộp, đã ký,
-   file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ duy
-   nhất theo X0 C11: chỉ THÊM lệnh hay từ cấm để siết chặt là B; gỡ, nới vẫn C)
+   file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ theo
+   X0 C11: THÊM lệnh hay từ cấm để siết chặt, và ĐIỀN LẦN ĐẦU mục còn ở C12, là
+   B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
    PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
    của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
-   nhóm khóa · THÊM lệnh cấm siết chặt theo ngoại lệ C11 · dọn hay xóa nháp
+   nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12, theo
+   ngoại lệ C11 · dọn hay xóa nháp
    CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
@@ -2627,15 +2875,15 @@ _so\                     NĂM sổ lõi rỗng + PLANNING (mức C) + THU (chỉ
                          bật EMAIL) + hai view máy sinh, copy nguyên
 ```
 
-Người dùng làm trước: đưa bộ này về thành `<gốc>\00_Index\` (clone hay giải nén
-nguyên trạng, không chọn lọc, không đổi tên gì) · dán INSTRUCTION vào Project
-instructions · mở phiên Cowork đầu tiên. Mọi việc còn lại là của AI.
+Người dùng làm trước: đưa bộ về `<gốc>\00_Index\` (clone hay giải nén nguyên
+trạng, không đổi tên gì) · dán INSTRUCTION vào Project instructions · mở phiên
+Cowork đầu. Mọi việc còn lại là của AI.
 
 # 1. Phiên đầu tiên: ba câu bắt buộc, một câu profile
 
-AI nhận diện X0 còn `rev 0` thì tự chuyển sang chế độ CÀI ĐẶT. Khi rev 0, điền giá
-trị ban đầu KHÔNG coi là sửa nhóm khóa C11: không plan, không QUYETDINH; luật khóa
-chỉ hiệu lực từ khi đặt rev 1. Hỏi BA câu bắt buộc:
+AI nhận diện X0 còn `rev 0` thì tự chuyển sang chế độ CÀI ĐẶT: điền giá trị ban
+đầu không tính là sửa nhóm khóa, không plan, không QUYETDINH (ngoại lệ 1 của X0
+C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
 
 ```
 1  Mã công ty (3-4 ký tự A-Z hay số, không dấu) và tên đầy đủ? Công ty đóng vai gì trong công
@@ -2658,7 +2906,10 @@ Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LIT
 
 Xong bốn câu: đổi tên các file _TEMPLATE theo mã công ty, dựng _so\_inbox\
 và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
-rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch". TỪ ĐÂY LÀM VIỆC ĐƯỢC.
+rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
+Kho vừa clone bằng git: XÓA `00_Index\.git` - kho chạy không phải bản làm việc
+git, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c).
+TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
 thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B nếu mở folder mới).
@@ -2718,14 +2969,19 @@ khi đụng việc thật.
 
 # 3c. Nâng cấp bộ khi repo mẫu ra bản mới
 
-git pull (hay chép bản mới) xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
+CẤM `git pull`, `git stash`, `git checkout` trong kho đang chạy: `_so\` là sổ
+SỐNG, pull dừng vì local changes và `git stash` mà git khuyên làm DÒNG SỔ biến
+mất khỏi bản làm việc. Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép
+file _TEMPLATE mới vào `00_Index`.
+
+Chép xong: file _TEMPLATE rev 0 mới nằm CẠNH bộ đã
 mang mã: chúng là NGUỒN LUẬT, không phải bộ chạy. AI diff template mới với bản
 mang mã, áp phần LUẬT sang bản mã bằng MỘT plan mức C, QUYETDINH ghi version;
 X0 đã điền giữ nguyên giá trị, chỉ đối chiếu schema mục. instruction_yeu_cau
 tăng: NHẮC người dùng dán lại INSTRUCTION vào Project instructions TRƯỚC khi
 làm việc tiếp. File _TEMPLATE để nguyên trong 00_Index, không tính là "hai
-bản bộ X" của rà 18. Pull báo local changes ở _quan_sat_truoc.json hay
-_thu_*: file máy sinh, xóa đi rồi pull lại, không mất gì.
+bản bộ X" của rà 18. Lỡ giữ .git (rà 0g nhắc): xóa nó, sổ trên đĩa nguyên vẹn. Trót `git stash` mất
+dòng sổ: `git stash pop`, rồi rà 3c và 2 đối chiếu.
 
 # 4. Luật hỏi lại, áp mãi mãi về sau
 
@@ -2784,6 +3040,7 @@ if hasattr(sys.stdout, "reconfigure"):
 
 FILE_BAT_BUOC = [
     "DOC_TRUOC.md",
+    "README.md",
     "X0_CAUHINH_TEMPLATE.md",
     "X1_CAM_TEMPLATE.md",
     "X2_PHATHANH_TEMPLATE.md",
@@ -3705,8 +3962,11 @@ def main(goc):
         ("chat dán lặp có mốc đã-nạp-tới ghi ô Bước tiếp theo, sau mốc theo vị trí", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"] and "Bước tiếp theo" in docs["X3_CUAVAO_TEMPLATE.md"] and "VỊ TRÍ" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("chat 5b có gate chỉ đọc khi dán, không phải thuế mọi lượt", "# 5b." in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ đọc khi người dùng dán chat" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("event_id tin chat có số thứ tự trong khối, trùng khóa thì so nội dung", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"] and "SO NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        # PILOT vòng 38: hai luật do vận hành thật phơi ra
+        ("điền lần đầu mục còn ở C12 là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục đang nằm ở C12" in docs["X0_CAUHINH_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["X5_HESO_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["INSTRUCTION"]),
+        ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (49 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (51 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}
@@ -3762,7 +4022,11 @@ FILE: kiem_van_hanh.py
 ════════════════════════════════════════
 
 #!/usr/bin/env python3
-# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v33 · 20260826
+# kiem_van_hanh.py · kiểm máy hệ WORKOPS đang chạy · v34 · 20260828
+# v34, theo PILOT vận hành thật: 0d hết báo động giả ngay sau khi cài (kho
+# vừa cài chưa ghi lần nào thì NHATKY CHƯA sinh là đúng luật X5 mục 3, cũ
+# báo 'trục sự thật đã biến mất, cấm cấp mã G') · 0g mới: 00_Index còn là
+# bản làm việc git thì sổ sống nằm trong vùng git quản, git pull sẽ đụng.
 # v33, theo hội đồng vòng 12: 12l so mã Q của tombstone ĐÚNG Ô trong
 # QUYETDINH (qua dong_bang, hết so chuỗi con toàn văn) - Q là tiền tố của
 # mã thật, hay Q chỉ được nhắc trong ghi chú của dòng khác, hết miễn oan.
@@ -4940,12 +5204,37 @@ def main(goc):
         co_nk = loc_ban_chinh(so.glob("NHATKY_*.md"), r"NHATKY_\d{4}Q[1-4]\.md")
         chi_conflict = (not co_nk and any(
             "TEMPLATE" not in q.name for q in so.glob("NHATKY_*.md")))
-        bao("0d. NHATKY tồn tại khi hệ đã cài (rev >= 1)", bool(co_nk),
-            ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
-             " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
-             if chi_conflict else
-             "trục sự thật để cấp mã, hòa giải trùng và chốt sổ đã biến mất:"
-             " khôi phục mức C từ version history, cấm cấp mã G mới khi chưa có lại"))
+        # KHO VỪA CÀI, CHƯA GHI LẦN NÀO: NHATKY chưa sinh là ĐÚNG luật (X5 mục
+        # 3 bước 1 tạo file quý ở lượt ghi ĐẦU). Chỉ khi có DẤU VẾT đã từng ghi
+        # mà NHATKY vắng thì mới là mất trục sự thật (PILOT vòng 38: bản cũ dọa
+        # "cấm cấp mã G" ngay sau khi cài đúng X9, hệ tự khóa mình).
+        dau_vet_ghi = []
+        for _t in ["VIEC.md", "DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md"]:
+            if re.search(MAU_G, doc(so / _t)):
+                dau_vet_ghi.append(_t)
+        if (so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file():
+            dau_vet_ghi.append("nhật ký EMAIL")
+        if not co_nk and not chi_conflict and not dau_vet_ghi:
+            print("  BỎ QUA  0d: hệ đã cài nhưng CHƯA ghi lần nào; NHATKY quý sinh"
+                  " ở lượt ghi đầu theo X5 mục 3 bước 1, chưa có là đúng")
+        else:
+            bao("0d. NHATKY tồn tại khi hệ đã cài và đã có lượt ghi", bool(co_nk),
+                ("chỉ còn bản conflicted/xung đột, BẢN CHÍNH đã mất: khôi phục bản"
+                 " chính mức C từ version history TRƯỚC, rồi mới hòa giải theo 0b"
+                 if chi_conflict else
+                 f"sổ còn dấu mã G ({dau_vet_ghi[:3]}) mà NHATKY vắng: trục sự thật"
+                 " để cấp mã, hòa giải trùng và chốt sổ đã biến mất; khôi phục mức C"
+                 " từ version history, cấm cấp mã G mới khi chưa có lại"))
+    # 0g. Kho ĐANG CHẠY không được là bản làm việc git: _so chứa sổ SỐNG, mà
+    #     sổ ship kèm bộ nên bị git quản; "git pull" sẽ dừng vì local changes và
+    #     làm theo lời khuyên "git stash" của git thì DÒNG SỔ BIẾN MẤT khỏi bản
+    #     làm việc (PILOT vòng 38 dựng lại được). Nâng cấp theo X9 mục 3c.
+    if not chua_cai and (goc / ".git").exists():
+        bao("0g. kho đang chạy không còn là bản làm việc git", False,
+            "00_Index còn thư mục .git: sổ sống nằm trong vùng git quản."
+            " XÓA 00_Index\\.git (sổ trên đĩa giữ nguyên), giữ bản clone để nâng"
+            " cấp ở thư mục KHÁC ngoài kho; nâng cấp theo X9 mục 3c."
+            " CẤM chạy git pull hay git stash trong kho đang chạy")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi pipeline EMAIL có dấu vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")

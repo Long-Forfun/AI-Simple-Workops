@@ -11,15 +11,17 @@ Ba mức A B C khai ở INSTRUCTION mục 5. Danh mục chi tiết:
 
 ```
 C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản đã gửi, đã nộp, đã ký,
-   file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ duy
-   nhất theo X0 C11: chỉ THÊM lệnh hay từ cấm để siết chặt là B; gỡ, nới vẫn C)
+   file gốc ngoài · sửa X0 nhóm khóa C11, X1 tới X5, INSTRUCTION (ngoại lệ theo
+   X0 C11: THÊM lệnh hay từ cấm để siết chặt, và ĐIỀN LẦN ĐẦU mục còn ở C12, là
+   B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
    PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
    của phần mềm (X0 C2 @DUAN.PHANMEM)
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
    sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
-   nhóm khóa · THÊM lệnh cấm siết chặt theo ngoại lệ C11 · dọn hay xóa nháp
+   nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12, theo
+   ngoại lệ C11 · dọn hay xóa nháp
    CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên

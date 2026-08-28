@@ -58,6 +58,28 @@ CHAT có EMAIL (kèm X3E) ~23764 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
+## Phiên thật đã đo (PILOT 2026-08-28)
+
+Pilot dựng một công ty giả lập có dự án PHẦN MỀM (profile REGULATED + EMAIL):
+clone bộ, chạy X9 cài từ zero, vòng thử mức A của X9 mục 3, rồi rà máy. Đây là
+số ĐO ĐƯỢC của phiên thật đầu tiên, không phải ước lượng.
+
+```
+CÀI ĐẶT (X9 phiên đầu)   đọc thật INSTRUCTION + X9 + X0 + 9 mẫu sổ
+                         ~35,5k ký tự ~11,8k token · 6 lượt đọc file
+                         đọc thừa: không · sai: không
+NOI_BO mức A (vòng thử)  đọc thật X5 mục 3 ~2,4k ký tự ~0,8k token
+                         đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
+                         quả vì việc thuần nội bộ, không có đầu ra)
+RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng kết
+                         quả tự đủ nghĩa. Route ~1506 chỉ phải trả khi cần
+                         luật rà, không phải mỗi lượt rà
+```
+
+Ba defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả ngay
+sau khi cài · mâu thuẫn "điền nhóm B giữa chừng" với nhóm khóa C11 · `git pull`
+trên kho đang chạy làm mất dòng sổ. Đã vá ở vòng 38.
+
 ## Ghi chú profile
 
 Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED,

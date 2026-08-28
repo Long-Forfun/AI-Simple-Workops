@@ -29,6 +29,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    mục đó (thư mục chứa file README.md này) thành 00_Index rồi chuyển vào
    <gốc>. NGUYÊN TRẠNG: không chọn lọc file, không đổi tên file nào.
    Máy Mac: đường dẫn dùng dấu / thay cho \.
+   Dùng git clone: sau khi cài xong, AI xóa thư mục 00_Index\.git giúp bạn.
+   Kho đang chạy không phải bản làm việc git, vì _so\ là sổ sống của công ty.
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
@@ -83,9 +85,11 @@ CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ đ
             chỉ bị chặn khi đưa ra ngoài công ty
 ```
 
-Cập nhật bộ về sau: `git pull` ngay trong 00_Index (người dùng ZIP: tải ZIP
-mới, nhờ AI trong phiên Cowork thay bộ luật). Pull xong AI sẽ tự đối chiếu và
-nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
+Cập nhật bộ về sau: tải bản mới về MỘT THƯ MỤC KHÁC (clone hay ZIP đều được),
+rồi nói với AI trong phiên Cowork "cập nhật bộ luật, bản mới ở <đường dẫn>".
+AI tự đối chiếu, áp phần luật và nhắc nếu cần dán lại INSTRUCTION (X9 mục 3c).
+ĐỪNG chạy `git pull` trong 00_Index: sổ của bạn nằm trong đó, git sẽ dừng và
+lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ khỏi thư mục làm việc.
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
