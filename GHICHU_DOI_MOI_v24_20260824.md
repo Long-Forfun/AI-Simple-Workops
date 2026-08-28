@@ -9,6 +9,28 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 76: lưới MỀM cho động từ thứ N+1 của 7g
+
+Hai vòng rubric liền, mục PHẠM VI PHẦN MỀM đều mất điểm theo cùng một khuôn:
+giám khảo tìm ra một ĐỘNG TỪ đời thực chưa vào danh sách của 7g (vòng 01:
+gop; vòng 02: phat hanh, dua len, squash). Danh sách động từ là cuộc rượt
+đuổi không có vạch đích - vá từng từ là đúng nhưng chưa đủ, vì từ thứ N+1
+luôn lọt trong IM LẶNG TUYỆT ĐỐI.
+
+Lưới mềm mới nằm ngay sau 7g: câu mức A/B nhắc ĐÍCH DANH host chạy thật đã
+khai ở X0 C2 mà máy KHÔNG nhận ra động từ sản xuất nào thì in LƯU Ý tự soát -
+"nếu lượt đó CÓ chạm thật thì đổi mức C; chỉ nhắc tới thì thôi". KHÔNG kết
+tội: họp, xem, bàn về prod là hợp lệ, nên đây là LƯU Ý chứ không phải LỆCH -
+đổi lớp im-lặng-tuyệt-đối lấy lớp tự-soát mà không đẻ thêm lớp báo oan.
+
+Lab 5 ca: động từ lạ + host -> LƯU Ý · chỉ họp bàn về host -> LƯU Ý · động
+từ đã biết + host mức B -> LỆCH (7g cứng giữ nguyên) · mức C -> im · câu
+không liên quan -> im. Nhân tiện "hotfix" và "sửa nóng" vào thẳng danh sách
+cứng - ca hotfix chuyển từ LƯU Ý thành LỆCH đúng bậc.
+
+BẤT BIẾN không đổi: I1 7, I2 31, I3 71(nt)/70. Đang chờ rubric vòng chấm 03
+(bản vòng 44). BACKLOG: (e) sổ CSV (đang CẤM chuyển - trạng thái an toàn).
+
 ## Vòng 75: backlog (a) - nội dung QUYETDINH thành thứ MÁY GIỮ (phép 13n)
 
 QUYETDINH tự khai "Không xóa dòng, không sửa NỘI DUNG quyết định" từ ngày

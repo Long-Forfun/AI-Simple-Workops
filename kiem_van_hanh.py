@@ -2919,6 +2919,7 @@ def main(goc):
                r"|s[ửu]a d[ữu] li[ệe]u|sua du lieu|g[ộo]p nh[áa]nh|gop nhanh"
                r"|ph[áa]t h[àa]nh|phat hanh|đ[ưu]a b[ảa]n|dua ban"
                r"|đ[ưu]a l[êe]n|dua len|\bsquash\b|\brelease\b|go[- ]live"
+               r"|\bhotfix\b|s[ửu]a n[óo]ng|sua nong"
                r"|l[ấa]y b[ảa]n sao|lay ban sao|b[ậa]t c[ờo]|t[ắa]t c[ờo]"
                r"|c[ấa]p quy[ềe]n|cap quyen|thu h[ồo]i quy[ềe]n")
         _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
@@ -2948,6 +2949,22 @@ def main(goc):
             f" ghi KHÔNG ở mức C. X5 mục 1 MẶC ĐỊNH ĐÓNG: chạm chạy thật cần"
             f" plan và cái gật TRƯỚC. Việc trên staging hay đã có plan thì sửa"
             f" ô Mức về C và nối mã plan; [AI: không tự hạ mức]")
+        # Lưới MỀM cho động từ chưa vào danh sách: hai vòng rubric liền phát
+        # hiện lớp lỗ này bằng động từ MỚI (gop, phat hanh, squash...). Câu
+        # mức A/B nhắc ĐÍCH DANH host/nhánh đã khai mà máy không nhận ra động
+        # từ nào thì KHÔNG kết tội (họp, xem, bàn về prod là hợp lệ) - chỉ in
+        # LƯU Ý tự soát, để động từ thứ N+1 không lọt trong im lặng tuyệt đối.
+        _neo_cung = _neo[2:]          # chỉ host/nhánh ĐÍCH DANH, bỏ neo chữ
+        _tu_soat = [f"{(_r[0] or '?').strip()[:22]}"
+                    for _r in hang_nk
+                    if len(_r) >= 5 and _r[3].strip() != "C"
+                    and not re.search(_dv, _r[4])
+                    and any(re.search(_n, _r[4], re.I) for _n in _neo_cung)]
+        if _tu_soat:
+            print(f"        LƯU Ý  7g: {_liet(_tu_soat[:3])} mức A/B nhắc"
+                  f" đích danh nơi chạy thật/nhánh tự deploy mà máy không"
+                  f" nhận ra động từ sản xuất nào - nếu lượt đó CÓ chạm thật"
+                  f" thì đổi mức C; chỉ nhắc tới thì thôi")
 
     # 7e. SECRET không được nằm trong sổ. X5 mục 1b cấm secret ở kho đồng bộ,
     #     ở sổ và ở _INBOX; trước vòng 46 không phép nào canh điều đó.
