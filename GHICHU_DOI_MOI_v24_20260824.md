@@ -9,6 +9,35 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 85: rubric vòng chấm 08 - 96/100 (giữ đỉnh), vá bốn khoản
+
+Giám khảo chấm bản vòng 54 (7451063): 96/100 lần hai liên tiếp (95 · 96 ·
+91 · 93 · 91 · 95 · 96 · 96). Bốn vá vòng 53-54 giữ kèm đối chứng hai
+chiều; PHẠM VI PM giữ 10/10. Bốn khoản mới:
+
+1. MISS THẬT (khoản nặng nhất): dòng bảng SAI SỐ Ô trong KHỐI NỐI cuối sổ
+   (sau dòng trống, không header) thoát phép 5 - "hệ sạch" trong khi cùng
+   dòng đó ở khối có header bị tố, và dòng rơi luôn khỏi bộ đếm plan C
+   treo. Phép 5 nay quét thêm MỌI dòng | ngoài các cụm có-header, so với
+   số cột chuẩn của SỔ (5d đã ép một sổ một header nên số cột là duy
+   nhất). Hai ca ghim: 9-ô trong khối header và 9-ô ở khối nối.
+
+2. m06: 0j bắt thư mục lạ ĐÚNG từ vòng 36 nhưng fixture chỉ có ca FILE lạ
+   - mutant hẹp hóa sống. Ca thư-mục-lạ thêm.
+
+3. m08: kho lành KHÔNG có dòng DUKIEN nào - lane DUKIEN của 3g chưa từng
+   quan sát hai chiều (bài PLANNING vòng 89 lặp ở sổ kế). Dòng DUKIEN
+   chuẩn vào _kho_song.
+
+4. m04: mutant >= của dem_qua_han CRASH trên dòng 9 ô. Hai ca 9-ô mới làm
+   suite mutant chết bằng traceback exit 1 - bộ ĐỎ đúng nghĩa - nhưng
+   script đo đột biến của tôi chỉ đếm dòng "FAIL <phép>" nên báo nhầm
+   SỐNG; kiểm tay xác nhận exit 1. Bài học cho chính máy đo: từ vòng sau
+   đếm cả EXIT CODE, crash giữa lượt rà là bắt, không phải thoát.
+
+BẤT BIẾN I1 7, I2 36, I3 88(nt)/87. NHẬT KÝ RUBRIC: 95 · 96 · 91 · 93 ·
+91 · 95 · 96 · 96. BACKLOG: (e) sổ CSV (CẤM).
+
 ## Vòng 84: rubric vòng chấm 07 - 96/100 (đỉnh mới), vá hai khoản
 
 Giám khảo chấm bản vòng 52 (9237920): 96/100 - đỉnh mới của thước, cùng mốc

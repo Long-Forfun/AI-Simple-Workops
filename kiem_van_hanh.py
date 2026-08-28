@@ -2751,16 +2751,31 @@ def main(goc):
         # viết dấu | trong ô) bị tính dôi một cột và phép 5 tố oan. Hai chỗ đọc
         # bảng bằng hai luật khác nhau thì sớm muộn cũng lệch (hội đồng vòng 21)
         lines = ngoai_fence(doc(p))
+        _da_soi, _cot_so = set(), None
         for i, d in enumerate(lines[:-1]):
             if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
                 so_cot = len(tach_o(d))
+                _cot_so = _cot_so or so_cot
+                _da_soi.update((i, i + 1))
                 if len(tach_o(lines[i + 1], so_cot)) != so_cot:
                     lech.append((p.name, "dòng kẻ"))
                 j = i + 2
                 while j < len(lines) and lines[j].startswith("|"):
+                    _da_soi.add(j)
                     if len(tach_o(lines[j], so_cot)) != so_cot:
                         lech.append((p.name, f"dòng dữ liệu {j + 1}"))
                     j += 1
+        # KHỐI NỐI cuối sổ (sau dòng trống, không header): trước vòng 94
+        # những dòng này thoát phép 5 - sai số ô mà "hệ sạch" và rơi luôn
+        # khỏi bộ đếm (giám khảo rubric 08). 5d đã ép mọi bảng một sổ cùng
+        # header nên số cột của SỔ là duy nhất - so mọi dòng | còn lại với nó.
+        if _cot_so:
+            for j, d in enumerate(lines):
+                if j in _da_soi or not d.startswith("|") \
+                        or re.match(r"^\|[\s:|-]+\|$", d):
+                    continue
+                if len(tach_o(d, _cot_so)) != _cot_so:
+                    lech.append((p.name, f"dòng ngoài khối header {j + 1}"))
     bao("5. schema bảng: mọi dòng cùng số cột",
         not lech, str(lech[:5]))
 

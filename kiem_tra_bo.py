@@ -258,6 +258,12 @@ def _kho_song(goc, td):
     # theo X5 mục 5 chỉ đúng luật với việc XONG hay HỦY (hội đồng vòng 15b)
     for t in ["DUKIEN.md", "TAILIEU.md", "QUYETDINH.md", "PLANNING.md", "THU.md"]:
         _ghi(so / t, (so / t).read_text(encoding="utf-8").replace("<MÃ>", "FUZ"))
+    dk = (so / "DUKIEN.md").read_text(encoding="utf-8").rstrip(NL)
+    _ghi(so / "DUKIEN.md", dk + NL + "| DA1 | D-DA1-001 | Gia von hang A |"
+         " 120000 | 2026-08-01 | noi bo | bao gia NCC | B | HIỆU LỰC |"
+         " 2098-01-01 | " + G + " |" + NL)  # lane DUKIEN của 3g cần dòng
+    # lành để quan sát HAI CHIỀU - mutant đọc lệch cột báo oan mà suite
+    # vẫn xanh khi kho lành trống lane này (giám khảo rubric 08, m08)
     pl = (so / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL)
     _ghi(so / "PLANNING.md", pl + NL + "| P-001 | 2098-01-01 | DA1 | mini |"
          " Viec mot | X5 muc 3 | VIEC.md | V-DA1-001 | thap | ĐÃ GHI | " + G
@@ -1509,6 +1515,22 @@ def phep_fuzz(goc, phu_them=()):
              + "| DA1 | V-DA1-003 | Cho bao gia | b | toi | 2020-01-01 |"
                " 2099-12-31 | CHỜ ĐỐI TÁC | | " + G + " |" + NL), "8e.")
 
+    thu3("thư mục lạ rơi vào 00_Index", lambda k, i, so, G, sua:
+         (i / "ban_nhap_cu").mkdir(), "0j.")
+
+    thu3("dòng PLANNING thiếu ô (9/11) trong khối có header",
+         lambda k, i, so, G, sua: _ghi(so / "PLANNING.md",
+             (so / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| P-003 | 2098-01-01 | DA1 | mini | Viec ba | X5 | VIEC.md |"
+               " ĐANG LÀM | |" + NL), "5.")
+
+    thu3("dòng bảng sai số ô trong KHỐI NỐI cuối sổ (không header)",
+         lambda k, i, so, G, sua: _ghi(so / "PLANNING.md",
+             (so / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL)
+             + NL * 2
+             + "| P-004 | 2098-01-01 | DA1 | mini | Viec bon | X5 | VIEC.md |"
+               " ĐANG LÀM | |" + NL), "5.")
+
     def _ca_8e_banner_day(k, i, so, G, sua):
         """Banner ĐẦY ĐỦ đúng khuôn INSTRUCTION (không nhãn hết hạn) + chứng
         thư đã quá hạn: nhánh đầy-đủ của 8e phải kêu thay vì chỉ so nhãn có
@@ -1824,7 +1846,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 85 if _os_dem.name == "nt" else 84   # ca 9d chỉ có trên NTFS
+    _i3_mong = 88 if _os_dem.name == "nt" else 87   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 36, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 36,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
