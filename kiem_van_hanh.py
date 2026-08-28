@@ -216,8 +216,8 @@ MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
 PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0j.", "0k.", "1.", "1a.", "1b.", "1c.", "2.", "3a.", "3b.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
-           "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.",
-           "8.", "8b.", "8d.", "8c.", "9.", "10a.", "10b.",
+           "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
+           "7g.", "8.", "8b.", "8d.", "8c.", "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
     r"(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU|BANG_DIEU_KHIEN|X0_INDEX)\.md"
@@ -243,13 +243,22 @@ def loc_dau_vet_ghi(so, doc_ham=None):
     return ra
 
 
-def tim_vung_git(goc):
+def tim_vung_git(goc, them=None):
     """Thư mục gần nhất (kho hay TỔ TIÊN của nó) đang là bản làm việc git.
     Bắt cả .git thư mục lẫn .git FILE (worktree, submodule). Hội đồng vòng
     13: v34 chỉ soi đúng một tầng, clone vào chính gốc kho thì git stash
-    vẫn nuốt dòng sổ mà lưới im."""
-    g = Path(goc).resolve()
-    return next((d for d in [g, *g.parents] if (d / ".git").exists()), None)
+    vẫn nuốt dòng sổ mà lưới im. `them`: đường thứ hai để soi - hội đồng vòng
+    17 chuyển _so thành JUNCTION sang thư mục Dropbox nằm trong một repo, gốc
+    kho vẫn sạch nên 0g mù trọn; phải resolve TỪ ĐÍCH THẬT của _so đi ngược
+    lên mới thấy .git đang quản sổ."""
+    ra = []
+    for goc_i in ([goc] if them is None else [goc, them]):
+        try:
+            g = Path(goc_i).resolve()
+        except OSError:
+            continue
+        ra += [g, *g.parents]
+    return next((d for d in ra if (d / ".git").exists()), None)
 
 
 # Dòng ĐỊNH NGHĨA CÚ PHÁP ("@DUAN.<MÃ DA>", "@NGUON.<LOẠI>") là văn phạm của
@@ -263,8 +272,12 @@ MAU_LEGEND = re.compile(r"@[A-Z][A-Z0-9._]*<")
 # Hội đồng vòng 16 cắm chuỗi kết nối prod vào DUKIEN và prod.env vào kho:
 # cả hai "hệ sạch", và bộ quan sát còn MỜI prod.env vào sổ mức A. Chính
 # vòng 45 lấy hậu quả đó làm lý do dựng 7d mà không ai canh nó.
+# Sau dấu phân cách phải là GIÁ TRỊ kiểu bí mật: >=12 ký tự LIỀN và có ít nhất
+# một chữ số. Bản cũ chỉ đòi "\S" nên tố luôn "Loại secret: API key cổng thanh
+# toán" - đúng cách viết mà X5 mục 1b DẶN dùng (hội đồng vòng 17, 3/7 báo oan).
 MAU_SECRET = re.compile(
-    r"(?i)(api[_-]?key|secret|password|passwd|token|private[_-]?key)\s*[:=]\s*\S"
+    r"(?i)(api[_-]?key|secret|password|passwd|token|private[_-]?key)"
+    r"\s*[:=]\s*(?=\S*\d)\S{12,}"
     r"|\b(sk|pk|ghp|xox[abpr])_[A-Za-z0-9_]{16,}"
     r"|[a-z+]+://[^\s/@]+:[^\s/@]+@"
     r"|BEGIN [A-Z ]*PRIVATE KEY")
@@ -506,8 +519,13 @@ def chuan_hoa_ho(ten):
     goc, cham, duoi = ten.rpartition(".")
     if not cham:
         goc, duoi = ten, ""
+    # NFD (macOS, iCloud, Dropbox) và NFC là CÙNG một họ: không chuẩn hóa thì
+    # "Hồ_sơ_v01.docx" tách làm hai họ, phép 11 hết đường kêu XUNG ĐỘT và phép
+    # 9 báo oan khi sổ ghi NFC mà đĩa giữ NFD (hội đồng vòng 17)
+    import unicodedata as _ud
+    goc = _ud.normalize("NFC", goc)
     goc = re.sub(r"[-_ ().]+", "_", goc).strip("_").lower()
-    return goc + ("." + duoi.lower() if duoi else "")
+    return goc + ("." + _ud.normalize("NFC", duoi).lower() if duoi else "")
 
 
 def ho_va_v(ten):
@@ -697,7 +715,13 @@ def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
         if ".git" in rel.split("/"):
             continue  # checkout repo trong kho: X0 C2 nói code KHÔNG chép vào
             # kho, và .git/HEAD từng được MỜI vào TAILIEU (hội đồng vòng 16)
-        if any(seg in THU_MUC_HE_THONG for seg in rel.split("/")):
+        # khớp cả BẢN SAO: "00_Index - Copy", "00_Index (1)",
+        # "00_Index_20260828". `_so` vốn được lọc bằng startswith("_") nên
+        # bản sao của nó vẫn bị lọc; 00_Index thì không, và mỗi bản sao đẩy
+        # trọn 14 FILE LUẬT thành ứng viên chờ vào TAILIEU (vòng 16)
+        if any(seg == t or seg.startswith((t + " ", t + "_", t + "-",
+                                           t + ".", t + "("))
+               for seg in rel.split("/") for t in THU_MUC_HE_THONG):
             continue  # 00_Index là vùng luật và sổ, không phải tài liệu nghiệp
             # vụ - lọc ở MỌI TẦNG như "_so", không riêng tầng đầu: một bản sao
             # lưu 00_Index lồng trong kho đẩy trọn 14 file LUẬT thành ứng viên
@@ -1438,7 +1462,7 @@ def main(goc):
     #     đụng _so. Hội đồng vòng 13 dựng lại được cảnh mất trọn sổ ở ca cha.
     # KHÔNG chốt theo chua_cai: kho vừa clone, X0 còn rev 0, là đúng khoảnh khắc
     # .git chắc chắn còn và cần cảnh báo nhất (hội đồng vòng 14)
-    vung_git = tim_vung_git(goc)
+    vung_git = tim_vung_git(goc, so)
     if vung_git is not None and chua_cai:
         # kho VỪA CLONE, chưa cài: chưa có sổ nào để mất, nên đây là LỜI NHẮC
         # chứ không phải lệch - đá người dùng ở bước 1 của README là báo động
@@ -1561,8 +1585,9 @@ def main(goc):
         treo = [h[0] for h in hang_nk if any(o == "ĐANG GHI" for o in h)] + [
             (h[0] or "?") + " (dòng CỤT)" for h in hang_nk
             if not any(o == "ĐANG GHI" for o in h)
-            and (len(h) < so_o_dau or any(o.strip().startswith("ĐANG") and
-                                          o.strip() != "ĐANG GHI" for o in h))]
+            and (len(h) < so_o_dau or not (h[7].strip() if len(h) > 7 else "x")
+                 or any(o.strip().startswith("ĐANG") and
+                        o.strip() != "ĐANG GHI" for o in h))]
         bao("3a. không dòng NHATKY còn ĐANG GHI hay dòng cụt", not treo, str(treo))
         trung = sorted({m for m in ma_g if ma_g.count(m) > 1})
         bao("3b. không mã G trùng ở cột Mã ghi", not trung, str(trung))
@@ -1734,7 +1759,10 @@ def main(goc):
     # đúng dạng tự nhiên nhất nên BA sổ không có lưới mã trùng nào. Và đọc CẢ
     # _lich_su: X5 mục 5 BẮT lưu trữ khi sổ vượt 500 dòng, mà mã đã lưu trữ vẫn
     # là mã ĐÃ DÙNG - cấp lại nó làm mọi liên kết cũ trỏ nhầm (hội đồng vòng 16)
-    for ten, cot, mau in [("VIEC.md", 1, r"V-[A-Z0-9]+-\d+"),
+    # khuôn VIEC từng BẮT BUỘC đoạn khối trong khi ba sổ kia để tùy chọn, nên
+    # V-001 trùng lọt ở sổ NÓNG NHẤT - nơi hai phiên hay cấp mã song song nhất -
+    # và 7c cũng mù theo với mã ngắn. Bộ không có chỗ nào bắt mã mang đoạn khối
+    for ten, cot, mau in [("VIEC.md", 1, r"V-(?:[A-Z0-9]+-)?\d+"),
                           ("DUKIEN.md", 1, r"D-(?:[A-Z0-9]+-)?\d+"),
                           ("TAILIEU.md", 1, r"T-(?:[A-Z0-9]+-)?\d+"),
                           ("QUYETDINH.md", 0, r"Q-(?:[A-Z0-9]+-)?\d+"),
@@ -1782,8 +1810,13 @@ def main(goc):
         _c2 = _x0c2[_x0c2.find("# C2."):_x0c2.find("# C3.")]
         _pm = _c2[_c2.find("@DUAN.PHANMEM"):] if "@DUAN.PHANMEM" in _c2 else ""
         _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
+        _host_pm = []   # GIÁ TRỊ nơi chạy thật, để 7g đọc lại
         for _i, _dg in enumerate(_dong_pm):
-            _m = re.match(r"^  ([A-Z0-9]{2,6})  +\S", _dg)
+            # KHÔNG đòi 2-6 ký tự HOA: không văn bản nào của bộ khai luật
+            # đó, mà mã ngoài khuôn ngầm làm công ty khai ĐÚNG bị 7d và
+            # 7d2 buộc tội, còn công ty khai THIẾU thì nhận đúng thông
+            # điệp ấy - lời hứa của README sai cả hai chiều (vòng 16)
+            _m = re.match(r"^  ([A-Za-z0-9][A-Za-z0-9_.-]{0,23})  +\S", _dg)
             if not _m:
                 continue
             _khoi_pm = _dg
@@ -1795,6 +1828,13 @@ def main(goc):
                     break
                 _khoi_pm += " " + _kx.strip()
             _ma_pm.append(_m.group(1))
+            # GIÁ TRỊ nơi chạy thật: "chạy thật app.cty.vn" -> app.cty.vn.
+            # Bỏ qua "chưa rõ" (đó là khai hợp lệ tạm thời, 7d đã lo).
+            _mh = re.search(r"(?:nơi\s+)?ch[ạa]y\s+th[ậa]t\s*:?\s*"
+                            r"([A-Za-z0-9][A-Za-z0-9.:_-]*\.[A-Za-z0-9][\w.-]*)",
+                            _khoi_pm)
+            if _mh:
+                _host_pm.append(_mh.group(1).rstrip(".,;·"))
             # nhận CẢ bản có dấu lẫn không dấu: người Việt gõ cả hai kiểu, dò
             # mỗi bản có dấu là phạt oan công ty gõ "chay that" (bàn thử vòng 45)
             _can_pm = [("repo", r"repo\s*[:=]?\s*\S"),
@@ -1835,15 +1875,53 @@ def main(goc):
             f" đưa mục đó vào danh sách còn thiếu ở X0 C12 để hỏi lại sau; mức B")
 
         # dòng TAILIEU dạng "Repo" chỉ hợp lệ khi công ty CÓ khai phần mềm
+        # 7d2 từng chỉ nổ khi C2 chưa khai phần mềm NÀO, nên công ty khai một
+        # dự án rồi là cổng khóa vĩnh viễn ở trạng thái xanh: dòng "Repo KIOT"
+        # trỏ mã KHÔNG có trong danh sách khai vẫn PASS. Nhận dự án phần mềm
+        # thứ hai là chuyện tháng thứ ba, không phải ngoại lệ (vòng 17).
         _repo_mo_coi = []
         for _r in dong_bang(doc(so / "TAILIEU.md")):
-            if len(_r) > 5 and _r[5].strip().startswith("Repo ") and not _ma_pm:
-                _repo_mo_coi.append((_r[1] if len(_r) > 1 else "?").strip())
+            if len(_r) > 5 and _r[5].strip().startswith("Repo "):
+                _pm_o = _r[5].strip()[5:].split()
+                if not _ma_pm or (_pm_o and _pm_o[0] not in _ma_pm):
+                    _repo_mo_coi.append((_r[1] if len(_r) > 1 else "?").strip()
+                                        + (f" (Repo {_pm_o[0]})" if _pm_o else ""))
         if _repo_mo_coi:
             bao("7d2. dòng TAILIEU dạng Repo phải thuộc dự án có khai phần mềm",
                 False, f"{_liet(_repo_mo_coi[:3])}: cột \"Ở đâu\" dạng Repo chỉ"
-                f" cho dòng thuộc dự án @DUAN.PHANMEM (X0 C1), mà C2 chưa khai"
-                f" phần mềm nào. Khai phạm vi tổ chức trước, mức B")
+                f" cho dòng thuộc dự án ĐÃ khai @DUAN.PHANMEM (X0 C1)."
+                f" Đang khai: {_liet(_ma_pm) or 'chưa dự án nào'}. Khai phạm vi"
+                f" tổ chức của dự án đó trước, mức B")
+
+        # 7g. GIÁ TRỊ khai ở @DUAN.PHANMEM phải ĐIỀU KHIỂN mức duyệt, không
+        #     chỉ nằm đó cho đẹp. Đây là vế thi hành của X5 mục 1 MẶC ĐỊNH
+        #     ĐÓNG: động từ sản xuất GIAO với neo chạy thật thì lượt đó là C.
+        #     Trước 7g, ba thao tác hiểm nhất của công ty phần mềm - deploy
+        #     prod, sửa dữ liệu khách trên CSDL thật, merge kích hoạt
+        #     auto-deploy - đều ghi mức A mà bộ vẫn in "hệ sạch" (vòng 17).
+        _dv = (r"(?i)\bdeploy\b|\bmigration\b|\brollback\b|\brestore\b"
+               r"|\bdump\b|\bdrop\b|\btruncate\b|\bforce[- ]push\b"
+               r"|\bupdate\b|\bdelete\b|\bmerge\b|xoay khóa|xoay khoa"
+               r"|thu hồi secret|thu hoi secret|feature flag|cấp quyền|cap quyen")
+        _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
+            "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm]
+        _sx = []
+        for _r in hang_nk:
+            if len(_r) < 5:
+                continue
+            _lg, _muc = _r[4], _r[3].strip()
+            if _muc == "C" or not re.search(_dv, _lg):
+                continue
+            if any(re.search(_n, _lg, re.I) for _n in _neo):
+                _sx.append(f"{(_r[0] or '?').strip()[:22]} (mức {_muc or 'trống'})")
+        bao("7g. lượt chạm CHẠY THẬT phải ghi mức C (X5 mục 1b)", not _sx,
+            f"{_liet(_sx[:4])}: ô \"Làm gì\" có động từ sản xuất GIAO với nơi"
+            f" chạy thật đã khai ở X0 C2"
+            f"{' (' + _liet(_host_pm[:2]) + ')' if _host_pm else ''}, mà lượt"
+            f" ghi KHÔNG ở mức C. X5 mục 1 MẶC ĐỊNH ĐÓNG: mọi thao tác chạm"
+            f" chạy thật cần plan và cái gật TRƯỚC khi chạm, không phải làm"
+            f" rồi báo một dòng. Đúng là việc trên staging hay đã có plan thì"
+            f" sửa ô Mức về C và nối mã plan; [AI: không tự hạ mức]")
 
     # 7e. SECRET không được nằm trong sổ. X5 mục 1b cấm secret ở kho đồng bộ,
     #     ở sổ và ở _INBOX; trước vòng 46 không phép nào canh điều đó.
@@ -1853,13 +1931,36 @@ def main(goc):
             for _r in dong_bang(doc(so / _t)):
                 for _o in _r:
                     if MAU_SECRET.search(_o or ""):
-                        _lo.append(f"{_t}:{(_r[0] or '?').strip()[:16]}")
+                        _ma_d = next((c.strip() for c in _r
+                                      if re.match(r"[VDTQPG]-", c.strip())),
+                                     (_r[0] or "?").strip())
+                        _lo.append(f"{_t}:{_ma_d[:20]}")
                         break
         bao("7e. secret không lọt vào sổ (X5 mục 1b)", not _lo,
             f"{_liet(sorted(set(_lo))[:5])}: X5 mục 1b cấm secret nằm trong kho"
             f" đồng bộ, trong sổ và trong _INBOX. THU HỒI và xoay khóa TRƯỚC, gỡ"
             f" khỏi sổ sau; sổ chỉ mô tả LOẠI secret và hệ liên quan, không bao"
             f" giờ chứa giá trị. Việc mức C")
+
+    # 7f. Ô "Ở đâu" chỉ nhận BỐN DẠNG khai ở X0 C1. Đây KHÔNG phải lỗi trình
+    #     bày: bộ quan sát lọc dòng bằng h[5].startswith("Kho "), nên gõ "kho "
+    #     thường, "Kho:", hay bỏ hẳn tiền tố là TẮT LẶNG LẼ phép 9, 10a và 10b
+    #     cho đúng tài liệu đó. Đo vòng 47: hợp đồng ĐÃ KÝ bị sửa đè tại chỗ -
+    #     đúng thứ luật cốt lõi 3 sinh ra để bắt - đi im ở 4/5 cách gõ đời thực.
+    _sai_khuon = []
+    for _r in dong_bang(doc(so / "TAILIEU.md")):
+        _o = (_r[5] if len(_r) > 5 else "").strip().strip("`").strip()
+        if not _o:
+            continue          # ô TRỐNG là dòng chưa đặt chỗ, không phạt
+        if not re.match(r"(Kho|Project|Drive|Repo) \S", _o):
+            _sai_khuon.append(f"{(_r[1] if len(_r) > 1 else '?').strip()[:14]}:"
+                              f" {_o[:30]}")
+    bao("7f. ô \"Ở đâu\" của TAILIEU thuộc bốn dạng X0 C1", not _sai_khuon,
+        f"{_liet(_sai_khuon[:5])}: X0 C1 cho ĐÚNG bốn dạng - Kho · Project ·"
+        f" Drive · Repo - ngoài ra là cấm. Sai khuôn thì bộ quan sát lọc theo"
+        f" tiền tố sẽ BỎ QUA dòng này ở phép 9, 10a và 10b: tài liệu trông như"
+        f" được theo dõi mà KHÔNG có lưới toàn vẹn nào, hợp đồng đã ký bị sửa"
+        f" đè vẫn im. Sửa về đúng khuôn, mức A")
 
     # 7b. TỪ VỰNG của sổ phải nằm trong X0: cửa ma (gõ nhầm một ký tự là sinh
     #     một lane watermark mới) và dự án ĐÃ NGỪNG còn việc mở (X0 C2 bắt

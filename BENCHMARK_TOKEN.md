@@ -1,15 +1,18 @@
 # BENCHMARK_TOKEN · STARTER v24 · 20260824
 
 Đo bằng máy: token ước lượng = ký tự / 3 (văn bản tiếng Việt).
-ĐỘ BẤT ĐỊNH CỦA HỆ SỐ 1/3, khai thẳng: bộ CHƯA đối chứng tokenizer sản xuất nào.
-Đối chứng duy nhất làm được (sentencepiece 32k của T5, SAI HỌ vì vocab tiếng Anh)
-cho 1,43 ký tự/token trên chính bộ này, tức 2,1 lần ước lượng; cùng văn bản bỏ
-dấu là 2,01 và văn xuôi tiếng Anh là 5,26. Tokenizer sản xuất phủ tiếng Việt tốt
-hơn T5 nhiều, nên 2,1x là TRẦN TRÊN chứ không phải đáp số. Bộ này 16,0 phần trăm
-ký tự non-ASCII, 1,243 byte mỗi ký tự UTF-8, mà mọi BPE hiện đại đếm theo BYTE.
-Kết luận: MỌI con số token trong file này phải đọc với khoảng 1,0x tới 2,1x. Ai
-có tiktoken hãy chạy len(get_encoding("o200k_base").encode(nội dung)) trên X0 và
-X5 rồi ghi tỉ số thật vào đây; đó là việc còn lại duy nhất để đóng khoảng này. Version khớp
+HỆ SỐ 1/3 ĐÃ ĐƯỢC ĐỐI CHỨNG (vòng 47, tokenizer Claude công bố
+Xenova/claude-tokenizer): thuế thường trực 6.948 ký tự, ước lượng 2.316, đo
+thật 4.785 token - hệ số x2,07. Từng file: cao nhất x2,18 (X2_PHATHANH), thấp
+nhất x1,68 (X3E_EMAIL). Nên MỌI con số token trong file này là ĐƠN VỊ SO SÁNH
+TƯƠNG ĐỐI giữa các route, KHÔNG phải hóa đơn; muốn ra token thật thì nhân
+khoảng 2,1. Câu cũ "2,1x là trần trên" sai hai lần: 2,07x là số THẬT chứ không
+phải trần, và X2 đã vượt qua nó. Đối chứng phải dùng tokenizer CLAUDE chứ không
+phải o200k_base của OpenAI (o200k cho 1,09x - chọn nó là tự chấm điểm dễ cho
+mình). Bản Claude công bố thuộc thế hệ Claude 1-2, Anthropic không công bố
+tokenizer Claude 4-5, nên đây là mốc GẦN NHẤT chứ chưa phải hóa đơn thật. Phép
+2d đo lại con số này khi máy có thư viện tokenizers, không có thì in BỎ QUA -
+bộ vẫn không phụ thuộc gói ngoài. Version khớp
 DOC_TRUOC (phép kiểm 2b); các số route được MÁY GIỮ KHỚP file thật bằng phép
 kiểm 2c (dung sai 10%), số mới lấy bằng lệnh
 `python kiem_tra_bo.py . --sinh-benchmark`. Đây là BENCHMARK TĨNH; cột
@@ -92,7 +95,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~750
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~788
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1618 chỉ phải trả

@@ -1,4 +1,4 @@
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 46 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 47 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -12,8 +12,9 @@ làm; bước 3 chỉ cần khi dùng phiên CHAT. Từ mở phiên đầu tới
    thư mục mây đồng bộ
 2  Tạo Claude Project cho công ty. Dán NGUYÊN VĂN file INSTRUCTION_WORKOPS_v11.md
    vào Project instructions. Không sửa chữ nào. VIỆC TAY DUY NHẤT PHẢI LÀM ĐÚNG
-3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0 tới X5, X9, và X3E nếu
-   bật profile EMAIL, vào tài liệu của Project. Dùng Cowork thuần thì bỏ qua được
+3  Chỉ khi sẽ dùng phiên CHAT không chạm kho: đưa X0, X1, X2, X5 - và X3E nếu
+   bật EMAIL - vào tài liệu của Project. ĐỪNG đưa X9 (đọc một lần lúc cài) và
+   X4 (chỉ đọc khi rà file). Dùng Cowork thuần thì bỏ qua được
 4  Mở phiên Cowork (loại phiên Claude đọc ghi được file trên máy, làm trên
    máy tính) gắn folder gốc, gõ: "cài đặt". AI đọc X9, hỏi BỐN câu (ba câu
    chạy được, câu bốn chọn profile), đổi tên file theo mã công ty, điền X0, dựng

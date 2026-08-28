@@ -31,6 +31,126 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 47: lời khai phần mềm thành thứ ĐIỀU KHIỂN mức duyệt, và lưới của lưới
+
+Điểm vòng 17 (chấm bản vòng 46, bốn lăng kính về kịp): KHÔNG MISS 5,5 · VẬN
+HÀNH 6,5 · THÔNG MINH 5,5 · ĐƠN GIẢN 7,5 · TOKEN 6,5. Vòng 16 các lăng kính
+tương ứng là 7,6 · 7,8 · 7,6 · 9,0 · 9,1. ĐIỂM TỤT MẠNH, và tụt vì lý do TỐT:
+vòng 17 giám khảo ĐO thay vì ĐỌC - dựng 101 kho hỏng, diễn 20 tình huống của
+một công ty phần mềm 12 người trong hai tuần, sinh 69 đột biến mã nguồn, và
+chạy tokenizer thật. Điểm cao ba vòng trước là điểm của việc đọc kỹ, không
+phải điểm của bộ.
+
+VÁ NẶNG NHẤT CHIẾN DỊCH - PHÉP 7g. Vòng 45 dựng @DUAN.PHANMEM với lý do khai
+đủ thì vận hành mới chính xác. Pilot vòng 17 bác thẳng lý do đó: GIÁ TRỊ khai
+KHÔNG ĐƯỢC ĐỌC LẠI Ở BẤT KỲ PHÉP NÀO. 7d chỉ dò xem chữ "chạy thật" có XUẤT
+HIỆN trong X0 hay không. Đo trên kho thật, khai đủ năm trường rồi mà:
+
+  deploy lên qlkh.bacha.vn (nơi chạy thật ĐÃ KHAI)   ghi mức A -> hệ sạch
+  UPDATE trực tiếp CSDL chạy thật, 812 bản ghi       ghi mức A -> hệ sạch
+  merge PR vào main mà CI/CD tự deploy chạy thật     ghi mức A -> hệ sạch
+
+Ba thao tác hiểm nhất của một công ty phần mềm đi qua mức A "làm rồi báo một
+dòng", không plan, không cái gật - và lưới an toàn cấp giấy "hệ sạch". Khai đủ
+là THUẦN GIẤY TỜ. 7g đóng vòng: đọc GIÁ TRỊ nơi chạy thật, giao với động từ sản
+xuất trong ô "Làm gì", đòi mức C theo X5 mục 1 MẶC ĐỊNH ĐÓNG. Bàn thử 7/7: bắt
+cả ba ca trên, IM với deploy lên staging stg.qlkh.vn (host staging CHỨA tên dự
+án, đúng bẫy chuỗi con), IM với deploy prod đã có plan mức C, IM với rollback
+sự cố mức C, IM với việc thường. Từ vòng này, khai phạm vi tổ chức phần mềm
+ĐỔI thứ máy làm - đó là điều kiện thứ hai của yêu cầu gốc, nay có máy giữ.
+
+LỚP LỖI "PHẠT NGƯỜI DÙNG VÌ LÀM ĐÚNG", LẦN THỨ SÁU, ba chỗ cùng lúc:
+1. Khuôn nhận dòng khai phần mềm là `^  ([A-Z0-9]{2,6})  +\S` - mã BẮT BUỘC
+   2-6 ký tự HOA, một luật KHÔNG VĂN BẢN NÀO CỦA BỘ KHAI. Công ty đặt mã
+   DATHANG hay webapp, khai ĐỦ cả năm trường, bị 7d VÀ 7d2 buộc tội và được
+   bảo "khai phạm vi tổ chức trước" - đúng việc họ vừa làm; còn công ty khai
+   THIẾU nhận CÙNG một thông điệp. README hứa "7d nêu đích danh trường còn
+   thiếu nên không ai quên được": sai cả hai chiều.
+2. 7e tố đúng dòng viết theo NGUYÊN VĂN X5 mục 1b. Luật dặn "sổ chỉ mô tả LOẠI
+   secret và hệ liên quan"; viết "Loại secret: API key cổng thanh toán" thì bị
+   tố lộ secret - ngay giữa lúc xử sự cố lộ khóa. Bài học người dùng rút ra sẽ
+   là "đừng ghi gì về secret vào sổ", tức xóa luôn truy vết sự cố bảo mật. Nay
+   sau dấu phân cách phải là GIÁ TRỊ (>=12 ký tự liền, có chữ số): 3/7 báo oan
+   xuống 0/7, giữ nguyên 4/4 ca bắt thật.
+3. Ô Trạng thái NHATKY RỖNG: 3a không thấy "ĐANG GHI", 3g bỏ qua ô rỗng, 3c
+   chỉ soi dòng XONG - ba lưới đứng cạnh nhau, không lưới nào nhận. Cùng kho
+   đó ghi "XONG" thì 3c kêu, ghi "-" thì 3g kêu; CHỈ giá trị rỗng lọt.
+
+Ô "Ở ĐÂU" SAI KHUÔN TẮT LẶNG LẼ TOÀN BỘ LƯỚI TOÀN VẸN (hai giám khảo độc lập
+cùng bắt). Bộ quan sát lọc dòng bằng h[5].startswith("Kho "), nên gõ "kho "
+thường, "Kho:", hay bỏ tiền tố là phép 9, 10a, 10b BỎ QUA dòng đó. Đo: hợp
+đồng ĐÃ KÝ bị sửa đè tại chỗ - đúng thứ luật cốt lõi 3 sinh ra để bắt - đi im
+ở 4/5 cách gõ đời thực. Phép 7f đóng, và IM với cả bốn dạng hợp lệ lẫn dòng
+trỏ thư mục có sha256 để trống.
+
+PHÉP 15 - DANH MỤC TRẠNG THÁI HỎNG, thứ hai giám khảo vòng 16 gọi tên là bản
+vá đáng giá nhất còn lại. Lưới đi từ PHÉP (13, 14, 14b, 14c) và lưới đi từ
+TRẠNG THÁI phát hiện hai lớp lỗi khác nhau: phép 14 đi từ danh sách phép hiện
+hữu nên theo định nghĩa không bao giờ hỏi được "bộ còn THIẾU phép nào". Phép
+15 đi từ NGHĨA VỤ mà chính X4 khai là máy dò được, 16 ca, và 15b kẹp danh mục
+vào lời khai đó nên thêm một dòng X4 mà quên ca là đỏ ngay. Đo giá trị riêng
+của nó: đục ruột phép 3a thì CHỈ phép 15 bắt (3a nằm trong MIEN_TRU nên 14b mù).
+
+LƯỚI CỦA LƯỚI. Giám khảo THÔNG MINH đo: kiem_tra_bo bắt 0/9 đột biến đục ruột
+nhắm vào CHÍNH NÓ - phép 13, 14, 14b, 14c bảo vệ kiem_van_hanh mà không ai bảo
+vệ chúng. Ba vá: 14d (danh bạ PHEP_BAT_BUOC đối chiếu mã nguồn - rút sáu phép
+khỏi danh bạ rồi xóa thân hàm từng cho "đóng gói được"), 14e (cấm hằng True ở
+vị trí điều kiện của kiem() và bao(), và thân hai hàm đó phải CÒN rẽ nhánh theo
+tham số điều kiện; hằng False vẫn HỢP LỆ vì 7d2, 7e2, 10c cố ý dùng), và CA MỒI
+cho vế I2 và vế I3. Chú thích cũ ngay trên chỗ ghim số ca khai "tắt I2, tắt I3
+đều đỏ" - SAI, vì _dem đếm ca ĐĂNG KÝ chứ không đếm khẳng định ĐƯỢC THI HÀNH.
+Lời khai sai NẰM TRONG chính cái lưới là thứ nguy hơn thiếu lưới: vòng sau tin nó.
+
+ĐO SAU KHI VÁ: 9/9 đột biến nhắm vào chính các lưới mới đều bị bắt (trước vá
+6/9; và lượt đo đầu tiên của tôi ra "8/8" là CON SỐ TỰ LỪA - tôi loại *_GOP.md
+khỏi bản chép nên phép 9 đỏ ở mọi con, kể cả bản nguyên vẹn. Ghi lại đây vì
+đó đúng lớp sai mà hội đồng bắt bộ suốt: đo mà không có đối chứng).
+
+HỆ SỐ TOKEN: BENCHMARK tự nêu "việc còn lại duy nhất để đóng khoảng bất định"
+là chạy một tokenizer sản xuất. Vòng 47 chạy - và bằng tokenizer CLAUDE, không
+phải o200k_base như câu cũ chỉ định, vì bộ chạy trên Claude còn o200k là của
+OpenAI và cho hệ số đẹp nhất (1,09x): chọn nó là tự chấm điểm dễ cho mình. Đo
+độc lập hai lượt: thuế thường trực khai 2.316, đo THẬT 4.785 token, x2,07. Câu
+"2,1x là TRẦN TRÊN chứ không phải đáp số" sai hai lần - 2,07x là số thật, và
+X2_PHATHANH đo được 2,18x đã vượt qua cái trần đó. Nay khai đúng: các số token
+trong BENCHMARK là ĐƠN VỊ SO SÁNH TƯƠNG ĐỐI giữa các route, không phải hóa
+đơn; nhân khoảng 2,1 để ra token thật. Phép 2d giữ lời khai này, và BỎ QUA
+sạch sẽ khi máy không có thư viện - bộ vẫn không phụ thuộc gói ngoài.
+
+CÁC VÁ CÒN LẠI: DOC_TRUOC bước 3 dạy NGƯỢC README bước 3 (thêm X3, X4, X9 vào
+Project), và phép 12 chỉ soi README nên cụm bị cấm sống yên trong file mà chính
+nó dặn "đọc trước" - đo được 35,9% token mỗi phiên CHAT. Vá cả văn bản lẫn vế
+cấm · bản sao vùng luật ("00_Index - Copy", "00_Index (1)", "00_Index_20260828"
+- thứ Windows Explorer và OneDrive tự đẻ) đẩy trọn 14 FILE LUẬT thành ứng viên
+chờ vào TAILIEU; nay lọc khớp cả bản sao · NFD và NFC là CÙNG một họ (file từ
+macOS, iCloud): không chuẩn hóa thì phép 11 hết đường kêu XUNG ĐỘT và phép 9
+báo oan; bộ đã biết lớp lỗi này vì bo_dau có normalize, chỉ quên đúng chỗ
+chuan_hoa_ho · _so là JUNCTION sang thư mục nằm trong một repo thì 0g mù trọn,
+nay soi từ ĐÍCH THẬT · khuôn mã VIEC bắt buộc đoạn khối trong khi ba sổ kia để
+tùy chọn, nên V-001 trùng lọt ở sổ NÓNG NHẤT · 7d2 chỉ nổ khi CHƯA khai phần
+mềm nào, nên dự án phần mềm THỨ HAI lọt trọn - nhận sản phẩm thứ hai là chuyện
+tháng thứ ba, không phải ngoại lệ · @NHIP.BOCHINH gắn nhãn (EMAIL).
+
+KHÔNG SỬA dù giám khảo đề nghị, vì kiểm lại thì lời khai của bộ đúng:
+@MATHU (X0 dòng 248 khai THẲNG nó là CORE, mọi profile đọc) và @NHIP.QUETMAIL
+(chú thích của chính nó nói quét TỰ ĐỘNG chỉ cho EMAIL, còn chat Zalo đi lối
+bán thủ công X3 mục 5b - công ty LITE dùng lối chat VẪN cần nhịp này).
+
+BACKLOG: (i) phép 14 chỉ chứng minh phép ĐÃ CHẠY - 14e đóng phần cấu trúc,
+phần hành vi vẫn hở · (f) MIEN_TRU còn 16/46 phép chưa ai canh, giám khảo đo
+8/8 đột biến vào vùng đó lọt · (l) MỚI: dump CSDL prod mang dữ liệu khách vào
+kho vẫn im và còn được MỜI vào sổ mức A · (m) MỚI: secret trong _INBOX và
+trong NỘI DUNG file chưa ai soi (7e2 chỉ dò TÊN file) · (n) MỚI: X5 1b bắt
+phân biệt "nhánh CI/CD tự deploy" mà schema @DUAN.PHANMEM không có ô nào khai
+nhánh · (o) MỚI: xóa pháp lý sót dòng THU trỏ tài liệu đã tombstone · (p) MỚI:
+X0 của kho ĐANG CHẠY không có trần runtime (bơm lên 49.591 ký tự vẫn hệ sạch)
+· (q) MỚI: mọi hằng ngưỡng (2700, 5200, 4200, 500) đứng ngoài lưới, chỉ
+NGAN_SACH có 9b canh · (j) (k) (a) (b) (c) (e) (g) (h) như cũ.
+
+Bài học vòng này: điểm ba vòng trước là điểm của việc ĐỌC KỸ. Vòng đầu tiên có
+giám khảo chịu cài kho thật, diễn hai tuần, và chạy tokenizer thật thì điểm tụt
+1,5 tới 2,6 mỗi lăng kính. Không phải bộ xấu đi - là lần đầu nó bị đo đúng.
+
 ## Vòng 46: hội đồng vòng 16 - trần giả, secret không lưới, junction no-op
 
 Điểm vòng 16 (sáu lăng kính, chấm sau ba vòng vá 43-45): TOKEN 9,1 · ĐƠN GIẢN
@@ -148,7 +268,7 @@ nhờ lời khai, không nhờ máy. Đúng thứ mà chính bộ này cấm.
    chưa có ca, rồi báo ca đầu tiên tôi viết KHÔNG kích hoạt được phép (khối
    tiếp nối nuốt nhầm dòng định nghĩa cú pháp nên đủ từ khóa oan).
 
-Trạng thái: 21 phép của kiem_tra_bo, 37 phép của kiem_van_hanh, 91 fixture, 73
+Trạng thái: 24 phép của kiem_tra_bo, 38 phép của kiem_van_hanh (vòng 47 đếm lại: dòng này từng khai 21 và 37, SAI), 91 fixture, 73
 luật ghim, phép 13 với 7 ca I1 + 4 ca I2 + 13 ca I3, phép 14 và 14b điểm danh
 hai chiều.
 

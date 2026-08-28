@@ -272,7 +272,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @NHIP.TENGOI     (EMAIL) <điền: tên, cách xưng hô, bí danh của người dùng trong thư
                  (Long, anh Long, Mr. Long...); bộ email TỰ điền từ tên tài
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
-@NHIP.BOCHINH    <điền: thứ DUY NHẤT đọc mail và sinh dữ liệu thô>
+@NHIP.BOCHINH    (EMAIL) <điền: thứ DUY NHẤT đọc mail và sinh dữ liệu thô>
 @NHIP.GIAMSAT    <điền hoặc "không có". Giám sát chỉ cảnh báo, cấm tự quét, cấm nạp sổ>
 @NHIP.RALAI      dữ kiện đổi nhanh <N> ngày · còn lại <N> ngày
 @NHIP.HETHAN     cảnh báo trước <N> và <N> ngày

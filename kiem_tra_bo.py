@@ -73,9 +73,14 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 110000,   # ngoài mọi route, nhưng vào _GOP; lưới của lưới tốn chỗ
-    "kiem_van_hanh.py": 115000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
-    # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là proxy
+    "kiem_tra_bo.py": 135000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
+    # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
+    # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
+    "kiem_van_hanh.py": 125000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
+    # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
+    # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
     "_so/X0_INDEX.md": 1500,
     "_so/BANG_DIEU_KHIEN.md": 1400,
 }
@@ -163,7 +168,7 @@ loi = []
 DA_KIEM = []
 PHEP_BAT_BUOC = ["1.", "1b.", "1c.", "1d.", "1e.", "2.", "2b.", "2c.", "3.", "4.",
                  "5.", "6.", "7.", "9.", "9b.", "10.", "11.", "12.", "13.", "13b.",
-                 "13c.", "13d.", "14.", "14b.", "14c."]
+                 "13c.", "13d.", "14.", "14b.", "14c.", "14d.", "14e.", "15.", "15b.", "2d."]
 # phép 8 chạy trong nhánh riêng (bản gộp), không điểm danh ở đây
 
 
@@ -261,6 +266,9 @@ def _kho_song(goc, td):
     return kho, idx, so, G
 
 
+RA_SOAT_VAN = [""]   # toàn văn đầu ra của lượt _ra_soat gần nhất
+
+
 def _ra_soat(idx, kho):
     """Chạy TRỌN main() của kiem_van_hanh, trả TẬP tên phép LỆCH. Kẹp CHỖ GỌI
     chứ không chỉ hàm helper: hội đồng vòng 14 đo được 12/25 đột biến lọt vì
@@ -273,14 +281,201 @@ def _ra_soat(idx, kho):
     K.LOI_DOC.clear()
     try:
         sys.argv = ["kvh", str(idx), str(kho)]
-        with contextlib.redirect_stdout(_io2.StringIO()):
+        with contextlib.redirect_stdout(_io2.StringIO()) as _bva:
             try:
                 K.main(idx)
             except SystemExit:
                 pass  # main() kết thúc bằng sys.exit theo số lệch, không phải lỗi
+        RA_SOAT_VAN[0] = _bva.getvalue()
     finally:
         sys.argv = argv
     return set(K.loi)
+
+
+# Phép 15 đi từ NGHĨA VỤ, không đi từ danh sách phép. Mỗi dòng X4 mà chính X4
+# khai là "dò được bằng máy" phải có ÍT NHẤT MỘT trạng thái mẫu ở đây, và rà
+# soát phải kêu khi gặp nó. Dòng nào X4 khai máy dò mà không dựng nổi ca là
+# LỜI KHAI VƯỢT CÁI MÁY LÀM - lớp lỗi mà cả bốn defect nặng của vòng 46 đều
+# thuộc về. Miễn trừ phải ghi LÝ DO, và phải RỖNG DẦN.
+X4_MAY_DO = {1, 2, 3, 4, 5, 12, 17, 19, 22, 23, 24, 31}
+X4_MIEN = {3: "X4 tự khai kiểm TAY (hai kho cùng giữ bản cuối)",
+           5: "X4 tự khai kiểm TAY (file 99_Goc chưa có sha256)",
+           24: "nhóm EMAIL: cần fixture profile EMAIL có nhật ký và registry;"
+               " phép 12 canh riêng, danh mục trạng thái chưa với tới",
+           31: "nhóm EMAIL: như trên"}
+
+
+def phep_danh_muc(goc):
+    """Phép 15: DANH MỤC TRẠNG THÁI HỎNG. Trả (hong, phu, so_ca)."""
+    import tempfile
+    import hashlib
+    import kiem_van_hanh as K15
+
+    TL = ("| DA1 | T-{ma} | {ten} | v1 | 2026-08-28 | {noi} | HIỆN HÀNH |"
+          " ĐANG DÙNG | 2026-08-28 | quan sat | doi tac | | | {sha} | {G} |")
+
+    def _sha(s):
+        return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+    def _noi(p, d):
+        _ghi(p, p.read_text(encoding="utf-8").rstrip(NL) + NL + d + NL)
+
+    # ---- các trạng thái, mỗi cái gắn ĐÚNG dòng nghĩa vụ của X4 ----
+    def s1a(k, i, so, G):
+        (so / "QUYETDINH.md").unlink()
+
+    def s1b(k, i, so, G):
+        _noi(so / "TAILIEU.md", TL.format(ma="001", ten="Hop dong A",
+             noi="Kho 01_Phap_ly\\hopdong_a.pdf", sha="", G=G))
+
+    def s2(k, i, so, G):
+        (k / "01_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "01_Phap_ly" / "hopdong_moi.md", "noi dung")
+
+    def s4a(k, i, so, G):
+        (k / "99_Goc").mkdir(exist_ok=True)
+        _ghi(k / "99_Goc" / "goc_a.md", "ban goc")
+        _noi(so / "TAILIEU.md", TL.format(ma="002", ten="Ban goc a",
+             noi="Kho 99_Goc\\goc_a.md", sha=_sha("khac han"), G=G))
+
+    def s4b(k, i, so, G):
+        (k / "01_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "01_Phap_ly" / "hd.pdf", "BAN DA BI SUA DE")
+        _noi(so / "TAILIEU.md", "| DA1 | T-004 | Hop dong da ky | v1 |"
+             " 2026-08-28 | Kho 01_Phap_ly\\hd.pdf | HIỆN HÀNH | ĐÃ KÝ |"
+             " 2026-08-28 | ban giay | doi tac | | | "
+             + _sha("ban goc luc ky") + " | " + G + " |")
+
+    def s4c(k, i, so, G):
+        """ô "Ở đâu" gõ "kho " thường: 9, 10a, 10b BỎ QUA lặng lẽ dòng này."""
+        (k / "01_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "01_Phap_ly" / "hd.pdf", "BAN DA BI SUA DE")
+        _noi(so / "TAILIEU.md", "| DA1 | T-005 | Hop dong da ky | v1 |"
+             " 2026-08-28 | kho 01_Phap_ly\\hd.pdf | HIỆN HÀNH | ĐÃ KÝ |"
+             " 2026-08-28 | ban giay | doi tac | | | "
+             + _sha("ban goc luc ky") + " | " + G + " |")
+
+    def s12a(k, i, so, G):
+        _ghi(so / "VIEC.md", (so / "VIEC.md").read_text(encoding="utf-8")
+             .rstrip(NL) + NL + "| DA1 | V-DA1-001 | Viec trung ma | buoc |"
+             " toi | | 2026-12-31 | MỚI | | " + G + " |" + NL)
+
+    def s12b(k, i, so, G):
+        _ghi(so / "VIEC.md", (so / "VIEC.md").read_text(encoding="utf-8")
+             .replace("| XONG | | " + G, "| XONG | Q-999 | " + G))
+
+    def s17(k, i, so, G):
+        _ghi(i / "X0_CAUHINH_FUZ.md",
+             (i / "X0_CAUHINH_FUZ.md").read_text(encoding="utf-8")
+             .replace("instruction_yeu_cau: v11", "instruction_yeu_cau: v99"))
+
+    def s19a(k, i, so, G):
+        _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8")
+             .replace("| XONG |", "| ĐANG GHI |"))
+
+    def s19b(k, i, so, G):
+        _ghi(so / "VIEC.md", (so / "VIEC.md").read_text(encoding="utf-8")
+             .replace(" | " + G + " |", " |  |"))
+
+    def s22(k, i, so, G):
+        _ghi(so / "VIEC.md", (so / "VIEC.md").read_text(encoding="utf-8")
+             .rstrip(NL) + NL + NL.join(
+                 f"| DA1 | V-DA1-{n:03d} | Viec {n} | buoc | toi | |"
+                 f" 2026-12-31 | MỚI | | {G} |" for n in range(2, 620)) + NL)
+
+    def s23(k, i, so, G):
+        G2 = "G-20260828-CUA1-02"
+        _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip(NL)
+             + NL + "| " + G2 + " | 2026-08-28 | CUA1.1000.c3d4 | C |"
+             " doi cau truc so | VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+        for cu, moi in [(" | " + G + " |", " | " + G + " " + G2 + " |")]:
+            _ghi(so / "VIEC.md", (so / "VIEC.md")
+                 .read_text(encoding="utf-8").replace(cu, moi))
+        b = (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+        _ghi(so / "BANG_DIEU_KHIEN.md", b.replace("CUA1=" + G, "CUA1=" + G2)
+             .replace("sinh_boi: " + G, "sinh_boi: " + G2))
+
+    # ---- trạng thái ĐÚNG LUẬT: không được kêu (vế chống báo oan) ----
+    def L1(k, i, so, G):
+        (k / "99_Goc").mkdir(exist_ok=True)
+        _ghi(k / "99_Goc" / "goc_b.md", "ban goc b")
+        _noi(so / "TAILIEU.md", TL.format(ma="003", ten="Ban goc b",
+             noi="Kho 99_Goc\\goc_b.md", sha=_sha("ban goc b"), G=G))
+
+    def L2(k, i, so, G):
+        (k / "01_Phap_ly").mkdir(exist_ok=True)
+        _ghi(k / "01_Phap_ly" / "a.md", "a")
+        _noi(so / "TAILIEU.md", TL.format(ma="006", ten="Bo ho so",
+             noi="Kho 01_Phap_ly\\", sha="", G=G))
+
+    def L3(k, i, so, G):
+        _noi(so / "TAILIEU.md", TL.format(ma="007", ten="Tai lieu Drive",
+             noi="Drive 1AbC_dEf", sha="", G=G))
+
+    DANH_MUC = [
+        (1, "sổ lõi QUYETDINH vắng trên đĩa", s1a, True),
+        (1, "TAILIEU khai file mà kho không có", s1b, True),
+        (2, "file trên kho chưa vào TAILIEU", s2, "ĐỀ XUẤT _INBOX"),
+        (4, "sha256 khai khác nội dung thật", s4a, True),
+        (4, "mốc ĐÃ KÝ bị sửa đè tại chỗ", s4b, True),
+        (4, 'ô "Ở đâu" gõ "kho" thường: tắt lặng lẽ 9, 10a, 10b', s4c, True),
+        (12, "mã V trùng giữa hai dòng", s12a, True),
+        (12, "ô Liên kết trỏ mã không tồn tại", s12b, True),
+        (17, "X0 khai instruction_yeu_cau bản không có thật", s17, True),
+        (19, "NHATKY còn ĐANG GHI", s19a, True),
+        (19, "lượt XONG mà sổ chạm chưa mang mã ghi", s19b, True),
+        (22, "sổ vượt ngưỡng lưu trữ mà chưa tách", s22, True),
+        (23, "lượt mức C đã ghi mà không có plan", s23, True),
+    ]
+    LANH = [("file thật, sha256 thật", L1),
+            ("dòng trỏ THƯ MỤC, sha256 bỏ trống", L2),
+            ("dòng dạng Drive (một trong bốn dạng)", L3)]
+
+    hong, phu = [], set()
+    cu_on = K15.KHOANG_ON_DINH
+
+    def _chay(sua):
+        """Dựng kho lành, ép trạng thái, quét HAI lượt (luật ổn định), trả
+        (tập lệch, toàn văn đầu ra). Hạ KHOANG_ON_DINH về 0 để fixture không
+        phải chờ thật - không hạ thì mọi ca quan sát file báo LỌT OAN."""
+        with tempfile.TemporaryDirectory() as td:
+            kho, idx, so, G = _kho_song(goc, td)
+            if _ra_soat(idx, kho):
+                return None, ""
+            sua(kho, idx, so, G)
+            K15.KHOANG_ON_DINH = 0
+            try:
+                _ra_soat(idx, kho)          # lượt nạp mốc ổn định
+                lech = _ra_soat(idx, kho)   # lượt đủ luật ổn định hai lần
+                return lech, RA_SOAT_VAN[0]
+            finally:
+                K15.KHOANG_ON_DINH = cu_on
+
+    for x4, ten, sua, mong in DANH_MUC:
+        lech, van = _chay(sua)
+        if lech is None:
+            hong.append(f"X4#{x4} {ten}: KHO LÀNH đã lệch sẵn, ca không tin được")
+            continue
+        phu.update(l.split(" ")[0] for l in lech)
+        if mong is True and not lech:
+            hong.append(f"X4#{x4} {ten}: trạng thái HỎNG mà không phép nào kêu")
+        elif isinstance(mong, str) and mong not in van:
+            hong.append(f"X4#{x4} {ten}: đầu ra không có \"{mong}\"")
+    for ten, sua in LANH:
+        lech, _ = _chay(sua)
+        if lech is None:
+            hong.append(f"LÀNH {ten}: KHO LÀNH đã lệch sẵn")
+        elif lech:
+            hong.append(f"LÀNH {ten}: ĐÚNG LUẬT mà bị báo {sorted(lech)[:2]}")
+
+    # vế còn lại: dòng X4 khai máy dò mà DANH MỤC chưa có ca nào
+    co_ca = {x for x, _, _, _ in DANH_MUC}
+    thieu = sorted(X4_MAY_DO - co_ca - set(X4_MIEN))
+    if thieu:
+        hong.append(f"X4 khai máy dò dòng {thieu} mà danh mục chưa có ca nào")
+    return hong, phu, len(DANH_MUC) + len(LANH)
 
 
 def phep_fuzz(goc):
@@ -407,6 +602,31 @@ def phep_fuzz(goc):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    def _ca_7g(k, i, so, G, sua):
+        """Khai đủ phạm vi phần mềm (có nơi chạy thật), rồi ghi một lượt
+        deploy CHÍNH cái host đó ở mức A. Đây là ca chứng minh GIÁ TRỊ khai
+        ở X0 C2 thật sự điều khiển mức duyệt, chứ không nằm đó cho đẹp."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He quan ly · repo github.com/cty/qlkh" + NL
+             + "        · web + api · dev may doi, staging stg.qlkh.vn,"
+             + " chạy thật qlkh.bacha.vn" + NL
+             + "        · secret o Vault noi bo" + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-09 | 2026-08-28 | CUA1.1200.zz | A |"
+             " deploy ban va len qlkh.bacha.vn (chạy thật) |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+
+    thu3("deploy lên ĐÚNG host chạy thật đã khai mà ghi mức A", _ca_7g, "7g.")
+    thu3("ô \"Ở đâu\" của TAILIEU sai khuôn (tắt lặng lẽ 9, 10a, 10b)",
+         lambda k, i, so, G, sua: _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-001 | Tai lieu | v1 | 2026-08-28 | Dropbox abc |"
+             " HIỆN HÀNH | ĐANG DÙNG | 2026-08-28 | qs | doi tac | | | | "
+             + G + " |" + NL), "7f.")
     thu3("xóa trọn mục C12 khỏi X0 (tắt luôn phép canh chính mục đó)",
          lambda k, i, so, G, sua: _ghi(i / "X0_CAUHINH_FUZ.md",
              (lambda t: t[:t.index("# C12.")] + t[t.index("# C13."):])(
@@ -453,11 +673,31 @@ def phep_fuzz(goc):
     elif hong[-1].startswith("I1 CA MỒI"):
         hong.pop()   # pop() mù từng nuốt được thông điệp "KHO LÀNH đã lệch sẵn"
 
-    # CA MỒI chỉ canh vế I1. Ghim SỐ CA thì tắt I2, tắt I3, hay bỏ bớt ca đều
-    # đỏ - hội đồng vòng 15b tắt được cả I2 lẫn I3 mà bộ vẫn in "sạch".
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 4, 19):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 4,"
-                    f" I3 19 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    # CA MỒI chỉ canh vế I1 là chưa đủ: ghim SỐ CA đếm _dem, mà _dem vẫn tăng
+    # bình thường khi KHẲNG ĐỊNH bị đục ruột. Hội đồng vòng 17 tắt được cả vế
+    # I2 lẫn vế I3 mà bộ vẫn in "sạch" - và chú thích cũ ở đây khai NGƯỢC LẠI.
+    # Mỗi vế nay có mồi của riêng nó.
+    _n2 = len(hong)
+    thu("CA MỒI I2: xóa trọn NHATKY quý mà khai là ĐÚNG LUẬT",
+        lambda k, i, so, G, sua: (so / "NHATKY_2026Q3.md").unlink(), False)
+    if len(hong) == _n2:
+        hong.append("CA MỒI I2 không kêu: vế I2 đã bị tắt, lưới chống báo oan"
+                    " chỉ còn trang trí")
+    elif hong[-1].startswith("I2 CA MỒI"):
+        hong.pop()
+
+    _n3 = len(hong)
+    thu3("CA MỒI I3: kho LÀNH mà đòi 0j phải kêu", lambda *a: None, "0j.")
+    if len(hong) == _n3:
+        hong.append("CA MỒI I3 không kêu: khẳng định I3 đã bị tắt, mọi ca I3"
+                    " chỉ còn chạy cho có")
+    elif hong[-1].startswith("I3 CA MỒI"):
+        hong.pop()
+
+    # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 5, 22):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 5,"
+                    f" I3 22 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -476,6 +716,7 @@ def phep_fuzz(goc):
     #      khai, nên 14b mù đúng phép mới nhất và quy tắc vòng 44 bị phá ngay
     #      vòng sau. Đối chiếu danh bạ với NGUỒN thì lớp lỗi đó hết đường.
     _nguon_vh = Path(K14.__file__).read_text(encoding="utf-8")
+    _nguon_tb = Path(__file__).read_text(encoding="utf-8")
     _ten_bao = {m.group(1) for m in re.finditer(
         r'bao\(\s*[fr]?["\']([0-9][A-Za-z0-9]*\.)\s', _nguon_vh)}
     kiem("14c. danh bạ PHEP_VH khai đủ mọi phép bao() có trong kiem_van_hanh",
@@ -483,6 +724,46 @@ def phep_fuzz(goc):
          f"nguồn có mà danh bạ thiếu: {sorted(_ten_bao - set(K14.PHEP_VH))};"
          f" danh bạ có mà nguồn không: {sorted(set(K14.PHEP_VH) - _ten_bao)}."
          f" Danh bạ chép tay không có lưới thì 14b mù đúng phép mới nhất")
+    # 14d. Danh bạ PHEP_BAT_BUOC của CHÍNH kiem_tra_bo là dữ liệu chép tay và
+    #      chưa có 14c của riêng nó: hội đồng vòng 17 rút sáu phép khỏi danh bạ
+    #      rồi xóa thân phep_fuzz, bộ vẫn in "đóng gói được". Phép 14 chỉ mạnh
+    #      bằng danh bạ của nó, mà danh bạ đó đang trôi tự do.
+    _ten_kiem = {m.group(1) for m in re.finditer(
+        r'kiem\(\s*[fr]?["\']([0-9][A-Za-z0-9]*\.)\s', _nguon_tb)} - {"8."}
+    kiem("14d. danh bạ PHEP_BAT_BUOC khai đủ mọi phép kiem() có trong nguồn",
+         _ten_kiem == set(PHEP_BAT_BUOC),
+         f"nguồn có mà danh bạ thiếu: {sorted(_ten_kiem - set(PHEP_BAT_BUOC))};"
+         f" danh bạ có mà nguồn không: {sorted(set(PHEP_BAT_BUOC) - _ten_kiem)}."
+         f" Rút tên khỏi danh bạ rồi xóa thân hàm là lối vá 'cho qua bộ kiểm'"
+         f" rẻ nhất; 14d bịt đúng lối đó")
+
+    # 14e. LƯỚI CỦA LƯỚI. Phép 13, 14, 14b, 14c canh kiem_van_hanh; không ai
+    #      canh chính kiem_tra_bo - hội đồng vòng 17 đo được 0/9 đột biến đục
+    #      ruột nhắm vào nó bị bắt. Ép điều kiện một phép thành luôn-đúng là
+    #      lối vá "cho qua bộ kiểm" rẻ nhất. Hằng False vẫn HỢP LỆ (7d2, 7e2,
+    #      10c cố ý gọi trong nhánh if đã quyết định xong); chỉ cấm hằng True.
+    import ast as _ast
+    _duc = []
+    for _tenf, _ndf, _hamf in [("kiem_tra_bo", _nguon_tb, "kiem"),
+                               ("kiem_van_hanh", _nguon_vh, "bao")]:
+        for _nut in _ast.walk(_ast.parse(_ndf)):
+            if (isinstance(_nut, _ast.Call) and isinstance(_nut.func, _ast.Name)
+                    and _nut.func.id == _hamf and len(_nut.args) > 1
+                    and isinstance(_nut.args[1], _ast.Constant)
+                    and _nut.args[1].value is True):
+                _duc.append(f"{_tenf} dòng {_nut.lineno}: điều kiện là hằng True")
+            if isinstance(_nut, _ast.FunctionDef) and _nut.name == _hamf:
+                _tsd = _nut.args.args[1].arg
+                if not any(isinstance(_x, _ast.Name) and _x.id == _tsd
+                           for _y in _ast.walk(_nut)
+                           if isinstance(_y, _ast.If)
+                           for _x in _ast.walk(_y.test)):
+                    _duc.append(f"{_tenf}: {_hamf}() hết rẽ nhánh theo {_tsd}")
+    kiem("14e. không phép nào bị đục ruột thành luôn-đúng", not _duc,
+         f"{'; '.join(_duc[:4])}. Một phép có điều kiện là hằng True thì nó chỉ"
+         f" còn in chữ PASS; nếu thật sự muốn báo lệch vô điều kiện thì dùng"
+         f" hằng False trong nhánh if như 7d2 và 7e2")
+
     kiem("14b. mọi phép của kiem_van_hanh đều có ca ép trạng thái ở phép 13",
          not _ho, f"phép {_ho} không có ca nào: xóa trọn phép đó thì bộ vẫn in"
          f" 'hệ sạch'. Thêm một ca I1, I2 hay I3 cho nó, hay khai vào MIEN_TRU"
@@ -836,6 +1117,48 @@ def main(goc):
         # chuẩn hóa không được quá tay: AB_C và A_BC là HAI họ khác nhau
         ca.append(("AB_C_v01 và A_BC_v02 không bị trộn họ",
                    ho_va_v("AB_C_v01.docx")[0] != ho_va_v("A_BC_v02.docx")[0]))
+        # NFD (macOS, iCloud, Dropbox) và NFC là CÙNG một họ. Không chuẩn hóa
+        # thì phép 11 (XUNG ĐỘT) hết đường kêu về mặt cấu trúc và phép 9 báo
+        # oan khi sổ ghi NFC mà đĩa giữ NFD (hội đồng vòng 17)
+        import os as _os17
+        import subprocess as _sp17
+        import unicodedata as _ud17
+        import kiem_van_hanh as _kv17
+        ca.append(("tên NFD và NFC là CÙNG một họ",
+                   ho_va_v(_ud17.normalize("NFC", "Hồ_sơ_v01.docx"))
+                   == ho_va_v(_ud17.normalize("NFD", "Hồ_sơ_v01.docx"))))
+        # Bản sao của vùng luật cũng là vùng luật: Windows Explorer đẻ
+        # "00_Index - Copy", OneDrive đẻ "00_Index (1)". Mỗi bản sao lọt là
+        # 14 FILE LUẬT thành ứng viên chờ vào TAILIEU (hội đồng vòng 16)
+        with tempfile.TemporaryDirectory() as _td17:
+            _k17 = Path(_td17) / "kho"
+            for _t17 in ["00_Index - Copy", "00_Index (1)", "00_Index_20260828",
+                         "01_Backup/00_Index"]:
+                (_k17 / _t17).mkdir(parents=True)
+                _ghi(_k17 / _t17 / "X1_CAM_ABC.md", "luat")
+            (_k17 / "02_Ky_thuat").mkdir(parents=True)
+            _ghi(_k17 / "02_Ky_thuat" / "tai_lieu_v01.md", "nghiep vu")
+            _, _moi17 = _kv17.quet_ho(_k17, None, (), None, 1000.0)
+            ca.append(("bản sao 00_Index không rò file luật thành ứng viên",
+                       list(_moi17) == ["02_Ky_thuat/tai_lieu_v01.md"]))
+        # Junction Windows KHÔNG phải symlink: Path.is_symlink() trả False cho
+        # nó. Vá vòng 46 đọc cờ FILE_ATTRIBUTE_REPARSE_POINT, và hoàn nguyên
+        # được trong im lặng cho tới vòng 47 - một junction tự trỏ đẻ 38 đường
+        # dẫn ma, đệ quy chỉ dừng bằng MAX_PATH (hội đồng vòng 17)
+        if _os17.name == "nt":
+            with tempfile.TemporaryDirectory() as _tdj:
+                _kj = Path(_tdj) / "kho" / "02_Ky_thuat"
+                _kj.mkdir(parents=True)
+                _ghi(_kj / "that_v01.md", "noi dung")
+                _rc = _sp17.run(["cmd", "/c", "mklink", "/J",
+                                      str(_kj / "vong"), str(_kj)],
+                                     capture_output=True).returncode
+                if _rc == 0:
+                    _, _mj = _kv17.quet_ho(Path(_tdj) / "kho", None, (), None, 1000.0)
+                    ca.append(("junction tự trỏ không đẻ đường dẫn ma",
+                               len(_mj) == 1
+                               and _kv17._la_lien_ket(_kj / "vong") is True))
+
         # 00_Index bị loại, nhưng script NGHIỆP VỤ ngoài 00_Index vẫn được quét
         with tempfile.TemporaryDirectory() as td3:
             kho3 = Path(td3)
@@ -1108,10 +1431,10 @@ def main(goc):
         # được mà mọi lưới im (hội đồng vòng 15)
         _tpl = (goc / "X0_CAUHINH_TEMPLATE.md").read_text(encoding="utf-8")
         _mt = _kv26.muc_con_trong(_tpl)
-        ca.append(("0i trên CHÍNH template: 38 ô trống khi chưa bật profile nào,"
+        ca.append(("0i trên CHÍNH template: 37 ô trống khi chưa bật profile nào,"
                    " 44 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
                    " đã điền; có khóa của C13",
-                   len(_mt) == 38 and len(_kv26.muc_con_trong(
+                   len(_mt) == 37 and len(_kv26.muc_con_trong(
                        _tpl.replace("  [ ] EMAIL", "  [x] EMAIL")
                            .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 44
                    and not ({"@DUAN.", "@NGUON.", "@TEN.PROJECT"} & _mt)
@@ -1478,8 +1801,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 91,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 91: bớt ca là"
+             not hong and len(ca) == 94,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 94: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
@@ -1552,7 +1875,8 @@ def main(goc):
         ("điền lần đầu mục CHƯA TỪNG có giá trị là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục CHƯA TỪNG mang giá trị" in docs["X0_CAUHINH_TEMPLATE.md"] and "CHỐT CHỐNG LÁCH" in docs["X0_CAUHINH_TEMPLATE.md"] and all("CHƯA TỪNG" in docs[k] for k in ("X5_HESO_TEMPLATE.md", "INSTRUCTION"))),
         ("mức của ĐIỀN LẦN ĐẦU khớp nhau ở cả ba nơi khai, không nơi nào nói A", all("CHƯA TỪNG" in d and re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,260}?(?:mức B|, là\s*\n?\s*B)", d) and not re.search(r"ĐIỀN LẦN ĐẦU[\s\S]{0,60}?mức A", d) for d in [docs["X0_CAUHINH_TEMPLATE.md"], docs["X5_HESO_TEMPLATE.md"], docs["INSTRUCTION"]])),
         ("số ngoại lệ C11 khai đúng bằng số ngoại lệ liệt kê", ("BA ngoại lệ" in docs["X0_CAUHINH_TEMPLATE.md"]) == (len(re.findall(r"\((\d)\) ", docs["X0_CAUHINH_TEMPLATE.md"].split("# C11.")[1].split("# C12.")[0])) == 3)),
-        ("README bước 3 nạp CHAT khớp BENCHMARK: không X9, không X4", "ĐỪNG đưa X9" in docs["README.md"] and "X0 tới X5, X9" not in docs["README.md"]),
+        ("README bước 3 nạp CHAT khớp BENCHMARK: không X9, không X4", "ĐỪNG đưa X9" in docs["README.md"] and "X0 tới X5, X9" not in
+          (docs["README.md"] + docs["DOC_TRUOC.md"])),
         ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
         ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
         ("CHỐT CHỐNG LÁCH giữ nguyên vế khóa C11 và C12, không bị đảo ngược", "Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa" in docs["X0_CAUHINH_TEMPLATE.md"] and not re.search(r"C11 và C12 (KHÔNG|không) thuộc nhóm khóa", docs["X0_CAUHINH_TEMPLATE.md"])),
@@ -1577,6 +1901,49 @@ def main(goc):
                             if len(_luat) != 74 else ""))
 
     phep_fuzz(goc)
+
+    # 2d. Hệ số quy đổi ước-lượng -> token THẬT là lời khai NẶNG KÝ nhất của
+    #     BENCHMARK, và trước vòng 47 không ai giữ nó: bộ tự khai "chưa đối
+    #     chứng tokenizer sản xuất nào" rồi vẫn in mọi số như thể là token.
+    #     Đo lại KHI CÓ thư viện; không có thì BỎ QUA, bộ giữ nguyên tính chất
+    #     không phụ thuộc gói ngoài.
+    _m2d = re.search(r"đo\s+thật\s+([\d.]+)\s+token\s*-\s*hệ số x([\d,]+)",
+                     docs["BENCHMARK_TOKEN.md"])
+    try:
+        from tokenizers import Tokenizer as _Tk
+        _tk = _Tk.from_pretrained("Xenova/claude-tokenizer")
+    except Exception:
+        _tk = None
+    if _tk is None:
+        print("  BỎ QUA  2d. không có tokenizers hay bản tải về; hệ số token"
+              " giữ nguyên lời khai, chưa đo lại lượt này")
+    else:
+        _nd2d = (docs["INSTRUCTION"] + docs["_so/X0_INDEX.md"]
+                 + docs["_so/BANG_DIEU_KHIEN.md"])
+        _that = len(_tk.encode(_nd2d).ids)
+        _khai = int(_m2d.group(1).replace(".", "")) if _m2d else 0
+        kiem("2d. hệ số quy đổi token khai ở BENCHMARK khớp tokenizer thật",
+             bool(_m2d) and abs(_that - _khai) <= 0.03 * _that,
+             f"BENCHMARK khai {_khai} token, tokenizer Claude đo {_that}."
+             f" Đây là con số nói cho người dùng biết họ TRẢ bao nhiêu; khai"
+             f" sai nó là sai toàn bộ phần token của bộ")
+
+    # 15b. Danh mục trạng thái phải kẹp vào CHÍNH LỜI KHAI của X4. X4 tự liệt
+    #      dòng nào "dò được bằng máy"; thêm một dòng nghĩa vụ mà danh mục đứng
+    #      yên là bộ lại hứa nhiều hơn thứ nó làm. Ghim tập số ở đây, sửa X4 là
+    #      phải sửa danh mục trong CÙNG lượt vá.
+    _m15 = re.search(r"Phần dò được bằng máy \(([^)]*)\)",
+                     docs["X4_RASOAT_TEMPLATE.md"])
+    _khai15 = {int(x) for x in re.findall(r"\d+", _m15.group(1))} if _m15 else set()
+    kiem("15b. tập dòng X4 tự khai máy dò được khớp bản ghim của danh mục",
+         _khai15 == X4_MAY_DO,
+         f"X4 khai {sorted(_khai15)}, danh mục ghim {sorted(X4_MAY_DO)}."
+         f" Sửa X4 mà không sửa danh mục là bộ hứa nhiều hơn thứ nó làm")
+
+    _h15, _phu15, _n15 = phep_danh_muc(goc)
+    kiem("15. danh mục TRẠNG THÁI HỎNG: mỗi nghĩa vụ X4 khai máy dò đều có"
+         f" trạng thái mẫu và rà soát kêu ({_n15} ca)",
+         not _h15, "; ".join(_h15[:4]))
 
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
