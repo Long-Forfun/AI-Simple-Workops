@@ -2119,7 +2119,11 @@ def main(goc):
                 for _r in dong_bang(doc(_p)):
                     if len(_r) > _c:
                         _ma_that |= set(re.findall(r"\b[VDTQP]-[A-Za-z0-9-]+\b", _r[_c]))
-        for _t, _cot in [("VIEC.md", -2), ("QUYETDINH.md", -2), ("THU.md", -2)]:
+        # PLANNING ô "Việc" (thứ 5) và DUKIEN ô "Nguồn" (thứ 7) cũng là liên
+        # kết: treo ở đó thì plan mức C đứng trên một mã việc gãy mà 3d vẫn
+        # xanh - nó so mã G, không so mã việc (backlog (h), vòng 55)
+        for _t, _cot in [("VIEC.md", -2), ("QUYETDINH.md", -2), ("THU.md", -2),
+                         ("PLANNING.md", 4), ("DUKIEN.md", 6)]:
             for _r in dong_bang(doc(so / _t)):
                 if len(_r) < abs(_cot) or "[đã xóa theo Q-" in "|".join(_r):
                     continue

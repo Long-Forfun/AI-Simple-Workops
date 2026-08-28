@@ -611,6 +611,12 @@ def phep_fuzz(goc, phu_them=()):
              (so / "PLANNING.md").read_text(encoding="utf-8").rstrip() + NL
              + "| P-20260828-09 | 2026-08-28 | DA1 | x | x | x | x | x | x |"
                " ĐÃ GHI |  |" + NL), "4.")
+    thu3("PLANNING trỏ mã việc không tồn tại (ô liên kết ngoài VIEC/QUYETDINH)",
+         lambda k, i, so, G, sua: _ghi(so / "PLANNING.md",
+             (so / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
+             " x | x | x | x | MỚI | |" + NL), "7c.")
+
     def _ca_0m(k, i, so, G, sua):
         """Nơi sao lưu ĐÃ KHAI và có thật, nhưng bỏ bê từ lâu."""
         _tm = k.parent / "saoluu_ngoai_kho"
@@ -826,9 +832,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 8, 32):
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 8, 33):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 8,"
-                    f" I3 32 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+                    f" I3 33 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của

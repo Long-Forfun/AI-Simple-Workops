@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 54 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 55 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -280,6 +280,26 @@ X3 ~4,24k/4.500. Backlog còn lại sau vòng này: KHÔNG - ba mục tự khai 
 của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
+
+## Vòng 55: liên kết treo ở hai sổ còn lại
+
+Backlog (h). 7c gom mã CÓ THẬT từ cả năm sổ, nhưng chỉ soi ô liên kết của VIEC,
+QUYETDINH và THU. PLANNING có ô "Việc" trỏ mã việc, DUKIEN có ô "Nguồn" trỏ mã
+tài liệu - treo ở hai chỗ đó thì không ai kêu.
+
+Hậu quả cụ thể: plan mức C trỏ một mã việc gõ sai thì phép 3d (lượt mức C phải
+có plan mang mã G tương ứng) VẪN XANH, vì 3d so mã G chứ không so mã việc. Cả
+chuỗi duyệt mức C - thứ đắt nhất của bộ - đứng trên một liên kết gãy mà không
+ai biết. Bàn thử 4/4, gồm hai ca không báo oan: PLANNING trỏ mã có thật, và
+DUKIEN ô Nguồn ghi văn xuôi thường ("email đối tác") chứ không phải mã.
+
+Kèm một ca I3 ghim riêng phần MỚI: 14b chỉ đòi 7c kêu ở ĐÂU ĐÓ, nên hai cột vừa
+thêm có thể bị gỡ lại mà không lưới nào biết.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(k) cache _quan_sat_truoc.json giả mạo được · (a) hash QUYETDINH · (b) phép 5
+đối chiếu số cột với X5 mục 4 · (c) khuôn bản sao · (e) bản rà cho sổ CSV ·
+(g) loc_ban_chinh tất định nhờ sorted mà không ai ghim.
 
 ## Vòng 54: đính kèm hết biến mất im lặng
 
