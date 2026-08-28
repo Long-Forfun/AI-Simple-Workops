@@ -36,6 +36,111 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 58: một dấu cách đầu dòng xóa sổ toàn bộ lưới
+
+Hội đồng vòng 19: KHÔNG MISS 3,0 (dựng 62 kho, 33/48 kho hỏng lọt lưới) ·
+VẬN HÀNH 7,8 (pilot 18 tình huống, lên từ 7,0). Hai con số ngược chiều nhau và
+cả hai đều đúng: các vá vòng 47-52 phần lớn KÍN khi diễn nghiệp vụ bình thường,
+nhưng nền móng đọc bảng thì thủng.
+
+PHÁT HIỆN NẶNG NHẤT CẢ CHIẾN DỊCH. `dong_bang()` và phép 5 lọc dòng bảng bằng
+`d.startswith("|")`. Dòng thụt MỘT DẤU CÁCH - Markdown vẫn render, người và AI
+vẫn đọc thấy - biến mất khỏi 3f, 3g, 5, 6, 7, 7b, 7b2, 7e, 7f, 7g và
+dem_qua_han CÙNG LÚC. Giám khảo dựng kho có trọn một lượt deploy môi trường
+CHẠY THẬT ghi mức A, còn ĐANG GHI, không plan, cộng một dòng VIEC trạng thái
+ngoài từ vựng và ô Ghi lần TRỐNG - cả hai dòng thụt đúng một dấu cách - và bộ
+in "hệ sạch". Một lần Prettier, một lần dán từ Word, một lần AI thụt lề cho đẹp
+là kho mất trắng lưới, mà người dùng TIN là sạch. Nay nhận tối đa ba khoảng
+trắng theo đúng GFM rồi strip trước khi tách ô.
+
+TOÀN BỘ CÂY 00_Index LÀ VÙNG MÙ CỦA MỌI PHÉP SECRET. quet_secret loại
+THU_MUC_HE_THONG nên bỏ qua cả `_so`, `_lich_su`, `_inbox`, `_thu_staging` và
+các bản backup - tức bỏ qua đúng chỗ secret THẬT rơi vào. Sáu kho lọt, trong đó
+lối `_thu_staging` là lối TỰ ĐỘNG: khách MAIL file prod.env, pipeline X3E tự
+lưu, COMMITTED, "hệ sạch" - không ai phải làm gì sai. Nay quét cả cây, chỉ bỏ
+đúng FILE CỦA BỘ (chính tài liệu bộ trích `sk_live_...` làm ví dụ nên quét
+chúng là tự báo oan mình), 7e3 đổi glob thành rglob, trần đọc file văn bản nới
+256 KB lên 2 MB.
+
+LƯỚI SECRET CHỈ BẮT NHÃN TIẾNG ANH, TRONG MỘT BỘ TIẾNG VIỆT CHO CÔNG TY VIỆT.
+"Mật khẩu: Congtruong@2026x" im, "password: Congtruong@2026x" lệch. Mật khẩu
+tới kho bằng chữ "mật khẩu". Cả ba lưới 7e, 7e2, 7e3 dùng chung khuôn nên cùng
+mù. Giám khảo đã đo khuôn mới: bắt 6/7 ca xấu, 0/9 ca viết ĐÚNG cách X5 mục 1b
+dặn, 0 ca bắt thêm khi quét trọn kho pilot cộng trọn bộ luật. Giữ nguyên ràng
+buộc dấu `:`/`=` và giá trị >=12 ký tự có chữ số - đó mới là thứ chặn báo oan.
+
+BÁO OAN LẦN THỨ CHÍN, MƯỜI VÀ MƯỜI MỘT - và lần thứ mười một là kiểu tệ nhất:
+KHÔNG CÓ LỐI THOÁT HỢP LỆ.
+- 7f tố ô "Ở đâu" mang tombstone `[đã xóa theo Q-...]`, trong khi X5 mục 7b BẮT
+  thay ô đó khi chính tên file mang dữ liệu cá nhân. 7f đã miễn ô TRỐNG mà quên
+  miễn tombstone, dù 8e và 12k đã miễn đúng chuỗi này.
+- 3f tố dòng chuẩn chỉ vì có khoảng trắng sau dấu `|` cuối.
+- 8e tố "hết hạn" cho hợp đồng ĐÃ GIA HẠN bằng phụ lục. Giám khảo thử MỌI lối
+  thoát - đổi Trạng thái, ghi chú vào ô Cờ, ghi mũi tên ngày mới - đều vẫn đếm.
+  Lối DUY NHẤT hết đếm là GHI ĐÈ ô Hết hạn của bản ĐÃ KÝ bằng một ngày mà bản
+  ký không hề nói. Bộ dẫn người dùng THẲNG tới thao tác làm sai lệch sổ. Nay
+  TAILIEU có từ vựng HẾT HIỆU LỰC và ĐÃ GIA HẠN, và bộ đếm thôi tính dòng đó.
+
+MÃ G CHỈ NHẬN NN HAI CHỮ SỐ: `\d{2}` không neo cuối nên "-101" bị cắt thành
+"-10". Kho vượt 99 lượt một cửa một ngày (AUTOMATED quét mail theo giờ, hay
+ngày nạp hàng loạt theo X9 mục 3b) thì 8 và 8d tố ngược VĨNH VIỄN - sinh lại
+bảng bao nhiêu lần cũng lệch. Và đúng như câu cảnh báo của chính 8d: phiên sau
+đọc watermark "-99" rồi cấp lại "-100", sinh mã TRÙNG THẬT.
+
+NGƯỠNG @NHIP ĐỌC XUYÊN QUA MỤC KHÁC: `\D*` khớp cả xuống dòng, nên mục còn <N>
+thì con trỏ chạy sang mục kế lấy chữ số đầu tiên gặp được. @NHIP.INBOX lấy 30
+của @NHIP.DEMSTAGING; @NHIP.RALAI lấy số 3 từ chữ "X3, X4" ở TIÊU ĐỀ mục. Đo
+được: biên bản nghiệm thu nằm _INBOX 18 ngày mà bộ im. Nay đọc trong ĐÚNG KHỐI.
+
+PHÉP MỚI: 7h (profile AUTOMATED: lượt máy tự làm chỉ được mức A - giám khảo
+dựng phiên hẹn giờ ban đêm PHÁT HÀNH VÀ GỬI công văn giục thanh toán cho chủ
+đầu tư ở mức C, exit 0, im lặng; X5 nói ô Phiên `.AUTO.` là dấu DUY NHẤT phân
+biệt việc máy với việc người, dấu đó có mà không phép nào đọc) · 13m (QUYETDINH:
+ô Thay bởi và ô Trạng thái là một CẶP - dòng tự khai người kế nhiệm mà vẫn đứng
+HIỆN HÀNH thì sổ có hai quyết định nói ngược nhau về cùng một việc, đúng thứ
+DUY NHẤT sổ này tồn tại để chặn).
+
+14e SIẾT: giám khảo lách được bằng `not []` thay cho `True`. Nay chặn cả
+`not <hằng rỗng>`, `len(<hằng rỗng>) == 0` và so sánh hai hằng.
+
+ĐO ĐƯỢC: bàn thử 16/16, gồm sáu ca ĐÚNG LUẬT (mô tả LOẠI secret bằng tiếng
+Việt, mật khẩu đã xoay, chuỗi QUYETDINH thay đúng cách, giấy đã gia hạn, mã G
+ba chữ số khai đúng, phiên AUTO mức A).
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(z1) MỚI: trần 1d 22.000 BẤT KHẢ THI - template X0 rỗng đã 19.274 ký tự = 88%
+trần, công ty REGULATED trả lời trọn nhóm B của X9 là 22.497 và còn ~1.216 ký
+tự dấu C12 nữa; cần tách X0 thành phần THAM SỐ (tính trần) và phần CHÚ GIẢI
+(không tính) · (z2) MỚI: @KHO.CU không có dạng "Ở đâu" nào hợp lệ, mọi công ty
+vừa chuyển kho hoặc ôm LỆCH 9 vĩnh viễn hoặc nhân đôi kho · (z3) MỚI: dự án
+NGỪNG còn nghĩa vụ bảo hành 12 tháng thì X0 C2 chỉ cho HỦY hay bàn giao, cả hai
+đều sai sự thật · (z4) MỚI: NHATKY vượt 500 dòng trong MỘT quý không có lối
+tách nào được luật mô tả · (z5) MỚI: 3f, 3g, 5, 6 chưa đọc `_lich_su` trong khi
+3c, 3d, 3e, 7, 12l thì có · (z6) MỚI: cot_thu trả rỗng im lặng khi header đổi
+tên · (a) (b) (c) (e) như cũ.
+
+## Vòng 57: trục tất định thứ chín
+
+Backlog (g). `loc_ban_chinh` chọn "bản chính" trong một tập file, và nó TẤT
+ĐỊNH nhờ đúng một chữ `sorted` ở đầu hàm - tính chất mà không ai khẳng định.
+Bỏ chữ đó đi thì kết quả theo thứ tự glob của hệ tệp, và trước vòng 57 bộ vẫn
+xanh trọn.
+
+Hậu quả nếu mất: cùng một kho, hai máy (hay hai lượt) chọn hai bản NHATKY khác
+nhau làm bản chính, nên mã G cao nhất khác nhau, watermark khác nhau, và lượt
+ghi sau cấp lại một mã ĐÃ DÙNG - đúng thứ hỏng nặng nhất mà cả nhóm phép 3 và 8
+tồn tại để chặn.
+
+Bộ đã đo tất định 8/8 trục ở các vòng trước (PYTHONHASHSEED, bốn locale kể cả
+bẫy chữ I của tr_TR, NFC/NFD, mười lượt giống nhau từng byte). Đây là trục thứ
+CHÍN và chưa ai đo: THỨ TỰ ĐẦU VÀO. Ca ghim đưa cùng một tập ba file vào theo
+sáu hoán vị và đòi đúng MỘT kết quả. Đo lại bằng đột biến: bỏ `sorted` thì
+phép 11 đỏ ngay.
+
+BACKLOG còn: (i) phần hành vi của phép 14 · (j) vòng đời _inbox và _da_nap ·
+(a) hash QUYETDINH · (b) phép 5 đối chiếu số cột với X5 mục 4 · (c) khuôn bản
+sao · (e) bản rà cho sổ CSV.
+
 ## Vòng 56: cache quan sát vào lưới
 
 Backlog (k). `_so/_quan_sat_truoc.json` là MÁY SINH và giữ mốc "lần đầu thấy

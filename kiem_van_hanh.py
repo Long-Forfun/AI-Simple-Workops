@@ -208,7 +208,11 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 loi = []
-MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2}"
+# NN >= 2 chữ số và NEO CUỐI: bản cũ chốt \d{2} không neo nên "-101" bị
+# cắt thành "-10", làm phép 8 và 8d tố ngược VĨNH VIỄN ở kho vượt 99 lượt
+# một cửa một ngày - và phiên sau đọc watermark "-99" rồi cấp lại "-100",
+# sinh mã TRÙNG THẬT (hội đồng vòng 19). X5 mục 3 không đặt trần 99.
+MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2,}(?!\d)"
 # DANH BẠ PHÉP: DỮ LIỆU, không phải nhãn. Phép 14b của kiem_tra_bo đối
 # chiếu danh bạ này với tập phép mà phép 13 THẬT SỰ ép được trạng thái vi
 # phạm. Hội đồng vòng 15b: 27/36 phép xóa trọn được mà bộ vẫn in "sạch",
@@ -218,7 +222,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.", "11b.", "0m.", "0n.",
+           "8e.", "11b.", "0m.", "0n.", "13m.", "7h.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -278,7 +282,9 @@ MAU_LEGEND = re.compile(r"@[A-Z][A-Z0-9._]*<")
 # một chữ số. Bản cũ chỉ đòi "\S" nên tố luôn "Loại secret: API key cổng thanh
 # toán" - đúng cách viết mà X5 mục 1b DẶN dùng (hội đồng vòng 17, 3/7 báo oan).
 MAU_SECRET = re.compile(
-    r"(?i)(api[_-]?key|secret|password|passwd|token|private[_-]?key)"
+    r"(?i)(api[_-]?key|secret|password|passwd|token|private[_-]?key"
+    r"|m[ậa]t\s*kh[ẩa]u|matkhau|m[ãa]\s*pin|kh[óo]a\s*api"
+    r"|kh[óo]a\s*b[íi]\s*m[ậa]t|m[ãa]\s*kh[óo]a)"
     r"\s*[:=]\s*(?=\S*\d)\S{12,}"
     r"|\b(sk|pk|ghp|xox[abpr])_[A-Za-z0-9_]{16,}"
     r"|[a-z+]+://[^\s/@]+:[^\s/@]+@"
@@ -287,6 +293,8 @@ MAU_FILE_SECRET = re.compile(r"(?i)\.env(\.|$)|(^|[/\\])id_rsa|\.pem$|\.p12$")
 # file MẪU khai cấu hình là cách làm ĐÚNG (giá trị là <điền>), không phải
 # secret: không loại nó ra thì lưới phạt đúng người làm đúng (vòng 17)
 MAU_FILE_MAU = re.compile(r"(?i)\.(example|sample|template|mau|dist)$")
+DUOI_VAN_BAN = (".env", ".txt", ".md", ".json", ".yml", ".yaml", ".ini",
+                ".cfg", ".conf", ".sql", ".log", ".ndjson", ".csv", "")
 # dump và log CỦA CHẠY THẬT mang dữ liệu khách: X5 mục 1 xếp mức C và cấm
 # kéo vào kho đồng bộ. Chỉ tính khi tên hay đường dẫn mang NEO chạy thật,
 # để dump của staging hay của máy dev không bị đá oan.
@@ -459,8 +467,16 @@ def sha_file(p):
 
 
 def dong_bang(nd):
-    """Các dòng dữ liệu bảng (bỏ header và dòng kẻ), mỗi dòng là list ô."""
-    lines = nd.splitlines()
+    """Các dòng dữ liệu bảng (bỏ header và dòng kẻ), mỗi dòng là list ô.
+
+    Nhận tối đa BA khoảng trắng đầu dòng theo đúng GFM: bản cũ lọc bằng
+    `d.startswith("|")` nên một dấu cách thừa - thứ Prettier, bản dán từ Word,
+    hay một lượt AI "thụt cho đẹp" sinh ra - làm dòng đó biến mất khỏi 3f, 3g,
+    5, 6, 7, 7b, 7b2, 7e, 7f, 7g và dem_qua_han cùng lúc, trong khi Markdown
+    vẫn render nó và người vẫn đọc thấy (hội đồng vòng 19). Thụt SÂU hơn ba là
+    khối code, không phải bảng - phép 5b báo riêng chỗ đó."""
+    lines = [d.strip() if re.match(r"^[ \t]{1,3}\|", d) else d
+             for d in nd.splitlines()]
     headers = set()
     for i, d in enumerate(lines[:-1]):
         if d.startswith("|") and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
@@ -468,7 +484,7 @@ def dong_bang(nd):
     ket = []
     for d in lines:
         if d.startswith("|") and not re.match(r"^\|[\s:|-]+\|$", d):
-            r = [o.strip() for o in d.strip("|").split("|")]
+            r = [o.strip() for o in d.strip().strip("|").split("|")]
             if tuple(r) not in headers:
                 ket.append(r)
     return ket
@@ -721,8 +737,15 @@ def dem_qua_han(so, x0nd, hom_nay=None):
             return None
 
     def nguong(ten, mac_dinh):
-        m = re.search(rf"@NHIP\.{ten}\D*(\d+)", x0nd or "")
-        return int(m.group(1)) if m else mac_dinh
+        """Đọc trong ĐÚNG KHỐI của @NHIP.<ten>. Bản cũ dùng `\\D*` khớp cả
+        xuống dòng, nên mục còn <N> thì con trỏ chạy sang mục KẾ và lấy chữ số
+        đầu tiên gặp được: @NHIP.INBOX từng lấy 30 của @NHIP.DEMSTAGING và
+        @NHIP.RALAI lấy số 3 từ chữ "X3, X4" ở tiêu đề mục (hội đồng vòng 19).
+        Biên bản nghiệm thu nằm _INBOX 18 ngày mà bộ im vì ngưỡng thành 30."""
+        m = re.search(rf"@NHIP\.{ten}\b([^\n]*(?:\n(?![ \t]*(?:@|# C))[^\n]*)*)",
+                      x0nd or "")
+        so = re.search(r"(\d+)", m.group(1)) if m else None
+        return int(so.group(1)) if so else mac_dinh
 
     ra = {"quá hạn": [], "rà lại": [], "hết hạn": [], "_INBOX": []}
     for r in dong_bang(doc(so / "VIEC.md")):
@@ -736,8 +759,15 @@ def dem_qua_han(so, x0nd, hom_nay=None):
             if h and h < hom_nay:
                 ra["rà lại"].append(r[1].strip())
     _canh = nguong("HETHAN", 30)
+    # dòng KHÔNG CÒN SỐNG thì thôi đếm: hợp đồng đã gia hạn bằng phụ lục, giấy
+    # đã hết hiệu lực, hồ sơ đã trả. Không có các trạng thái này thì lối thoát
+    # DUY NHẤT của người dùng là ghi đè ô Hết hạn của một bản ĐÃ KÝ - tức bộ
+    # dẫn thẳng tới thao tác làm sai lệch sổ (hội đồng vòng 19).
+    _thoi_dem = ("HẾT HIỆU LỰC", "ĐÃ GIA HẠN", "ĐÃ THAY", "TRẢ HỒ SƠ", "HỦY")
     for r in dong_bang(doc(so / "TAILIEU.md")):
         if len(r) > 11 and "[đã xóa theo Q-" not in "|".join(r):
+            if len(r) > 7 and r[7].strip().upper() in _thoi_dem:
+                continue
             h = ngay(r[11])
             if h and (h - hom_nay).days <= _canh:
                 ra["hết hạn"].append(r[1].strip())
@@ -820,8 +850,14 @@ def quet_secret(kho):
         rel = str(f.relative_to(kho)).replace("\\", "/")
         if any(seg == t or seg.startswith((t + " ", t + "_", t + "-",
                                            t + ".", t + "("))
-               for seg in rel.split("/")
-               for t in THU_MUC_HE_THONG + (".git", "__pycache__")):
+               for seg in rel.split("/") for t in (".git", "__pycache__")):
+            continue
+        # KHÔNG loại trọn 00_Index nữa: _so, _lich_su, _inbox, _thu_staging và
+        # các bản backup đều nằm trong đó, và đó là chỗ secret THẬT rơi vào -
+        # lối _thu_staging còn là lối TỰ ĐỘNG, không ai phải làm gì sai (hội
+        # đồng vòng 19). Chỉ bỏ đúng FILE CỦA BỘ: chính tài liệu bộ trích
+        # `sk_live_...` làm ví dụ nên quét chúng là tự báo oan mình.
+        if BIET_MAT_00.fullmatch(f.name) or f.suffix.lower() == ".py":
             continue
         if MAU_FILE_MAU.search(f.name):
             continue           # file MẪU khai cấu hình là cách làm ĐÚNG
@@ -832,7 +868,11 @@ def quet_secret(kho):
             dump.append(rel)
             continue
         try:
-            if f.stat().st_size > 256 * 1024:
+            # file VĂN BẢN đọc tới 2 MB: file bàn giao môi trường 300 KB từng
+            # lọt trọn vì trần cứng 256 KB (hội đồng vòng 19)
+            _tran = (2 * 1024 * 1024
+                     if f.suffix.lower() in DUOI_VAN_BAN else 256 * 1024)
+            if f.stat().st_size > _tran:
                 continue
             if MAU_SECRET.search(f.read_text(encoding="utf-8", errors="ignore")):
                 bo.append(rel + " (giá trị trong ruột file)")
@@ -2289,10 +2329,18 @@ def main(goc):
         #     Trước 7g, ba thao tác hiểm nhất của công ty phần mềm - deploy
         #     prod, sửa dữ liệu khách trên CSDL thật, merge kích hoạt
         #     auto-deploy - đều ghi mức A mà bộ vẫn in "hệ sạch" (vòng 17).
+        # tiếng VIỆT là ngôn ngữ chính của bộ: bản cũ chỉ liệt động từ tiếng
+        # Anh nên sáu cách viết tự nhiên nhất đều lọt (hội đồng vòng 19)
         _dv = (r"(?i)\bdeploy\b|\bmigration\b|\brollback\b|\brestore\b"
                r"|\bdump\b|\bdrop\b|\btruncate\b|\bforce[- ]push\b"
                r"|\bupdate\b|\bdelete\b|\bmerge\b|xoay khóa|xoay khoa"
-               r"|thu hồi secret|thu hoi secret|feature flag|cấp quyền|cap quyen")
+               r"|thu hồi secret|thu hoi secret|feature flag"
+               r"|x[óo]a|xo[áa]|kh[ôo]i ph[ụu]c|ph[ụu]c h[ồo]i"
+               r"|đ[ẩa]y b[ảa]n|day ban|đ[ẩa]y l[êe]n|day len"
+               r"|tri[ểe]n khai|trien khai|c[ậa]p nh[ậa]t|cap nhat"
+               r"|s[ửu]a d[ữu] li[ệe]u|sua du lieu|g[ộo]p nh[áa]nh|gop nhanh"
+               r"|l[ấa]y b[ảa]n sao|lay ban sao|b[ậa]t c[ờo]|t[ắa]t c[ờo]"
+               r"|c[ấa]p quy[ềe]n|cap quyen|thu h[ồo]i quy[ềe]n")
         _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
             "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm]
         # merge vào ĐÚNG nhánh tự deploy là chạm chạy thật, dù câu ghi không
@@ -2341,10 +2389,12 @@ def main(goc):
     #      và file bàn giao môi trường viết thẳng chuỗi kết nối prod trong RUỘT
     #      (hội đồng vòng 17: cả hai "hệ sạch", lối thứ hai còn được MỜI vào sổ)
     _lo_ib = []
-    for _thu in (so / "_inbox", so / "_inbox" / "_da_nap"):
+    # rglob chứ không glob: .env nằm trong THƯ MỤC CON của _inbox từng lọt
+    # trọn (hội đồng vòng 19)
+    for _thu in (so / "_inbox",):
         if not _thu.is_dir():
             continue
-        for _f in sorted(_thu.glob("*")):
+        for _f in sorted(_thu.rglob("*")):
             if not _f.is_file() or MAU_FILE_MAU.search(_f.name):
                 continue
             _rel_ib = _f.relative_to(so).as_posix()
@@ -2402,8 +2452,10 @@ def main(goc):
     _sai_khuon = []
     for _r in dong_bang(doc(so / "TAILIEU.md")):
         _o = (_r[5] if len(_r) > 5 else "").strip().strip("`").strip()
-        if not _o:
-            continue          # ô TRỐNG là dòng chưa đặt chỗ, không phạt
+        if not _o or _o.startswith("[đã xóa theo Q-"):
+            continue          # ô TRỐNG là dòng chưa đặt chỗ; tombstone là thứ
+            # X5 mục 7b BẮT ghi vào đúng ô này khi tên file mang dữ liệu cá
+            # nhân - 8e và 12k đã miễn nó, 7f quên (hội đồng vòng 19)
         if not re.match(r"(Kho|Project|Drive|Repo) \S", _o):
             _sai_khuon.append(f"{(_r[1] if len(_r) > 1 else '?').strip()[:14]}:"
                               f" {_o[:30]}")
@@ -2412,6 +2464,52 @@ def main(goc):
         f" Drive · Repo. Sai khuôn thì phép 9, 10a, 10b BỎ QUA dòng này: tài"
         f" liệu trông như được theo dõi mà không có lưới toàn vẹn nào, hợp"
         f" đồng đã ký bị sửa đè vẫn im. Sửa về đúng khuôn, mức A")
+
+    # 13m. QUYETDINH: ô "Thay bởi" và ô "Trạng thái" là một CẶP (X5 mục 4).
+    #      Dòng tự khai người kế nhiệm mà vẫn đứng HIỆN HÀNH thì sổ có hai
+    #      quyết định nói ngược nhau về cùng một việc, và phiên sau lấy dòng
+    #      nào cũng "đúng sổ" - đúng thứ DUY NHẤT sổ này tồn tại để chặn (hội
+    #      đồng vòng 19). Tất định cả hai chiều, không suy luận nội dung.
+    if not chua_cai:
+        _hang_qd = dong_bang(doc(so / "QUYETDINH.md"))
+        _ma_qd = {(_r[0] or "").strip() for _r in _hang_qd}
+        _cap_qd = []
+        for _r in _hang_qd:
+            if len(_r) < 7 or "[đã xóa theo Q-" in "|".join(_r):
+                continue
+            _tt, _tb = _r[5].strip().upper(), _r[6].strip()
+            _co_tb = bool(re.fullmatch(r"Q-[A-Za-z0-9-]+", _tb)) and _tb in _ma_qd
+            if _co_tb and _tt != "ĐÃ THAY":
+                _cap_qd.append(f"{(_r[0] or '?').strip()} khai Thay bởi {_tb}"
+                               f" mà Trạng thái là {_tt or '(rỗng)'}")
+            elif _tt == "ĐÃ THAY" and not _co_tb:
+                _cap_qd.append(f"{(_r[0] or '?').strip()} ĐÃ THAY mà ô Thay bởi"
+                               f" không trỏ quyết định có thật")
+        bao("13m. QUYETDINH: Trạng thái khớp ô Thay bởi", not _cap_qd,
+            f"{_liet(_cap_qd[:3])}: hai quyết định cùng HIỆN HÀNH về một việc"
+            f" thì phiên sau lấy dòng nào cũng 'đúng sổ'. Đánh ĐÃ THAY cho dòng"
+            f" cũ, mức A")
+
+    # 7h. Profile AUTOMATED: lượt máy TỰ LÀM chỉ được mức A. X5 mục 1 khối
+    #     KHÔNG NGƯỜI cấm B và C ghi sổ, gửi, hay update ngược X0 - và chính X5
+    #     nói ô Phiên dạng <CỬA>.AUTO.<giờ phút> là dấu DUY NHẤT phân biệt việc
+    #     máy với việc người. Dấu đó có, máy đọc được, mà trước vòng 59 không
+    #     phép nào đọc: phiên hẹn giờ ban đêm phát hành công văn đòi tiền chủ
+    #     đầu tư ở mức C vẫn "hệ sạch" (hội đồng vòng 19).
+    if not chua_cai and x0s and re.search(r"\[x\]\s*AUTOMATED", doc(x0s[0])):
+        _auto_sai = []
+        for _r in hang_nk:
+            if len(_r) < 5 or not re.match(r"^[A-Z0-9]+\.AUTO\.", _r[2].strip()):
+                continue
+            if _r[3].strip().upper() in ("B", "C"):
+                _auto_sai.append(f"{(_r[0] or '?').strip()[:22]} mức"
+                                 f" {_r[3].strip()}: {_r[4].strip()[:40]}")
+        bao("7h. lượt phiên AUTOMATED chỉ ghi mức A", not _auto_sai,
+            f"{_liet(_auto_sai[:3])}: X5 mục 1 KHÔNG NGƯỜI cho phiên hẹn giờ"
+            f" mức B và C CHUẨN BỊ thôi - xếp bảng chờ duyệt và mở dòng VIEC"
+            f" hạn phiên sau; ngoài dòng đó không ghi sổ, không gửi, không"
+            f" update ngược X0. Lượt đã lỡ: ghi QUYETDINH và để người duyệt"
+            f" xác nhận sau việc, mức C")
 
     # 7b. TỪ VỰNG của sổ phải nằm trong X0: cửa ma (gõ nhầm một ký tự là sinh
     #     một lane watermark mới) và dự án ĐÃ NGỪNG còn việc mở (X0 C2 bắt

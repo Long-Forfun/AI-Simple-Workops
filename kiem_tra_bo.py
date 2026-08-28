@@ -617,6 +617,72 @@ def phep_fuzz(goc, phu_them=()):
              + "| P-20260828-07 | 2026-08-28 | DA1 | sua file | V-DA1-999 |"
              " x | x | x | x | MỚI | |" + NL), "7c.")
 
+    def _ca_7h(k, i, so, G, sua):
+        """Phiên hẹn giờ tự chốt mức C và GỬI công văn ra ngoài công ty."""
+        sua(i / "X0_CAUHINH_FUZ.md", "  [ ] AUTOMATED", "  [x] AUTOMATED")
+        _p = so / "NHATKY_2026Q3.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-19 | 2026-08-28 | CUA1.AUTO.0300.z9q | C |"
+             " phat hanh va GUI cong van giuc thanh toan cho chu dau tu |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+
+    thu3("phiên AUTOMATED tự chốt mức C và gửi ra ngoài", _ca_7h, "7h.")
+
+    def _ca_7h_lanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: phiên AUTO mức A, chuẩn bị và mở dòng chờ duyệt - đó
+        chính là việc bộ MUỐN máy làm."""
+        sua(i / "X0_CAUHINH_FUZ.md", "  [ ] AUTOMATED", "  [x] AUTOMATED")
+        G2 = "G-20260828-CUA1-19"
+        _p = so / "NHATKY_2026Q3.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| " + G2 + " | 2026-08-28 | CUA1.AUTO.0300.z9q | A |"
+             " quet mail dem, xep 3 thu cho duyet | VIEC V-DA1-001 | khong |"
+             " XONG | khong |" + NL)
+        sua(so / "VIEC.md", " | " + G + " |", " | " + G + " " + G2 + " |")
+        _b = so / "BANG_DIEU_KHIEN.md"
+        _ghi(_b, _b.read_text(encoding="utf-8")
+             .replace("CUA1=" + G, "CUA1=" + G2)
+             .replace("sinh_boi: " + G, "sinh_boi: " + G2))
+
+    thu("phiên AUTOMATED mức A chuẩn bị và chờ duyệt (không được kêu)",
+        _ca_7h_lanh, False)
+
+    thu3("dòng NHATKY thụt một dấu cách (Prettier, dán từ Word)",
+         lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip(NL)
+             + NL + " | G-20260828-CUA1-02 | 2026-08-28 | CUA1.0300.zz | A |"
+             " viec | VIEC V-DA1-001 | khong | ĐANG GHI | khong |" + NL), "3a.")
+
+    thu3("mật khẩu ghi bằng NHÃN TIẾNG VIỆT trong ô sổ",
+         lambda k, i, so, G, sua: _ghi(so / "DUKIEN.md",
+             (so / "DUKIEN.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | D-051 | Ghi chu | Mat khau: Congtruong@2026x |"
+             " 2026-01-01 | NOI_BO | doi tac | A | ĐÃ KIỂM | 2099-05-01 | "
+             + G + " |" + NL), "7e.")
+
+    def _ca_13m(k, i, so, G, sua):
+        """Quyết định tự khai người kế nhiệm mà vẫn đứng HIỆN HÀNH: sổ có hai
+        dòng nói ngược nhau về cùng một việc (hội đồng vòng 19)."""
+        _p = so / "QUYETDINH.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-20260828-03 | 2026-08-28 | chon ABB | vi z | mat x |"
+             " HIỆN HÀNH | Q-20260828-04 | " + G + " |" + NL
+             + "| Q-20260828-04 | 2026-08-28 | quay lai Schneider | vi z |"
+             " mat x | HIỆN HÀNH | | " + G + " |" + NL)
+
+    thu3("QUYETDINH khai Thay bởi mà vẫn HIỆN HÀNH", _ca_13m, "13m.")
+
+    def _ca_13m_lanh(k, i, so, G, sua):
+        """ĐÚNG LUẬT: dòng cũ ĐÃ THAY trỏ dòng mới, dòng mới HIỆN HÀNH."""
+        _p = so / "QUYETDINH.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| Q-20260828-03 | 2026-08-28 | chon ABB | vi z | mat x |"
+             " ĐÃ THAY | Q-20260828-04 | " + G + " |" + NL
+             + "| Q-20260828-04 | 2026-08-28 | quay lai Schneider | vi z |"
+             " mat x | HIỆN HÀNH | | " + G + " |" + NL)
+
+    thu("chuỗi QUYETDINH thay đúng cách (không được kêu)", _ca_13m_lanh, False)
+
     def _ca_0n(k, i, so, G, sua):
         """Cache mang mốc TƯƠNG LAI: mọi file lập tức "đủ ổn định" nên bộ công
         nhận HIỆN HÀNH một file có thể đang ghi dở (backlog (k), vòng 55)."""
@@ -855,9 +921,9 @@ def phep_fuzz(goc, phu_them=()):
         hong.pop()
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 9, 34):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 9,"
-                    f" I3 34 - bớt ca là bớt lưới; đổi số thì sửa con số này"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 11, 38):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 11,"
+                    f" I3 38 - bớt ca là bớt lưới; đổi số thì sửa con số này"
                     f" trong CÙNG lượt vá")
 
     # 14b. ĐIỂM DANH PHÉP CỦA kiem_van_hanh. Phép 14 chỉ điểm danh phép của
@@ -904,15 +970,43 @@ def phep_fuzz(goc, phu_them=()):
     #      lối vá "cho qua bộ kiểm" rẻ nhất. Hằng False vẫn HỢP LỆ (7d2, 7e2,
     #      10c cố ý gọi trong nhánh if đã quyết định xong); chỉ cấm hằng True.
     import ast as _ast
+
+    def _hang_rong(_n):
+        """Hằng rỗng theo cấu trúc: [], (), {}, "", 0, None."""
+        if isinstance(_n, (_ast.List, _ast.Tuple, _ast.Set)):
+            return not _n.elts
+        if isinstance(_n, _ast.Dict):
+            return not _n.keys
+        return isinstance(_n, _ast.Constant) and not _n.value
+
+    def _luon_dung(_n):
+        """Biểu thức LUÔN ĐÚNG mà không đọc dữ liệu nào. Bản đầu của 14e chỉ
+        dò hằng True nên `not []` lách được trọn (hội đồng vòng 19)."""
+        if isinstance(_n, _ast.Constant) and _n.value is True:
+            return True
+        if isinstance(_n, _ast.UnaryOp) and isinstance(_n.op, _ast.Not):
+            return _hang_rong(_n.operand)
+        if (isinstance(_n, _ast.Compare) and len(_n.ops) == 1
+                and isinstance(_n.ops[0], (_ast.Eq, _ast.Is))):
+            _t = _n.left
+            if (isinstance(_t, _ast.Call) and isinstance(_t.func, _ast.Name)
+                    and _t.func.id == "len" and len(_t.args) == 1
+                    and _hang_rong(_t.args[0])):
+                return _hang_rong(_n.comparators[0])
+            return (isinstance(_t, _ast.Constant)
+                    and isinstance(_n.comparators[0], _ast.Constant)
+                    and _t.value == _n.comparators[0].value)
+        return False
+
     _duc = []
     for _tenf, _ndf, _hamf in [("kiem_tra_bo", _nguon_tb, "kiem"),
                                ("kiem_van_hanh", _nguon_vh, "bao")]:
         for _nut in _ast.walk(_ast.parse(_ndf)):
             if (isinstance(_nut, _ast.Call) and isinstance(_nut.func, _ast.Name)
                     and _nut.func.id == _hamf and len(_nut.args) > 1
-                    and isinstance(_nut.args[1], _ast.Constant)
-                    and _nut.args[1].value is True):
-                _duc.append(f"{_tenf} dòng {_nut.lineno}: điều kiện là hằng True")
+                    and _luon_dung(_nut.args[1])):
+                _duc.append(f"{_tenf} dòng {_nut.lineno}: điều kiện LUÔN ĐÚNG"
+                            f" theo cấu trúc")
             if isinstance(_nut, _ast.FunctionDef) and _nut.name == _hamf:
                 _tsd = _nut.args.args[1].arg
                 if not any(isinstance(_x, _ast.Name) and _x.id == _tsd
@@ -921,9 +1015,9 @@ def phep_fuzz(goc, phu_them=()):
                            for _x in _ast.walk(_y.test)):
                     _duc.append(f"{_tenf}: {_hamf}() hết rẽ nhánh theo {_tsd}")
     kiem("14e. không phép nào bị đục ruột thành luôn-đúng", not _duc,
-         f"{'; '.join(_duc[:4])}. Một phép có điều kiện là hằng True thì nó chỉ"
-         f" còn in chữ PASS; nếu thật sự muốn báo lệch vô điều kiện thì dùng"
-         f" hằng False trong nhánh if như 7d2 và 7e2")
+         f"{'; '.join(_duc[:4])}. Điều kiện luôn đúng theo cấu trúc (True,"
+         f" not [], len([]) == 0...) thì phép đó chỉ còn in chữ PASS; muốn báo"
+         f" lệch vô điều kiện thì dùng hằng False trong nhánh if như 7d2, 7e2")
 
     kiem("14b. mọi phép của kiem_van_hanh đều có ca ép trạng thái ở phép 13",
          not _ho, f"phép {_ho} không có ca nào: xóa trọn phép đó thì bộ vẫn in"
@@ -1332,6 +1426,21 @@ def main(goc):
         # chuẩn hóa không được quá tay: AB_C và A_BC là HAI họ khác nhau
         ca.append(("AB_C_v01 và A_BC_v02 không bị trộn họ",
                    ho_va_v("AB_C_v01.docx")[0] != ho_va_v("A_BC_v02.docx")[0]))
+        # TẤT ĐỊNH của loc_ban_chinh: nó đúng nhờ `sorted(cac)` ở đầu hàm, mà
+        # đó là tính chất chưa ai khẳng định. Mất `sorted` thì kết quả theo thứ
+        # tự glob của hệ tệp: hai máy chọn hai bản NHATKY khác nhau làm bản
+        # chính, watermark khác nhau, và lượt sau cấp lại mã đã dùng (vòng 57)
+        import itertools as _it57
+        import kiem_van_hanh as _kv57
+        _ten57 = ["NHATKY_2026Q1.md", "NHATKY_2026Q3.md", "NHATKY_2026Q2.md"]
+        _kq57 = {tuple(q.name for q in _kv57.loc_ban_chinh(
+                     [Path(t) for t in _hv], r"NHATKY_\d{4}Q[1-4]\.md"))
+                 for _hv in _it57.permutations(_ten57)}
+        ca.append(("loc_ban_chinh TẤT ĐỊNH: 6 hoán vị đầu vào, 1 kết quả",
+                   len(_kq57) == 1 and next(iter(_kq57)) == (
+                       "NHATKY_2026Q1.md", "NHATKY_2026Q2.md",
+                       "NHATKY_2026Q3.md")))
+
         # NFD (macOS, iCloud, Dropbox) và NFC là CÙNG một họ. Không chuẩn hóa
         # thì phép 11 (XUNG ĐỘT) hết đường kêu về mặt cấu trúc và phép 9 báo
         # oan khi sổ ghi NFC mà đĩa giữ NFD (hội đồng vòng 17)
@@ -2058,8 +2167,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 98,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 98: bớt ca là"
+             not hong and len(ca) == 99,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 99: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
