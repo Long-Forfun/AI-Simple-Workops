@@ -267,6 +267,47 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 39: PILOT EMAIL - luật tả bằng văn xuôi, máy đòi schema
+
+Pilot tiếp phần chưa ai đi: thực thi X3E mục 1 BẰNG TAY, chỉ theo CHỮ trong
+luật, cố ý không đọc kiem_van_hanh.py, rồi để máy chấm. Kết quả: máy TỪ CHỐI
+sản phẩm của người thực thi đúng luật.
+
+1. GỐC (VỪA-nặng). X3E tả payload PREPARED bằng văn xuôi tiếng Việt ("convId,
+   người gửi, thời điểm UTC, tiêu đề, đường dẫn staging, sha256 của .eml...")
+   trong khi kiem_payload đòi một SCHEMA JSON chính xác không được khai ở
+   đâu trong bộ: conv_id, nguoi_gui, thoi_diem, tieu_de, eml_sha256, staging,
+   dinh_kem, thao_tac. Năm trên bảy tên trường tôi suy ra từ luật đều SAI, và
+   trớ trêu nhất: tên khóa DUY NHẤT mà luật có ghi nguyên văn - `convId` - lại
+   chính là tên máy không nhận (`conv_id`). Đường dẫn staging cũng lửng: luật
+   nói "tương đối, nằm trong _so\_thu_staging", máy đòi chuỗi bắt đầu đúng
+   `_so/_thu_staging/<sha256(khóa)>` tính từ GỐC KHO. Hậu quả dây chuyền: 12h
+   từ chối payload, nên 12k coi cả ba mục index là "thừa" - ba dòng LỆCH cho
+   một lượt nạp làm ĐÚNG luật.
+2. VÁ: X3E thêm mục 1b "Schema file máy sinh, tên trường ĐÚNG NGUYÊN VĂN" -
+   khai trọn ba file máy sinh (nhật ký ndjson, index, registry) dưới dạng
+   JSON mẫu; văn xuôi mục 1 trỏ về đó và bỏ tên `convId` sai. Trần X3E giữ
+   nguyên 12.000 bằng BÙ: cắt hai đoạn văn xuôi nay đã trùng schema (11.995).
+3. MÁY GIỮ LỜI: hai fixture mới (bộ 82 ca) dựng payload ĐÚNG THEO SCHEMA khai
+   trong X3E rồi gọi thẳng kiem_payload - phải trả RỖNG; và payload dùng tên
+   cũ `convId`, `thoi_diem_utc` - phải bị từ chối đúng hai lỗi. Từ nay schema
+   trong luật không thể trôi khỏi schema máy thực thi mà không ai biết. Thêm
+   luật ghim 52: X3E phải chứa nguyên văn cả bảy tên trường.
+4. KIỂM CHỨNG SAU VÁ: chạy lại pilot EMAIL với schema mục 1b - nạp một công
+   văn trọn bốn bước (staging, PREPARED, áp ba thao tác THU/VIEC/TAILIEU kèm
+   index, COMMITTED, registry dựng từ COMMITTED) - kho qua SẠCH toàn bộ
+   12a-12l. Trước vá: 2 lệch; sau vá: 0.
+
+Ghi thêm hai quan sát của pilot (không trừ điểm, là bằng chứng lưới chạy
+đúng): (a) tôi quên sinh lại BANG_DIEU_KHIEN sau lượt ghi thứ hai - rà 8 bắt
+ngay bằng watermark, đúng vai lưới an toàn cho lỗi THAO TÁC của người vận
+hành; (b) đường "điền lần đầu C9 khi đụng <chưa điền>" vá ở vòng 38 chạy trơn
+trong pilot này: điền @NHIP.* là mức B, rev 2 lên 3, xóa dòng khỏi C12, không
+phải mở plan C.
+
+Trạng thái sau 39 vòng vá: bốn gate token, 82 fixture, 52 luật ghim, 13 số
+BENCHMARK máy giữ, 4 defect trạng-thái do pilot bắt.
+
 ## Vòng 38: vá theo PILOT VẬN HÀNH THẬT (nguồn phát hiện mới)
 
 Hội đồng vòng 12 nhất trí 6/6: điểm đọc-tĩnh bão hòa quanh 96,8, nguồn phát
@@ -1467,14 +1508,14 @@ không tuyên bố kết quả runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | ~1884 |
+| INSTRUCTION dán trong Project | 4148 | ~1905 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
-| CỘNG | ~6969 | ~2214 |
+| CỘNG | ~6969 | ~2235 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.884) xấp xỉ 4.084
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.905) xấp xỉ 4.105
 token, vẫn thấp hơn trước tối ưu.
 Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
 mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
@@ -1488,13 +1529,13 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1643 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5231 + khối (không phần mềm trừ thêm mục 1b ~421) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2554 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6059 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1668 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5256 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2580 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6371 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3406 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3406 + khối | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3431 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3431 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
@@ -1509,8 +1550,8 @@ BANG_DIEU_KHIEN 1.400. Vượt trần là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0
 tới X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy
 hồi theo cơ chế riêng, xấu nhất là cả bộ:
-CHAT không EMAIL ~20052 token
-CHAT có EMAIL (kèm X3E) ~23764 token
+CHAT không EMAIL ~20314 token
+CHAT có EMAIL (kèm X3E) ~24313 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -1532,9 +1573,15 @@ RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng
                          luật rà, không phải mỗi lượt rà
 ```
 
-Ba defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả ngay
-sau khi cài · mâu thuẫn "điền nhóm B giữa chừng" với nhóm khóa C11 · `git pull`
-trên kho đang chạy làm mất dòng sổ. Đã vá ở vòng 38.
+Bốn defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả
+ngay sau khi cài · mâu thuẫn "điền nhóm B giữa chừng" với nhóm khóa C11 ·
+`git pull` trên kho đang chạy làm mất dòng sổ (vá vòng 38) · X3E tả payload
+bằng văn xuôi trong khi máy đòi schema JSON không khai ở đâu, thực thi đúng
+chữ vẫn bị 12h và 12k từ chối (vá vòng 39: X3E mục 1b).
+
+PILOT EMAIL: nạp một mail công văn trọn bốn bước (staging, PREPARED, áp ba
+thao tác kèm index, COMMITTED, registry) theo schema mục 1b thì kho qua sạch
+toàn bộ 12a-12l.
 
 ## Ghi chú profile
 
@@ -2302,14 +2349,13 @@ SỔ THƯ      _so\THU.md: một dòng một LUỒNG, mã #L-<NNN>, luồng nh�
             NHẤT serialize CỐ ĐỊNH: FB-<sha256(convId + thời điểm UTC tới giây
             + tiêu đề chuẩn hóa + 200 ký tự đầu thân thư)>, không có dạng
             khóa nào khác.
-            Chống nạp trùng bằng REGISTRY _so\_thu_da_nap.json (máy sinh, là
-            DANH SÁCH CHUỖI khóa, không dạng nào khác): khóa nằm trong registry
-            thì bỏ qua kể cả khi quét lại toàn hộp
+            Chống nạp trùng bằng REGISTRY _so\_thu_da_nap.json (mục 1b):
+            khóa nằm trong registry thì bỏ qua kể cả khi quét lại toàn hộp
 NHẬT KÝ SỰ  _so\_thu_nhat_ky.ndjson, append-only, NGUỒN SỰ THẬT. Mỗi dòng một
-KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa nằm ở
-            trường "khoa" DUY NHẤT và là CHUỖI ("msgId" kiểu cũ chỉ được nạp
-            qua một lượt migration riêng, không đọc lẫn hai dạng), "hop_thu"
-            bắt buộc ở cả hai loại; sai một điều là dòng hỏng.
+KIỆN        JSON object theo mục 1b: "ev" CHỈ nhận PREPARED hoặc COMMITTED,
+            khóa ở trường "khoa" DUY NHẤT và là CHUỖI ("msgId" kiểu cũ chỉ nạp
+            qua một lượt migration riêng), "hop_thu" bắt buộc ở cả hai loại;
+            sai một điều là dòng hỏng.
             Mỗi mail đúng HAI sự kiện, PREPARED đứng TRƯỚC COMMITTED; lượt
             phục hồi không append PREPARED mới, dùng lại payload cũ.
             Thứ tự ghi an toàn bốn bước:
@@ -2317,17 +2363,16 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
                đầy đủ, KHÔNG rỗng) cùng MỌI đính kèm (TRỪ mục mang cờ de_ngoai, mục 2) vào thư mục
                _so\_thu_staging\<sha256(khóa)>\ (mỗi mail MỘT thư mục riêng,
                tên bằng đúng sha256 của khóa, không dùng chung), rồi mới
-               append PREPARED có PAYLOAD PHỤC HỒI: convId, người gửi, thời
-               điểm UTC, tiêu đề, đường dẫn staging (đường dẫn TƯƠNG ĐỐI, sau
-               chuẩn hóa PHẢI còn nằm bên trong _so\_thu_staging\, cấm tuyệt
-               đối, cấm chấm chấm, cấm symlink thoát ra), sha256 của file
-               .eml hay body, danh sách đính kèm kèm sha256 và byte của TỪNG
-               file (tên đính kèm là BASENAME thuần, không dấu phân cách
-               đường dẫn, không chấm chấm; file vượt trần thì khai cờ
-               de_ngoai kèm lý do thay cho sha256, xem mục 2), danh sách THAO TÁC ghi sổ đã
-               chuẩn hóa: mỗi thao tác đủ operation_id (DUY NHẤT trong một
-               mail), sổ đích (THU VIEC DUKIEN TAILIEU QUYETDINH), mã dòng,
-               nội dung dòng.
+               append PREPARED có PAYLOAD PHỤC HỒI theo SCHEMA mục 1b: nguồn
+               thư, đường dẫn staging (TƯƠNG ĐỐI TỪ GỐC KHO, sau chuẩn hóa
+               PHẢI còn nằm bên trong _so\_thu_staging\, cấm tuyệt đối, cấm
+               chấm chấm, cấm symlink thoát ra), sha256 của .eml hay body,
+               danh sách đính kèm kèm sha256 và byte của TỪNG file (tên là
+               BASENAME thuần, không dấu phân cách đường dẫn, không chấm chấm;
+               file vượt trần khai cờ de_ngoai kèm lý do thay cho sha256, xem
+               mục 2), danh sách THAO TÁC ghi sổ đã chuẩn hóa: mỗi thao tác đủ
+               operation_id (DUY NHẤT trong một mail), sổ đích (THU VIEC
+               DUKIEN TAILIEU QUYETDINH), mã dòng, nội dung dòng.
                Phục hồi = staging cộng thao tác, KHÔNG đọc lại hộp thư; tên và
                dung lượng đính kèm suông KHÔNG phải payload phục hồi; staging
                hụt thì không được append PREPARED
@@ -2402,6 +2447,27 @@ AN TOÀN     token và bí mật của kênh báo (Telegram...) để NGOÀI kho
             script đọc từ chỗ hệ điều hành giữ bí mật; digest sinh lỗi thì tuyệt
             đối không gửi lại bản cũ, báo lỗi thay vì báo DONE
 ```
+
+# 1b. Schema file máy sinh, tên trường ĐÚNG NGUYÊN VĂN
+
+Máy đối chiếu tên trường KHỚP TỪNG CHỮ, đặt tên khác là dòng hỏng. Ba file
+dưới đều máy sinh, JSON, UTF-8.
+
+```
+_so\_thu_nhat_ky.ndjson  mỗi dòng một object:
+  {"ev":"PREPARED","khoa":"<Message-ID hay FB-...>","hop_thu":"<@NHIP.HOPTHU>",
+   "payload":{"conv_id":"","nguoi_gui":"","thoi_diem":"","tieu_de":"",
+     "eml_sha256":"","staging":"_so/_thu_staging/<sha256(khóa)>",
+     "dinh_kem":[{"ten":"","sha256":"","bytes":0}
+                 hay {"ten":"","de_ngoai":true,"ly_do":""}],
+     "thao_tac":[{"operation_id":"","so":"","dong":"","noi_dung":""}]}}
+  {"ev":"COMMITTED","khoa":"...","hop_thu":"..."}   KHÔNG mang payload
+_so\_thu_ap_dung.json   {"<khóa>|<operation_id>":{"so":"","dong":""}}
+_so\_thu_da_nap.json    ["<khóa>", ...]  DANH SÁCH CHUỖI thuần, không object
+```
+
+Năm trường nguồn (conv_id, nguoi_gui, thoi_diem, tieu_de, eml_sha256) bắt
+buộc là chuỗi không rỗng; thiếu một cái thì rà 12h chặn ngay ở PREPARED.
 
 # 1c. Phục hồi sự cố (CHỈ đọc khi rà 24-31 của X4 báo lệch)
 
@@ -3008,7 +3074,7 @@ FILE: kiem_tra_bo.py
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, tổng 80 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, vòng 39 thêm 2 ca schema X3E, tổng 82 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -3552,6 +3618,24 @@ def main(goc):
                                      "_so/QUYETDINH.md": "| Q-20260826-01 | cân nhắc Q-77, không ban hành |\n"}))
         ca.append(("12l Q chỉ nằm trong ghi chú dòng khác không được miễn hash",
                    r.get(TEN_12L) is False))
+        # SCHEMA KHAI Ở X3E MỤC 1b PHẢI ĐƯỢC CHÍNH MÁY CHẤP NHẬN (PILOT vòng 39:
+        # thực thi X3E theo văn xuôi cũ sinh ra payload bị 12h từ chối, vì tên
+        # trường máy đòi không được khai ở đâu; nay khai rồi thì phải khớp)
+        _khoa_pl = "<a@x>"
+        _pl_dung = {"conv_id": "c1", "nguoi_gui": "a@x", "thoi_diem": "2026-08-28T03:10:00Z",
+                    "tieu_de": "tieu de", "eml_sha256": "0" * 64,
+                    "staging": "_so/_thu_staging/" + __import__("hashlib").sha256(
+                        _khoa_pl.encode("utf-8")).hexdigest(),
+                    "dinh_kem": [{"ten": "f.pdf", "sha256": "1" * 64, "bytes": 12}],
+                    "thao_tac": [{"operation_id": "op1", "so": "VIEC",
+                                  "dong": "V-001", "noi_dung": "| V-001 | x |"}]}
+        ca.append(("payload dựng đúng SCHEMA khai ở X3E mục 1b thì máy nhận",
+                   _kv26.kiem_payload(_pl_dung, _khoa_pl) == []))
+        _pl_cu = dict(_pl_dung)
+        del _pl_cu["conv_id"], _pl_cu["thoi_diem"]
+        _pl_cu["convId"], _pl_cu["thoi_diem_utc"] = "c1", "2026-08-28T03:10:00Z"
+        ca.append(("payload dùng tên trường ngoài schema thì máy từ chối",
+                   len(_kv26.kiem_payload(_pl_cu, _khoa_pl)) == 2))
         # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
         giu10, nghi10 = _kv26.loc_nghi_ban_sao(
             ["01_A/BC-KH-PHULUC-2026.docx"],
@@ -3962,11 +4046,12 @@ def main(goc):
         ("chat dán lặp có mốc đã-nạp-tới ghi ô Bước tiếp theo, sau mốc theo vị trí", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"] and "Bước tiếp theo" in docs["X3_CUAVAO_TEMPLATE.md"] and "VỊ TRÍ" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("chat 5b có gate chỉ đọc khi dán, không phải thuế mọi lượt", "# 5b." in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ đọc khi người dùng dán chat" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("event_id tin chat có số thứ tự trong khối, trùng khóa thì so nội dung", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"] and "SO NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("X3E khai nguyên văn schema file máy sinh mà máy thực thi", all(t in docs["X3E_EMAIL_TEMPLATE.md"] for t in ["conv_id", "nguoi_gui", "thoi_diem", "tieu_de", "eml_sha256", "operation_id", "_so/_thu_staging/"])),
         # PILOT vòng 38: hai luật do vận hành thật phơi ra
         ("điền lần đầu mục còn ở C12 là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục đang nằm ở C12" in docs["X0_CAUHINH_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["X5_HESO_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["INSTRUCTION"]),
         ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (51 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (52 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}

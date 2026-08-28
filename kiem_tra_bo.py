@@ -2,7 +2,7 @@
 # kiem_tra_bo.py · bộ test hồi quy cho WORKOPS STARTER · v21 · 20260825
 # v21 bộ kiểm: thêm hai fixture de_ngoai và một fixture DƯƠNG hộp cũ
 # @NHIP.HOPTHU_CU, tổng 69 ca; v27 thêm 3 ca bộ lọc bản sao và 1 ca kho sau
-# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, tổng 80 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
+# XÓA PHÁP LÝ phải sạch; vòng 34 thêm 2 ca (cùng-tiền-tố, 12l-tombstone), vòng 35 thêm 1 ca đa-tiền-tố, vòng 36 thêm 2 ca 12l khuôn trọn, vòng 37 thêm 2 ca 12l so-đúng-ô, vòng 39 thêm 2 ca schema X3E, tổng 82 ca. Trước đó v20 66 ca. Một dòng "Kho 01_A/" phải bao phủ
 # 01_A/BC_v02.docx trong chế độ --ho (chống đề xuất _INBOX oan); cache đời cũ
 # không mang theo bằng chứng ổn định sang bản mới.
 # v19: fixture chế độ --ho kiểm HÀNH VI THẬT thay vì hàm khớp tên: v01 phải
@@ -546,6 +546,24 @@ def main(goc):
                                      "_so/QUYETDINH.md": "| Q-20260826-01 | cân nhắc Q-77, không ban hành |\n"}))
         ca.append(("12l Q chỉ nằm trong ghi chú dòng khác không được miễn hash",
                    r.get(TEN_12L) is False))
+        # SCHEMA KHAI Ở X3E MỤC 1b PHẢI ĐƯỢC CHÍNH MÁY CHẤP NHẬN (PILOT vòng 39:
+        # thực thi X3E theo văn xuôi cũ sinh ra payload bị 12h từ chối, vì tên
+        # trường máy đòi không được khai ở đâu; nay khai rồi thì phải khớp)
+        _khoa_pl = "<a@x>"
+        _pl_dung = {"conv_id": "c1", "nguoi_gui": "a@x", "thoi_diem": "2026-08-28T03:10:00Z",
+                    "tieu_de": "tieu de", "eml_sha256": "0" * 64,
+                    "staging": "_so/_thu_staging/" + __import__("hashlib").sha256(
+                        _khoa_pl.encode("utf-8")).hexdigest(),
+                    "dinh_kem": [{"ten": "f.pdf", "sha256": "1" * 64, "bytes": 12}],
+                    "thao_tac": [{"operation_id": "op1", "so": "VIEC",
+                                  "dong": "V-001", "noi_dung": "| V-001 | x |"}]}
+        ca.append(("payload dựng đúng SCHEMA khai ở X3E mục 1b thì máy nhận",
+                   _kv26.kiem_payload(_pl_dung, _khoa_pl) == []))
+        _pl_cu = dict(_pl_dung)
+        del _pl_cu["conv_id"], _pl_cu["thoi_diem"]
+        _pl_cu["convId"], _pl_cu["thoi_diem_utc"] = "c1", "2026-08-28T03:10:00Z"
+        ca.append(("payload dùng tên trường ngoài schema thì máy từ chối",
+                   len(_kv26.kiem_payload(_pl_cu, _khoa_pl)) == 2))
         # ĐA TIỀN TỐ: hai tiền tố cùng khớp thì nhãn phải TẤT ĐỊNH = dài nhất
         giu10, nghi10 = _kv26.loc_nghi_ban_sao(
             ["01_A/BC-KH-PHULUC-2026.docx"],
@@ -956,11 +974,12 @@ def main(goc):
         ("chat dán lặp có mốc đã-nạp-tới ghi ô Bước tiếp theo, sau mốc theo vị trí", "CHỐNG DÁN LẶP" in docs["X3_CUAVAO_TEMPLATE.md"] and "đã nạp tới tin" in docs["X3_CUAVAO_TEMPLATE.md"] and "Bước tiếp theo" in docs["X3_CUAVAO_TEMPLATE.md"] and "VỊ TRÍ" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("chat 5b có gate chỉ đọc khi dán, không phải thuế mọi lượt", "# 5b." in docs["X3_CUAVAO_TEMPLATE.md"] and "CHỈ đọc khi người dùng dán chat" in docs["X3_CUAVAO_TEMPLATE.md"]),
         ("event_id tin chat có số thứ tự trong khối, trùng khóa thì so nội dung", "-chat-<NN>" in docs["X3_CUAVAO_TEMPLATE.md"] and "SO NỘI DUNG" in docs["X3_CUAVAO_TEMPLATE.md"]),
+        ("X3E khai nguyên văn schema file máy sinh mà máy thực thi", all(t in docs["X3E_EMAIL_TEMPLATE.md"] for t in ["conv_id", "nguoi_gui", "thoi_diem", "tieu_de", "eml_sha256", "operation_id", "_so/_thu_staging/"])),
         # PILOT vòng 38: hai luật do vận hành thật phơi ra
         ("điền lần đầu mục còn ở C12 là mức B, đổi giá trị đã điền vẫn C", "ĐIỀN LẦN ĐẦU một mục đang nằm ở C12" in docs["X0_CAUHINH_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["X5_HESO_TEMPLATE.md"] and "ĐIỀN LẦN ĐẦU mục còn ở C12" in docs["INSTRUCTION"]),
         ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
     ] if not dk]
-    kiem("12. luật nghiệp vụ then chốt có mặt (51 luật)", not thieu_luat, str(thieu_luat))
+    kiem("12. luật nghiệp vụ then chốt có mặt (52 luật)", not thieu_luat, str(thieu_luat))
 
     # 10. Tham chiếu chéo "X<k> mục <n>" và "INSTRUCTION mục <n>" phải trỏ tới mục có thật
     muc_cua = {}

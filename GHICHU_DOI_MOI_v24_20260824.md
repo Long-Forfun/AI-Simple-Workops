@@ -31,6 +31,47 @@ của giám khảo KHÔNG MISS vòng 9 khi đó còn treo, vá ở vòng 35]
 dọn hết; phần chưa làm còn lại đều là đánh đổi có chủ đích đã ghi nhận
 user-facing (không pipeline chat tự động, không phân quyền).
 
+## Vòng 39: PILOT EMAIL - luật tả bằng văn xuôi, máy đòi schema
+
+Pilot tiếp phần chưa ai đi: thực thi X3E mục 1 BẰNG TAY, chỉ theo CHỮ trong
+luật, cố ý không đọc kiem_van_hanh.py, rồi để máy chấm. Kết quả: máy TỪ CHỐI
+sản phẩm của người thực thi đúng luật.
+
+1. GỐC (VỪA-nặng). X3E tả payload PREPARED bằng văn xuôi tiếng Việt ("convId,
+   người gửi, thời điểm UTC, tiêu đề, đường dẫn staging, sha256 của .eml...")
+   trong khi kiem_payload đòi một SCHEMA JSON chính xác không được khai ở
+   đâu trong bộ: conv_id, nguoi_gui, thoi_diem, tieu_de, eml_sha256, staging,
+   dinh_kem, thao_tac. Năm trên bảy tên trường tôi suy ra từ luật đều SAI, và
+   trớ trêu nhất: tên khóa DUY NHẤT mà luật có ghi nguyên văn - `convId` - lại
+   chính là tên máy không nhận (`conv_id`). Đường dẫn staging cũng lửng: luật
+   nói "tương đối, nằm trong _so\_thu_staging", máy đòi chuỗi bắt đầu đúng
+   `_so/_thu_staging/<sha256(khóa)>` tính từ GỐC KHO. Hậu quả dây chuyền: 12h
+   từ chối payload, nên 12k coi cả ba mục index là "thừa" - ba dòng LỆCH cho
+   một lượt nạp làm ĐÚNG luật.
+2. VÁ: X3E thêm mục 1b "Schema file máy sinh, tên trường ĐÚNG NGUYÊN VĂN" -
+   khai trọn ba file máy sinh (nhật ký ndjson, index, registry) dưới dạng
+   JSON mẫu; văn xuôi mục 1 trỏ về đó và bỏ tên `convId` sai. Trần X3E giữ
+   nguyên 12.000 bằng BÙ: cắt hai đoạn văn xuôi nay đã trùng schema (11.995).
+3. MÁY GIỮ LỜI: hai fixture mới (bộ 82 ca) dựng payload ĐÚNG THEO SCHEMA khai
+   trong X3E rồi gọi thẳng kiem_payload - phải trả RỖNG; và payload dùng tên
+   cũ `convId`, `thoi_diem_utc` - phải bị từ chối đúng hai lỗi. Từ nay schema
+   trong luật không thể trôi khỏi schema máy thực thi mà không ai biết. Thêm
+   luật ghim 52: X3E phải chứa nguyên văn cả bảy tên trường.
+4. KIỂM CHỨNG SAU VÁ: chạy lại pilot EMAIL với schema mục 1b - nạp một công
+   văn trọn bốn bước (staging, PREPARED, áp ba thao tác THU/VIEC/TAILIEU kèm
+   index, COMMITTED, registry dựng từ COMMITTED) - kho qua SẠCH toàn bộ
+   12a-12l. Trước vá: 2 lệch; sau vá: 0.
+
+Ghi thêm hai quan sát của pilot (không trừ điểm, là bằng chứng lưới chạy
+đúng): (a) tôi quên sinh lại BANG_DIEU_KHIEN sau lượt ghi thứ hai - rà 8 bắt
+ngay bằng watermark, đúng vai lưới an toàn cho lỗi THAO TÁC của người vận
+hành; (b) đường "điền lần đầu C9 khi đụng <chưa điền>" vá ở vòng 38 chạy trơn
+trong pilot này: điền @NHIP.* là mức B, rev 2 lên 3, xóa dòng khỏi C12, không
+phải mở plan C.
+
+Trạng thái sau 39 vòng vá: bốn gate token, 82 fixture, 52 luật ghim, 13 số
+BENCHMARK máy giữ, 4 defect trạng-thái do pilot bắt.
+
 ## Vòng 38: vá theo PILOT VẬN HÀNH THẬT (nguồn phát hiện mới)
 
 Hội đồng vòng 12 nhất trí 6/6: điểm đọc-tĩnh bão hòa quanh 96,8, nguồn phát

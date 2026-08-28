@@ -11,14 +11,14 @@ không tuyên bố kết quả runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | ~1884 |
+| INSTRUCTION dán trong Project | 4148 | ~1905 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX 228 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | 101 |
-| CỘNG | ~6969 | ~2214 |
+| CỘNG | ~6969 | ~2235 |
 
 Giảm xấp xỉ 70 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.884) xấp xỉ 4.084
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.905) xấp xỉ 4.105
 token, vẫn thấp hơn trước tối ưu.
 Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
 mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
@@ -32,13 +32,13 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1643 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5231 + khối (không phần mềm trừ thêm mục 1b ~421) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2554 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6059 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1668 (thêm X5 mục 3 ~1059 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5256 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2580 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6371 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1506 | |
-| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3406 | |
-| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3406 + khối | |
+| SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3431 | |
+| SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3431 + khối | |
 
 ## Trần từng file, máy enforce ở kiem_tra_bo.py phép kiểm 9
 
@@ -53,8 +53,8 @@ BANG_DIEU_KHIEN 1.400. Vượt trần là FAIL.
 Các con số route trên chỉ đúng cho COWORK đọc theo mục. Phiên CHAT nạp X0
 tới X5, X9 (và X3E nếu bật EMAIL) qua tài liệu Project: nền claude.ai truy
 hồi theo cơ chế riêng, xấu nhất là cả bộ:
-CHAT không EMAIL ~20052 token
-CHAT có EMAIL (kèm X3E) ~23764 token
+CHAT không EMAIL ~20314 token
+CHAT có EMAIL (kèm X3E) ~24313 token
 (hai số này máy giữ khớp qua phép 2c); CHAT vì thế chỉ nên dùng cho HOI,
 BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -76,9 +76,15 @@ RA_SOAT                  0 token đọc X4: chạy kiem_van_hanh.py thay, bảng
                          luật rà, không phải mỗi lượt rà
 ```
 
-Ba defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả ngay
-sau khi cài · mâu thuẫn "điền nhóm B giữa chừng" với nhóm khóa C11 · `git pull`
-trên kho đang chạy làm mất dòng sổ. Đã vá ở vòng 38.
+Bốn defect do pilot phơi ra (không vòng đọc-tĩnh nào thấy): 0d báo động giả
+ngay sau khi cài · mâu thuẫn "điền nhóm B giữa chừng" với nhóm khóa C11 ·
+`git pull` trên kho đang chạy làm mất dòng sổ (vá vòng 38) · X3E tả payload
+bằng văn xuôi trong khi máy đòi schema JSON không khai ở đâu, thực thi đúng
+chữ vẫn bị 12h và 12k từ chối (vá vòng 39: X3E mục 1b).
+
+PILOT EMAIL: nạp một mail công văn trọn bốn bước (staging, PREPARED, áp ba
+thao tác kèm index, COMMITTED, registry) theo schema mục 1b thì kho qua sạch
+toàn bộ 12a-12l.
 
 ## Ghi chú profile
 

@@ -20,14 +20,13 @@ SỔ THƯ      _so\THU.md: một dòng một LUỒNG, mã #L-<NNN>, luồng nh�
             NHẤT serialize CỐ ĐỊNH: FB-<sha256(convId + thời điểm UTC tới giây
             + tiêu đề chuẩn hóa + 200 ký tự đầu thân thư)>, không có dạng
             khóa nào khác.
-            Chống nạp trùng bằng REGISTRY _so\_thu_da_nap.json (máy sinh, là
-            DANH SÁCH CHUỖI khóa, không dạng nào khác): khóa nằm trong registry
-            thì bỏ qua kể cả khi quét lại toàn hộp
+            Chống nạp trùng bằng REGISTRY _so\_thu_da_nap.json (mục 1b):
+            khóa nằm trong registry thì bỏ qua kể cả khi quét lại toàn hộp
 NHẬT KÝ SỰ  _so\_thu_nhat_ky.ndjson, append-only, NGUỒN SỰ THẬT. Mỗi dòng một
-KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa nằm ở
-            trường "khoa" DUY NHẤT và là CHUỖI ("msgId" kiểu cũ chỉ được nạp
-            qua một lượt migration riêng, không đọc lẫn hai dạng), "hop_thu"
-            bắt buộc ở cả hai loại; sai một điều là dòng hỏng.
+KIỆN        JSON object theo mục 1b: "ev" CHỈ nhận PREPARED hoặc COMMITTED,
+            khóa ở trường "khoa" DUY NHẤT và là CHUỖI ("msgId" kiểu cũ chỉ nạp
+            qua một lượt migration riêng), "hop_thu" bắt buộc ở cả hai loại;
+            sai một điều là dòng hỏng.
             Mỗi mail đúng HAI sự kiện, PREPARED đứng TRƯỚC COMMITTED; lượt
             phục hồi không append PREPARED mới, dùng lại payload cũ.
             Thứ tự ghi an toàn bốn bước:
@@ -35,17 +34,16 @@ KIỆN        JSON object: "ev" CHỈ nhận PREPARED hoặc COMMITTED, khóa n�
                đầy đủ, KHÔNG rỗng) cùng MỌI đính kèm (TRỪ mục mang cờ de_ngoai, mục 2) vào thư mục
                _so\_thu_staging\<sha256(khóa)>\ (mỗi mail MỘT thư mục riêng,
                tên bằng đúng sha256 của khóa, không dùng chung), rồi mới
-               append PREPARED có PAYLOAD PHỤC HỒI: convId, người gửi, thời
-               điểm UTC, tiêu đề, đường dẫn staging (đường dẫn TƯƠNG ĐỐI, sau
-               chuẩn hóa PHẢI còn nằm bên trong _so\_thu_staging\, cấm tuyệt
-               đối, cấm chấm chấm, cấm symlink thoát ra), sha256 của file
-               .eml hay body, danh sách đính kèm kèm sha256 và byte của TỪNG
-               file (tên đính kèm là BASENAME thuần, không dấu phân cách
-               đường dẫn, không chấm chấm; file vượt trần thì khai cờ
-               de_ngoai kèm lý do thay cho sha256, xem mục 2), danh sách THAO TÁC ghi sổ đã
-               chuẩn hóa: mỗi thao tác đủ operation_id (DUY NHẤT trong một
-               mail), sổ đích (THU VIEC DUKIEN TAILIEU QUYETDINH), mã dòng,
-               nội dung dòng.
+               append PREPARED có PAYLOAD PHỤC HỒI theo SCHEMA mục 1b: nguồn
+               thư, đường dẫn staging (TƯƠNG ĐỐI TỪ GỐC KHO, sau chuẩn hóa
+               PHẢI còn nằm bên trong _so\_thu_staging\, cấm tuyệt đối, cấm
+               chấm chấm, cấm symlink thoát ra), sha256 của .eml hay body,
+               danh sách đính kèm kèm sha256 và byte của TỪNG file (tên là
+               BASENAME thuần, không dấu phân cách đường dẫn, không chấm chấm;
+               file vượt trần khai cờ de_ngoai kèm lý do thay cho sha256, xem
+               mục 2), danh sách THAO TÁC ghi sổ đã chuẩn hóa: mỗi thao tác đủ
+               operation_id (DUY NHẤT trong một mail), sổ đích (THU VIEC
+               DUKIEN TAILIEU QUYETDINH), mã dòng, nội dung dòng.
                Phục hồi = staging cộng thao tác, KHÔNG đọc lại hộp thư; tên và
                dung lượng đính kèm suông KHÔNG phải payload phục hồi; staging
                hụt thì không được append PREPARED
@@ -120,6 +118,27 @@ AN TOÀN     token và bí mật của kênh báo (Telegram...) để NGOÀI kho
             script đọc từ chỗ hệ điều hành giữ bí mật; digest sinh lỗi thì tuyệt
             đối không gửi lại bản cũ, báo lỗi thay vì báo DONE
 ```
+
+# 1b. Schema file máy sinh, tên trường ĐÚNG NGUYÊN VĂN
+
+Máy đối chiếu tên trường KHỚP TỪNG CHỮ, đặt tên khác là dòng hỏng. Ba file
+dưới đều máy sinh, JSON, UTF-8.
+
+```
+_so\_thu_nhat_ky.ndjson  mỗi dòng một object:
+  {"ev":"PREPARED","khoa":"<Message-ID hay FB-...>","hop_thu":"<@NHIP.HOPTHU>",
+   "payload":{"conv_id":"","nguoi_gui":"","thoi_diem":"","tieu_de":"",
+     "eml_sha256":"","staging":"_so/_thu_staging/<sha256(khóa)>",
+     "dinh_kem":[{"ten":"","sha256":"","bytes":0}
+                 hay {"ten":"","de_ngoai":true,"ly_do":""}],
+     "thao_tac":[{"operation_id":"","so":"","dong":"","noi_dung":""}]}}
+  {"ev":"COMMITTED","khoa":"...","hop_thu":"..."}   KHÔNG mang payload
+_so\_thu_ap_dung.json   {"<khóa>|<operation_id>":{"so":"","dong":""}}
+_so\_thu_da_nap.json    ["<khóa>", ...]  DANH SÁCH CHUỖI thuần, không object
+```
+
+Năm trường nguồn (conv_id, nguoi_gui, thoi_diem, tieu_de, eml_sha256) bắt
+buộc là chuỗi không rỗng; thiếu một cái thì rà 12h chặn ngay ở PREPARED.
 
 # 1c. Phục hồi sự cố (CHỈ đọc khi rà 24-31 của X4 báo lệch)
 
