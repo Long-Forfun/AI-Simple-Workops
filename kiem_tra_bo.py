@@ -1103,6 +1103,19 @@ def phep_fuzz(goc, phu_them=()):
 
     thu3("phiên AUTOMATED tự chốt mức C và gửi ra ngoài", _ca_7h, "7h.")
 
+    def _ca_7h_b(k, i, so, G, sua):
+        """Phiên hẹn giờ tự ghi mức B - X0 C0 chỉ cho AUTOMATED mức A; ca cũ
+        chỉ thử mức C nên mutant thu hẹp ('B' ra khỏi lưới) sống (tự quét
+        vòng 88)."""
+        sua(i / "X0_CAUHINH_FUZ.md", "  [ ] AUTOMATED", "  [x] AUTOMATED")
+        _p = so / "NHATKY_2026Q3.md"
+        _ghi(_p, _p.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-20 | 2026-08-28 | CUA1.AUTO.0400.y8p | B |"
+             " tu cap nhat bang tong hop tuan | VIEC V-DA1-001 | khong |"
+             " XONG | khong |" + NL)
+
+    thu3("phiên AUTOMATED tự ghi mức B (chỉ được mức A)", _ca_7h_b, "7h.")
+
     def _ca_7h_lanh(k, i, so, G, sua):
         """ĐÚNG LUẬT: phiên AUTO mức A, chuẩn bị và mở dòng chờ duyệt - đó
         chính là việc bộ MUỐN máy làm."""
@@ -1691,7 +1704,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 77 if _os_dem.name == "nt" else 76   # ca 9d chỉ có trên NTFS
+    _i3_mong = 78 if _os_dem.name == "nt" else 77   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 33, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 33,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"

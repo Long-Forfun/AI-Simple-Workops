@@ -184,7 +184,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 79 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 80 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -253,6 +253,23 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 80: tự quét trước - giết mutant TRƯỚC khi giám khảo tìm ra
+
+Không chờ vòng chấm 05: bốn vòng rubric liền, mục LƯỚI TỰ GIỮ đều mất điểm
+theo cùng một khuôn - giám khảo chiếu seed mới vào vùng chưa ai chiếu và tìm
+được mutant sống. Vòng này tự làm việc đó trước, trên tám vùng chưa vòng nào
+quét: 10a, 10b, 13m (cả hai vế), 7h, 0p, 11b, 8e.
+
+Kết quả: 7/8 BẮT ngay - các lưới 14b/14e/15 và ca fuzz cũ phủ tốt hơn dự
+đoán. MỘT SỐNG SÓT: "7h nhận cả mức B" - ca 7h duy nhất thử mức C, nên
+mutant THU HẸP lưới (bỏ B, giữ C) chạy y hệt bản lành. Đúng bài học cũ: mỗi
+NHÁNH GIÁ TRỊ phải có ca riêng, một ca cho cả lưới chỉ ghim được một nhánh.
+Ca mới: phiên AUTOMATED tự ghi mức B (X0 C0 chỉ cho mức A) -> 7h. Tái đo:
+8/8 CHẾT.
+
+BẤT BIẾN I1 7, I2 33, I3 78(nt)/77. Đang chờ rubric vòng chấm 05 (bản vòng
+48). BACKLOG: (e) sổ CSV (đang CẤM).
 
 ## Vòng 79: rubric vòng chấm 04 - 93/100, vá nốt các khoản còn lại
 
