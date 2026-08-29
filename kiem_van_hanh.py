@@ -223,7 +223,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "3c.", "3d.", "3e.", "3f.", "4.", "5.", "6.", "7.", "7b.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
-           "8e.", "11b.", "0m.", "0n.", "13m.", "13n.", "7h.", "5b.", "0p.",
+           "8e.", "11b.", "0m.", "0n.", "13m.", "13n.", "13o.", "7h.", "5b.", "0p.",
            "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.", "9e.", "0r.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
@@ -2131,6 +2131,28 @@ def main(goc):
     #      sha chỉ lấy PHẦN BẤT BIẾN, hai ô quản trị đổi theo luật ĐÃ THAY
     #      không vào sha. Dòng chưa neo chỉ LƯU Ý - kho lập trước nâng cấp
     #      không bị phạt vì làm đúng luật của thời điểm cũ.
+    # 13o. DUKIEN "thay bởi": X3 chặng 2 và X5 mục 4 bắt dòng cũ ghi "thay
+    #      bởi <mã>" khi số thay - trước vòng 97 là lời suông (P1 định vị
+    #      lại). Mã trỏ tới phải TỒN TẠI, và dòng khai phải HẾT HIỆU LỰC -
+    #      còn hiệu lực mà khai thay bởi là hai bản cùng sống.
+    _dk_ma = {(_r[1] or "").strip().casefold()
+              for _r in dong_bang(doc(so / "DUKIEN.md")) if len(_r) > 1}
+    _loi13o = []
+    for _r in dong_bang(doc(so / "DUKIEN.md")):
+        _m13o = re.search(r"[Tt]hay b[ởo]i\s*:?\s*(D-[\w-]+)", "|".join(_r))
+        if not _m13o:
+            continue
+        _ma_r = (_r[1] or "?").strip()[:14]
+        if _m13o.group(1).casefold() not in _dk_ma:
+            _loi13o.append(f"{_ma_r} thay bởi {_m13o.group(1)}: mã KHÔNG tồn"
+                           f" tại trong DUKIEN")
+        if len(_r) > 8 and _r[8].strip() not in ("HẾT HIỆU LỰC", "HỦY"):
+            _loi13o.append(f"{_ma_r} khai thay bởi mà còn"
+                           f" {_r[8].strip() or '(rỗng)'} - hai bản cùng sống")
+    bao("13o. DUKIEN thay bởi trỏ mã có thật", not _loi13o,
+        f"{_liet(_loi13o[:3])}. Sửa về đúng khuôn X5 mục 4: dòng cũ HẾT HIỆU"
+        f" LỰC ghi thay bởi <mã mới có thật>, mức B")
+
     _qd_neo_p = goc / "_moc_qd.txt"
     _qd_rows = {}
     for _r in dong_bang(doc(so / "QUYETDINH.md")):
@@ -2238,7 +2260,8 @@ def main(goc):
     #     (THU_MUC_HE_THONG), nên tài liệu lỡ lưu vào đây KHÔNG phép nào nhặt.
     #     Trước vòng 38, "git status" là lưới cuối; xóa .git thì mất nốt.
     _la = sorted(f.name + ("\\" if f.is_dir() else "") for f in goc.iterdir()
-                 if not (f.is_dir() and f.name in ("_so", "__pycache__", ".git"))
+                 if not (f.is_dir() and f.name in ("_so", "__pycache__", ".git",
+                                                   ".github"))
                  and not (f.is_file() and BIET_MAT_00.fullmatch(f.name)))
     # _so\ cũng ngoài quan sát nghiệp vụ, đúng nguyên văn lý lẽ của chính 0j:
     # tài liệu để đây KHÔNG BAO GIỜ được nhặt (hội đồng vòng 15)

@@ -189,7 +189,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 87 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 88 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -258,6 +258,22 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 88: ba P1 cuối của định vị lại - CI, CHAT stale, thay-bởi DUKIEN
+
+1. CI self-test: .github/workflows/kiem.yml chạy trọn kiem_tra_bo mỗi push
+   (Windows chính thức, Linux thăm dò); 0j và 1e miễn đúng file này.
+2. CHAT STALE sau cài: X9 dặn thay bản TEMPLATE trong tài liệu Project
+   bằng bản ĐÃ ĐIỀN ngay sau cài và mỗi lần rev X0 tăng; luật-grep ghim
+   (75 luật).
+3. Phép 13o: DUKIEN "thay bởi" thành máy - mã trỏ tới phải TỒN TẠI, dòng
+   khai phải HẾT HIỆU LỰC (còn hiệu lực mà khai là hai bản cùng sống). Ba
+   ca: mã ma, còn-sống, và ca lành đúng khuôn X5 mục 4.
+
+Tinh thần chốt theo người dùng: phần PHẦN MỀM của bộ là để NẮM TÍNH NĂNG
+HIỆN THỜI - thẻ kiểm kê, ai phụ trách, quyết định - không gì hơn.
+
+BẤT BIẾN I1 7, I2 38, I3 93(nt)/92; 75 luật; fixture 111 ca.
 
 ## Vòng 87: ĐỊNH VỊ LẠI - hệ quản lý hiện trạng, KHÔNG thực thi vận hành
 
@@ -1978,7 +1994,7 @@ NOI_BO mức A (vòng thử)  đọc thật X5 mục 3, 3.176 ký tự ~1.059 to
                          đọc THIẾU X1 mục 3, 4 của route (không gây sai kết
                          quả vì việc thuần nội bộ, không có đầu ra)
 RA_SOAT                  0 token ĐỌC X4, nhưng KHÔNG phải 0 token phiên: bảng
-                         kết quả kiem_van_hanh.py dán vào phiên đo được ~853
+                         kết quả kiem_van_hanh.py dán vào phiên đo được ~877
                          token trên kho lành tối thiểu và lớn hơn trên kho ĐANG
                          LỆCH (phép 13b và 13c giữ hai trần đó), phình từ ~502
                          ở vòng 39 và ~587 ở vòng 42; phép 13d giữ số này khớp. Route ~1661 chỉ phải trả
@@ -3492,8 +3508,11 @@ Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là 
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
 rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì TUYỆT ĐỐI KHÔNG xóa -
 repo cha có thể là dự án khác của công ty, xóa là mất lịch sử của họ:
-CHUYỂN kho ra một thư mục ngoài vùng git rồi chạy tiếp - kho chạy không
-được nằm trong bản làm việc git nào, `_so\` là sổ SỐNG (mục 3c). Quét X0 một lượt, đưa MỌI
+CHUYỂN kho ra thư mục ngoài vùng git - kho chạy không được nằm trong
+bản git nào, `_so\` là sổ SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
+Project (README bước 3)? Thay bản TEMPLATE bằng bản ĐÃ ĐIỀN ngay sau cài
+và mỗi lần rev X0 tăng - phiên CHAT đọc bản trong Project, để bản cũ là
+CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
 mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi
 (tham số của profile CHƯA bật thì KHÔNG vào C12; bật profile sau, mức B, thì
 cùng lượt đó thêm chúng vào C12): C12

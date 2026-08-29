@@ -74,11 +74,11 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
-    "kiem_tra_bo.py": 210000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 220000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 195000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 205000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -1486,6 +1486,40 @@ def phep_fuzz(goc, phu_them=()):
     thu3("triển khai lên máy chủ nội bộ không dấu chấm mà mức B", _ca_7g_vps,
          "7g.")
 
+    def _ca_13o_ma(k, i, so, G, sua):
+        """Dòng cũ HẾT HIỆU LỰC khai 'thay bởi D-DA1-999' mà mã đó KHÔNG tồn
+        tại: quan hệ thay-bởi đứt, không lần ngược được bản mới (P1)."""
+        _ghi(so / "DUKIEN.md",
+             (so / "DUKIEN.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | D-DA1-002 | Gia cu | 110000 (thay bởi D-DA1-999) |"
+               " 2026-07-01 | noi bo | bao gia | B | HẾT HIỆU LỰC |"
+               " 2098-01-01 | " + G + " |" + NL)
+
+    thu3("DUKIEN thay bởi trỏ mã không tồn tại", _ca_13o_ma, "13o.")
+
+    def _ca_13o_song(k, i, so, G, sua):
+        """Khai thay bởi mà Trạng thái còn HIỆU LỰC: hai bản cùng sống, phép
+        tra cứu có thể vớ bản cũ (P1)."""
+        _ghi(so / "DUKIEN.md",
+             (so / "DUKIEN.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | D-DA1-003 | Gia treo | 115000 (thay bởi D-DA1-001) |"
+               " 2026-07-01 | noi bo | bao gia | B | HIỆU LỰC |"
+               " 2098-01-01 | " + G + " |" + NL)
+
+    thu3("DUKIEN khai thay bởi mà còn hiệu lực", _ca_13o_song, "13o.")
+
+    def _ca_13o_dung(k, i, so, G, sua):
+        """ĐÚNG LUẬT X5 mục 4: dòng cũ HẾT HIỆU LỰC, thay bởi mã CÓ THẬT
+        (D-DA1-001 nằm sẵn trong kho lành) - không được kêu."""
+        _ghi(so / "DUKIEN.md",
+             (so / "DUKIEN.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | D-DA1-004 | Gia truoc | 100000 (thay bởi D-DA1-001) |"
+               " 2026-06-01 | noi bo | bao gia | B | HẾT HIỆU LỰC |"
+               " 2098-01-01 | " + G + " |" + NL)
+
+    thu("DUKIEN dòng cũ hết hiệu lực thay bởi mã có thật (không được kêu)",
+        _ca_13o_dung, False)
+
     def _ca_9e_thoat(k, i, so, G, sua):
         """Dòng TAILIEU trỏ '..' ra ngoài kho: mọi phép toàn vẹn sẽ đọc file
         KHÔNG thuộc công ty - chặn tại cửa (P0 vòng 96)."""
@@ -1898,9 +1932,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 91 if _os_dem.name == "nt" else 90   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 37, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 37,"
+    _i3_mong = 93 if _os_dem.name == "nt" else 92   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 38, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 38,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -2131,7 +2165,11 @@ def main(goc):
         print("  BỎ QUA  1e: đây là KHO CÔNG TY (bộ X đã mang mã), không phải bộ mẫu")
         cho_phep = None
     else:
-        cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {".gitignore", "_so/_quan_sat_bo.txt"}
+        cho_phep = set(FILE_BAT_BUOC + FILE_KEM) | {
+            ".gitignore", "_so/_quan_sat_bo.txt",
+            # CI self-test của chính bộ (P1 định vị lại, vòng 97): theo bộ
+            # vào 00_Index của công ty cũng vô hại - 0j đã miễn .github
+            ".github/workflows/kiem.yml"}
     thua = []
     import kiem_van_hanh as _kvj
     for f in (goc.rglob("*") if cho_phep is not None else []):
@@ -3507,12 +3545,13 @@ def main(goc):
         ("ô Ghi lần là danh sách chỉ-thêm, cấm ghi đè mã lượt trước", "CHỈ-THÊM" in docs["X5_HESO_TEMPLATE.md"]),
         ("người vận hành là tham số có thật để bàn giao đổi", "@VANHANH.NGUOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "đổi @VANHANH.NGUOI ở C6" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("có chỗ khai nơi phát hành bộ để biết bản mới sau khi gỡ .git", "@NHIP.BANMOI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.BANMOI" in docs["X5_HESO_TEMPLATE.md"]),
-        ("kho đang chạy không phải bản làm việc git, cài xong gỡ .git kể cả ở thư mục cha", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "THƯ MỤC CHA" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
+        ("kho chạy không nằm trong bản git; .git thư mục CHA thì KHÔNG xóa mà chuyển kho ra", "XÓA `00_Index\\.git`" in docs["X9_CAIDAT.md"] and "CẤM `git pull`" in docs["X9_CAIDAT.md"] and "KHÔNG xóa" in docs["X9_CAIDAT.md"] and "git stash" in docs["README.md"]),
+        ("X9 dặn đồng bộ tài liệu Project của phiên CHAT sau cài và khi rev tăng", "bản ĐÃ ĐIỀN" in docs["X9_CAIDAT.md"] and "CHAT chạy luật STALE" in docs["X9_CAIDAT.md"]),
     ]
     thieu_luat = [t for t, dk in _luat if not dk]
     kiem(f"12. luật nghiệp vụ then chốt có mặt ({len(_luat)} luật)",
-         not thieu_luat and len(_luat) == 74,
-         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 74: bớt"
+         not thieu_luat and len(_luat) == 75,
+         str(thieu_luat) + (f" · đếm được {len(_luat)} luật mà bộ khai 75: bớt"
                             f" luật là bớt lưới không ai hay; đổi số thì sửa"
                             f" con số này trong CÙNG lượt vá"
                             if len(_luat) != 74 else ""))

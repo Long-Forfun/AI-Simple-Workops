@@ -9,6 +9,22 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 88: ba P1 cuối của định vị lại - CI, CHAT stale, thay-bởi DUKIEN
+
+1. CI self-test: .github/workflows/kiem.yml chạy trọn kiem_tra_bo mỗi push
+   (Windows chính thức, Linux thăm dò); 0j và 1e miễn đúng file này.
+2. CHAT STALE sau cài: X9 dặn thay bản TEMPLATE trong tài liệu Project
+   bằng bản ĐÃ ĐIỀN ngay sau cài và mỗi lần rev X0 tăng; luật-grep ghim
+   (75 luật).
+3. Phép 13o: DUKIEN "thay bởi" thành máy - mã trỏ tới phải TỒN TẠI, dòng
+   khai phải HẾT HIỆU LỰC (còn hiệu lực mà khai là hai bản cùng sống). Ba
+   ca: mã ma, còn-sống, và ca lành đúng khuôn X5 mục 4.
+
+Tinh thần chốt theo người dùng: phần PHẦN MỀM của bộ là để NẮM TÍNH NĂNG
+HIỆN THỜI - thẻ kiểm kê, ai phụ trách, quyết định - không gì hơn.
+
+BẤT BIẾN I1 7, I2 38, I3 93(nt)/92; 75 luật; fixture 111 ca.
+
 ## Vòng 87: ĐỊNH VỊ LẠI - hệ quản lý hiện trạng, KHÔNG thực thi vận hành
 
 Người dùng chốt lại phạm vi sản phẩm: WORKOPS là hệ QUẢN LÝ HIỆN TRẠNG VÀ

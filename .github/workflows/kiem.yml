@@ -1,0 +1,23 @@
+# Self-test của bộ WORKOPS: chạy trọn kiem_tra_bo trên mỗi push.
+# Windows là nền chính (bộ tối ưu cho kho Windows/NTFS); Linux chạy thăm dò
+# (continue-on-error) vì vài ca nền-đặc-thù chưa được cam kết trên POSIX.
+name: kiem
+on: [push, pull_request]
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python kiem_tra_bo.py .
+  linux-tham-do:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python kiem_tra_bo.py .
