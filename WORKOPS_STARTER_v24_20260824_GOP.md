@@ -10,8 +10,8 @@ FILE: README.md
 # WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
 
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
-Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM cũng dùng được (xem
-mục "Công ty có phần mềm" bên dưới). Bên trong: luật thường
+Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM: xem
+mục "Công ty có phần mềm" bên dưới. Bên trong: luật thường
 trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
 là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
 thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
@@ -113,9 +113,9 @@ X0 tới X5, AI tự tìm tới đúng mục đúng lúc.
 
 ## Công ty có phần mềm
 
-Bộ xử được trọn vòng vận hành phần mềm, với điều kiện KHAI RÕ PHẠM VI TỔ
-CHỨC của từng phần mềm ngay từ đầu - AI hỏi ở phiên cài đặt (X9 mục 1 câu
-3), giá trị nằm ở X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
+Bộ QUẢN LÝ HIỆN TRẠNG phần mềm - với điều kiện KHAI RÕ PHẠM VI TỔ
+CHỨC ngay từ đầu: AI hỏi ở phiên cài đặt (X9 mục 1 câu 3), giá trị nằm ở
+X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
 
 ```
 HẠ TẦNG   repo · thành phần chính · môi trường (dev, staging, prod)
@@ -125,15 +125,16 @@ DỮ LIỆU   CSDL/kho dữ liệu chạy thật (tên đích danh)
 CON NGƯỜI người phụ trách vận hành - ai GẬT các lượt rủi ro
 ```
 
-Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch nêu đích danh trường thiếu,
-báo cả khi làm phần mềm mà chưa khai dòng nào. Khai đủ thì
-các vận hành liên quan mới chính xác: repo là nguồn sự thật của code
-(không chép vào kho), secret không vào kho, sổ; thao tác chạm CHẠY THẬT (host,
-nhánh tự deploy, CSDL đã khai) là việc rủi ro cần đúng NGƯỜI PHỤ TRÁCH
-duyệt - việc trên dev, staging là việc nhẹ AI tự làm; người phụ trách
-nghỉ thì bàn giao có máy nhắc. Chi tiết mức duyệt: X5 mục 1b; phát hành
-bản build: X2; dump, log mang dữ liệu khách có phạm vi riêng. Mục nào
-chưa rõ cứ trả lời "chưa rõ, hỏi đội kỹ thuật".
+Ba tầng: (1) WORKOPS Core - việc, dữ kiện, tài liệu, quyết
+định, nhật ký; (2) Software Inventory - thẻ mô tả phần mềm,
+chỉ đọc/cập nhật hồ sơ; (3) Software Operations - NGOÀI PHẠM VI: bộ không
+deploy, migration, rollback, sửa CSDL, xoay secret hay đổi quyền hộ - AI
+chỉ soạn checklist hay mở việc chuyển đội kỹ thuật. Rà 7d CƯỠNG CHẾ khai
+(nêu đích danh trường thiếu). Khai đủ thì
+các vận hành liên quan mới chính xác: repo là nguồn sự thật của code,
+secret không vào kho hay sổ; lượt GHI NHẬN chạm CHẠY THẬT phải mức C,
+đúng NGƯỜI PHỤ TRÁCH duyệt, nghỉ thì bàn giao có máy nhắc. Chi tiết: X5
+mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật".
 
 ## Trong repo có gì
 
@@ -188,7 +189,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 86 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 87 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -257,6 +258,45 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 87: ĐỊNH VỊ LẠI - hệ quản lý hiện trạng, KHÔNG thực thi vận hành
+
+Người dùng chốt lại phạm vi sản phẩm: WORKOPS là hệ QUẢN LÝ HIỆN TRẠNG VÀ
+PHẠM VI phần mềm - kiểm kê, mô tả, phân công trách nhiệm, quản lý quyết
+định - KHÔNG phải công cụ thực thi vận hành phần mềm. Ba tầng: (1) WORKOPS
+Core (việc, dữ kiện, tài liệu, quyết định, nhật ký); (2) Software Inventory
+(thẻ mô tả phần mềm, chỉ đọc/cập nhật hồ sơ); (3) Software Operations -
+NGOÀI PHẠM VI, tuyên bố rõ, không hỗ trợ thực thi.
+
+1. X5 mục 1b: BỎ BẢNG MỨC REPO - bảng đó cho AI deploy/migration staging ở
+   mức A, tức trao quyền thực thi mà sản phẩm không nhận. Thay bằng nguyên
+   tắc NGOÀI PHẠM VI THỰC THI: AI chỉ soạn checklist hay mở việc chuyển đội
+   kỹ thuật. 7g giữ nguyên vai nhưng đổi nghĩa: nó canh lượt GHI NHẬN thao
+   tác mà NGƯỜI đã làm - chạm chạy thật vẫn phải mức C kèm plan. Luật-grep
+   phép 12 chuyển sang ghim nguyên tắc mới.
+
+2. README: mục "Công ty có phần mềm" mở đầu bằng định vị ba tầng; câu cũ
+   "bộ xử được trọn vòng vận hành phần mềm" - nay SAI định vị - thành "bộ
+   QUẢN LÝ HIỆN TRẠNG phần mềm".
+
+3. P0 - THÔI XÚI XÓA .git THƯ MỤC CHA: X9 mục 1 và thông điệp 0g từng bảo
+   xóa cả .git ở thư mục cha - repo cha có thể là DỰ ÁN KHÁC của công ty,
+   xóa là mất lịch sử của họ. Nay: .git ở CHÍNH kho (vỏ clone của bộ) thì
+   xóa; ở thư mục CHA thì TUYỆT ĐỐI KHÔNG - chuyển kho ra ngoài vùng git.
+   0g phân nhánh thông điệp theo vị trí .git.
+
+4. P0 - PHÉP 9e: đường dẫn sổ THOÁT KHO ('..' đầu hay GIỮA chuỗi, ổ đĩa,
+   đường tuyệt đối) bị chặn tại cửa quan sát - trước đây "Kho ..\..\x.md"
+   làm 9/10a/10b/10d đọc và tính sha trên file NGOÀI phạm vi công ty. Hai
+   ca I3 (đầu chuỗi + giấu giữa chuỗi - mutant hẹp-hóa sống lượt đầu vì
+   thiếu ca giữa, đúng bài mỗi-nhánh-một-ca); loại dòng khỏi quan sát ngay.
+
+Đo mutant: 9e 2/2 CHẾT. Route 1b đo lại (421 -> 475); mọi trần giữ. Việc
+còn theo định vị mới (P1): đồng bộ trạng thái DUKIEN/TAILIEU "thay bởi" ·
+luồng CHAT stale sau cài · self-test CI · đã ghi giới hạn vào luật.
+
+BẤT BIẾN I1 7, I2 37, I3 91(nt)/90. NHẬT KÝ RUBRIC: 95-96-91-93-91-95-96-
+96-97 (chiến dịch 99/100 đã đóng theo lệnh người dùng ở 97).
 
 ## Vòng 86: rubric vòng chấm 09 - 97/100 (ĐỈNH MỚI), vá ba khoản
 
@@ -1871,8 +1911,8 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~421) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6078 + khối (không phần mềm trừ thêm mục 1b ~421) | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~475) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6132 + khối (không phần mềm trừ thêm mục 1b ~475) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
 | CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
@@ -1916,7 +1956,7 @@ không phải phiên ghi sổ:
 CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17177 token
 CHAT không EMAIL ~18872 token
 CHAT có EMAIL (kèm X3E) ~22870 token
-CHAT nạp cả X9 và X4 ~23232 token
+CHAT nạp cả X9 và X4 ~23373 token
 (các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4409 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
@@ -3144,13 +3184,16 @@ kiểm được sau việc. A làm và ghi
 
 # 1b. Phần mềm và repo (CHỈ đọc khi dự án thuộc X0 C2 @DUAN.PHANMEM)
 
-BẢNG MỨC REPO: sửa code trên nhánh trong việc đã
-mở, deploy hay migration trên dev, staging, xóa nhánh ĐÃ merge là A · deploy
-hay migration môi trường CHẠY THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy
-thật, ROLLBACK chạy thật, force-push hay xóa lịch sử, xóa nhánh CHƯA merge
-(mất code) là C; lệnh trực tiếp "rollback đi" giữa sự cố là gật plan, plan
-ghi trong cùng lượt · danh mục "cấu trúc folder hàng loạt" và "dọn nháp"
-của kho KHÔNG áp cho bên trong repo, mức lấy theo bảng này.
+ĐỊNH VỊ: thông tin phần mềm trong WORKOPS chỉ phục vụ KIỂM KÊ, mô tả
+hiện trạng, phân công trách nhiệm và quản lý quyết định. MỌI thao tác kỹ
+thuật trên repo, môi trường, CSDL, secret và hạ tầng nằm NGOÀI PHẠM VI
+THỰC THI của bộ: AI không tự deploy, migration, ROLLBACK, merge, sửa dữ
+liệu, xoay secret hay đổi quyền ở BẤT KỲ môi trường nào (kể cả dev,
+staging) - chỉ được SOẠN CHECKLIST hoặc MỞ VIỆC chuyển đội kỹ thuật.
+GHI NHẬN vào sổ thao tác mà NGƯỜI/đội kỹ thuật đã làm: lượt chạm CHẠY
+THẬT (deploy, migration, rollback, merge vào nhánh tự deploy, sửa CSDL đã
+khai) ghi mức C kèm plan - rà 7g giữ; việc trên dev, staging ghi như việc
+thường.
 
 SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
 bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
@@ -3447,9 +3490,10 @@ và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
 Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là file
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
-rà 0g là lưới cuối nếu sót), VÀ cả `.git` ở THƯ MỤC CHA nếu lỡ
-clone vào chính `<gốc>` - kho chạy không được nằm trong bất kỳ bản làm việc git
-nào, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c). Quét X0 một lượt, đưa MỌI
+rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì TUYỆT ĐỐI KHÔNG xóa -
+repo cha có thể là dự án khác của công ty, xóa là mất lịch sử của họ:
+CHUYỂN kho ra một thư mục ngoài vùng git rồi chạy tiếp - kho chạy không
+được nằm trong bản làm việc git nào, `_so\` là sổ SỐNG (mục 3c). Quét X0 một lượt, đưa MỌI
 mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi
 (tham số của profile CHƯA bật thì KHÔNG vào C12; bật profile sau, mức B, thì
 cùng lượt đó thêm chúng vào C12): C12

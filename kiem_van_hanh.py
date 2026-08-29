@@ -224,7 +224,7 @@ PHEP_VH = ["0.", "0b.", "0c.", "0d.", "0e.", "0f.", "0g.", "0h.", "0i.",
            "0i2.", "0k2.", "3g.", "7c.", "7d.", "7d2.", "7e.", "7e2.", "7f.",
            "1d.", "7b2.", "7e3.", "7e4.", "7g.", "8.", "8b.", "8d.", "8c.",
            "8e.", "11b.", "0m.", "0n.", "13m.", "13n.", "7h.", "5b.", "0p.",
-           "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.", "0r.",
+           "0i3.", "2b.", "10d.", "5d.", "5e.", "3h.", "0q.", "9d.", "9e.", "0r.",
            "9.", "10a.", "10b.",
            "10c.", "11."]
 BIET_MAT_SO = re.compile(
@@ -1265,9 +1265,17 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
                     if khoa_ho_cua(h[5][4:].strip("` ").replace("\\", "/").strip("/")) == khoa_ho]
 
     mat, sua_bat_bien, lech_sha, khong_kiem = [], [], [], []
-    _lech_hoa = []
+    _lech_hoa, _thoat_kho = [], []
     for h in dong_kho:
         rel = h[5][4:].strip("` ").replace("\\", "/").strip("/")
+        # 9e. Đường dẫn THOÁT KHO: `..`, ổ đĩa hay đầu `/` làm 9/10a/10b/10d
+        #     đọc và tính sha trên file NGOÀI phạm vi công ty - mọi thao tác
+        #     đề xuất từ đó đều chạm chỗ không thuộc kho (P0, định vị lại
+        #     vòng 96). Loại dòng khỏi quan sát ngay tại cửa.
+        if re.search(r"(^|/)\.\.(/|$)", rel) or re.match(r"^[A-Za-z]:", rel) \
+                or h[5][4:].strip().startswith(("/", "\\")):
+            _thoat_kho.append((h[1].strip(), rel[:40]))
+            continue
         # gốc DÀI: vòng 67 thêm goc_dai cho quet_ho và quet_secret mà quên đây,
         # nên cùng một lượt chạy tầng quan sát THẤY file còn phép 9 tuyên nó
         # ĐÃ MẤT - hai lời khai ngược nhau trong một báo cáo (vòng 22)
@@ -1345,6 +1353,11 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         f"{_liet(_thieu_sha[:5])}: thiếu sha thì 10a và 10b BỎ QUA trọn dòng,"
         f" tức bản đã ký hay đã nộp không còn lưới toàn vẹn nào (X4 dòng 5)."
         f" Chạy lại lượt ghi để đóng sha, mức A")
+    bao("9e. đường dẫn sổ không thoát kho" + pv, not _thoat_kho,
+        f"{_liet([f'{m}: {r}' for m, r in _thoat_kho[:3]])}: dòng trỏ RA"
+        f" NGOÀI kho ('..', ổ đĩa hay đường tuyệt đối) - máy sẽ đọc và tính"
+        f" sha trên file không thuộc công ty. Đưa file VÀO kho rồi khai"
+        f" đường dẫn tương đối, mức C")
     bao("9d. tên khai đúng hoa thường với đĩa" + pv, not _lech_hoa,
         f"{_liet(_lech_hoa[:3])}: NTFS cho qua nhưng đồng bộ Linux, git hay"
         f" rsync coi là MẤT FILE. Sửa sổ theo tên thật trên đĩa, mức A")
@@ -2101,13 +2114,16 @@ def main(goc):
               f" chưa có sổ; bước cài đặt của X9 mục 1 sẽ xóa nó. Sau khi cài mà"
               f" còn thì thành LỆCH: git pull hay git stash sẽ nuốt dòng sổ")
     elif vung_git is not None:
+        _git_cha = Path(vung_git).resolve() != Path(goc).resolve()
         bao("0g. kho chạy không nằm trong bản git", False,
-            f"thấy thư mục ẩn .git ở {vung_git} (thư mục này hay THƯ MỤC CHA"
-            f" của kho): sổ công ty đang nằm trong vùng git quản. Nói với AI"
-            f" \"xóa .git giúp tôi\" - sổ trên đĩa không suy suyển gì; tự làm"
-            f" thì bật Hidden items trong File Explorer rồi xóa. TUYỆT ĐỐI"
-            f" đừng gõ git pull hay git stash ở đây; lỡ gõ mà sổ trống thì git"
-            f" stash pop lấy lại ngay. Nâng cấp bộ theo X9 mục 3c")
+            f"thấy .git ở {vung_git}: sổ công ty đang trong vùng git quản. "
+            + ("Đây là THƯ MỤC CHA - có thể là repo của dự án khác, ĐỪNG xóa"
+               " .git của nó: CHUYỂN kho ra thư mục ngoài vùng git"
+               if _git_cha else
+               "Xóa .git này đi (nó là vỏ clone của bộ) - sổ trên đĩa không"
+               " suy suyển gì")
+            + f". TUYỆT ĐỐI đừng gõ git pull hay git stash ở đây; lỡ gõ mà sổ"
+            f" trống thì git stash pop lấy lại ngay. Xem X9 mục 3c")
 
     # 13n. QUYETDINH tự khai "Không xóa dòng, không sửa NỘI DUNG quyết định"
     #      mà chưa máy nào giữ - sửa ô "Chọn gì" tại chỗ hay xóa trọn dòng

@@ -9,6 +9,45 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 87: ĐỊNH VỊ LẠI - hệ quản lý hiện trạng, KHÔNG thực thi vận hành
+
+Người dùng chốt lại phạm vi sản phẩm: WORKOPS là hệ QUẢN LÝ HIỆN TRẠNG VÀ
+PHẠM VI phần mềm - kiểm kê, mô tả, phân công trách nhiệm, quản lý quyết
+định - KHÔNG phải công cụ thực thi vận hành phần mềm. Ba tầng: (1) WORKOPS
+Core (việc, dữ kiện, tài liệu, quyết định, nhật ký); (2) Software Inventory
+(thẻ mô tả phần mềm, chỉ đọc/cập nhật hồ sơ); (3) Software Operations -
+NGOÀI PHẠM VI, tuyên bố rõ, không hỗ trợ thực thi.
+
+1. X5 mục 1b: BỎ BẢNG MỨC REPO - bảng đó cho AI deploy/migration staging ở
+   mức A, tức trao quyền thực thi mà sản phẩm không nhận. Thay bằng nguyên
+   tắc NGOÀI PHẠM VI THỰC THI: AI chỉ soạn checklist hay mở việc chuyển đội
+   kỹ thuật. 7g giữ nguyên vai nhưng đổi nghĩa: nó canh lượt GHI NHẬN thao
+   tác mà NGƯỜI đã làm - chạm chạy thật vẫn phải mức C kèm plan. Luật-grep
+   phép 12 chuyển sang ghim nguyên tắc mới.
+
+2. README: mục "Công ty có phần mềm" mở đầu bằng định vị ba tầng; câu cũ
+   "bộ xử được trọn vòng vận hành phần mềm" - nay SAI định vị - thành "bộ
+   QUẢN LÝ HIỆN TRẠNG phần mềm".
+
+3. P0 - THÔI XÚI XÓA .git THƯ MỤC CHA: X9 mục 1 và thông điệp 0g từng bảo
+   xóa cả .git ở thư mục cha - repo cha có thể là DỰ ÁN KHÁC của công ty,
+   xóa là mất lịch sử của họ. Nay: .git ở CHÍNH kho (vỏ clone của bộ) thì
+   xóa; ở thư mục CHA thì TUYỆT ĐỐI KHÔNG - chuyển kho ra ngoài vùng git.
+   0g phân nhánh thông điệp theo vị trí .git.
+
+4. P0 - PHÉP 9e: đường dẫn sổ THOÁT KHO ('..' đầu hay GIỮA chuỗi, ổ đĩa,
+   đường tuyệt đối) bị chặn tại cửa quan sát - trước đây "Kho ..\..\x.md"
+   làm 9/10a/10b/10d đọc và tính sha trên file NGOÀI phạm vi công ty. Hai
+   ca I3 (đầu chuỗi + giấu giữa chuỗi - mutant hẹp-hóa sống lượt đầu vì
+   thiếu ca giữa, đúng bài mỗi-nhánh-một-ca); loại dòng khỏi quan sát ngay.
+
+Đo mutant: 9e 2/2 CHẾT. Route 1b đo lại (421 -> 475); mọi trần giữ. Việc
+còn theo định vị mới (P1): đồng bộ trạng thái DUKIEN/TAILIEU "thay bởi" ·
+luồng CHAT stale sau cài · self-test CI · đã ghi giới hạn vào luật.
+
+BẤT BIẾN I1 7, I2 37, I3 91(nt)/90. NHẬT KÝ RUBRIC: 95-96-91-93-91-95-96-
+96-97 (chiến dịch 99/100 đã đóng theo lệnh người dùng ở 97).
+
 ## Vòng 86: rubric vòng chấm 09 - 97/100 (ĐỈNH MỚI), vá ba khoản
 
 Giám khảo chấm bản vòng 55 (d819048): 97/100 - đỉnh mới, +1 so đỉnh 96

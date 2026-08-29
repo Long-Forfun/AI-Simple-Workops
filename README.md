@@ -1,8 +1,8 @@
 # WORKOPS · bộ khởi tạo hệ vận hành công ty bằng AI · v24
 
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
-Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM cũng dùng được (xem
-mục "Công ty có phần mềm" bên dưới). Bên trong: luật thường
+Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM: xem
+mục "Công ty có phần mềm" bên dưới. Bên trong: luật thường
 trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
 là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
 thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
@@ -104,9 +104,9 @@ X0 tới X5, AI tự tìm tới đúng mục đúng lúc.
 
 ## Công ty có phần mềm
 
-Bộ xử được trọn vòng vận hành phần mềm, với điều kiện KHAI RÕ PHẠM VI TỔ
-CHỨC của từng phần mềm ngay từ đầu - AI hỏi ở phiên cài đặt (X9 mục 1 câu
-3), giá trị nằm ở X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
+Bộ QUẢN LÝ HIỆN TRẠNG phần mềm - với điều kiện KHAI RÕ PHẠM VI TỔ
+CHỨC ngay từ đầu: AI hỏi ở phiên cài đặt (X9 mục 1 câu 3), giá trị nằm ở
+X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
 
 ```
 HẠ TẦNG   repo · thành phần chính · môi trường (dev, staging, prod)
@@ -116,15 +116,16 @@ DỮ LIỆU   CSDL/kho dữ liệu chạy thật (tên đích danh)
 CON NGƯỜI người phụ trách vận hành - ai GẬT các lượt rủi ro
 ```
 
-Máy CƯỠNG CHẾ việc khai này: rà 7d báo lệch nêu đích danh trường thiếu,
-báo cả khi làm phần mềm mà chưa khai dòng nào. Khai đủ thì
-các vận hành liên quan mới chính xác: repo là nguồn sự thật của code
-(không chép vào kho), secret không vào kho, sổ; thao tác chạm CHẠY THẬT (host,
-nhánh tự deploy, CSDL đã khai) là việc rủi ro cần đúng NGƯỜI PHỤ TRÁCH
-duyệt - việc trên dev, staging là việc nhẹ AI tự làm; người phụ trách
-nghỉ thì bàn giao có máy nhắc. Chi tiết mức duyệt: X5 mục 1b; phát hành
-bản build: X2; dump, log mang dữ liệu khách có phạm vi riêng. Mục nào
-chưa rõ cứ trả lời "chưa rõ, hỏi đội kỹ thuật".
+Ba tầng: (1) WORKOPS Core - việc, dữ kiện, tài liệu, quyết
+định, nhật ký; (2) Software Inventory - thẻ mô tả phần mềm,
+chỉ đọc/cập nhật hồ sơ; (3) Software Operations - NGOÀI PHẠM VI: bộ không
+deploy, migration, rollback, sửa CSDL, xoay secret hay đổi quyền hộ - AI
+chỉ soạn checklist hay mở việc chuyển đội kỹ thuật. Rà 7d CƯỠNG CHẾ khai
+(nêu đích danh trường thiếu). Khai đủ thì
+các vận hành liên quan mới chính xác: repo là nguồn sự thật của code,
+secret không vào kho hay sổ; lượt GHI NHẬN chạm CHẠY THẬT phải mức C,
+đúng NGƯỜI PHỤ TRÁCH duyệt, nghỉ thì bàn giao có máy nhắc. Chi tiết: X5
+mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật".
 
 ## Trong repo có gì
 

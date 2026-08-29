@@ -53,9 +53,10 @@ và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
 Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là file
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
-rà 0g là lưới cuối nếu sót), VÀ cả `.git` ở THƯ MỤC CHA nếu lỡ
-clone vào chính `<gốc>` - kho chạy không được nằm trong bất kỳ bản làm việc git
-nào, `_so\` là sổ SỐNG (lý do, cách nâng cấp: mục 3c). Quét X0 một lượt, đưa MỌI
+rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì TUYỆT ĐỐI KHÔNG xóa -
+repo cha có thể là dự án khác của công ty, xóa là mất lịch sử của họ:
+CHUYỂN kho ra một thư mục ngoài vùng git rồi chạy tiếp - kho chạy không
+được nằm trong bản làm việc git nào, `_so\` là sổ SỐNG (mục 3c). Quét X0 một lượt, đưa MỌI
 mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi
 (tham số của profile CHƯA bật thì KHÔNG vào C12; bật profile sau, mức B, thì
 cùng lượt đó thêm chúng vào C12): C12

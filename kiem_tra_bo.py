@@ -1486,6 +1486,28 @@ def phep_fuzz(goc, phu_them=()):
     thu3("triển khai lên máy chủ nội bộ không dấu chấm mà mức B", _ca_7g_vps,
          "7g.")
 
+    def _ca_9e_thoat(k, i, so, G, sua):
+        """Dòng TAILIEU trỏ '..' ra ngoài kho: mọi phép toàn vẹn sẽ đọc file
+        KHÔNG thuộc công ty - chặn tại cửa (P0 vòng 96)."""
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-094 | Ho so ngoai | v01 | 2026-08-20 |"
+               " Kho ..\\..\\ngoai_kho\\bi_mat.md | HIỆN HÀNH | NHÁP |"
+               " 2026-08-20 | qs | noi bo | | | | " + G + " |" + NL)
+
+    thu3("dòng sổ trỏ '..' ra ngoài kho", _ca_9e_thoat, "9e.")
+
+    def _ca_9e_giua(k, i, so, G, sua):
+        """'..' nằm GIỮA đường dẫn ('03_Phap_ly/../../ngoai') cũng thoát kho
+        y hệt - mutant chỉ-bắt-đầu-chuỗi sống nếu không có ca này."""
+        _ghi(so / "TAILIEU.md",
+             (so / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| DA1 | T-095 | Ho so lach | v01 | 2026-08-20 |"
+               " Kho 03_Phap_ly\\..\\..\\ngoai.md | HIỆN HÀNH | NHÁP |"
+               " 2026-08-20 | qs | noi bo | | | | " + G + " |" + NL)
+
+    thu3("dòng sổ giấu '..' giữa đường dẫn", _ca_9e_giua, "9e.")
+
     def _ca_7b_ngung(k, i, so, G, sua):
         """Dự án NGỪNG (thanh lý hẳn, không bảo hành) mà VIEC còn dòng ĐANG
         LÀM: vế thứ ba của 7b - chưa ca nào giữ (rubric 09, m10)."""
@@ -1876,7 +1898,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 89 if _os_dem.name == "nt" else 88   # ca 9d chỉ có trên NTFS
+    _i3_mong = 91 if _os_dem.name == "nt" else 90   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 37, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 37,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
@@ -3444,12 +3466,12 @@ def main(goc):
         ("schema @NHIP.TRANGTHAI bắt buộc, FAILED hay thiếu coi là dữ liệu cũ", "last_success_utc" in docs["X0_CAUHINH_TEMPLATE.md"] and "DỮ LIỆU CŨ" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("khóa digest đã gửi lưu bền ở @NHIP.DAUGUI, ghi sau xác nhận", "@NHIP.DAUGUI" in docs["X0_CAUHINH_TEMPLATE.md"] and "@NHIP.DAUGUI" in (docs["X3_CUAVAO_TEMPLATE.md"] + docs["X3E_EMAIL_TEMPLATE.md"])),
         ("mail máy có lối thoát nghiệp vụ, không nuốt hóa đơn bản ký", "THOÁT luật gom" in docs["X3E_EMAIL_TEMPLATE.md"]),
-        ("bảng mức thao tác repo tồn tại, rollback chạy thật là C", "ROLLBACK" in docs["X5_HESO_TEMPLATE.md"] and "REPO" in docs["X5_HESO_TEMPLATE.md"]),
+        ("thao tác kỹ thuật NGOÀI phạm vi thực thi; ghi nhận rollback chạy thật là C", "NGOÀI PHẠM VI" in docs["X5_HESO_TEMPLATE.md"] and "ROLLBACK" in docs["X5_HESO_TEMPLATE.md"] and "SOẠN CHECKLIST" in docs["X5_HESO_TEMPLATE.md"]),
         # PHẠM VI TỔ CHỨC PHẦN MỀM: sáu luật giữ TRỌN chuỗi từ README tới X2.
         # Đây là yêu cầu nghiệp vụ có thật của người dùng ("công ty có dự án
         # phần mềm cần nắm rõ phạm vi tổ chức để các vận hành liên quan
         # chính xác hơn"), nên nó phải do MÁY giữ chứ không do lời khai.
-        ("README có mục riêng cho công ty phần mềm, kèm LÝ DO phải khai", "## Công ty có phần mềm" in docs["README.md"] and "KHAI RÕ PHẠM VI TỔ" in docs["README.md"] and "vận hành liên quan mới chính xác" in docs["README.md"]),
+        ("README có mục riêng cho công ty phần mềm, kèm LÝ DO phải khai", "## Công ty có phần mềm" in docs["README.md"] and "KHAI RÕ PHẠM VI TỔ" in docs["README.md"] and "vận hành liên quan mới chính xác" in docs["README.md"] and "NGOÀI PHẠM VI" in docs["README.md"]),
         ("X9 hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm", "là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức" in docs["X9_CAIDAT.md"] and "người phụ trách vận hành" in docs["X9_CAIDAT.md"]),
         ("X0 C2 khai đủ NĂM trường phạm vi tổ chức phần mềm", all(t in docs["X0_CAUHINH_TEMPLATE.md"] for t in ["@DUAN.PHANMEM", "repo <URL hay đường dẫn>", "thành phần chính", "môi trường", "nơi chạy thật", "nơi giữ secret"])),
         ("repo là nguồn sự thật của code, code KHÔNG chép vào kho", "Repo là NGUỒN SỰ THẬT" in docs["X0_CAUHINH_TEMPLATE.md"] and "code KHÔNG chép vào kho" in docs["X0_CAUHINH_TEMPLATE.md"]),

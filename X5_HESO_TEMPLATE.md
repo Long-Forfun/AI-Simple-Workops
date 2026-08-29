@@ -97,13 +97,16 @@ kiểm được sau việc. A làm và ghi
 
 # 1b. Phần mềm và repo (CHỈ đọc khi dự án thuộc X0 C2 @DUAN.PHANMEM)
 
-BẢNG MỨC REPO: sửa code trên nhánh trong việc đã
-mở, deploy hay migration trên dev, staging, xóa nhánh ĐÃ merge là A · deploy
-hay migration môi trường CHẠY THẬT, MERGE vào nhánh mà CI/CD tự deploy chạy
-thật, ROLLBACK chạy thật, force-push hay xóa lịch sử, xóa nhánh CHƯA merge
-(mất code) là C; lệnh trực tiếp "rollback đi" giữa sự cố là gật plan, plan
-ghi trong cùng lượt · danh mục "cấu trúc folder hàng loạt" và "dọn nháp"
-của kho KHÔNG áp cho bên trong repo, mức lấy theo bảng này.
+ĐỊNH VỊ: thông tin phần mềm trong WORKOPS chỉ phục vụ KIỂM KÊ, mô tả
+hiện trạng, phân công trách nhiệm và quản lý quyết định. MỌI thao tác kỹ
+thuật trên repo, môi trường, CSDL, secret và hạ tầng nằm NGOÀI PHẠM VI
+THỰC THI của bộ: AI không tự deploy, migration, ROLLBACK, merge, sửa dữ
+liệu, xoay secret hay đổi quyền ở BẤT KỲ môi trường nào (kể cả dev,
+staging) - chỉ được SOẠN CHECKLIST hoặc MỞ VIỆC chuyển đội kỹ thuật.
+GHI NHẬN vào sổ thao tác mà NGƯỜI/đội kỹ thuật đã làm: lượt chạm CHẠY
+THẬT (deploy, migration, rollback, merge vào nhánh tự deploy, sửa CSDL đã
+khai) ghi mức C kèm plan - rà 7g giữ; việc trên dev, staging ghi như việc
+thường.
 
 SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
 bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
