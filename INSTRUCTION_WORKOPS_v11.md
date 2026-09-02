@@ -39,7 +39,8 @@ COWORK_CAU_NOI qua cầu nối. In hai dòng, số liệu lấy từ `_so\X0_IND
 
 ```
 WORKOPS · <mã> · <phiên> · chạm được: <kho> · rev <khớp/lệch> · bảng <YYYY-MM-DD>
-<n> quá hạn · <n> chờ đối tác · <n> plan C treo · <n> ĐANG GHI · mail <n> ngày · mốc: <mốc>
+<n> quá hạn · <n> chờ đối tác · <n> chờ bạn chốt (plan C treo)
+· <n> ghi dở (ĐANG GHI) · mail <n> ngày · mốc: <mốc>
 ```
 
 Bàn sạch: dòng hai còn "bàn sạch · mốc: <mốc>". Gõ `điểm danh` mới bung đủ.

@@ -3,9 +3,9 @@
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
 Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM: xem
 mục "Công ty có phần mềm" bên dưới. Bên trong: luật thường
-trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
-là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
-thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
+trực, cấu hình X0 tới X5, năm sổ lõi, hai script kiểm máy. Repo này là BỘ
+MẪU; vận hành hằng ngày ở KHO CÔNG TY của bạn (ổ máy đơn hay thư mục mây
+như Dropbox; ổ đơn nhớ sao lưu ra thiết bị khác).
 
 Việc tay duy nhất phải làm ĐÚNG là dán INSTRUCTION vào Project instructions.
 Mọi thứ khác: copy nguyên trạng hoặc để AI tự dựng. Mọi sổ sách là file văn bản
@@ -31,7 +31,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    Máy Mac: đường dẫn dùng dấu / thay cho \.
    Dùng git clone: sau khi cài xong, AI xóa thư mục 00_Index\.git giúp bạn.
    Kho đang chạy không nối với GitHub nữa, vì thư mục _so (sổ sách của công
-   ty bạn) nằm trong đó.
+   ty bạn) nằm trong đó. 00_Index = ngăn LUẬT + SỔ của bộ; đừng bỏ file
+   công ty vào đây (tài liệu để ở các folder nghiệp vụ 01_, 03_...).
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
@@ -67,12 +68,11 @@ quét mail   xử thư trong phiên, ra bảng chờ duyệt      (khi bật EMA
 rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa;
             xem bảng xong muốn sửa mục nào thì nói, AI trình cách rồi làm
 chốt sổ     kết phiên an toàn, vét các lượt ghi dở
-đồng bộ quan sát   (nâng cao) sau khi quét kho, cho AI tự cập nhật sổ để
-            biết file nào là bản mới nhất, bản nào đã cũ
+đồng bộ quan sát   (nâng cao) cho AI cập nhật sổ theo bản mới nhất trên kho
 ```
 
-Kênh chat (Zalo, Messenger) chưa có lối quét tự động như mail, nhưng
-có lối bán thủ công: dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
+Kênh chat (Zalo, Messenger): lối bán thủ công -
+dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
 như mục đến ở cửa vào (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
@@ -86,17 +86,18 @@ rev lệch    bản luật dán trong Project cũ hơn bộ trong kho. Mở file
 XUNG ĐỘT    hai bản file cùng số hiệu khác nội dung. AI sẽ hỏi, bạn chọn bản đúng
 CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ được,
             chỉ bị chặn khi đưa ra ngoài công ty
+ĐANG GHI    lượt ghi sổ bỏ dở; nói "chốt sổ" là AI vét lại
+plan C treo việc rủi ro đã trình mà bạn chưa gõ "chốt"
+LECH        máy thấy sổ lệch thực tế; dán nguyên dòng đó cho AI xử
 ```
 
 Cập nhật bộ về sau: tải bản mới về MỘT THƯ MỤC KHÁC (clone hay ZIP đều được),
 rồi nói với AI trong phiên Cowork "cập nhật bộ luật, bản mới ở <đường dẫn>".
 AI tự đối chiếu, áp phần luật và nhắc nếu cần dán lại INSTRUCTION. Nói rõ với
 AI: đọc X9 mục 3c trong THƯ MỤC BẢN MỚI, không đọc bản trong kho.
-ĐỪNG chạy `git pull` trong 00_Index, và cả ở thư mục CHA của nó: sổ của bạn nằm
-trong đó, git sẽ dừng và lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ
-khỏi thư mục làm việc. Lỡ chạy `git stash` rồi thấy sổ trống: gõ ngay
-`git stash pop` ở đúng thư mục đó là dòng quay về, rồi nói với AI "rà file" để
-đối chiếu. Đừng gõ thêm lệnh git nào khác trước khi làm việc này.
+ĐỪNG chạy `git pull` hay `git stash` trong 00_Index hay thư mục CHA: sổ
+của bạn nằm đó, stash làm mất dòng sổ. Lỡ stash mà sổ trống: gõ ngay
+`git stash pop` ở đúng thư mục đó rồi nói AI "rà file".
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc

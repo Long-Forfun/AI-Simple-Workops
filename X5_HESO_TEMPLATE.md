@@ -324,7 +324,7 @@ XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 
 KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
 đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
 · _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
-con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
+con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Luu_tru, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
 CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
 giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
 mất dấu "Ghi lần" ở MỘT sổ vì lệnh này vừa xóa dòng sổ đó: ô "Chạm sổ nào" của

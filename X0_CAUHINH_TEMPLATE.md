@@ -129,7 +129,7 @@ Tầng ngoài là CHỨC NĂNG, tầng trong là DỰ ÁN hoặc hồ sơ của 
 ```
 @FOLDER.CHUCNANG   cây mặc định, X9 dựng sẵn, thêm bớt khi công ty đã có cây riêng
   00_Index   01_Phap_ly   02_Ky_thuat   03_Thuong_mai   04_Trao_doi   05_Mau
-  98_Assets  99_Goc       99_Archive
+  98_Tai_nguyen  99_Goc  99_Luu_tru
 
 @FOLDER.KHOI       khối việc sinh KHI CÓ VIỆC ĐẦU TIÊN của khối, không bắt khai trước
   <MÃ KHỐI>  <mô tả>  <folder thật>  <dự án>

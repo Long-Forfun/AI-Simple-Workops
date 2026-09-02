@@ -2578,18 +2578,20 @@ def main(goc):
                    and da_vao_so("01_A/Le_v01.docx", fs, ds)
                    and not da_vao_so("01_A/Khac_v01.docx", fs, ds)
                    and not da_vao_so("01_A/Bundle2/BC_v01.docx", fs, ds)))
-        # 98_Assets và 99_Goc PHẢI được quét (X4 kiểm sha 99_Goc); 99_Archive loại
+        # 98_* và 99_Goc PHẢI được quét (X4 kiểm sha 99_Goc); kho lưu trữ
+        # loại - CẢ tên Việt mới lẫn tên cũ (vòng 99)
         with tempfile.TemporaryDirectory() as td4:
             kho4 = Path(td4)
-            for d in ("98_Assets", "99_Goc", "99_Archive"):
+            for d in ("98_Tai_nguyen", "99_Goc", "99_Luu_tru", "99_Archive"):
                 (kho4 / d).mkdir()
-            (kho4 / "98_Assets" / "Logo_v01.png").write_text("x", encoding="utf-8")
+            (kho4 / "98_Tai_nguyen" / "Logo_v01.png").write_text("x", encoding="utf-8")
             (kho4 / "99_Goc" / "HopDong_SIGNED.pdf").write_text("goc", encoding="utf-8")
-            (kho4 / "99_Archive" / "Cu_v01.docx").write_text("cu", encoding="utf-8")
+            (kho4 / "99_Luu_tru" / "Cu_v01.docx").write_text("cu", encoding="utf-8")
+            (kho4 / "99_Archive" / "Cu2_v01.docx").write_text("cu2", encoding="utf-8")
             _, st4 = quet_ho(kho4, {}, (), None, 10_000_000.0)
             n4, _ = quet_ho(kho4, st4, (), None, 10_000_400.0)
             thay4 = sorted(it for kq in n4.values() for it in kq["hien_hanh"])
-            ca.append(("98_Assets và 99_Goc được quét, 99_Archive bị loại",
+            ca.append(("98_* và 99_Goc được quét; 99_Luu_tru lẫn 99_Archive bị loại",
                        thay4 == ["HopDong_SIGNED.pdf", "Logo_v01.png"]))
         # email: gọi CẢ kiem_email() trên các kịch bản hỏng, không thử lẻ từng hàm
         from kiem_van_hanh import kiem_email
@@ -3532,7 +3534,7 @@ def main(goc):
         ("số ngoại lệ C11 khai đúng bằng số ngoại lệ liệt kê", ("BA ngoại lệ" in docs["X0_CAUHINH_TEMPLATE.md"]) == (len(re.findall(r"\((\d)\) ", docs["X0_CAUHINH_TEMPLATE.md"].split("# C11.")[1].split("# C12.")[0])) == 3)),
         ("README bước 3 nạp CHAT khớp BENCHMARK: không X9, không X4", "ĐỪNG đưa X9" in docs["README.md"] and "X0 tới X5, X9" not in
           (docs["README.md"] + docs["DOC_TRUOC.md"])),
-        ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
+        ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` hay `git stash` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
         ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
         ("CHỐT CHỐNG LÁCH giữ nguyên vế khóa C11 và C12, không bị đảo ngược", "Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa" in docs["X0_CAUHINH_TEMPLATE.md"] and not re.search(r"C11 và C12 (KHÔNG|không) thuộc nhóm khóa", docs["X0_CAUHINH_TEMPLATE.md"])),
         ("X9 mục 4 ĐÁNH DẤU dòng C12, không xóa, khớp C11 ngoại lệ 2", "ĐÁNH DẤU dòng C12" in docs["X9_CAIDAT.md"] and "xóa dòng khỏi C12" not in docs["X9_CAIDAT.md"]),

@@ -1099,7 +1099,9 @@ def quet_ho(kho, truoc=None, bo_them=(), khoa_ho=None, bay_gio=None):
         # quét (X4 kiểm sha 99_Goc); chỉ loại đích danh kho lưu trữ 99_Archive
         if rel.startswith(("_", ".")) or "/_" in rel:
             continue
-        if rel.split("/")[0] == "99_Archive":
+        if rel.split("/")[0] in ("99_Luu_tru", "99_Archive"):
+            # tên Việt là mặc định từ vòng 99; tên cũ vẫn nhận - kho khai
+            # theo bản trước không bị đổi hành vi
             continue
         if ".git" in rel.split("/"):
             continue  # checkout repo trong kho: X0 C2 nói code KHÔNG chép vào
@@ -1367,8 +1369,13 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
            " @KHO.CU>\" (X0 C1) - dạng đó không bị kiểm tồn tại vì kho cũ chỉ"
            " tra lịch sử và có thể offline; ĐỪNG chép file sang kho mới, X5"
            " mục 6 bắt bản cuối chỉ nằm MỘT kho" if mat else ""))
-    bao("10a. mốc chính thức không sửa tại chỗ" + pv, not sua_bat_bien, str(sua_bat_bien))
-    bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha, str(lech_sha[:5]))
+    bao("10a. mốc chính thức không sửa tại chỗ" + pv, not sua_bat_bien,
+        f"{_liet(sua_bat_bien[:4])}: bản đã ký/đã nộp bị ĐỔI RUỘT sau khi"
+        f" chốt. Muốn sửa thì làm BẢN MỚI (v tiếp theo), bản cũ giữ nguyên")
+    bao("10b. sha256 file thường khớp sổ" + pv, not lech_sha,
+        f"{_liet(lech_sha[:4])}: file trên đĩa KHÁC bản lúc vào sổ - ai đó"
+        f" đã sửa ngoài lượt ghi. Nói AI \"rà file\" để đối chiếu và ghi"
+        f" nhận lại")
     if khong_kiem:
         bao("10c. sha kiểm được (file không bị khóa)" + pv, False,
             f"{khong_kiem[:5]}: file đang bị khóa hay không đọc được, CHƯA KIỂM"
@@ -2068,8 +2075,8 @@ def main(goc):
     if rev and rev.group(1) == "0" and dau_vet_ghi:
         bao("0h. rev X0 khớp trạng thái sổ đã ghi", False,
             f"X0 còn rev 0 (CHƯA cài) mà sổ đã mang dấu mã G"
-            f" ({_liet(dau_vet_ghi[:3])}): X0 bị khôi phục nhầm bản cũ hay mất dòng"
-            f" rev. Phục hồi rev đúng, mức C, từ {BAN_CU} TRƯỚC khi ghi tiếp."
+            f" ({_liet(dau_vet_ghi[:3])}): cấu hình bị lùi nhầm bản cũ. Phục"
+            f" hồi rev đúng, mức C, từ {BAN_CU} TRƯỚC khi ghi tiếp."
             f" [AI: cấm cấp mã G mới khi chưa có lại]")
     if chua_cai:
         print("  BỎ QUA  2, 3, 4, 8: " + ("X0 tên chưa chuẩn (xem 0c), chưa đọc được rev"
@@ -2284,10 +2291,9 @@ def main(goc):
                   and not (f.is_file() and _ls_ok.fullmatch(f.name)))
     if _la:
         bao("0j. không file lạ trong 00_Index", False,
-            f"{_liet(_la[:5])}: 00_Index là vùng luật, bị loại khỏi quan sát nên"
-            f" file ở đây KHÔNG BAO GIỜ được đề xuất vào TAILIEU. Tài liệu thì"
-            f" chuyển ra vùng nghiệp vụ rồi nạp sổ; file phụ trợ khai vào"
-            f" _so\\_quan_sat_bo.txt, để NGOÀI 00_Index")
+            f"{_liet(_la[:4])}: 00_Index là ngăn luật + sổ, file để đây KHÔNG"
+            f" BAO GIỜ được đề xuất vào TAILIEU. Tài liệu thì chuyển ra vùng"
+            f" nghiệp vụ rồi nạp sổ; file phụ trợ khai _quan_sat_bo.txt")
     if ((so / "_thu_nhat_ky.ndjson").is_file() or (so / "_thu_da_nap.json").is_file())             and not (so / "THU.md").is_file():
         bao("0e. THU.md tồn tại khi EMAIL có vết", False,
             "nhật ký hay registry còn mà sổ THU vắng: khôi phục mức C")
@@ -2552,7 +2558,10 @@ def main(goc):
             rev_idx = re.search(r"x0_rev:\s*(\d+)", idx)
             bao("2. X0_INDEX đúng rev X0",
                 bool(rev and rev_idx and rev.group(1) == rev_idx.group(1)),
-                f"X0 rev={rev and rev.group(1)} index={rev_idx and rev_idx.group(1)}")
+                f"X0_INDEX là bản tóm tắt CŨ của cấu hình (X0 bản"
+                f" {rev and rev.group(1)}, tóm tắt bản"
+                f" {rev_idx and rev_idx.group(1)}): nói AI \"sinh lại"
+                f" X0_INDEX\", mức A")
         else:
             print("  BỎ QUA  2. chưa có X0_INDEX")
 
@@ -2575,9 +2584,13 @@ def main(goc):
             and (len(h) < so_o_dau or not (h[7].strip() if len(h) > 7 else "x")
                  or any(o.strip().startswith("ĐANG") and
                         o.strip() != "ĐANG GHI" for o in h))]
-        bao("3a. không dòng NHATKY cụt / ĐANG GHI", not treo, str(treo))
+        bao("3a. không dòng NHATKY cụt / ĐANG GHI", not treo,
+            f"{_liet(treo[:4])}: lượt ghi sổ BỎ DỞ giữa chừng (phiên đứt hay"
+            f" quên chốt). Nói AI \"chốt sổ\" để vét lại, chưa mất gì")
         trung = sorted({m for m in ma_g if ma_g.count(m) > 1})
-        bao("3b. không mã G trùng ở cột Mã ghi", not trung, str(trung))
+        bao("3b. không mã G trùng ở cột Mã ghi", not trung,
+            f"{_liet(trung[:4])}: hai lượt ghi trùng số - thường do hai phiên"
+            f" mở cùng lúc. Nói AI \"chốt sổ\" để hòa giải theo X5 mục 3")
         cu = [m for m in ma_g if cua_cua(m) is None]
         if cu:
             print(f"        LƯU Ý: {len(cu)} mã G định dạng cũ (không cửa), không tính"
@@ -2631,9 +2644,11 @@ def main(goc):
             can = {t for t in SO_CO_GHI_LAN if t.split(".")[0] in cham}
             thieu = sorted(t for t in (can or set()) if ma not in ghi_lan_theo_so.get(t, set()))
             if thieu or (not can and ma not in ghi_lan):
-                khong_dau.append(f"{ma}{' thiếu ở ' + str(thieu) if thieu else ''}")
+                khong_dau.append(
+                    f"{ma}{' thiếu ở ' + ', '.join(thieu) if thieu else ''}")
         bao("3c. lượt XONG để dấu mã G ở đúng sổ", not khong_dau,
-            str(khong_dau[:5]))
+            f"{_liet(khong_dau[:4])}: nhật ký khai đã chạm sổ mà sổ không có"
+            f" vết - lượt ghi hụt nửa chừng. Nói AI \"chốt sổ\"")
 
         # 3f. Mọi DÒNG DỮ LIỆU của sổ phải mang ít nhất một mã G ở ô "Ghi lần":
         #     dòng vào sổ ngoài lượt ghi (sửa tay, dán nhầm) trước đây đi im.
@@ -2675,10 +2690,9 @@ def main(goc):
                      | set(re.findall(MAU_G, doc(so / "X0_INDEX.md"))))
         mo_coi = sorted(dau_ngoai - set(ma_g))
         bao("3e. mã G ở sổ có dòng NHATKY", not mo_coi,
-            f"{_liet(mo_coi[:5])}: sổ hay bảng mang mã mà NHATKY không có dòng."
-            f" Kiểm _so\\_lich_su\\ TRƯỚC (quý cũ tách theo X5 mục 7 là hợp"
-            f" lệ); thật sự mất thì dòng NHATKY hay CẢ FILE QUÝ đã bay: khôi"
-            f" phục mức C từ {BAN_CU}. [AI: cấm cấp mã G mới]")
+            f"{_liet(mo_coi[:4])}: sổ mang mã mà NHATKY không có dòng. Quý cũ"
+            f" đã tách vào _lich_su là hợp lệ - kiểm đó TRƯỚC; thật mất thì"
+            f" khôi phục mức C từ {BAN_CU}. [AI: cấm cấp mã G mới]")
 
         # 3g. Ô Mức và Trạng thái là DỮ LIỆU ĐIỀU KHIỂN, không phải văn xuôi: 3d
         #     chỉ nhìn h[3] == "C" và 3c chỉ nhìn "XONG", nên gõ "c" hay "xong"
@@ -2780,7 +2794,9 @@ def main(goc):
         thieu_g = [h[0] for h in hang_pl
                    if any(o == "ĐÃ GHI" for o in h) and not re.search(MAU_G, h[-1] or "")]
         cho_chot = [h[0] for h in hang_pl if any(o == "CHỜ CHỐT" for o in h)]
-        bao("4. plan ĐÃ GHI có mã G ở cột Mã ghi", not thieu_g, str(thieu_g))
+        bao("4. plan ĐÃ GHI có mã G ở cột Mã ghi", not thieu_g,
+            f"{_liet(thieu_g[:4])}: việc rủi ro khai ĐÃ CHỐT mà không thấy"
+            f" lượt ghi tương ứng. Nói AI \"chốt sổ\" để nối lại dấu")
         print(f"        plan CHỜ CHỐT: {cho_chot or 'không'}")
 
     lech = []
@@ -2878,7 +2894,9 @@ def main(goc):
         n = len(dong_bang(doc(p)))
         if n > 500 or p.stat().st_size > 1_000_000:
             vuot.append((p.name, n, p.stat().st_size))
-    bao("6. không sổ nào vượt 500 dòng / 1 MB", not vuot, str(vuot))
+    bao("6. không sổ nào vượt 500 dòng / 1 MB", not vuot,
+        f"{_liet_cap(vuot[:3], '{0} ({1} dòng)')}: sổ quá dày, đọc chậm dần."
+        f" Nói AI \"tách sổ sang lịch sử\" (X5 mục 5), dữ liệu không mất")
 
     trung_ma = []
     # khuôn mã phải phủ dạng có mã khối, ví dụ Q-DA2-001: khuôn cũ Q-\d+ bỏ sót

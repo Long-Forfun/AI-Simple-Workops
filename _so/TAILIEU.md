@@ -4,6 +4,8 @@
 so: TAILIEU
 ```
 
+Đọc từ trái: Tài liệu, Ngày, Ở đâu, Trạng thái là phần CHO NGƯỜI; cột
+Mã, sha256, Ghi lần là dấu vết máy, bỏ qua được.
 Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
 thuộc dự án @DUAN.PHANMEM). Vai phiên bản là quan sát của máy
 (HIỆN HÀNH · CŨ · XUNG ĐỘT · KHÔNG XÁC ĐỊNH), đổi theo bằng chứng quét kho, luật

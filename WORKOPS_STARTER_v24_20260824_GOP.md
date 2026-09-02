@@ -12,9 +12,9 @@ FILE: README.md
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
 Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM: xem
 mục "Công ty có phần mềm" bên dưới. Bên trong: luật thường
-trực, bộ cấu hình X0 tới X5, năm sổ lõi, hai script kiểm bằng máy. Repo này
-là BỘ MẪU; vận hành hằng ngày diễn ra ở KHO CÔNG TY của bạn (ổ máy đơn hoặc
-thư mục mây đồng bộ như Dropbox; kho ổ đơn nhớ sao lưu ra thiết bị khác).
+trực, cấu hình X0 tới X5, năm sổ lõi, hai script kiểm máy. Repo này là BỘ
+MẪU; vận hành hằng ngày ở KHO CÔNG TY của bạn (ổ máy đơn hay thư mục mây
+như Dropbox; ổ đơn nhớ sao lưu ra thiết bị khác).
 
 Việc tay duy nhất phải làm ĐÚNG là dán INSTRUCTION vào Project instructions.
 Mọi thứ khác: copy nguyên trạng hoặc để AI tự dựng. Mọi sổ sách là file văn bản
@@ -40,7 +40,8 @@ công ty do bạn chọn, kiểu D:\CongTyABC hay thư mục Dropbox của công
    Máy Mac: đường dẫn dùng dấu / thay cho \.
    Dùng git clone: sau khi cài xong, AI xóa thư mục 00_Index\.git giúp bạn.
    Kho đang chạy không nối với GitHub nữa, vì thư mục _so (sổ sách của công
-   ty bạn) nằm trong đó.
+   ty bạn) nằm trong đó. 00_Index = ngăn LUẬT + SỔ của bộ; đừng bỏ file
+   công ty vào đây (tài liệu để ở các folder nghiệp vụ 01_, 03_...).
 
 2  Vào claude.ai, mục Projects, bấm New Project, đặt tên công ty. Mở phần
    Instructions của Project, dán NGUYÊN VĂN toàn bộ nội dung file
@@ -76,12 +77,11 @@ quét mail   xử thư trong phiên, ra bảng chờ duyệt      (khi bật EMA
 rà file     nghi sổ lệch thực tế: kiểm toàn bộ, chỉ báo cáo chưa sửa;
             xem bảng xong muốn sửa mục nào thì nói, AI trình cách rồi làm
 chốt sổ     kết phiên an toàn, vét các lượt ghi dở
-đồng bộ quan sát   (nâng cao) sau khi quét kho, cho AI tự cập nhật sổ để
-            biết file nào là bản mới nhất, bản nào đã cũ
+đồng bộ quan sát   (nâng cao) cho AI cập nhật sổ theo bản mới nhất trên kho
 ```
 
-Kênh chat (Zalo, Messenger) chưa có lối quét tự động như mail, nhưng
-có lối bán thủ công: dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
+Kênh chat (Zalo, Messenger): lối bán thủ công -
+dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
 như mục đến ở cửa vào (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
@@ -95,17 +95,18 @@ rev lệch    bản luật dán trong Project cũ hơn bộ trong kho. Mở file
 XUNG ĐỘT    hai bản file cùng số hiệu khác nội dung. AI sẽ hỏi, bạn chọn bản đúng
 CHƯA KIỂM   thông tin chưa có giấy tờ xác nhận. Dùng nội bộ được,
             chỉ bị chặn khi đưa ra ngoài công ty
+ĐANG GHI    lượt ghi sổ bỏ dở; nói "chốt sổ" là AI vét lại
+plan C treo việc rủi ro đã trình mà bạn chưa gõ "chốt"
+LECH        máy thấy sổ lệch thực tế; dán nguyên dòng đó cho AI xử
 ```
 
 Cập nhật bộ về sau: tải bản mới về MỘT THƯ MỤC KHÁC (clone hay ZIP đều được),
 rồi nói với AI trong phiên Cowork "cập nhật bộ luật, bản mới ở <đường dẫn>".
 AI tự đối chiếu, áp phần luật và nhắc nếu cần dán lại INSTRUCTION. Nói rõ với
 AI: đọc X9 mục 3c trong THƯ MỤC BẢN MỚI, không đọc bản trong kho.
-ĐỪNG chạy `git pull` trong 00_Index, và cả ở thư mục CHA của nó: sổ của bạn nằm
-trong đó, git sẽ dừng và lời khuyên `git stash` mà git in ra sẽ làm mất dòng sổ
-khỏi thư mục làm việc. Lỡ chạy `git stash` rồi thấy sổ trống: gõ ngay
-`git stash pop` ở đúng thư mục đó là dòng quay về, rồi nói với AI "rà file" để
-đối chiếu. Đừng gõ thêm lệnh git nào khác trước khi làm việc này.
+ĐỪNG chạy `git pull` hay `git stash` trong 00_Index hay thư mục CHA: sổ
+của bạn nằm đó, stash làm mất dòng sổ. Lỡ stash mà sổ trống: gõ ngay
+`git stash pop` ở đúng thư mục đó rồi nói AI "rà file".
 
 Muốn hiểu bộ trước khi dùng: đọc [DOC_TRUOC.md](DOC_TRUOC.md) (tổng quan, 1
 trang) rồi [X9_CAIDAT.md](X9_CAIDAT.md) (kịch bản phiên đầu). Không cần đọc
@@ -189,7 +190,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 88 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 89 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -258,6 +259,35 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 89: audit TÍNH NGƯỜI - báo cáo, sổ và tên folder cho người thường
+
+Người dùng đặt tiêu chí: "đơn giản, dễ dùng, tên file folder người hoá,
+báo cáo phải người - đưa mã chỉ AI hiểu là chưa đáp ứng". Giám khảo chuyên
+đề cài bộ bằng mắt người thường, chấm 5 lớp: tên file/folder ĐẠT (có
+khuyết), nội dung sổ CHƯA trọn, báo cáo ĐẠT có điều kiện, luồng dùng ĐẠT,
+thông tin tổ chức ĐẠT. Vá cả năm đề xuất - thuần LỚP TRÌNH BÀY, không đụng
+mã phép/mã G là xương sống đối chiếu của máy:
+
+1. DỊCH NỐT ~8 DÒNG LECH còn in repr Python / mã trần (2, 3a, 3b, 3c, 4,
+   6, 10a, 10b): lời người đứng trước, mã sau, chốt bằng MỘT CÂU VIỆC CẦN
+   LÀM ("nói AI 'chốt sổ' để vét lại, chưa mất gì"). Nghịch lý tự khai:
+   _liet sinh ra để chữa đúng vụ này mà tám phép chưa gọi. Trần đầu ra
+   GIỮ: bù bằng rút 3e, 0h, 0j.
+2. Bảng "Khi AI báo chữ lạ" của README thêm ĐANG GHI · plan C treo · LECH
+   (banner in hai chữ đầu MỖI PHIÊN mà không có chỗ tra); banner INSTRUCTION
+   tự dịch tại chỗ: "chờ bạn chốt (plan C treo)", "ghi dở (ĐANG GHI)" -
+   thuế thường trực +8 token, khai lại BENCHMARK (2316 -> 2324).
+3. Ba sổ lõi thêm MỘT dòng chú giải khi mở bằng Notepad: cột nào CHO NGƯỜI,
+   cột nào là dấu vết máy bỏ qua được; DUKIEN giải thang A-D tại chỗ.
+4. README giải nghĩa 00_Index (ngăn LUẬT + SỔ, đừng bỏ file công ty vào) -
+   trước đây 0j chỉ kêu SAU khi lỡ.
+5. NGƯỜI HOÁ TÊN FOLDER mặc định: 98_Assets -> 98_Tai_nguyen, 99_Archive ->
+   99_Luu_tru; máy nhận CẢ tên cũ (kho khai bản trước không đổi hành vi);
+   00_Index, _so, 99_Goc giữ cứng vì script trỏ đích danh.
+
+Trần: README 8994/9000 · X0 19967/20000 · X5 20299/20300 - mọi chữ thêm
+đều có chữ cắt bù. BẤT BIẾN I1 7, I2 38, I3 93(nt)/92; fixture giữ nguyên.
 
 ## Vòng 88: ba P1 cuối của định vị lại - CI, CHAT stale, thay-bởi DUKIEN
 
@@ -1906,14 +1936,14 @@ không tuyên bố kết quả runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | ~1924 |
+| INSTRUCTION dán trong Project | 4148 | ~1932 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX ~247 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | ~145 |
-| CỘNG | ~6969 | ~2316 |
+| CỘNG | ~6969 | ~2324 |
 
 Giảm gần 67 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.924) xấp xỉ 4.124
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.932) xấp xỉ 4.132
 token, vẫn thấp hơn trước tối ưu.
 Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
 mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
@@ -2063,7 +2093,8 @@ COWORK_CAU_NOI qua cầu nối. In hai dòng, số liệu lấy từ `_so\X0_IND
 
 ```
 WORKOPS · <mã> · <phiên> · chạm được: <kho> · rev <khớp/lệch> · bảng <YYYY-MM-DD>
-<n> quá hạn · <n> chờ đối tác · <n> plan C treo · <n> ĐANG GHI · mail <n> ngày · mốc: <mốc>
+<n> quá hạn · <n> chờ đối tác · <n> chờ bạn chốt (plan C treo)
+· <n> ghi dở (ĐANG GHI) · mail <n> ngày · mốc: <mốc>
 ```
 
 Bàn sạch: dòng hai còn "bàn sạch · mốc: <mốc>". Gõ `điểm danh` mới bung đủ.
@@ -2292,7 +2323,7 @@ Tầng ngoài là CHỨC NĂNG, tầng trong là DỰ ÁN hoặc hồ sơ của 
 ```
 @FOLDER.CHUCNANG   cây mặc định, X9 dựng sẵn, thêm bớt khi công ty đã có cây riêng
   00_Index   01_Phap_ly   02_Ky_thuat   03_Thuong_mai   04_Trao_doi   05_Mau
-  98_Assets  99_Goc       99_Archive
+  98_Tai_nguyen  99_Goc  99_Luu_tru
 
 @FOLDER.KHOI       khối việc sinh KHI CÓ VIỆC ĐẦU TIÊN của khối, không bắt khai trước
   <MÃ KHỐI>  <mô tả>  <folder thật>  <dự án>
@@ -3427,7 +3458,7 @@ XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 
 KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
 đủ các tầng sổ · _lich_su · backup · 99_Goc và bản _Summary · _inbox\_da_nap
 · _thu_staging và manifest dọn · 04_Trao_doi · MỌI file khác trên kho theo
-con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Archive, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
+con trỏ sổ (kể cả 01_Phap_ly\_NOP, 99_Luu_tru, file digest đã sinh). NHATKY, QUYETDINH và nhật ký thư là
 CHỈ-THÊM, không xóa dòng: thay giá trị bị yêu cầu bằng "[đã xóa theo Q-<mã>]",
 giữ khung dòng (kể cả ô tên đính kèm nếu tên mang dữ liệu cá nhân); dòng NHATKY
 mất dấu "Ghi lần" ở MỘT sổ vì lệnh này vừa xóa dòng sổ đó: ô "Chạm sổ nào" của
@@ -3704,6 +3735,9 @@ FILE: _so/VIEC.md
 so: VIEC
 ```
 
+Đọc từ trái: Việc, Bước tiếp theo, Ai làm, Hạn là phần CHO NGƯỜI; cột Mã
+và Ghi lần là dấu vết máy, bỏ qua được.
+
 ## <KHỐI>
 
 | Dự án | Mã | Việc | Bước tiếp theo | Ai làm | Chờ ai từ | Hạn | Trạng thái | Liên kết | Ghi lần |
@@ -3722,6 +3756,8 @@ so: DUKIEN
 Dữ kiện mang DANH SÁCH phạm vi được phép và MỨC NGUỒN (A B C D theo X0 C7).
 Đầu ra mang đúng một phạm vi; dữ kiện dùng phải đạt mức nguồn tối thiểu của phạm vi đó.
 Schema cố định mọi profile: ô Mức nguồn LUÔN ghi A, B, C hay D theo thang X0 C7.
+Đọc nhanh thang đó: A văn bản ký · B mail/văn bản xác nhận · C tài liệu
+làm việc · D nói miệng. Cột Mã, Ghi lần là dấu vết máy, bỏ qua được.
 
 ## <KHỐI>
 
@@ -3738,6 +3774,8 @@ FILE: _so/TAILIEU.md
 so: TAILIEU
 ```
 
+Đọc từ trái: Tài liệu, Ngày, Ở đâu, Trạng thái là phần CHO NGƯỜI; cột
+Mã, sha256, Ghi lần là dấu vết máy, bỏ qua được.
 Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
 thuộc dự án @DUAN.PHANMEM). Vai phiên bản là quan sát của máy
 (HIỆN HÀNH · CŨ · XUNG ĐỘT · KHÔNG XÁC ĐỊNH), đổi theo bằng chứng quét kho, luật

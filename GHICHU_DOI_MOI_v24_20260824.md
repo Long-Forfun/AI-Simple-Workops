@@ -9,6 +9,35 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 89: audit TÍNH NGƯỜI - báo cáo, sổ và tên folder cho người thường
+
+Người dùng đặt tiêu chí: "đơn giản, dễ dùng, tên file folder người hoá,
+báo cáo phải người - đưa mã chỉ AI hiểu là chưa đáp ứng". Giám khảo chuyên
+đề cài bộ bằng mắt người thường, chấm 5 lớp: tên file/folder ĐẠT (có
+khuyết), nội dung sổ CHƯA trọn, báo cáo ĐẠT có điều kiện, luồng dùng ĐẠT,
+thông tin tổ chức ĐẠT. Vá cả năm đề xuất - thuần LỚP TRÌNH BÀY, không đụng
+mã phép/mã G là xương sống đối chiếu của máy:
+
+1. DỊCH NỐT ~8 DÒNG LECH còn in repr Python / mã trần (2, 3a, 3b, 3c, 4,
+   6, 10a, 10b): lời người đứng trước, mã sau, chốt bằng MỘT CÂU VIỆC CẦN
+   LÀM ("nói AI 'chốt sổ' để vét lại, chưa mất gì"). Nghịch lý tự khai:
+   _liet sinh ra để chữa đúng vụ này mà tám phép chưa gọi. Trần đầu ra
+   GIỮ: bù bằng rút 3e, 0h, 0j.
+2. Bảng "Khi AI báo chữ lạ" của README thêm ĐANG GHI · plan C treo · LECH
+   (banner in hai chữ đầu MỖI PHIÊN mà không có chỗ tra); banner INSTRUCTION
+   tự dịch tại chỗ: "chờ bạn chốt (plan C treo)", "ghi dở (ĐANG GHI)" -
+   thuế thường trực +8 token, khai lại BENCHMARK (2316 -> 2324).
+3. Ba sổ lõi thêm MỘT dòng chú giải khi mở bằng Notepad: cột nào CHO NGƯỜI,
+   cột nào là dấu vết máy bỏ qua được; DUKIEN giải thang A-D tại chỗ.
+4. README giải nghĩa 00_Index (ngăn LUẬT + SỔ, đừng bỏ file công ty vào) -
+   trước đây 0j chỉ kêu SAU khi lỡ.
+5. NGƯỜI HOÁ TÊN FOLDER mặc định: 98_Assets -> 98_Tai_nguyen, 99_Archive ->
+   99_Luu_tru; máy nhận CẢ tên cũ (kho khai bản trước không đổi hành vi);
+   00_Index, _so, 99_Goc giữ cứng vì script trỏ đích danh.
+
+Trần: README 8994/9000 · X0 19967/20000 · X5 20299/20300 - mọi chữ thêm
+đều có chữ cắt bù. BẤT BIẾN I1 7, I2 38, I3 93(nt)/92; fixture giữ nguyên.
+
 ## Vòng 88: ba P1 cuối của định vị lại - CI, CHAT stale, thay-bởi DUKIEN
 
 1. CI self-test: .github/workflows/kiem.yml chạy trọn kiem_tra_bo mỗi push

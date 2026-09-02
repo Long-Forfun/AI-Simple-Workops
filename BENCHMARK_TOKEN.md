@@ -23,14 +23,14 @@ không tuyên bố kết quả runtime.
 
 | Thành phần | trước tối ưu (v05) | hiện tại |
 |---|---:|---:|
-| INSTRUCTION dán trong Project | 4148 | ~1924 |
+| INSTRUCTION dán trong Project | 4148 | ~1932 |
 | Mở phiên đọc cấu hình | X0 cả file 2770 | X0_INDEX ~247 |
 | BANG_DIEU_KHIEN (mẫu rỗng, chạy thật lớn hơn) | 51 | ~145 |
-| CỘNG | ~6969 | ~2316 |
+| CỘNG | ~6969 | ~2324 |
 
 Giảm gần 67 phần trăm thuế thường trực theo benchmark tĩnh VỚI VIEW MẪU
 RỖNG; mức tối đa runtime theo trần đã enforce (X0_INDEX 2.400 + BANG_DIEU_KHIEN
-4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.924) xấp xỉ 4.124
+4.200 ký tự runtime, kiem_van_hanh giữ, cộng INSTRUCTION ~1.932) xấp xỉ 4.132
 token, vẫn thấp hơn trước tối ưu.
 Nền tảng nào kéo CẢ X5 (bằng số dòng SUA_FILE ở bảng dưới) thay vì đúng
 mục thì mỗi thao tác đổi trạng thái tốn thêm phần chênh; luật đọc theo mục
