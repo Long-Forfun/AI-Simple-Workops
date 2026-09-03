@@ -6,8 +6,8 @@ so: TAILIEU
 
 Đọc từ trái: Tài liệu, Ngày, Ở đâu, Trạng thái là phần CHO NGƯỜI; cột
 Mã, sha256, Ghi lần là dấu vết máy, bỏ qua được.
-Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
-thuộc dự án @DUAN.PHANMEM). Cột "Vai phiên bản" do MÁY tự điền
+Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dự án
+phần mềm đã khai ở X0 C2). Cột "Vai phiên bản" do MÁY tự điền
 khi quét kho - nó cho biết bản nào đang MỚI NHẤT (HIỆN HÀNH), bản nào CŨ,
 hay hai bản đang XUNG ĐỘT; bạn không sửa tay cột này (luật ở X5 mục 4). Trạng thái nghiệp vụ chỉ đổi khi có căn cứ (mail,
 biên nhận, lời người dùng), ghi vào cột Căn cứ trạng thái kèm Quan sát lúc.

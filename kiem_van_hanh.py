@@ -1364,11 +1364,10 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         f"{_liet(_lech_hoa[:3])}: NTFS cho qua nhưng đồng bộ Linux, git hay"
         f" rsync coi là MẤT FILE. Sửa sổ theo tên thật trên đĩa, mức A")
     bao("9. file khai 'Kho' còn trên kho" + pv, not mat,
-        f"{mat[:5]}"
-        + (": tài liệu nằm ở KHO CŨ thì khai dạng \"KhoCu <đường dẫn từ"
-           " @KHO.CU>\" (X0 C1) - dạng đó không bị kiểm tồn tại vì kho cũ chỉ"
-           " tra lịch sử và có thể offline; ĐỪNG chép file sang kho mới, X5"
-           " mục 6 bắt bản cuối chỉ nằm MỘT kho" if mat else ""))
+        f"{_liet_cap(mat[:4], '{0}: {1}')}: sổ trỏ file mà kho không thấy -"
+        f" bị xóa, đổi tên hay chưa đồng bộ; nói AI \"rà file\" để đối"
+        f" chiếu. Tài liệu nằm ở KHO CŨ thì khai dạng KhoCu (X0 C1), ĐỪNG"
+        f" chép về kho mới - X5 mục 6 bắt bản cuối chỉ nằm MỘT kho")
     bao("10a. mốc chính thức không sửa tại chỗ" + pv, not sua_bat_bien,
         f"{_liet(sua_bat_bien[:4])}: bản đã ký/đã nộp bị ĐỔI RUỘT sau khi"
         f" chốt. Muốn sửa thì làm BẢN MỚI (v tiếp theo), bản cũ giữ nguyên")
@@ -1405,7 +1404,9 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         for d, goc_ng in nghi_ban_sao[:10]:
             print(f"          - {d} (tiền tố gây nghi: {goc_ng})")
     bao("11. không họ nào cùng vN khác nội dung" + pv, not xung_dot,
-        str(xung_dot[:3]))
+        f"{_liet_cap([(t, ', '.join(d)) for t, d in xung_dot[:3]], '{0}: {1}')}:"
+        f" hai bản cùng số v mà ruột khác nhau - XUNG ĐỘT, AI sẽ hỏi bạn"
+        f" chọn bản đúng (X5 mục 4)")
     if lan_dau:
         print(f"        LƯU Ý: lần quét ĐẦU của phạm vi này, chưa file nào đạt luật ổn"
               f" định; chạy lại sau tối thiểu {KHOANG_ON_DINH // 60} phút để nhận bản hiện hành")
@@ -1739,7 +1740,9 @@ def kiem_email(goc, so):
     #      ở hai luồng THU
     khoa_cuoi = cot_thu(thu_nd, "Message-ID cuối")
     trung = sorted({k for k in khoa_cuoi if khoa_cuoi.count(k) > 1})
-    ket.append(("12f. không khóa nào đứng cuối ở HAI luồng THU", not trung, str(trung[:3])))
+    ket.append(("12f. không khóa nào đứng cuối ở HAI luồng THU", not trung,
+                f"{_liet(trung[:3])}: một mail đang đứng cuối ở HAI luồng -"
+                f" gộp hai dòng THU về một luồng"))
 
     # 12i. một Conversation-ID chỉ được nằm ở MỘT dòng THU
     _CO_MAT = object()
@@ -2788,7 +2791,8 @@ def main(goc):
                         and re.fullmatch(MAU_G, h[0].strip("* "))
                         and h[0].strip("* ") not in plan_da_ghi]
         bao("3d. lượt mức C đều có plan mang mã G", not c_khong_plan,
-            str(c_khong_plan[:5]))
+            f"{_liet(c_khong_plan[:4])}: lượt rủi ro đã ghi sổ mà không thấy"
+            f" plan ĐÃ GHI nào mang mã này. Nói AI \"chốt sổ\" để nối lại")
 
         hang_pl = dong_bang(doc(so / "PLANNING.md"))
         thieu_g = [h[0] for h in hang_pl
@@ -2831,8 +2835,9 @@ def main(goc):
                     continue
                 if len(tach_o(d, _cot_so)) != _cot_so:
                     lech.append((p.name, f"dòng ngoài khối header {j + 1}"))
-    bao("5. schema bảng: mọi dòng cùng số cột",
-        not lech, str(lech[:5]))
+    bao("5. schema bảng: mọi dòng cùng số cột", not lech,
+        f"{_liet_cap(lech[:4], '{0} ({1})')}: dòng bảng sai số cột nên máy"
+        f" đọc lệch ô. Đếm lại dấu | của dòng đó, mức A")
 
     # 5e. Dấu fence trong sổ phải đóng ĐỦ CẶP. `ngoai_fence` bật cờ và không
     #     bao giờ tắt nếu thiếu dòng đóng, nên mọi dòng còn lại TÀNG HÌNH với
@@ -2917,7 +2922,10 @@ def main(goc):
         t = sorted({m for m in ds if ds.count(m) > 1})
         if t:
             trung_ma.append((ten, t))
-    bao("7. không mã trùng ở cột Mã của các sổ", not trung_ma, str(trung_ma))
+    bao("7. không mã trùng ở cột Mã của các sổ", not trung_ma,
+        f"{_liet_cap([(t, ', '.join(m)) for t, m in trung_ma[:3]], '{0}: {1}')}:"
+        f" hai dòng dùng chung một mã - dán nhầm hay cấp trùng. Nói AI hòa"
+        f" giải theo X5 mục 3")
 
     # 7c. LIÊN KẾT TREO: X4 dòng 12 khai tường minh "mã trùng, HOẶC liên kết
     #     trỏ mã không tồn tại" là phần DÒ ĐƯỢC BẰNG MÁY, mà phép 7 mới làm nửa

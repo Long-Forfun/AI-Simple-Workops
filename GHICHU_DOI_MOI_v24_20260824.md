@@ -9,6 +9,28 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 91: thẩm định lại tính người - 6/6 GIỮ, vét trọn khuôn str(...)
+
+Giám khảo thẩm định lại trên kho lỗi thật: CẢ SÁU khoản vòng 89-90 GIỮ
+(8 dòng LECH đã người, README, banner, chú giải sổ, folder Việt nhận cả
+tên cũ, cài LITE "hệ sạch" ngay lượt đầu). Nhưng quét TOÀN đầu ra theo
+KHUÔN thay vì theo danh sách thì lòi thêm 6 dòng LECH cùng bệnh str(...)
+mà vòng trước bỏ sót: 3d, 5, 7, 9, 11, 12f. Đúng lời docstring _liet_cap
+tự khai "13/18 phép còn rò" - vá theo danh sách nêu tên thì phần chưa
+được nêu tên vẫn rò.
+
+Vét trọn sáu dòng theo cùng chuẩn lời-người-trước + một-câu-việc-cần-làm:
+· 3d: "lượt rủi ro đã ghi sổ mà không thấy plan... Nói AI 'chốt sổ'"
+· 5: "dòng bảng sai số cột nên máy đọc lệch ô. Đếm lại dấu |"
+· 7: "hai dòng dùng chung một mã - dán nhầm hay cấp trùng"
+· 9: vế chính lên đầu ("sổ trỏ file mà kho không thấy - bị xóa, đổi tên
+  hay chưa đồng bộ"), vế KhoCu lùi sau
+· 11: "hai bản cùng số v mà ruột khác nhau - XUNG ĐỘT, AI sẽ hỏi bạn chọn"
+· 12f: "một mail đang đứng cuối ở HAI luồng - gộp về một"
+Kèm vệt cuối: TAILIEU thôi phơi khóa @DUAN.PHANMEM với người đọc sổ.
+
+Trần đầu ra GIỮ cả ba (2.700 / 5.200 / token khớp). Không đổi fixture.
+
 ## Vòng 90: vét nốt ba khuyết tính người - sổ và lối rà cho người thường
 
 1. TAILIEU: câu "Vai phiên bản là quan sát của máy... luật SUY BẢN HIỆN
