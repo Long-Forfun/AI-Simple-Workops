@@ -16,20 +16,18 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    CHƯA TỪNG có giá trị, là B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
-   PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
-   của phần mềm (X0 C2 @DUAN.PHANMEM); MẶC ĐỊNH ĐÓNG: mọi thao tác KHÁC
-   chạm môi trường CHẠY THẬT hay dữ liệu của nó cũng là C - chạy lệnh sửa dữ
-   liệu trực tiếp trên CSDL, restore, lấy dump hay log mang dữ liệu khách,
-   xoay hay thu hồi secret, đổi feature flag, cấp hay thu quyền truy cập.
-   Không dòng nào khớp thì lấy C, không lấy A
+   PHÁP LÝ: thủ tục riêng ở mục 7b) · thao tác kỹ thuật trên hạ tầng,
+   CSDL, secret, quyền của phần mềm (X0 C2): MẶC ĐỊNH ĐÓNG - AI KHÔNG làm,
+   chỉ GHI NHẬN theo mục 1b. Không dòng nào khớp thì lấy C, không lấy A
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
-   sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
+   sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA
    TỪNG có giá trị, theo ngoại lệ C11 · dọn hay xóa nháp
    CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
-   MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4
+   MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4 · mở khối, folder con
+   theo cây C3, thêm loại tên C4 (không tăng rev X0)
 ```
 
 GẤP không phải một mức: là việc mức B mở NGAY trong lượt phát hiện, hạn trong
@@ -103,10 +101,9 @@ thuật trên repo, môi trường, CSDL, secret và hạ tầng nằm NGOÀI PH
 THỰC THI của bộ: AI không tự deploy, migration, ROLLBACK, merge, sửa dữ
 liệu, xoay secret hay đổi quyền ở BẤT KỲ môi trường nào (kể cả dev,
 staging) - chỉ được SOẠN CHECKLIST hoặc MỞ VIỆC chuyển đội kỹ thuật.
-GHI NHẬN vào sổ thao tác mà NGƯỜI/đội kỹ thuật đã làm: lượt chạm CHẠY
-THẬT (deploy, migration, rollback, merge vào nhánh tự deploy, sửa CSDL đã
-khai) ghi mức C kèm plan - rà 7g giữ; việc trên dev, staging ghi như việc
-thường.
+GHI NHẬN thao tác đội kỹ thuật ĐÃ làm: chạm CHẠY THẬT ghi mức B kèm tên
+người phụ trách xác nhận trong ô Làm gì (rà 7g giữ), KHÔNG plan - plan C
+chỉ cho việc AI SẮP làm; dev, staging ghi như việc thường.
 
 SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
 bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
@@ -208,7 +205,8 @@ DUKIEN.md     dự án · mã · dữ kiện · giá trị · hiệu lực từ 
               profile, ô này LUÔN ghi A tới D; thang là CORE, REGULATED chỉ
               thêm nguồn chỉ định và phạm vi chi tiết) · trạng thái · rà lại trước · ghi lần
 TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN BẢN (HIỆN HÀNH,
-              CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ · QUAN SÁT
+              CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ (NHÁP, ĐÃ
+              GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC...) · QUAN SÁT
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
               nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH

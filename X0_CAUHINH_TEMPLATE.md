@@ -124,22 +124,18 @@ dùng, rồi mới mở việc đầu tiên.
 
 # C3. Folder và khối
 
-Tầng ngoài là CHỨC NĂNG, tầng trong là DỰ ÁN hoặc hồ sơ của dự án.
-
 ```
 @FOLDER.CHUCNANG   cây mặc định, X9 dựng sẵn, thêm bớt khi công ty đã có cây riêng
   00_Index   01_Phap_ly   02_Ky_thuat   03_Thuong_mai   04_Trao_doi   05_Mau
-  98_Tai_nguyen  99_Goc  99_Luu_tru
+  06_Ke_toan_Nhan_su   07_Hanh_chinh   98_Tai_nguyen   99_Goc   99_Luu_tru
 
 @FOLDER.KHOI       khối việc sinh KHI CÓ VIỆC ĐẦU TIÊN của khối, không bắt khai trước
   <MÃ KHỐI>  <mô tả>  <folder thật>  <dự án>
 
-@FOLDER.CON        dùng khi cần, đúng tên: 01_Phap_ly 02_Ky_thuat 03_Thuong_mai
-                   04_Trao_doi 05_Mau 99_Goc _lich_su
+@FOLDER.CON        dùng khi cần (mức A), tên KHÔNG bắt đầu bằng _: 01_Phap_ly 02_Ky_thuat 03_Thuong_mai
+                   04_Trao_doi 05_Mau 06_Ke_toan_Nhan_su 07_Hanh_chinh 99_Goc
                    bản nộp: 01_Phap_ly\_NOP_YYYYMMDD\ rồi khóa
 ```
-
-Dự án mới cần chức năng đã có thì mở folder con, không mở folder chức năng mới.
 
 # C4. Tên file
 
@@ -147,7 +143,7 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 @TEN.MAY       (cú pháp) <KHOI>_<YYYYMMDD>_<LOAI>_<DoiTac>_<MoTa>_v<NN>.ext
 @TEN.PROJECT   Ten_vNN_YYYYMMDD.md
 @TEN.NHAP      (cú pháp) bản trung gian chưa chốt: v<NN>-nhap<M>, không vào TAILIEU
-@TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL, thêm bớt khi cài
+@TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL HDON BL BBBG, thêm bớt: A
 ```
 
 Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
@@ -189,16 +185,15 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
 
 @VANHANH.NGUOI  <điền: tên người vận hành hiện tại, chức danh, cửa hay dùng>
-                KHÔNG thuộc nhóm khóa: đổi là mức B. Đây là tham số mà
-                @NHIP.BANGIAO đổi khi bàn giao; ô "Ai làm" của VIEC là dữ
-                liệu, không phải tham số.
+                KHÔNG thuộc nhóm khóa: đổi là mức B; @NHIP.BANGIAO đổi nó
+                khi bàn giao.
 ```
 
-Bộ mặc định MỘT người vận hành toàn quyền chốt mức C; nhiều người dùng
-chung tự quy ước ai chốt - hệ ghi vết theo cửa, phiên, không phân quyền.
-Vai chỉ đổi khi có văn bản ký mới. Cách gọi trong hội thoại không làm đổi vai.
-Gỡ một lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã", chỉ gỡ khi dữ kiện
-gốc đổi trạng thái.
+Mặc định MỘT người vận hành chốt mức C; nhiều người thì tự quy ước ai chốt
+- hệ ghi vết theo cửa, không phân quyền. Vai đổi khi có văn bản ký mới: dòng
+TAILIEU ĐÃ KÝ (có sha256) với bên đó là ĐỦ, AI cập nhật vai ở C6 mức B
+cùng lượt, không cần QUYETDINH. Cách gọi trong hội thoại không đổi vai.
+Gỡ lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã".
 
 # C7. Nguồn thẩm quyền và mức nguồn (CORE: thang A-D và mức tối thiểu áp MỌI
 profile; riêng nguồn chỉ định và phạm vi chi tiết: profile REGULATED)
@@ -224,6 +219,8 @@ Mức nguồn TỐI THIỂU theo phạm vi của đầu ra:
   hồ sơ nộp cơ quan nhà nước       A
   đầu ra rời công ty khác          B    <chỉnh khi cài nếu công ty cần chặt hơn>
   NOI_BO                           A tới D đều được, nhưng phải ghi kèm mức
+  văn bản nội bộ (bảng giá, chính sách) người vận hành xác nhận trong
+  phiên: B, không cần QUYETDINH
 ```
 
 Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
@@ -258,11 +255,11 @@ bên có thẩm quyền (tức từ mức B).
 ```
 @TUNGU.DUNG          <điền>
 @TUNGU.CAM           <điền>
-@HINHTHUC.KYTUCAM    <điền, gợi ý: em-dash · en-dash · dấu xấp xỉ · mũi tên>
-@HINHTHUC.SO         <điền quy tắc làm tròn>
-@HINHTHUC.VANPHONG   <điền>
-@HINHTHUC.FONT       <điền>
-@HINHTHUC.QUANHE     dùng sự kiện kèm ngày · động từ cấm: <điền>
+@HINHTHUC.KYTUCAM    em-dash · en-dash · dấu xấp xỉ · mũi tên (mặc định)
+@HINHTHUC.SO         giữ số như nguồn, không tự làm tròn
+@HINHTHUC.VANPHONG   không có
+@HINHTHUC.FONT       không có
+@HINHTHUC.QUANHE     dùng sự kiện kèm ngày · động từ cấm: không có
 ```
 
 # C9. Nhịp và bộ thực thi (các ngưỡng @NHIP.RALAI, HETHAN, CHODOITAC, INBOX,
@@ -295,10 +292,10 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
 @NHIP.BOCHINH    (EMAIL) <điền: thứ DUY NHẤT đọc mail và sinh dữ liệu thô>
 @NHIP.GIAMSAT    <điền hoặc "không có". Giám sát chỉ cảnh báo, cấm tự quét, cấm nạp sổ>
-@NHIP.RALAI      dữ kiện đổi nhanh <N> ngày · còn lại <N> ngày
-@NHIP.HETHAN     cảnh báo trước <N> và <N> ngày
-@NHIP.CHODOITAC  nhắc đòi sau <N> ngày
-@NHIP.INBOX      chưa nạp cảnh báo sau <N> ngày
+@NHIP.RALAI      dữ kiện đổi nhanh 30 ngày · còn lại 180 ngày
+@NHIP.HETHAN     cảnh báo trước 30 và 7 ngày
+@NHIP.CHODOITAC  nhắc đòi sau 5 ngày
+@NHIP.INBOX      chưa nạp cảnh báo sau 3 ngày
 @NHIP.DEMSTAGING (profile EMAIL) thời gian đệm trước khi dọn staging đã
                  COMMITTED và xác minh, mặc định 30 ngày
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc

@@ -192,7 +192,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 92 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 93 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -261,6 +261,40 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 93: audit vai GIÁM ĐỐC - đợt 2: SỬA LUẬT giảm thủ tục
+
+Đợt này đổi HÀNH VI bộ theo năm đề xuất của giám khảo vai giám đốc - mọi
+chỗ đều là thủ tục bộ bắt người làm mà "một giám đốc thật sẽ không làm":
+
+1. CHUYỆN ĐÃ XẢY RA ghi mức B, không plan. Đội kỹ thuật đã deploy, HĐ đã
+   ký, mail đã gửi: ghi nhận mức B kèm TÊN người phụ trách xác nhận trong
+   ô Làm gì là đủ; plan C chỉ cho việc AI SẮP làm - mà thao tác kỹ thuật
+   thì AI không làm (định vị vòng 57), nên hết cảnh "mở plan C để ghi nhận
+   việc đã rồi". 7g: mức B có tên phụ trách -> im; mức A vẫn đỏ; mức B
+   không tên vẫn đỏ. X5 mục 1 danh mục C rút gọn tương ứng. Ca I2 ghim.
+2. VAI BÊN MUA/BÁN TỰ XÁC LẬP: dòng TAILIEU ĐÃ KÝ (có sha256) với bên đó
+   là ĐỦ căn cứ, AI cập nhật C6 mức B cùng lượt, không cần QUYETDINH + plan
+   (X0 C6). Văn bản nội bộ (bảng giá, chính sách) người vận hành xác nhận
+   trong phiên: nguồn B - hết phải "ban hành bảng giá bằng QUYETDINH" (C7).
+3. NGƯỠNG C9 CÓ MẶC ĐỊNH sẵn (rà lại 30/180, hết hạn 30 và 7, chờ đối tác
+   5, inbox 3 - đúng số máy đang dùng), C8 hình thức mặc định "không có":
+   template từ 39 xuống 30 ô trống, kho LITE cài xong bớt 9 câu phải trả
+   lời. Mở khối, folder con theo cây, thêm loại tên = mức A, không tăng rev.
+4. CÂY MẶC ĐỊNH thêm 06_Ke_toan_Nhan_su, 07_Hanh_chinh; @TEN.LOAI thêm HDON
+   BL BBBG; TAILIEU có trạng thái ĐÃ NHẬN, ĐÃ THAY; folder con không bắt
+   đầu bằng _ (máy bỏ qua thư mục _ - file kế toán để ở _den là mất hút).
+5. NHÓM B của X9 còn HAI câu (phạm vi, các bên); câu 7, 8 xuống nhóm C với
+   mặc định có sẵn - báo giá đầu tiên không còn bị chặn bởi bốn câu về từ
+   cấm, em-dash, font, thuật ngữ.
+
+Vấp tự gây: viết "@BEN.VAI" xuống ĐẦU DÒNG trong văn xuôi C6 - máy đọc là
+khai @KEY lần hai (0i3) và MỌI ca fuzz báo "kho lành lệch sẵn". Quy ước ghi
+lại: trong X0, @KEY chỉ đứng đầu dòng ở dòng khai.
+
+Trần: X0 19967/20000, X5 20226/20300, X9 8500/8500 - mọi chữ thêm có chữ
+cắt. BENCHMARK route NOI_BO 1860, CUA_VAO mail 6563. I2 39. Đợt 3 còn: danh
+bạ người/khách, hai người dùng ở LITE, ẩn cột máy/GHICHU/GOP khỏi kho.
 
 ## Vòng 92: audit vai GIÁM ĐỐC - đợt 1: máy sinh báo cáo, bắt mất dòng
 
@@ -1747,10 +1781,10 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1902 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~475) | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1860 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~475) | |
 | SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6132 + khối (không phần mềm trừ thêm mục 1b ~475) | |
 | CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6605 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6563 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3683 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3683 + khối | |
@@ -2108,22 +2142,18 @@ dùng, rồi mới mở việc đầu tiên.
 
 # C3. Folder và khối
 
-Tầng ngoài là CHỨC NĂNG, tầng trong là DỰ ÁN hoặc hồ sơ của dự án.
-
 ```
 @FOLDER.CHUCNANG   cây mặc định, X9 dựng sẵn, thêm bớt khi công ty đã có cây riêng
   00_Index   01_Phap_ly   02_Ky_thuat   03_Thuong_mai   04_Trao_doi   05_Mau
-  98_Tai_nguyen  99_Goc  99_Luu_tru
+  06_Ke_toan_Nhan_su   07_Hanh_chinh   98_Tai_nguyen   99_Goc   99_Luu_tru
 
 @FOLDER.KHOI       khối việc sinh KHI CÓ VIỆC ĐẦU TIÊN của khối, không bắt khai trước
   <MÃ KHỐI>  <mô tả>  <folder thật>  <dự án>
 
-@FOLDER.CON        dùng khi cần, đúng tên: 01_Phap_ly 02_Ky_thuat 03_Thuong_mai
-                   04_Trao_doi 05_Mau 99_Goc _lich_su
+@FOLDER.CON        dùng khi cần (mức A), tên KHÔNG bắt đầu bằng _: 01_Phap_ly 02_Ky_thuat 03_Thuong_mai
+                   04_Trao_doi 05_Mau 06_Ke_toan_Nhan_su 07_Hanh_chinh 99_Goc
                    bản nộp: 01_Phap_ly\_NOP_YYYYMMDD\ rồi khóa
 ```
-
-Dự án mới cần chức năng đã có thì mở folder con, không mở folder chức năng mới.
 
 # C4. Tên file
 
@@ -2131,7 +2161,7 @@ Dự án mới cần chức năng đã có thì mở folder con, không mở fol
 @TEN.MAY       (cú pháp) <KHOI>_<YYYYMMDD>_<LOAI>_<DoiTac>_<MoTa>_v<NN>.ext
 @TEN.PROJECT   Ten_vNN_YYYYMMDD.md
 @TEN.NHAP      (cú pháp) bản trung gian chưa chốt: v<NN>-nhap<M>, không vào TAILIEU
-@TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL, thêm bớt khi cài
+@TEN.LOAI      CV TT PA BG DT HD PL MOU BB BC SL GP MAU MAIL HDON BL BBBG, thêm bớt: A
 ```
 
 Không dấu, không khoảng trắng. Cấm final, copy, moi_nhat, ban_cuoi
@@ -2173,16 +2203,15 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @BEN.CAM   <điền các lệnh cấm nêu tên: cấm đưa bên nào, số nào ra phạm vi nào>
 
 @VANHANH.NGUOI  <điền: tên người vận hành hiện tại, chức danh, cửa hay dùng>
-                KHÔNG thuộc nhóm khóa: đổi là mức B. Đây là tham số mà
-                @NHIP.BANGIAO đổi khi bàn giao; ô "Ai làm" của VIEC là dữ
-                liệu, không phải tham số.
+                KHÔNG thuộc nhóm khóa: đổi là mức B; @NHIP.BANGIAO đổi nó
+                khi bàn giao.
 ```
 
-Bộ mặc định MỘT người vận hành toàn quyền chốt mức C; nhiều người dùng
-chung tự quy ước ai chốt - hệ ghi vết theo cửa, phiên, không phân quyền.
-Vai chỉ đổi khi có văn bản ký mới. Cách gọi trong hội thoại không làm đổi vai.
-Gỡ một lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã", chỉ gỡ khi dữ kiện
-gốc đổi trạng thái.
+Mặc định MỘT người vận hành chốt mức C; nhiều người thì tự quy ước ai chốt
+- hệ ghi vết theo cửa, không phân quyền. Vai đổi khi có văn bản ký mới: dòng
+TAILIEU ĐÃ KÝ (có sha256) với bên đó là ĐỦ, AI cập nhật vai ở C6 mức B
+cùng lượt, không cần QUYETDINH. Cách gọi trong hội thoại không đổi vai.
+Gỡ lệnh cấm: không xóa dòng, gạch và ghi "gỡ ngày, căn cứ mã".
 
 # C7. Nguồn thẩm quyền và mức nguồn (CORE: thang A-D và mức tối thiểu áp MỌI
 profile; riêng nguồn chỉ định và phạm vi chi tiết: profile REGULATED)
@@ -2208,6 +2237,8 @@ Mức nguồn TỐI THIỂU theo phạm vi của đầu ra:
   hồ sơ nộp cơ quan nhà nước       A
   đầu ra rời công ty khác          B    <chỉnh khi cài nếu công ty cần chặt hơn>
   NOI_BO                           A tới D đều được, nhưng phải ghi kèm mức
+  văn bản nội bộ (bảng giá, chính sách) người vận hành xác nhận trong
+  phiên: B, không cần QUYETDINH
 ```
 
 Ngoại lệ NGUỒN CHỈ ĐỊNH, có bốn hàng rào:
@@ -2242,11 +2273,11 @@ bên có thẩm quyền (tức từ mức B).
 ```
 @TUNGU.DUNG          <điền>
 @TUNGU.CAM           <điền>
-@HINHTHUC.KYTUCAM    <điền, gợi ý: em-dash · en-dash · dấu xấp xỉ · mũi tên>
-@HINHTHUC.SO         <điền quy tắc làm tròn>
-@HINHTHUC.VANPHONG   <điền>
-@HINHTHUC.FONT       <điền>
-@HINHTHUC.QUANHE     dùng sự kiện kèm ngày · động từ cấm: <điền>
+@HINHTHUC.KYTUCAM    em-dash · en-dash · dấu xấp xỉ · mũi tên (mặc định)
+@HINHTHUC.SO         giữ số như nguồn, không tự làm tròn
+@HINHTHUC.VANPHONG   không có
+@HINHTHUC.FONT       không có
+@HINHTHUC.QUANHE     dùng sự kiện kèm ngày · động từ cấm: không có
 ```
 
 # C9. Nhịp và bộ thực thi (các ngưỡng @NHIP.RALAI, HETHAN, CHODOITAC, INBOX,
@@ -2279,10 +2310,10 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
                  khoản khi cài đặt, chỉ hỏi khi không tự lấy được>
 @NHIP.BOCHINH    (EMAIL) <điền: thứ DUY NHẤT đọc mail và sinh dữ liệu thô>
 @NHIP.GIAMSAT    <điền hoặc "không có". Giám sát chỉ cảnh báo, cấm tự quét, cấm nạp sổ>
-@NHIP.RALAI      dữ kiện đổi nhanh <N> ngày · còn lại <N> ngày
-@NHIP.HETHAN     cảnh báo trước <N> và <N> ngày
-@NHIP.CHODOITAC  nhắc đòi sau <N> ngày
-@NHIP.INBOX      chưa nạp cảnh báo sau <N> ngày
+@NHIP.RALAI      dữ kiện đổi nhanh 30 ngày · còn lại 180 ngày
+@NHIP.HETHAN     cảnh báo trước 30 và 7 ngày
+@NHIP.CHODOITAC  nhắc đòi sau 5 ngày
+@NHIP.INBOX      chưa nạp cảnh báo sau 3 ngày
 @NHIP.DEMSTAGING (profile EMAIL) thời gian đệm trước khi dọn staging đã
                  COMMITTED và xác minh, mặc định 30 ngày
 @NHIP.TRANDINHKEM (EMAIL) trần dung lượng đính kèm kéo vào staging, mặc
@@ -2941,20 +2972,18 @@ C  đầu ra rời công ty (trừ thường lệ dưới đây) · chạm bản
    CHƯA TỪNG có giá trị, là B; gỡ, nới, đổi giá trị ĐÃ điền vẫn C)
    · đổi vai các bên, nguồn thẩm quyền · cấu trúc folder, đổi tên hay di chuyển
    hàng loạt · xóa thứ ĐÃ vào sổ hay đã phát hành (yêu cầu
-   PHÁP LÝ: thủ tục riêng ở mục 7b) · deploy môi trường CHẠY THẬT
-   của phần mềm (X0 C2 @DUAN.PHANMEM); MẶC ĐỊNH ĐÓNG: mọi thao tác KHÁC
-   chạm môi trường CHẠY THẬT hay dữ liệu của nó cũng là C - chạy lệnh sửa dữ
-   liệu trực tiếp trên CSDL, restore, lấy dump hay log mang dữ liệu khách,
-   xoay hay thu hồi secret, đổi feature flag, cấp hay thu quyền truy cập.
-   Không dòng nào khớp thì lấy C, không lấy A
+   PHÁP LÝ: thủ tục riêng ở mục 7b) · thao tác kỹ thuật trên hạ tầng,
+   CSDL, secret, quyền của phần mềm (X0 C2): MẶC ĐỊNH ĐÓNG - AI KHÔNG làm,
+   chỉ GHI NHẬN theo mục 1b. Không dòng nào khớp thì lấy C, không lấy A
 B  sửa tài liệu nội bộ đã có sổ · tạo tài liệu nội bộ mới đáng vào sổ · thêm hay
-   sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án, khối mới · update ngược X0 ngoài
+   sửa DỮ KIỆN có phạm vi ra ngoài · mở dự án · update ngược X0 ngoài
    nhóm khóa · THÊM lệnh cấm siết chặt và ĐIỀN LẦN ĐẦU mục còn ở C12 và CHƯA
    TỪNG có giá trị, theo ngoại lệ C11 · dọn hay xóa nháp
    CHƯA vào sổ (trong repo phần mềm: theo mục 1b, không theo dòng này)
 A  mở việc, cập nhật bước, hạn, trạng thái việc · dữ kiện thuần nội bộ có nguồn
    rõ · nạp CUA_VAO đã có nguồn theo X3 · tạo nháp, ghi chú chưa vào sổ · đổi tên
-   MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4
+   MỘT file nội bộ chưa phát hành cho đúng chuẩn X0 C4 · mở khối, folder con
+   theo cây C3, thêm loại tên C4 (không tăng rev X0)
 ```
 
 GẤP không phải một mức: là việc mức B mở NGAY trong lượt phát hiện, hạn trong
@@ -3028,10 +3057,9 @@ thuật trên repo, môi trường, CSDL, secret và hạ tầng nằm NGOÀI PH
 THỰC THI của bộ: AI không tự deploy, migration, ROLLBACK, merge, sửa dữ
 liệu, xoay secret hay đổi quyền ở BẤT KỲ môi trường nào (kể cả dev,
 staging) - chỉ được SOẠN CHECKLIST hoặc MỞ VIỆC chuyển đội kỹ thuật.
-GHI NHẬN vào sổ thao tác mà NGƯỜI/đội kỹ thuật đã làm: lượt chạm CHẠY
-THẬT (deploy, migration, rollback, merge vào nhánh tự deploy, sửa CSDL đã
-khai) ghi mức C kèm plan - rà 7g giữ; việc trên dev, staging ghi như việc
-thường.
+GHI NHẬN thao tác đội kỹ thuật ĐÃ làm: chạm CHẠY THẬT ghi mức B kèm tên
+người phụ trách xác nhận trong ô Làm gì (rà 7g giữ), KHÔNG plan - plan C
+chỉ cho việc AI SẮP làm; dev, staging ghi như việc thường.
 
 SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
 bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
@@ -3133,7 +3161,8 @@ DUKIEN.md     dự án · mã · dữ kiện · giá trị · hiệu lực từ 
               profile, ô này LUÔN ghi A tới D; thang là CORE, REGULATED chỉ
               thêm nguồn chỉ định và phạm vi chi tiết) · trạng thái · rà lại trước · ghi lần
 TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN BẢN (HIỆN HÀNH,
-              CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ · QUAN SÁT
+              CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ (NHÁP, ĐÃ
+              GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC...) · QUAN SÁT
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
               nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH
@@ -3341,7 +3370,7 @@ trống sau khi cài là SAI (rà 0i bắt).
 TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
-thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B nếu mở folder mới).
+thêm dòng @FOLDER.KHOI (mức A; mở folder chức năng mới là B).
 
 # 2. Nhóm hỏi tiếp theo, đúng lúc cần
 
@@ -3361,14 +3390,14 @@ và hỏi đủ nhóm B:**
    khai gì?
 6  Các bên liên quan: tên, vai, tỷ lệ nếu có, và VĂN BẢN KÝ nào xác lập vai đó?
    Bên nào chưa có văn bản thì ghi CHƯA KIỂM và cấm đưa ra ngoài
+```
+
+**Nhóm C, điền dần, hỏi khi cần (7, 8 có mặc định ở X0 C7, C8):**
+
+```
 7  Loại dữ kiện nào lấy từ nguồn nào là nguồn thắng? Mức nguồn tối thiểu từng
    phạm vi giữ mặc định X0 C7 hay chỉnh?
 8  Thuật ngữ bắt buộc dùng, thuật ngữ cấm? Quy tắc hình thức văn bản?
-```
-
-**Nhóm C, điền dần được, hỏi khi chạm tới:**
-
-```
 9   Nhịp: quét mail bằng gì, ai giữ, bao lâu nhắc? Ngưỡng rà lại dữ kiện?
 10  Dòng kiểm riêng nào cần cộng vào bảng kiểm phát hành?
 11  Mục nào của X0 khóa thêm ngoài mặc định C11? Loại việc nào cần nâng mức (C13)?

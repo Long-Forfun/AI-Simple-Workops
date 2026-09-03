@@ -3173,16 +3173,21 @@ def main(goc):
             _lg, _muc = _r[4], _r[3].strip()
             if _muc == "C" or not re.search(_dv, _lg):
                 continue
+            # chuyện ĐÃ XẢY RA do đội kỹ thuật làm: ghi nhận mức B kèm TÊN
+            # người phụ trách xác nhận là đủ - bắt plan C để ghi nhận một việc
+            # đã rồi là thủ tục chiều bộ (audit vai giám đốc, đợt 2)
+            if _muc == "B" and _pt_pm and any(
+                    bo_dau(_pt) in bo_dau("|".join(_r)) for _pt in _pt_pm):
+                continue
             if any(re.search(_n, _lg, re.I) for _n in _neo):
                 _sx.append(f"{(_r[0] or '?').strip()[:22]} (mức {_muc or 'trống'})")
         bao("7g. chạm CHẠY THẬT phải ghi mức C", not _sx,
             f"{_liet(_sx[:4])}: ô \"Làm gì\" có động từ sản xuất GIAO với nơi"
             f" chạy thật khai ở X0 C2"
-            f"{' (' + _liet(_host_pm[:2]) + ')' if _host_pm else ''} mà lượt"
-            f" ghi KHÔNG ở mức C. X5 mục 1 MẶC ĐỊNH ĐÓNG: chạm chạy thật cần"
-            f" plan và cái gật TRƯỚC"
-            f"{' của ' + _liet(_pt_pm[:2]) if _pt_pm else ''}. Việc trên"
-            f" staging hay đã có plan thì sửa ô Mức về C và nối mã plan;"
+            f"{' (' + _liet(_host_pm[:2]) + ')' if _host_pm else ''}. Đội kỹ"
+            f" thuật ĐÃ làm thì ghi mức B kèm tên người phụ trách xác nhận"
+            f"{' (' + _liet(_pt_pm[:2]) + ')' if _pt_pm else ' (khai ở C2)'}"
+            f" ngay trong ô Làm gì; AI không tự làm thao tác này (X5 mục 1b)."
             f" [AI: không tự hạ mức]")
         # Lưới MỀM cho động từ chưa vào danh sách: hai vòng rubric liền phát
         # hiện lớp lỗ này bằng động từ MỚI (gop, phat hanh, squash...). Câu

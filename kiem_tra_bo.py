@@ -1430,6 +1430,30 @@ def phep_fuzz(goc, phu_them=()):
     thu3("ô Trạng thái THU bỏ RỖNG (với THU, rỗng cũng là lệch)",
          lambda k, i, so, G, sua: _moi_truong_thu(i, so, G, ""), "3g.")
 
+    def _ca_7g_ghi_nhan(k, i, so, G, sua):
+        """ĐÚNG LUẬT (đợt 2): đội kỹ thuật ĐÃ deploy, ghi nhận mức B kèm tên
+        người phụ trách xác nhận - không plan. 7g không được kêu."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He ban le · repo github.com/cty/bl · web · dev may doi,"
+               " staging stg.bl.vn, chạy thật bl.bacha.vn" + NL
+             + "        · secret o Vault · nhánh tự deploy main · CSDL chua ro" + NL
+             + "        · phụ trách vận hành: Nam ·" + _s[_m.end():])
+        G2 = "G-20260828-CUA1-02"
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| " + G2 + " | 2026-08-28 | CUA1.2400.wx | B |"
+             " ghi nhan: ABC Soft da deploy ban 1.2 len bl.bacha.vn, Nam xac"
+             " nhan | khong | khong | XONG | khong |" + NL)
+        b = (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+        _ghi(so / "BANG_DIEU_KHIEN.md", b.replace("CUA1=" + G, "CUA1=" + G2)
+             .replace("sinh_boi: " + G, "sinh_boi: " + G2))
+
+    thu("ghi nhận deploy đã xảy ra mức B kèm tên phụ trách (không được kêu)",
+        _ca_7g_ghi_nhan, False)
+
     def _ca_7g_phat_hanh(k, i, so, G, sua):
         """'phat hanh ban 2.1 len <host chạy thật>' mức B: nêu ĐÍCH DANH host
         mà lọt vì thiếu động từ (giám khảo rubric vòng 02, ca g8)."""
@@ -1939,8 +1963,8 @@ def phep_fuzz(goc, phu_them=()):
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
     _i3_mong = 94 if _os_dem.name == "nt" else 93   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 38, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 38,"
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 39, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 39,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -3091,12 +3115,12 @@ def main(goc):
         # được mà mọi lưới im (hội đồng vòng 15)
         _tpl = (goc / "X0_CAUHINH_TEMPLATE.md").read_text(encoding="utf-8")
         _mt = _kv26.muc_con_trong(_tpl)
-        ca.append(("0i trên CHÍNH template: 39 ô trống khi chưa bật profile nào,"
-                   " 46 khi bật REGULATED và EMAIL; không nuốt dòng cú pháp hay ô"
-                   " đã điền; có khóa của C13",
-                   len(_mt) == 39 and len(_kv26.muc_con_trong(
+        ca.append(("0i trên CHÍNH template: 30 ô trống khi chưa bật profile nào,"
+                   " 37 khi bật REGULATED và EMAIL (vòng 103 đặt mặc định cho"
+                   " C8, C9); không nuốt dòng cú pháp hay ô đã điền; có khóa C13",
+                   len(_mt) == 30 and len(_kv26.muc_con_trong(
                        _tpl.replace("  [ ] EMAIL", "  [x] EMAIL")
-                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 46
+                           .replace("  [ ] REGULATED", "  [x] REGULATED"))) == 37
                    and not ({"@DUAN.", "@NGUON.", "@TEN.PROJECT"} & _mt)
                    and "@MUC.NANG" in _mt))
         # PH-5: ghim CHIỀU của lời dặn phép 8, thứ mà phán quyết không giữ

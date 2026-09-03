@@ -66,7 +66,7 @@ trống sau khi cài là SAI (rà 0i bắt).
 TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
 Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
-thêm dòng @FOLDER.KHOI (mức A nếu folder dùng cây mặc định, mức B nếu mở folder mới).
+thêm dòng @FOLDER.KHOI (mức A; mở folder chức năng mới là B).
 
 # 2. Nhóm hỏi tiếp theo, đúng lúc cần
 
@@ -86,14 +86,14 @@ và hỏi đủ nhóm B:**
    khai gì?
 6  Các bên liên quan: tên, vai, tỷ lệ nếu có, và VĂN BẢN KÝ nào xác lập vai đó?
    Bên nào chưa có văn bản thì ghi CHƯA KIỂM và cấm đưa ra ngoài
+```
+
+**Nhóm C, điền dần, hỏi khi cần (7, 8 có mặc định ở X0 C7, C8):**
+
+```
 7  Loại dữ kiện nào lấy từ nguồn nào là nguồn thắng? Mức nguồn tối thiểu từng
    phạm vi giữ mặc định X0 C7 hay chỉnh?
 8  Thuật ngữ bắt buộc dùng, thuật ngữ cấm? Quy tắc hình thức văn bản?
-```
-
-**Nhóm C, điền dần được, hỏi khi chạm tới:**
-
-```
 9   Nhịp: quét mail bằng gì, ai giữ, bao lâu nhắc? Ngưỡng rà lại dữ kiện?
 10  Dòng kiểm riêng nào cần cộng vào bảng kiểm phát hành?
 11  Mục nào của X0 khóa thêm ngoài mặc định C11? Loại việc nào cần nâng mức (C13)?

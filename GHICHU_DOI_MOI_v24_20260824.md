@@ -9,6 +9,40 @@ Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 93: audit vai GIÁM ĐỐC - đợt 2: SỬA LUẬT giảm thủ tục
+
+Đợt này đổi HÀNH VI bộ theo năm đề xuất của giám khảo vai giám đốc - mọi
+chỗ đều là thủ tục bộ bắt người làm mà "một giám đốc thật sẽ không làm":
+
+1. CHUYỆN ĐÃ XẢY RA ghi mức B, không plan. Đội kỹ thuật đã deploy, HĐ đã
+   ký, mail đã gửi: ghi nhận mức B kèm TÊN người phụ trách xác nhận trong
+   ô Làm gì là đủ; plan C chỉ cho việc AI SẮP làm - mà thao tác kỹ thuật
+   thì AI không làm (định vị vòng 57), nên hết cảnh "mở plan C để ghi nhận
+   việc đã rồi". 7g: mức B có tên phụ trách -> im; mức A vẫn đỏ; mức B
+   không tên vẫn đỏ. X5 mục 1 danh mục C rút gọn tương ứng. Ca I2 ghim.
+2. VAI BÊN MUA/BÁN TỰ XÁC LẬP: dòng TAILIEU ĐÃ KÝ (có sha256) với bên đó
+   là ĐỦ căn cứ, AI cập nhật C6 mức B cùng lượt, không cần QUYETDINH + plan
+   (X0 C6). Văn bản nội bộ (bảng giá, chính sách) người vận hành xác nhận
+   trong phiên: nguồn B - hết phải "ban hành bảng giá bằng QUYETDINH" (C7).
+3. NGƯỠNG C9 CÓ MẶC ĐỊNH sẵn (rà lại 30/180, hết hạn 30 và 7, chờ đối tác
+   5, inbox 3 - đúng số máy đang dùng), C8 hình thức mặc định "không có":
+   template từ 39 xuống 30 ô trống, kho LITE cài xong bớt 9 câu phải trả
+   lời. Mở khối, folder con theo cây, thêm loại tên = mức A, không tăng rev.
+4. CÂY MẶC ĐỊNH thêm 06_Ke_toan_Nhan_su, 07_Hanh_chinh; @TEN.LOAI thêm HDON
+   BL BBBG; TAILIEU có trạng thái ĐÃ NHẬN, ĐÃ THAY; folder con không bắt
+   đầu bằng _ (máy bỏ qua thư mục _ - file kế toán để ở _den là mất hút).
+5. NHÓM B của X9 còn HAI câu (phạm vi, các bên); câu 7, 8 xuống nhóm C với
+   mặc định có sẵn - báo giá đầu tiên không còn bị chặn bởi bốn câu về từ
+   cấm, em-dash, font, thuật ngữ.
+
+Vấp tự gây: viết "@BEN.VAI" xuống ĐẦU DÒNG trong văn xuôi C6 - máy đọc là
+khai @KEY lần hai (0i3) và MỌI ca fuzz báo "kho lành lệch sẵn". Quy ước ghi
+lại: trong X0, @KEY chỉ đứng đầu dòng ở dòng khai.
+
+Trần: X0 19967/20000, X5 20226/20300, X9 8500/8500 - mọi chữ thêm có chữ
+cắt. BENCHMARK route NOI_BO 1860, CUA_VAO mail 6563. I2 39. Đợt 3 còn: danh
+bạ người/khách, hai người dùng ở LITE, ẩn cột máy/GHICHU/GOP khỏi kho.
+
 ## Vòng 92: audit vai GIÁM ĐỐC - đợt 1: máy sinh báo cáo, bắt mất dòng
 
 Giám khảo đóng vai giám đốc công ty 20 người, cài bộ thật cho "Thiên Phúc",
