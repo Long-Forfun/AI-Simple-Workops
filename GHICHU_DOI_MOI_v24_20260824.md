@@ -9,6 +9,44 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 92: audit vai GIÁM ĐỐC - đợt 1: máy sinh báo cáo, bắt mất dòng
+
+Giám khảo đóng vai giám đốc công ty 20 người, cài bộ thật cho "Thiên Phúc",
+ghi 15 lượt sổ tháng 8 đúng luật (máy "hệ sạch") rồi sống 10 kịch bản. Kết
+luận: bộ GIỮ DẤU VẾT rất tốt và ĐÚNG RANH GIỚI phần mềm, nhưng "bắt tôi và
+trợ lý phục vụ hệ sổ nhiều hơn hệ sổ phục vụ tôi" - 2/4 plan và 2/4 quyết
+định trong tháng là để chiều bộ. Ba chỗ đổi dấu GÁNH NẶNG -> ĐÁNG: máy sinh
+báo cáo, thôi bắt plan cho chuyện đã xảy ra, bắt mất dòng. Đợt 1 (thuần thêm
+máy/trình bày, không đổi cách công ty làm việc):
+
+1. bao_cao.py - MÁY SINH BANG_DIEU_KHIEN VÀ BÁO CÁO cho người quản lý từ
+   năm sổ, dùng ĐÚNG các hàm đọc sổ của kiem_van_hanh (cùng luật fence,
+   tách ô, ngưỡng C9) nên bảng máy sinh qua sạch mọi phép 8/8b/8c/8d/8e -
+   thử trên chính kho Thiên Phúc của giám khảo: PASS trọn 5 phép, bảng 1.758
+   ký tự. Bộ đếm viết NHÃN trước SỐ (8e đọc số sau nhãn). Trước đây AI viết
+   bảng tay từ sổ ngày càng dày (~80k token mỗi "điểm danh") và bảng lệch
+   sổ là lớp lệch thường trực. Báo cáo: cần quyết · tài liệu chờ ký, sắp hết
+   hạn · quyết định tháng · việc mở theo người · tài liệu đang hoạt động.
+   X4 câu tắt "điểm danh" nay chạy máy rồi DỊCH; X9 mục 3 và 3c biết file.
+   Hai ca kiem_tra_bo: bảng máy sinh trên kho lành qua sạch + trong trần;
+   trên kho có quá hạn và plan chờ chốt thì bộ đếm khớp 8e.
+
+2. MẤT DÒNG SỔ gọi đúng tên: xóa nhầm dòng tạm ứng 185 triệu, máy trước đây
+   chỉ nói "bảng khai 3, sổ đếm 2, sinh lại bảng" - làm theo là xóa nốt dấu
+   vết. Nay 3c đối chiếu TỪNG MÃ khai ở "Chạm sổ nào" với sổ (và _lich_su):
+   "dòng V-005 mà lượt G-... khai chạm đã BIẾN MẤT khỏi VIEC.md - khôi phục
+   từ bản cũ TRƯỚC, ĐỪNG sinh lại bảng"; 8e khi sổ ÍT hơn bảng cũng đổi lời
+   sang "có thể mất dòng, kiểm 3c". Ca I3 ghim.
+
+3. 7d thôi xúi đưa "chưa rõ" vào C12 (0i sẽ phạt): "chưa rõ" là giá trị hợp
+   lệ ngay tại dòng. 0i2 thôi kể "hội đồng vòng 16".
+
+Trần: X9 8500/8500, README 8997/9000 - cắt bù; route "cắt bỏ X9 và X4" đo
+lại 4535. Fixture 113 ca; I3 94(nt)/93. Đợt 2 (SỬA LUẬT - giảm thủ tục:
+chuyện đã xảy ra ghi mức A/B, vai bên mua tự xác lập khi ĐÃ KÝ, ngưỡng C9
+có mặc định, thêm folder/khối là mức A, rút nhóm B của X9) và đợt 3 (danh
+bạ người/khách, hai người dùng ở LITE, ẩn cột máy) chờ người dùng gật.
+
 ## Vòng 91: thẩm định lại tính người - 6/6 GIỮ, vét trọn khuôn str(...)
 
 Giám khảo thẩm định lại trên kho lỗi thật: CẢ SÁU khoản vòng 89-90 GIỮ

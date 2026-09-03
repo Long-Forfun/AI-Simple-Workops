@@ -12,7 +12,7 @@ FILE: README.md
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
 Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM: xem
 mục "Công ty có phần mềm" bên dưới. Bên trong: luật thường
-trực, cấu hình X0 tới X5, năm sổ lõi, hai script kiểm máy. Repo này là BỘ
+trực, cấu hình X0 tới X5, năm sổ lõi, ba script máy. Repo này là BỘ
 MẪU; vận hành hằng ngày ở KHO CÔNG TY của bạn (ổ máy đơn hay thư mục mây
 như Dropbox; ổ đơn nhớ sao lưu ra thiết bị khác).
 
@@ -143,7 +143,7 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 |---|---|
 | [DOC_TRUOC.md](DOC_TRUOC.md) | Tổng quan bộ, đọc trước |
 | [INSTRUCTION_WORKOPS_v11.md](INSTRUCTION_WORKOPS_v11.md) | Luật thường trực, dán nguyên văn vào Project instructions |
-| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Nguồn duy nhất mọi tham số công ty; phiên đầu điền, rev 0 nghĩa là chưa cài |
+| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Mọi tham số công ty; phiên đầu điền, rev 0 = chưa cài |
 | [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm: ký tự, động từ, từ theo phạm vi |
 | [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành đầu ra rời công ty |
 | [X3_CUAVAO_TEMPLATE.md](X3_CUAVAO_TEMPLATE.md) | Luật cửa vào: file đến, hai chặng, bảng chờ duyệt |
@@ -152,7 +152,8 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
 | [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
 | [_so/](_so) | Năm sổ lõi rỗng + PLANNING (mức C) + THU (khi bật EMAIL) + hai view máy sinh |
-| [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ của công ty ĐANG CHẠY; RA_SOAT chạy nó trước |
+| [bao_cao.py](bao_cao.py) | Máy sinh bảng điều khiển + báo cáo quản lý |
+| [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ công ty ĐANG CHẠY |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
 | [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
@@ -191,7 +192,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 91 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 92 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -260,6 +261,44 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 92: audit vai GIÁM ĐỐC - đợt 1: máy sinh báo cáo, bắt mất dòng
+
+Giám khảo đóng vai giám đốc công ty 20 người, cài bộ thật cho "Thiên Phúc",
+ghi 15 lượt sổ tháng 8 đúng luật (máy "hệ sạch") rồi sống 10 kịch bản. Kết
+luận: bộ GIỮ DẤU VẾT rất tốt và ĐÚNG RANH GIỚI phần mềm, nhưng "bắt tôi và
+trợ lý phục vụ hệ sổ nhiều hơn hệ sổ phục vụ tôi" - 2/4 plan và 2/4 quyết
+định trong tháng là để chiều bộ. Ba chỗ đổi dấu GÁNH NẶNG -> ĐÁNG: máy sinh
+báo cáo, thôi bắt plan cho chuyện đã xảy ra, bắt mất dòng. Đợt 1 (thuần thêm
+máy/trình bày, không đổi cách công ty làm việc):
+
+1. bao_cao.py - MÁY SINH BANG_DIEU_KHIEN VÀ BÁO CÁO cho người quản lý từ
+   năm sổ, dùng ĐÚNG các hàm đọc sổ của kiem_van_hanh (cùng luật fence,
+   tách ô, ngưỡng C9) nên bảng máy sinh qua sạch mọi phép 8/8b/8c/8d/8e -
+   thử trên chính kho Thiên Phúc của giám khảo: PASS trọn 5 phép, bảng 1.758
+   ký tự. Bộ đếm viết NHÃN trước SỐ (8e đọc số sau nhãn). Trước đây AI viết
+   bảng tay từ sổ ngày càng dày (~80k token mỗi "điểm danh") và bảng lệch
+   sổ là lớp lệch thường trực. Báo cáo: cần quyết · tài liệu chờ ký, sắp hết
+   hạn · quyết định tháng · việc mở theo người · tài liệu đang hoạt động.
+   X4 câu tắt "điểm danh" nay chạy máy rồi DỊCH; X9 mục 3 và 3c biết file.
+   Hai ca kiem_tra_bo: bảng máy sinh trên kho lành qua sạch + trong trần;
+   trên kho có quá hạn và plan chờ chốt thì bộ đếm khớp 8e.
+
+2. MẤT DÒNG SỔ gọi đúng tên: xóa nhầm dòng tạm ứng 185 triệu, máy trước đây
+   chỉ nói "bảng khai 3, sổ đếm 2, sinh lại bảng" - làm theo là xóa nốt dấu
+   vết. Nay 3c đối chiếu TỪNG MÃ khai ở "Chạm sổ nào" với sổ (và _lich_su):
+   "dòng V-005 mà lượt G-... khai chạm đã BIẾN MẤT khỏi VIEC.md - khôi phục
+   từ bản cũ TRƯỚC, ĐỪNG sinh lại bảng"; 8e khi sổ ÍT hơn bảng cũng đổi lời
+   sang "có thể mất dòng, kiểm 3c". Ca I3 ghim.
+
+3. 7d thôi xúi đưa "chưa rõ" vào C12 (0i sẽ phạt): "chưa rõ" là giá trị hợp
+   lệ ngay tại dòng. 0i2 thôi kể "hội đồng vòng 16".
+
+Trần: X9 8500/8500, README 8997/9000 - cắt bù; route "cắt bỏ X9 và X4" đo
+lại 4535. Fixture 113 ca; I3 94(nt)/93. Đợt 2 (SỬA LUẬT - giảm thủ tục:
+chuyện đã xảy ra ghi mức A/B, vai bên mua tự xác lập khi ĐÃ KÝ, ngưỡng C9
+có mặc định, thêm folder/khối là mức A, rút nhóm B của X9) và đợt 3 (danh
+bạ người/khách, hai người dùng ở LITE, ẩn cột máy) chờ người dùng gật.
 
 ## Vòng 91: thẩm định lại tính người - 6/6 GIỮ, vét trọn khuôn str(...)
 
@@ -2039,7 +2078,7 @@ CHAT HOI, BAN, soạn nháp (không X3, X4, X9) ~17177 token
 CHAT không EMAIL ~18872 token
 CHAT có EMAIL (kèm X3E) ~22870 token
 CHAT nạp cả X9 và X4 ~23373 token
-(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4409 token mỗi phiên,
+(các số này máy giữ khớp qua phép 2c; cắt bỏ X9 và X4 ~4535 token mỗi phiên,
 19,2 phần trăm).
 CHAT vì thế chỉ nên dùng cho HOI, BAN, soạn nháp, không phải phiên ghi sổ chính.
 
@@ -3147,7 +3186,8 @@ xuất vào X0 hoặc X1. Cùng câu hỏi lặp từ 2 lần là thiếu mục 
 # Năm câu tắt
 
 ```
-điểm danh   bung đủ bàn làm việc từ BANG_DIEU_KHIEN
+điểm danh   chạy `python bao_cao.py <00_Index>` rồi DỊCH cho người; bảng cũ
+            hơn sổ thì `--bang` sinh lại (máy sinh, không viết tay)
 quét mail   chạy X3 cho mail trong phiên, xuất bảng chờ duyệt
 rà file     chạy danh mục trên, xuất bảng, chưa sửa gì
 đồng bộ quan sát   khép kín bộ quan sát: kết quả kiem_van_hanh ỔN ĐỊNH và
@@ -3573,10 +3613,9 @@ và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
 Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là file
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
-rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì TUYỆT ĐỐI KHÔNG xóa -
-repo cha có thể là dự án khác của công ty, xóa là mất lịch sử của họ:
-CHUYỂN kho ra thư mục ngoài vùng git - kho chạy không được nằm trong
-bản git nào, `_so\` là sổ SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
+rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì KHÔNG xóa (repo
+cha có thể là dự án khác): CHUYỂN kho ra ngoài vùng git - `_so\` là sổ
+SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
 Project (README bước 3)? Thay bản TEMPLATE bằng bản ĐÃ ĐIỀN ngay sau cài
 và mỗi lần rev X0 tăng - phiên CHAT đọc bản trong Project, để bản cũ là
 CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
@@ -3625,6 +3664,9 @@ không bịa.
 
 # 3. Chạy thử
 
+Bảng điều khiển MÁY sinh: `python bao_cao.py <00_Index> --bang`; không
+`--bang` là báo cáo.
+
 Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy được ở cả hai đầu:
 
 ```
@@ -3656,7 +3698,7 @@ changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bả
 Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
 (a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
 thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, DOC_TRUOC.md,
-BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, kiem_van_hanh.py,
+BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, bao_cao.py, kiem_van_hanh.py,
 kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
 mới thay bản cũ là xong (bản v* cũ của INSTRUCTION và GHICHU xóa đi, chỉ giữ
 MỘT). Bỏ nhóm (b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới
@@ -3693,7 +3735,7 @@ nhưng với VAI CÁC BÊN thì vẫn cần văn bản ký, chưa có thì CHƯA
 ```
 
 ════════════════════════════════════════
-FILE: kiem_tra_bo.py và kiem_van_hanh.py (KHÔNG nhúng)
+FILE: kiem_tra_bo.py, kiem_van_hanh.py và bao_cao.py (KHÔNG nhúng)
 ════════════════════════════════════════
 
 Hai script chiếm 49,8 phần trăm bản gộp mà không ai đọc chúng trong bản

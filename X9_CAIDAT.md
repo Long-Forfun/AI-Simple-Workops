@@ -53,10 +53,9 @@ và _da_nap\ con của nó (X0 C1 @DUONG.INBOX), điền X0 C0 C1 C2, đặt
 rev 1, dựng cây folder mặc định theo X0 C3, sinh X0_INDEX và BANG_DIEU_KHIEN đầu tiên in "bàn sạch".
 Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là file
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
-rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì TUYỆT ĐỐI KHÔNG xóa -
-repo cha có thể là dự án khác của công ty, xóa là mất lịch sử của họ:
-CHUYỂN kho ra thư mục ngoài vùng git - kho chạy không được nằm trong
-bản git nào, `_so\` là sổ SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
+rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì KHÔNG xóa (repo
+cha có thể là dự án khác): CHUYỂN kho ra ngoài vùng git - `_so\` là sổ
+SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
 Project (README bước 3)? Thay bản TEMPLATE bằng bản ĐÃ ĐIỀN ngay sau cài
 và mỗi lần rev X0 tăng - phiên CHAT đọc bản trong Project, để bản cũ là
 CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
@@ -105,6 +104,9 @@ không bịa.
 
 # 3. Chạy thử
 
+Bảng điều khiển MÁY sinh: `python bao_cao.py <00_Index> --bang`; không
+`--bang` là báo cáo.
+
 Sau khi cài xong, chạy thử HAI vòng nhỏ để chứng minh hệ chạy được ở cả hai đầu:
 
 ```
@@ -136,7 +138,7 @@ changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bả
 Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
 (a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
 thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, DOC_TRUOC.md,
-BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, kiem_van_hanh.py,
+BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, bao_cao.py, kiem_van_hanh.py,
 kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
 mới thay bản cũ là xong (bản v* cũ của INSTRUCTION và GHICHU xóa đi, chỉ giữ
 MỘT). Bỏ nhóm (b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới

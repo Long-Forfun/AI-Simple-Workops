@@ -233,7 +233,8 @@ BIET_MAT_SO = re.compile(
 BIET_MAT_00 = re.compile(
     r"X[0-9]E?_[A-Z0-9_]+\.md|INSTRUCTION_WORKOPS_v\d+\.md|README\.md"
     r"|GHICHU_(DOI_MOI|LICHSU)_v.*\.md|DOC_TRUOC\.md|BENCHMARK_TOKEN\.md"
-    r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|\.gitignore|_moc_(ghi|qd)\.txt")
+    r"|WORKOPS_.*_GOP\.md|kiem_\w+\.py|bao_cao\.py|\.gitignore"
+    r"|_moc_(ghi|qd)\.txt")
 
 
 def loc_dau_vet_ghi(so, doc_ham=None):
@@ -2236,7 +2237,7 @@ def main(goc):
                     if not re.search(rf"^# {m}\. ", doc(x0s[0]), re.M)]
         bao("0i2. X0 còn đủ mục phép kiểm dùng", not _mat_muc,
             f"mất mục {_liet(_mat_muc)}: xóa mục là TẮT LUÔN phép canh chính mục"
-            f" đó - mất C12 thì 0i im, mất C2 thì 7b im (hội đồng vòng 16)")
+            f" đó - mất C12 thì 0i im, mất C2 thì 7b im. Khôi phục X0, mức C")
         # 0i3. Khai TRÙNG một @KEY: mọi hàm đọc X0 đều re.search MỘT LẦN nên
         #      bản trùng được giải theo "dòng nào gặp trước", không ai biết có
         #      mâu thuẫn. Hai dòng CUA1 trỏ hai gốc là CHIA ĐÔI KHO - hai máy
@@ -2619,6 +2620,13 @@ def main(goc):
         # không phải "ít nhất một sổ": ghi đè ô Ghi lần của MỘT sổ từng đi im
         # trong khi X5 mục 3 bước 3 hứa "3c lệch mãi" (hội đồng vòng 14)
         khong_dau = []
+        _ma_theo_so = {}
+        for _tso in SO_CO_GHI_LAN:
+            _cot = 0 if _tso in ("QUYETDINH.md", "PLANNING.md") else 1
+            _ms = {r[_cot].strip() for r in dong_bang(doc(so / _tso)) if len(r) > _cot}
+            for _pls in sorted((so / "_lich_su").glob(_tso.replace(".md", "*.md"))):
+                _ms |= {r[_cot].strip() for r in dong_bang(doc(_pls)) if len(r) > _cot}
+            _ma_theo_so[_tso] = _ms
         for h in hang_nk:
             ma = h[0].strip("* ")
             cham = (h[5] if len(h) > 5 else "")
@@ -2645,6 +2653,18 @@ def main(goc):
             if "khong, da xoa theo q-" in _cham_kd:
                 continue  # X5 mục 7b: mất dấu ở MỌI sổ, ô thay trọn
             can = {t for t in SO_CO_GHI_LAN if t.split(".")[0] in cham}
+            # MẤT DÒNG SỔ phải bị gọi đúng tên: xóa nhầm dòng V-005 mà máy chỉ
+            # nói "bảng khai 3, sổ đếm 2, sinh lại bảng" là xúi xóa nốt dấu vết
+            # (giám khảo vai giám đốc). Từng MÃ khai ở "Chạm sổ nào" phải còn
+            # trong sổ đó (hay đã sang _lich_su).
+            for _tso, _mdong in re.findall(
+                    r"\b(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU)\s+"
+                    r"([A-Z#][A-Za-z0-9-]{2,})", cham):
+                if _mdong not in _ma_theo_so.get(_tso + ".md", set()):
+                    khong_dau.append(
+                        f"dòng {_mdong} mà lượt {ma} khai chạm đã BIẾN MẤT khỏi"
+                        f" {_tso}.md - khôi phục từ bản cũ TRƯỚC, ĐỪNG sinh lại"
+                        f" bảng")
             thieu = sorted(t for t in (can or set()) if ma not in ghi_lan_theo_so.get(t, set()))
             if thieu or (not can and ma not in ghi_lan):
                 khong_dau.append(
@@ -3090,8 +3110,9 @@ def main(goc):
             f" không rõ đâu là môi trường CHẠY THẬT thì deploy đáng lẽ mức C bị"
             f" hạ xuống A (X5 mục 1b); không rõ nơi giữ secret thì secret rơi"
             f" vào sổ hay _INBOX. CHƯA BIẾT CŨNG KHAI ĐƯỢC: gõ đúng tên trường"
-            f" kèm chữ \"chưa rõ\" (ví dụ \"secret chưa rõ\") thì rà thôi đỏ, AI"
-            f" đưa mục đó vào danh sách còn thiếu ở X0 C12 để hỏi lại sau; mức B")
+            f" kèm chữ \"chưa rõ\" (ví dụ \"secret chưa rõ\") ngay tại dòng -"
+            f" đó là giá trị hợp lệ, KHÔNG đưa vào C12; hỏi lại đội kỹ thuật"
+            f" khi tiện; mức B")
 
         # dòng TAILIEU dạng "Repo" chỉ hợp lệ khi công ty CÓ khai phần mềm
         # 7d2 từng chỉ nổ khi C2 chưa khai phần mềm NÀO, nên công ty khai một
@@ -3459,8 +3480,12 @@ def main(goc):
                 for _k, _v in _qh.items():
                     _m8 = re.search(re.escape(_k) + r"\D{0,12}?(\d+)", bdk_nd)
                     if _m8 and int(_m8.group(1)) != len(_v):
-                        _loi8e.append(f"{_k}: bảng khai {_m8.group(1)},"
-                                      f" sổ đếm {len(_v)} ({_liet(_v[:3])})")
+                        _loi8e.append(
+                            f"{_k}: bảng khai {_m8.group(1)}, sổ đếm {len(_v)}"
+                            + (" - sổ ÍT hơn bảng: có thể MẤT DÒNG, kiểm 3c và"
+                               " khôi phục TRƯỚC, đừng sinh lại bảng"
+                               if int(_m8.group(1)) > len(_v)
+                               else f" ({_liet(_v[:3])})"))
                     elif not _m8 and _v:
                         # banner ĐẦY ĐỦ mà thiếu nhãn: chỉ so nhãn CÓ MẶT là
                         # ba bộ đếm hết hạn / rà lại / _INBOX vô hình - chứng

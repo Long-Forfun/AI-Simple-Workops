@@ -57,7 +57,7 @@ FILE_BAT_BUOC = [
 # File kèm bắt buộc: kiểm CÓ MẶT và có trong _GOP, nhưng miễn kiểm ký tự cấm và
 # tham chiếu chéo (script giữ danh sách ký tự cấm làm mẫu dò; GHICHU trích nguyên
 # văn các vòng cũ nên được phép chứa tham chiếu lịch sử)
-FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py"]
+FILE_KEM = ["kiem_tra_bo.py", "kiem_van_hanh.py", "bao_cao.py"]
 
 # Ngân sách context, tính bằng ký tự (ước lượng token tiếng Việt = ký tự / 3)
 NGAN_SACH = {
@@ -74,6 +74,7 @@ NGAN_SACH = {
     "README.md": 9000,  # file người dùng đọc ĐẦU TIÊN: dài là mất người trước khi cài xong
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
+    "bao_cao.py": 14000,        # máy sinh bảng + báo cáo, AI chỉ dịch
     "kiem_tra_bo.py": 220000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
@@ -1520,6 +1521,11 @@ def phep_fuzz(goc, phu_them=()):
     thu("DUKIEN dòng cũ hết hiệu lực thay bởi mã có thật (không được kêu)",
         _ca_13o_dung, False)
 
+    thu3("xóa nhầm dòng VIEC mà lượt ghi khai chạm - phải gọi đúng tên MẤT DÒNG",
+         lambda k, i, so, G, sua: _ghi(so / "VIEC.md", NL.join(
+             d for d in (so / "VIEC.md").read_text(encoding="utf-8").splitlines()
+             if "V-DA1-001" not in d) + NL), "3c.")
+
     def _ca_9e_thoat(k, i, so, G, sua):
         """Dòng TAILIEU trỏ '..' ra ngoài kho: mọi phép toàn vẹn sẽ đọc file
         KHÔNG thuộc công ty - chặn tại cửa (P0 vòng 96)."""
@@ -1932,7 +1938,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 93 if _os_dem.name == "nt" else 92   # ca 9d chỉ có trên NTFS
+    _i3_mong = 94 if _os_dem.name == "nt" else 93   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 38, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 38,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
@@ -2867,6 +2873,37 @@ def main(goc):
                 sys.argv = _argv7
             ca.append(("lưới mềm 7g in LƯU Ý với động từ lạ + chữ prod",
                        "LƯU Ý  7g" in _buf7.getvalue()))
+        # BẢNG MÁY SINH (bao_cao.py --bang) phải qua sạch MỌI phép trên kho
+        # lành, nằm trong trần 4.200, và trên kho có việc quá hạn thì bộ đếm
+        # phải khớp 8e mà không phải AI viết tay (audit vai giám đốc, #1)
+        import importlib.util as _ilu
+        _spec_bc = _ilu.spec_from_file_location("bao_cao", goc / "bao_cao.py")
+        _bc = _ilu.module_from_spec(_spec_bc)
+        _spec_bc.loader.exec_module(_bc)
+        with tempfile.TemporaryDirectory() as _tdbc:
+            _khoc, _idxc, _soc, _Gc = _kho_song(goc, _tdbc)
+            _dbc = _bc.thu_thap(_idxc)
+            _bang = _bc.sinh_bang(_dbc)
+            _ghi(_soc / "BANG_DIEU_KHIEN.md", _bang)
+            _lech_bc = _ra_soat(_idxc, _khoc)
+            ca.append(("bảng máy sinh qua sạch mọi phép trên kho lành",
+                       not _lech_bc and len(_bang) <= 4200))
+            # kho có việc quá hạn + plan chờ chốt: bảng máy sinh khớp 8e
+            _ghi(_soc / "VIEC.md",
+                 (_soc / "VIEC.md").read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| DA1 | V-DA1-009 | Viec tre | b | toi | | 2020-01-01 |"
+                   " ĐANG LÀM | | " + _Gc + " |" + NL)
+            _ghi(_soc / "PLANNING.md",
+                 (_soc / "PLANNING.md").read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| P-009 | 2098-01-01 | DA1 | mini | Viec cho chot | X5 |"
+                   " VIEC.md | V-DA1-001 | thap | CHỜ CHỐT | |" + NL)
+            _bang2 = _bc.sinh_bang(_bc.thu_thap(_idxc))
+            _ghi(_soc / "BANG_DIEU_KHIEN.md", _bang2)
+            _lech_bc2 = _ra_soat(_idxc, _khoc)
+            ca.append(("bảng máy sinh khớp sổ khi có quá hạn và plan chờ chốt",
+                       not any(l.startswith("8") for l in _lech_bc2)
+                       and "quá hạn: 1" in _bang2 and "plan C treo): 1" in _bang2))
+
         # KHO GIỮA CÀI ĐẶT: X0 đã đổi tên theo mã nhưng còn rev 0, chưa dấu
         # vết ghi - trạng thái HỢP LỆ giữa lượt cài X9, không phép 0i* nào
         # được kêu; mutant or-hóa báo oan mà suite xanh (rubric 09, m05)
@@ -3458,8 +3495,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 111,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 111: bớt ca là"
+             not hong and len(ca) == 113,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 113: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
@@ -3535,7 +3572,7 @@ def main(goc):
         ("README bước 3 nạp CHAT khớp BENCHMARK: không X9, không X4", "ĐỪNG đưa X9" in docs["README.md"] and "X0 tới X5, X9" not in
           (docs["README.md"] + docs["DOC_TRUOC.md"])),
         ("README cấm git pull và stash trong kho, kèm lối thoát, không khuyên ngược", "ĐỪNG chạy `git pull` hay `git stash` trong 00_Index" in docs["README.md"] and "git stash pop" in docs["README.md"] and not re.search(r"(nên|cứ|hãy)\s+`?git\s+(pull|stash)", docs["README.md"], re.I)),
-        ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
+        ("nâng cấp chở CẢ script, INSTRUCTION và MỐC VERSION, không chỉ _TEMPLATE", "chép ĐÈ" in docs["X9_CAIDAT.md"] and all(t in docs["X9_CAIDAT.md"] for t in ["INSTRUCTION_WORKOPS_v*.md", "README.md", "X9_CAIDAT.md", "DOC_TRUOC.md", "kiem_van_hanh.py", "kiem_tra_bo.py", "bao_cao.py"]) and "Bỏ nhóm" in docs["X9_CAIDAT.md"] and "LƯỚI RÀ" in docs["X9_CAIDAT.md"]),
         ("CHỐT CHỐNG LÁCH giữ nguyên vế khóa C11 và C12, không bị đảo ngược", "Bản thân hai danh sách C11 và C12 cũng thuộc nhóm khóa" in docs["X0_CAUHINH_TEMPLATE.md"] and not re.search(r"C11 và C12 (KHÔNG|không) thuộc nhóm khóa", docs["X0_CAUHINH_TEMPLATE.md"])),
         ("X9 mục 4 ĐÁNH DẤU dòng C12, không xóa, khớp C11 ngoại lệ 2", "ĐÁNH DẤU dòng C12" in docs["X9_CAIDAT.md"] and "xóa dòng khỏi C12" not in docs["X9_CAIDAT.md"]),
         ("KHÔNG chỗ nào khai nhóm (b) của nâng cấp là tùy chọn", not re.search(r"[Nn]hóm \(b\)[^.]{0,60}(TÙY CHỌN|tùy chọn|bỏ cũng được|không bắt buộc)", docs["X9_CAIDAT.md"])),

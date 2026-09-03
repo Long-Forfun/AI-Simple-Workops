@@ -73,7 +73,8 @@ xuất vào X0 hoặc X1. Cùng câu hỏi lặp từ 2 lần là thiếu mục 
 # Năm câu tắt
 
 ```
-điểm danh   bung đủ bàn làm việc từ BANG_DIEU_KHIEN
+điểm danh   chạy `python bao_cao.py <00_Index>` rồi DỊCH cho người; bảng cũ
+            hơn sổ thì `--bang` sinh lại (máy sinh, không viết tay)
 quét mail   chạy X3 cho mail trong phiên, xuất bảng chờ duyệt
 rà file     chạy danh mục trên, xuất bảng, chưa sửa gì
 đồng bộ quan sát   khép kín bộ quan sát: kết quả kiem_van_hanh ỔN ĐỊNH và

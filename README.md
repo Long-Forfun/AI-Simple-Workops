@@ -3,7 +3,7 @@
 Bộ mẫu giúp MỘT công ty giao việc giấy tờ, sổ sách, mail cho Claude làm;
 Claude tự ghi chép có kiểm soát. Công ty có PHẦN MỀM: xem
 mục "Công ty có phần mềm" bên dưới. Bên trong: luật thường
-trực, cấu hình X0 tới X5, năm sổ lõi, hai script kiểm máy. Repo này là BỘ
+trực, cấu hình X0 tới X5, năm sổ lõi, ba script máy. Repo này là BỘ
 MẪU; vận hành hằng ngày ở KHO CÔNG TY của bạn (ổ máy đơn hay thư mục mây
 như Dropbox; ổ đơn nhớ sao lưu ra thiết bị khác).
 
@@ -134,7 +134,7 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 |---|---|
 | [DOC_TRUOC.md](DOC_TRUOC.md) | Tổng quan bộ, đọc trước |
 | [INSTRUCTION_WORKOPS_v11.md](INSTRUCTION_WORKOPS_v11.md) | Luật thường trực, dán nguyên văn vào Project instructions |
-| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Nguồn duy nhất mọi tham số công ty; phiên đầu điền, rev 0 nghĩa là chưa cài |
+| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Mọi tham số công ty; phiên đầu điền, rev 0 = chưa cài |
 | [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm: ký tự, động từ, từ theo phạm vi |
 | [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành đầu ra rời công ty |
 | [X3_CUAVAO_TEMPLATE.md](X3_CUAVAO_TEMPLATE.md) | Luật cửa vào: file đến, hai chặng, bảng chờ duyệt |
@@ -143,7 +143,8 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
 | [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
 | [_so/](_so) | Năm sổ lõi rỗng + PLANNING (mức C) + THU (khi bật EMAIL) + hai view máy sinh |
-| [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ của công ty ĐANG CHẠY; RA_SOAT chạy nó trước |
+| [bao_cao.py](bao_cao.py) | Máy sinh bảng điều khiển + báo cáo quản lý |
+| [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ công ty ĐANG CHẠY |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
 | [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
