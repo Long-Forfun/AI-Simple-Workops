@@ -151,12 +151,12 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 | [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế, các câu tắt |
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
 | [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
-| [_so/](_so) | Năm sổ lõi rỗng (VIEC, DUKIEN, TAILIEU, QUYETDINH, NHATKY) + PLANNING (mức C) + THU (chỉ dùng khi bật EMAIL) + hai view máy sinh |
+| [_so/](_so) | Năm sổ lõi rỗng + PLANNING (mức C) + THU (khi bật EMAIL) + hai view máy sinh |
 | [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ của công ty ĐANG CHẠY; RA_SOAT chạy nó trước |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
 | [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
-| [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp nguyên văn mọi file, nạp một lần cho AI đánh giá |
+| [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp mọi file, nạp một lần cho AI đánh giá |
 
 ## Nguyên tắc vận hành
 
@@ -172,15 +172,16 @@ giờ) · EMAIL (mail là kênh nghiệp vụ chính, mở sổ THU). Bật thê
 
 ## Hai script kiểm
 
-Cần Python 3, không thư viện ngoài, chạy được trên Windows, macOS, Linux.
+Python 3, không thư viện ngoài, chạy trên Windows, macOS, Linux.
 
-Kiểm bộ mẫu (chạy ở gốc repo, cho người bảo trì, sửa bộ xong phải PASS hết):
+Kiểm bộ mẫu (ở gốc repo, cho người bảo trì, sửa bộ xong phải PASS hết):
 
 ```bash
 python kiem_tra_bo.py .
 ```
 
-Kiểm kho công ty đang chạy (chạy định kỳ hoặc khi nghi sổ lệch thực tế):
+Nghi sổ lệch: nói AI "rà file" là đủ - AI chạy máy kiểm và DỊCH kết quả
+thành việc cần làm. Tự chạy tay (tùy chọn, ra bảng kỹ thuật):
 
 ```bash
 python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
@@ -190,7 +191,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 89 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 90 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -259,6 +260,19 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 90: vét nốt ba khuyết tính người - sổ và lối rà cho người thường
+
+1. TAILIEU: câu "Vai phiên bản là quan sát của máy... luật SUY BẢN HIỆN
+   HÀNH" viết cho AI - nay là lời người: "cột do MÁY tự điền, cho biết bản
+   nào MỚI NHẤT, bản nào CŨ, hai bản XUNG ĐỘT; bạn không sửa tay".
+2. DUKIEN: "Schema cố định mọi profile" - jargon - thành "ô Mức nguồn luôn
+   ghi một chữ A/B/C/D, đó là độ tin của thông tin".
+3. README: lối CHÍNH khi nghi sổ lệch là nói AI "rà file" (AI chạy máy và
+   DỊCH kết quả thành việc cần làm); tự chạy script tay hạ xuống tùy chọn
+   cho người kỹ thuật - đầu ra thô thôi làm mặt tiền với người thường.
+
+README 8978/9000 sau ba lượt cắt bù. Không đổi máy, không đổi fixture.
 
 ## Vòng 89: audit TÍNH NGƯỜI - báo cáo, sổ và tên folder cho người thường
 
@@ -3755,7 +3769,8 @@ so: DUKIEN
 
 Dữ kiện mang DANH SÁCH phạm vi được phép và MỨC NGUỒN (A B C D theo X0 C7).
 Đầu ra mang đúng một phạm vi; dữ kiện dùng phải đạt mức nguồn tối thiểu của phạm vi đó.
-Schema cố định mọi profile: ô Mức nguồn LUÔN ghi A, B, C hay D theo thang X0 C7.
+Ô Mức nguồn LUÔN ghi một chữ A, B, C hay D (thang X0 C7) - đó là độ tin
+của thông tin.
 Đọc nhanh thang đó: A văn bản ký · B mail/văn bản xác nhận · C tài liệu
 làm việc · D nói miệng. Cột Mã, Ghi lần là dấu vết máy, bỏ qua được.
 
@@ -3777,9 +3792,9 @@ so: TAILIEU
 Đọc từ trái: Tài liệu, Ngày, Ở đâu, Trạng thái là phần CHO NGƯỜI; cột
 Mã, sha256, Ghi lần là dấu vết máy, bỏ qua được.
 Cột "Ở đâu" chỉ nhận năm dạng khai ở X0 C1 (dạng "Repo" chỉ cho dòng
-thuộc dự án @DUAN.PHANMEM). Vai phiên bản là quan sát của máy
-(HIỆN HÀNH · CŨ · XUNG ĐỘT · KHÔNG XÁC ĐỊNH), đổi theo bằng chứng quét kho, luật
-SUY BẢN HIỆN HÀNH ở X5 mục 4. Trạng thái nghiệp vụ chỉ đổi khi có căn cứ (mail,
+thuộc dự án @DUAN.PHANMEM). Cột "Vai phiên bản" do MÁY tự điền
+khi quét kho - nó cho biết bản nào đang MỚI NHẤT (HIỆN HÀNH), bản nào CŨ,
+hay hai bản đang XUNG ĐỘT; bạn không sửa tay cột này (luật ở X5 mục 4). Trạng thái nghiệp vụ chỉ đổi khi có căn cứ (mail,
 biên nhận, lời người dùng), ghi vào cột Căn cứ trạng thái kèm Quan sát lúc.
 Hết hiệu lực, hay đã gia hạn bằng phụ lục: đổi ô Trạng thái sang HẾT HIỆU LỰC
 hay ĐÃ GIA HẠN, ĐỪNG sửa ô Hết hạn của bản ĐÃ KÝ - bộ đếm hết hạn thôi tính

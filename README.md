@@ -142,12 +142,12 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 | [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế, các câu tắt |
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
 | [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
-| [_so/](_so) | Năm sổ lõi rỗng (VIEC, DUKIEN, TAILIEU, QUYETDINH, NHATKY) + PLANNING (mức C) + THU (chỉ dùng khi bật EMAIL) + hai view máy sinh |
+| [_so/](_so) | Năm sổ lõi rỗng + PLANNING (mức C) + THU (khi bật EMAIL) + hai view máy sinh |
 | [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ của công ty ĐANG CHẠY; RA_SOAT chạy nó trước |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
 | [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
-| [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp nguyên văn mọi file, nạp một lần cho AI đánh giá |
+| [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp mọi file, nạp một lần cho AI đánh giá |
 
 ## Nguyên tắc vận hành
 
@@ -163,15 +163,16 @@ giờ) · EMAIL (mail là kênh nghiệp vụ chính, mở sổ THU). Bật thê
 
 ## Hai script kiểm
 
-Cần Python 3, không thư viện ngoài, chạy được trên Windows, macOS, Linux.
+Python 3, không thư viện ngoài, chạy trên Windows, macOS, Linux.
 
-Kiểm bộ mẫu (chạy ở gốc repo, cho người bảo trì, sửa bộ xong phải PASS hết):
+Kiểm bộ mẫu (ở gốc repo, cho người bảo trì, sửa bộ xong phải PASS hết):
 
 ```bash
 python kiem_tra_bo.py .
 ```
 
-Kiểm kho công ty đang chạy (chạy định kỳ hoặc khi nghi sổ lệch thực tế):
+Nghi sổ lệch: nói AI "rà file" là đủ - AI chạy máy kiểm và DỊCH kết quả
+thành việc cần làm. Tự chạy tay (tùy chọn, ra bảng kỹ thuật):
 
 ```bash
 python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"

@@ -9,6 +9,19 @@ Các mục vòng 1 tới 45 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 90: vét nốt ba khuyết tính người - sổ và lối rà cho người thường
+
+1. TAILIEU: câu "Vai phiên bản là quan sát của máy... luật SUY BẢN HIỆN
+   HÀNH" viết cho AI - nay là lời người: "cột do MÁY tự điền, cho biết bản
+   nào MỚI NHẤT, bản nào CŨ, hai bản XUNG ĐỘT; bạn không sửa tay".
+2. DUKIEN: "Schema cố định mọi profile" - jargon - thành "ô Mức nguồn luôn
+   ghi một chữ A/B/C/D, đó là độ tin của thông tin".
+3. README: lối CHÍNH khi nghi sổ lệch là nói AI "rà file" (AI chạy máy và
+   DỊCH kết quả thành việc cần làm); tự chạy script tay hạ xuống tùy chọn
+   cho người kỹ thuật - đầu ra thô thôi làm mặt tiền với người thường.
+
+README 8978/9000 sau ba lượt cắt bù. Không đổi máy, không đổi fixture.
+
 ## Vòng 89: audit TÍNH NGƯỜI - báo cáo, sổ và tên folder cho người thường
 
 Người dùng đặt tiêu chí: "đơn giản, dễ dùng, tên file folder người hoá,
