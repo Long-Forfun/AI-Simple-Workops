@@ -50,20 +50,18 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <điền: đường dẫn gốc trên máy 1> · thiết bị <điền: tên>
-                 <thêm cửa thứ hai, thứ ba... nếu kho mây có nhiều máy cùng vào>
+                 CUA<n> = <đường dẫn máy n> · thiết bị <tên> · người dùng <tên>:
+                 mỗi người (trợ lý) một cửa, LITE vẫn được (mức A); PARALLEL
+                 chỉ khi nhiều phiên GHI cùng lúc
                  Kho Ổ MÁY ĐƠN: backup cùng ổ, phải sao lưu ra thiết bị khác
-@KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
-                 không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
-@KHO.SAOLUU      <điền: thư mục NGOÀI gốc kho (ổ khác, máy khác, hay tài
-                 khoản mây khác) và nhịp sao; hoặc "chưa có". Bản backup
-                 hằng ngày của X5 mục 7 nằm TRONG _so nên một lượt
-                 rollback đám mây trọn _so xóa sạch cả chúng cùng lúc -
-                 đây là bản duy nhất sống sót cảnh đó>
+@KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa (dung lượng...) hoặc "không có">
+@KHO.SAOLUU      <điền: thư mục NGOÀI gốc kho (ổ, máy hay mây khác) và nhịp
+                 sao; hoặc "chưa có". Backup ngày của X5 mục 7 nằm TRONG _so,
+                 rollback mây xóa cả - đây là bản sống sót duy nhất>
 @KHO.CUA_NGUNG   <điền: cửa đã thu hồi - CUAn · thiết bị · ngày · căn cứ
-                 Q-<mã>; hoặc "chưa có". Mã G cũ của cửa đó nằm trong
-                 NHATKY chỉ-thêm nên KHÔNG xóa được: gỡ hẳn dòng cửa
-                 khỏi trên mà không khai xuống đây thì rà 7b tố "cửa ma"
-                 vĩnh viễn. Thu hồi cửa là mức C, kèm QUYETDINH>
+                 Q-<mã>; hoặc "chưa có". Mã G cũ nằm trong NHATKY chỉ-thêm:
+                 gỡ dòng cửa mà không khai đây là 7b tố "cửa ma". Thu hồi
+                 cửa: mức C kèm QUYETDINH>
 @KHO.CU          <điền: kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
 @DUONG.SO        <điền: gốc kho>\00_Index\_so\
 @DUONG.INBOX     <điền: gốc kho>\00_Index\_so\_inbox\ · mục đã nạp chuyển
@@ -187,6 +185,9 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @VANHANH.NGUOI  <điền: tên người vận hành hiện tại, chức danh, cửa hay dùng>
                 KHÔNG thuộc nhóm khóa: đổi là mức B; @NHIP.BANGIAO đổi nó
                 khi bàn giao.
+@NGUOI.NOIBO    chưa có (danh bạ nội bộ, điền dần mức A: tên · chức danh ·
+                nhóm · ngày vào/ra; bàn giao, báo cáo lọc theo tên; TAILIEU
+                ghi người giữ ở cột Cờ: giữ:<tên>)
 ```
 
 Mặc định MỘT người vận hành chốt mức C; nhiều người thì tự quy ước ai chốt
@@ -250,7 +251,7 @@ Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file
 chọn. Bản mới thay bản cũ chỉ khi có mail, biên bản, hay xác nhận trong phiên của
 bên có thẩm quyền (tức từ mức B).
 
-# C8. Thuật ngữ và hình thức
+# C8. Thuật ngữ và hình thức (nâng cao)
 
 ```
 @TUNGU.DUNG          <điền>
@@ -318,7 +319,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @MATHU           sổ mã thư: <điền tên file, mã dạng gì, đang chạy tới đâu, hoặc "chưa có">
 ```
 
-# C10. Dòng kiểm riêng, cộng vào bảng kiểm X2
+# C10. Dòng kiểm riêng, cộng vào bảng kiểm X2 (nâng cao)
 
 ```
 @KIEM.RIENG   13  <điền, mỗi lỗi lặp khi phát hành thêm một dòng, đánh số từ 13>
@@ -379,9 +380,9 @@ tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 @MUC.NANG   <điền: ví dụ "dữ kiện khối tài chính: A nâng lên B", hoặc "không có">
 ```
 
-# C14. Bản đồ tham chiếu, file nào đọc mục nào
+# C14. Bản đồ tham chiếu, file nào đọc mục nào (nâng cao)
 
-Để soát tay khi nghi lệch. Không phải bản chép, chỉ là mục lục.
+Mục lục để soát tay.
 
 ```
 X1  đọc C1 (năm dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu

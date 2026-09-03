@@ -30,8 +30,8 @@ C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
 ```
 1  Mã công ty (3-4 ký tự A-Z hay số, không dấu) và tên đầy đủ? Công ty đóng vai gì trong công
    việc chính?
-2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
-   thì khai các cửa)
+2  Kho đặt ở đâu? (đường dẫn gốc, AI thử đọc để kiểm. Ai nữa dùng kho - trợ
+   lý? Mỗi người một cửa CUA2, CUA3 ở X0 C1, LITE vẫn được)
 3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
    là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức theo X0 C2
    @DUAN.PHANMEM: repo · thành phần · môi trường · nơi chạy thật · nơi giữ
@@ -55,18 +55,17 @@ Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là 
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
 rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì KHÔNG xóa (repo
 cha có thể là dự án khác): CHUYỂN kho ra ngoài vùng git - `_so\` là sổ
-SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
-Project (README bước 3)? Thay bản TEMPLATE bằng bản ĐÃ ĐIỀN ngay sau cài
-và mỗi lần rev X0 tăng - phiên CHAT đọc bản trong Project, để bản cũ là
-CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
+SỐNG (mục 3c). Xóa luôn GHICHU_*, WORKOPS_*_GOP.md, BENCHMARK_TOKEN.md
+khỏi kho: tài liệu của bộ mẫu, không dùng vận hành. Có tài liệu Project
+(README bước 3)? Thay TEMPLATE bằng bản ĐÃ ĐIỀN sau cài và mỗi lần rev
+tăng - để bản cũ là CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
 mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi
 (tham số của profile CHƯA bật thì KHÔNG vào C12; bật profile sau, mức B, thì
 cùng lượt đó thêm chúng vào C12): C12
 trống sau khi cài là SAI (rà 0i bắt).
 TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
-Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
-thêm dòng @FOLDER.KHOI (mức A; mở folder chức năng mới là B).
+Khối việc không hỏi trước: sinh khi có việc đầu tiên, thêm dòng @FOLDER.KHOI (mức A; mở folder chức năng mới là B).
 
 # 2. Nhóm hỏi tiếp theo, đúng lúc cần
 
@@ -138,7 +137,7 @@ changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bả
 Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
 (a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
 thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, DOC_TRUOC.md,
-BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, bao_cao.py, kiem_van_hanh.py,
+bao_cao.py, kiem_van_hanh.py,
 kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
 mới thay bản cũ là xong (bản v* cũ của INSTRUCTION và GHICHU xóa đi, chỉ giữ
 MỘT). Bỏ nhóm (b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới

@@ -192,7 +192,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 93 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 94 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -261,6 +261,33 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 94: audit vai GIÁM ĐỐC - đợt 3: danh bạ, hai người dùng, ẩn nâng cao
+
+Đợt cuối của 12 đề xuất. Nguyên tắc: KHÔNG đổi schema sổ (mỗi cột thêm là
+hàng chục fixture và bốn phép đọc theo vị trí cột phải đổi theo) - gắn
+thông tin mới vào cột đã có và vào X0.
+
+1. DANH BẠ + NGƯỜI GIỮ. X0 C6 thêm @NGUOI.NOIBO (danh bạ nội bộ, điền dần
+   mức A, không phải ô trống C12). TAILIEU ghi người giữ ở cột Cờ dạng
+   "giữ:<tên>" - không đổi schema. Neo bàn giao nay nhận MỌI cách viết tên
+   ("Tuấn (trưởng nhóm KD) sang Dũng", "Tuấn -> Dũng", "Tuấn cũ, Dũng mới")
+   - giám khảo từng viết tự nhiên và máy im - và liệt cả tài liệu người cũ
+   đang giữ. bao_cao có mục "Tài liệu theo người giữ". Ca đầu-ra ghim.
+2. HAI NGƯỜI DÙNG Ở LITE. X9 câu 2 hỏi "ai nữa dùng kho"; X0 C1 nói rõ:
+   mỗi người một cửa CUA2, CUA3 ngay cả LITE (mức A), KHÔNG cần PARALLEL -
+   máy vốn đọc cửa từ mã G nên watermark, 3b, 8c/8d đã đa cửa sẵn;
+   PARALLEL chỉ cho nhiều phiên GHI cùng lúc. bao_cao banner báo "phiên
+   khác đang mở (CUAn)" khi NHATKY có ĐANG GHI của cửa khác - trợ lý và
+   giám đốc không còn đè file nhau trong im lặng.
+3. ẨN CHO NGƯỜI THƯỜNG. Cài xong xóa GHICHU_*, WORKOPS_*_GOP.md,
+   BENCHMARK_TOKEN.md khỏi kho công ty (~500 KB tài liệu của bộ mẫu không
+   ai đọc); 3c thôi chép chúng. C8, C10, C14 của X0 và 7b của X5 gắn nhãn
+   "nâng cao". View máy sinh vốn không in cột máy (bao_cao vòng 92).
+
+Trần X0/X5/X9 giữ bằng cắt bù (lời khai @KHO.SAOLUU, @KHO.CUA_NGUNG gọn
+lại, C14 bỏ câu thừa). Fixture 114 ca. Ba đợt của audit giám đốc KHÉP: 12/12
+đề xuất đã xử - 3 thêm máy, 6 sửa luật, 2 trình bày, 1 bỏ bớt.
 
 ## Vòng 93: audit vai GIÁM ĐỐC - đợt 2: SỬA LUẬT giảm thủ tục
 
@@ -2068,20 +2095,18 @@ giữ bản cuối" giữa các cửa của cùng một kho.
 
 @KHO.CHINH       <điền: kho đặt ở đâu, ví dụ thư mục Dropbox / ổ máy đơn>
                  CUA1 = <điền: đường dẫn gốc trên máy 1> · thiết bị <điền: tên>
-                 <thêm cửa thứ hai, thứ ba... nếu kho mây có nhiều máy cùng vào>
+                 CUA<n> = <đường dẫn máy n> · thiết bị <tên> · người dùng <tên>:
+                 mỗi người (trợ lý) một cửa, LITE vẫn được (mức A); PARALLEL
+                 chỉ khi nhiều phiên GHI cùng lúc
                  Kho Ổ MÁY ĐƠN: backup cùng ổ, phải sao lưu ra thiết bị khác
-@KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa nếu có: giới hạn dung lượng ghi,
-                 không xóa được, tải theo yêu cầu phải quét hai lượt... hoặc "không có">
-@KHO.SAOLUU      <điền: thư mục NGOÀI gốc kho (ổ khác, máy khác, hay tài
-                 khoản mây khác) và nhịp sao; hoặc "chưa có". Bản backup
-                 hằng ngày của X5 mục 7 nằm TRONG _so nên một lượt
-                 rollback đám mây trọn _so xóa sạch cả chúng cùng lúc -
-                 đây là bản duy nhất sống sót cảnh đó>
+@KHO.LUAT_CUA    <điền ràng buộc riêng từng cửa (dung lượng...) hoặc "không có">
+@KHO.SAOLUU      <điền: thư mục NGOÀI gốc kho (ổ, máy hay mây khác) và nhịp
+                 sao; hoặc "chưa có". Backup ngày của X5 mục 7 nằm TRONG _so,
+                 rollback mây xóa cả - đây là bản sống sót duy nhất>
 @KHO.CUA_NGUNG   <điền: cửa đã thu hồi - CUAn · thiết bị · ngày · căn cứ
-                 Q-<mã>; hoặc "chưa có". Mã G cũ của cửa đó nằm trong
-                 NHATKY chỉ-thêm nên KHÔNG xóa được: gỡ hẳn dòng cửa
-                 khỏi trên mà không khai xuống đây thì rà 7b tố "cửa ma"
-                 vĩnh viễn. Thu hồi cửa là mức C, kèm QUYETDINH>
+                 Q-<mã>; hoặc "chưa có". Mã G cũ nằm trong NHATKY chỉ-thêm:
+                 gỡ dòng cửa mà không khai đây là 7b tố "cửa ma". Thu hồi
+                 cửa: mức C kèm QUYETDINH>
 @KHO.CU          <điền: kho đã ngừng, chỉ tra lịch sử, hoặc "không có">
 @DUONG.SO        <điền: gốc kho>\00_Index\_so\
 @DUONG.INBOX     <điền: gốc kho>\00_Index\_so\_inbox\ · mục đã nạp chuyển
@@ -2205,6 +2230,9 @@ Không đổi tên file cũ đã phát hành. Đổi tên hàng loạt là mức
 @VANHANH.NGUOI  <điền: tên người vận hành hiện tại, chức danh, cửa hay dùng>
                 KHÔNG thuộc nhóm khóa: đổi là mức B; @NHIP.BANGIAO đổi nó
                 khi bàn giao.
+@NGUOI.NOIBO    chưa có (danh bạ nội bộ, điền dần mức A: tên · chức danh ·
+                nhóm · ngày vào/ra; bàn giao, báo cáo lọc theo tên; TAILIEU
+                ghi người giữ ở cột Cờ: giữ:<tên>)
 ```
 
 Mặc định MỘT người vận hành chốt mức C; nhiều người thì tự quy ước ai chốt
@@ -2268,7 +2296,7 @@ Nguồn là ảnh chụp, scan KHÔNG đọc được chữ: TAILIEU nhận file
 chọn. Bản mới thay bản cũ chỉ khi có mail, biên bản, hay xác nhận trong phiên của
 bên có thẩm quyền (tức từ mức B).
 
-# C8. Thuật ngữ và hình thức
+# C8. Thuật ngữ và hình thức (nâng cao)
 
 ```
 @TUNGU.DUNG          <điền>
@@ -2336,7 +2364,7 @@ AUTOMATED, EMAIL chỉ đọc khi bật profile đó)
 @MATHU           sổ mã thư: <điền tên file, mã dạng gì, đang chạy tới đâu, hoặc "chưa có">
 ```
 
-# C10. Dòng kiểm riêng, cộng vào bảng kiểm X2
+# C10. Dòng kiểm riêng, cộng vào bảng kiểm X2 (nâng cao)
 
 ```
 @KIEM.RIENG   13  <điền, mỗi lỗi lặp khi phát hành thêm một dòng, đánh số từ 13>
@@ -2397,9 +2425,9 @@ tại đây, cấm hạ mức bất cứ dòng nào của danh mục C.
 @MUC.NANG   <điền: ví dụ "dữ kiện khối tài chính: A nâng lên B", hoặc "không có">
 ```
 
-# C14. Bản đồ tham chiếu, file nào đọc mục nào
+# C14. Bản đồ tham chiếu, file nào đọc mục nào (nâng cao)
 
-Để soát tay khi nghi lệch. Không phải bản chép, chỉ là mục lục.
+Mục lục để soát tay.
 
 ```
 X1  đọc C1 (năm dạng "Ở đâu") · C5 (từ cấm theo phạm vi) · C6 (lệnh cấm nêu
@@ -3164,7 +3192,8 @@ TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN 
               CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ (NHÁP, ĐÃ
               GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC...) · QUAN SÁT
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
-              nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
+              nhận...) · nguồn · hết hạn · cờ (GỐC, giữ:<tên người giữ>) ·
+              sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH
               hay ĐÃ THAY) · thay bởi · ghi lần. Không xóa, không sửa NỘI DUNG
               (ngoại lệ duy nhất: XÓA PHÁP LÝ mục 7b);
@@ -3272,7 +3301,7 @@ tiết hóa bằng một plan mức C khi chạm ngưỡng thật:
 5  BANG_DIEU_KHIEN sinh từ nguồn sự thật mới, cách đọc của người dùng không đổi
 ```
 
-# 7b. Xóa theo yêu cầu pháp lý (CHỈ đọc khi có Q-<mã> yêu cầu xóa)
+# 7b. Xóa theo yêu cầu pháp lý (nâng cao; CHỈ đọc khi có Q-<mã> yêu cầu xóa)
 
 XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 5 "cờ GỐC
 KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét
@@ -3334,8 +3363,8 @@ C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
 ```
 1  Mã công ty (3-4 ký tự A-Z hay số, không dấu) và tên đầy đủ? Công ty đóng vai gì trong công
    việc chính?
-2  Kho đặt ở đâu? (đường dẫn gốc; AI tự kiểm bằng cách thử đọc. Kho mây nhiều máy
-   thì khai các cửa)
+2  Kho đặt ở đâu? (đường dẫn gốc, AI thử đọc để kiểm. Ai nữa dùng kho - trợ
+   lý? Mỗi người một cửa CUA2, CUA3 ở X0 C1, LITE vẫn được)
 3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
    là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức theo X0 C2
    @DUAN.PHANMEM: repo · thành phần · môi trường · nơi chạy thật · nơi giữ
@@ -3359,18 +3388,17 @@ Kho vừa clone bằng git: XÓA `00_Index\.git` (Windows: object của git là 
 CHỈ ĐỌC nên `rmtree` hỏng giữa chừng và để lại `.git` cụt; dùng `rmdir /s /q`,
 rà 0g là lưới cuối nếu sót). `.git` ở THƯ MỤC CHA thì KHÔNG xóa (repo
 cha có thể là dự án khác): CHUYỂN kho ra ngoài vùng git - `_so\` là sổ
-SỐNG (mục 3c). Đã đưa X0-X5 vào tài liệu
-Project (README bước 3)? Thay bản TEMPLATE bằng bản ĐÃ ĐIỀN ngay sau cài
-và mỗi lần rev X0 tăng - phiên CHAT đọc bản trong Project, để bản cũ là
-CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
+SỐNG (mục 3c). Xóa luôn GHICHU_*, WORKOPS_*_GOP.md, BENCHMARK_TOKEN.md
+khỏi kho: tài liệu của bộ mẫu, không dùng vận hành. Có tài liệu Project
+(README bước 3)? Thay TEMPLATE bằng bản ĐÃ ĐIỀN sau cài và mỗi lần rev
+tăng - để bản cũ là CHAT chạy luật STALE. Quét X0 một lượt, đưa MỌI
 mục còn dấu chưa điền vào C12 thành danh sách thật, kể cả nhóm C chưa hỏi
 (tham số của profile CHƯA bật thì KHÔNG vào C12; bật profile sau, mức B, thì
 cùng lượt đó thêm chúng vào C12): C12
 trống sau khi cài là SAI (rà 0i bắt).
 TỪ ĐÂY LÀM VIỆC ĐƯỢC.
 
-Khối việc KHÔNG hỏi trước: khối sinh khi việc đầu tiên của khối xuất hiện, lúc đó
-thêm dòng @FOLDER.KHOI (mức A; mở folder chức năng mới là B).
+Khối việc không hỏi trước: sinh khi có việc đầu tiên, thêm dòng @FOLDER.KHOI (mức A; mở folder chức năng mới là B).
 
 # 2. Nhóm hỏi tiếp theo, đúng lúc cần
 
@@ -3442,7 +3470,7 @@ changes và `git stash` mà git khuyên làm DÒNG SỔ biến mất khỏi bả
 Đúng: tải bản mới ra THƯ MỤC KHÁC ngoài kho, rồi chép sang `00_Index` HAI nhóm.
 (a) file _TEMPLATE mới: để CẠNH bộ mang mã, là nguồn luật để diff. (b) chép ĐÈ
 thẳng: INSTRUCTION_WORKOPS_v*.md, README.md, X9_CAIDAT.md, DOC_TRUOC.md,
-BENCHMARK_TOKEN.md, GHICHU_DOI_MOI_v*.md, WORKOPS_*_GOP.md, bao_cao.py, kiem_van_hanh.py,
+bao_cao.py, kiem_van_hanh.py,
 kiem_tra_bo.py - nhóm này không mang mã công ty, không chứa dữ liệu công ty, bản
 mới thay bản cũ là xong (bản v* cũ của INSTRUCTION và GHICHU xóa đi, chỉ giữ
 MỘT). Bỏ nhóm (b) thì LƯỚI RÀ của kho đứng yên ở bản cũ và mọi phép kiểm mới

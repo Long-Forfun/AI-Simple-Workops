@@ -9,6 +9,33 @@ Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 94: audit vai GIÁM ĐỐC - đợt 3: danh bạ, hai người dùng, ẩn nâng cao
+
+Đợt cuối của 12 đề xuất. Nguyên tắc: KHÔNG đổi schema sổ (mỗi cột thêm là
+hàng chục fixture và bốn phép đọc theo vị trí cột phải đổi theo) - gắn
+thông tin mới vào cột đã có và vào X0.
+
+1. DANH BẠ + NGƯỜI GIỮ. X0 C6 thêm @NGUOI.NOIBO (danh bạ nội bộ, điền dần
+   mức A, không phải ô trống C12). TAILIEU ghi người giữ ở cột Cờ dạng
+   "giữ:<tên>" - không đổi schema. Neo bàn giao nay nhận MỌI cách viết tên
+   ("Tuấn (trưởng nhóm KD) sang Dũng", "Tuấn -> Dũng", "Tuấn cũ, Dũng mới")
+   - giám khảo từng viết tự nhiên và máy im - và liệt cả tài liệu người cũ
+   đang giữ. bao_cao có mục "Tài liệu theo người giữ". Ca đầu-ra ghim.
+2. HAI NGƯỜI DÙNG Ở LITE. X9 câu 2 hỏi "ai nữa dùng kho"; X0 C1 nói rõ:
+   mỗi người một cửa CUA2, CUA3 ngay cả LITE (mức A), KHÔNG cần PARALLEL -
+   máy vốn đọc cửa từ mã G nên watermark, 3b, 8c/8d đã đa cửa sẵn;
+   PARALLEL chỉ cho nhiều phiên GHI cùng lúc. bao_cao banner báo "phiên
+   khác đang mở (CUAn)" khi NHATKY có ĐANG GHI của cửa khác - trợ lý và
+   giám đốc không còn đè file nhau trong im lặng.
+3. ẨN CHO NGƯỜI THƯỜNG. Cài xong xóa GHICHU_*, WORKOPS_*_GOP.md,
+   BENCHMARK_TOKEN.md khỏi kho công ty (~500 KB tài liệu của bộ mẫu không
+   ai đọc); 3c thôi chép chúng. C8, C10, C14 của X0 và 7b của X5 gắn nhãn
+   "nâng cao". View máy sinh vốn không in cột máy (bao_cao vòng 92).
+
+Trần X0/X5/X9 giữ bằng cắt bù (lời khai @KHO.SAOLUU, @KHO.CUA_NGUNG gọn
+lại, C14 bỏ câu thừa). Fixture 114 ca. Ba đợt của audit giám đốc KHÉP: 12/12
+đề xuất đã xử - 3 thêm máy, 6 sửa luật, 2 trình bày, 1 bỏ bớt.
+
 ## Vòng 93: audit vai GIÁM ĐỐC - đợt 2: SỬA LUẬT giảm thủ tục
 
 Đợt này đổi HÀNH VI bộ theo năm đề xuất của giám khảo vai giám đốc - mọi

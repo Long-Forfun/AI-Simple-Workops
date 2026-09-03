@@ -208,7 +208,8 @@ TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN 
               CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ (NHÁP, ĐÃ
               GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC...) · QUAN SÁT
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
-              nhận...) · nguồn · hết hạn · cờ · sha256 · ghi lần
+              nhận...) · nguồn · hết hạn · cờ (GỐC, giữ:<tên người giữ>) ·
+              sha256 · ghi lần
 QUYETDINH.md  mã Q- · ngày · chọn gì · vì sao · đánh đổi · TRẠNG THÁI (HIỆN HÀNH
               hay ĐÃ THAY) · thay bởi · ghi lần. Không xóa, không sửa NỘI DUNG
               (ngoại lệ duy nhất: XÓA PHÁP LÝ mục 7b);
@@ -316,7 +317,7 @@ tiết hóa bằng một plan mức C khi chạm ngưỡng thật:
 5  BANG_DIEU_KHIEN sinh từ nguồn sự thật mới, cách đọc của người dùng không đổi
 ```
 
-# 7b. Xóa theo yêu cầu pháp lý (CHỈ đọc khi có Q-<mã> yêu cầu xóa)
+# 7b. Xóa theo yêu cầu pháp lý (nâng cao; CHỈ đọc khi có Q-<mã> yêu cầu xóa)
 
 XÓA THEO YÊU CẦU PHÁP LÝ (mức C; ngoại lệ DUY NHẤT của X1 mục 5 "cờ GỐC
 KHÔNG SỬA" và luật cốt lõi 3, chỉ khi có Q-<mã> trong QUYETDINH): quét

@@ -60,6 +60,10 @@ def thu_thap(goc, cua=None):
         cua = max(wm, key=lambda c: _khoa_g(wm[c])) if wm else None
     sinh_boi = wm.get(cua) if cua else None
     dang_ghi = [h[0].strip("* ") for h in nk if any(o.strip() == "ĐANG GHI" for o in h)]
+    # phiên KHÁC đang mở: lượt ĐANG GHI của cửa không phải cửa này (hai người
+    # dùng chung kho ở LITE - đợt 3 audit giám đốc)
+    phien_khac = sorted({K.cua_cua(m) for m in dang_ghi
+                         if K.cua_cua(m) and K.cua_cua(m) != cua})
 
     qh = K.dem_qua_han(so, x0nd)
     viec = _rows(so, "VIEC.md")
@@ -102,7 +106,15 @@ def thu_thap(goc, cua=None):
     for r in viec_mo:
         theo_nguoi.setdefault(ai(r), []).append(r)
 
+    theo_nguoi_giu = {}
+    for r in tl_song:
+        if len(r) > 12:
+            m = re.search(r"gi[ữu]\s*:\s*([^;|]+)", r[12])
+            if m:
+                theo_nguoi_giu.setdefault(m.group(1).strip(), []).append(r)
+
     return dict(ma_cty=ma_cty, rev=rev, cua=cua, sinh_boi=sinh_boi, wm=wm,
+                phien_khac=phien_khac, theo_nguoi_giu=theo_nguoi_giu,
                 qh=qh, dang_ghi=dang_ghi, qua_han=qua_han, cho_dt=cho_dt,
                 cho_chot=cho_chot, tl_song=tl_song, tl_cho_ky=tl_cho_ky,
                 sap_het=sap_het, moc=moc, qd_thang=qd_thang, c12=c12,
@@ -117,10 +129,12 @@ def dong_bo_dem(d):
            ("chờ bạn chốt (plan C treo)", len(qh["plan C treo"])),
            ("ghi dở (ĐANG GHI)", len(d["dang_ghi"]))]
     them = [(k, len(qh[k])) for k in ("hết hạn", "rà lại", "_INBOX") if qh[k]]
+    duoi = (f" · phiên khác đang mở ({', '.join(d['phien_khac'])})"
+            if d.get("phien_khac") else "")
     if not any(n for _, n in dem) and not them:
-        return f"bàn sạch · mốc: {d['moc']}"
+        return f"bàn sạch · mốc: {d['moc']}" + duoi
     phan = [f"{k}: {n}" for k, n in dem + them]
-    return " · ".join(phan) + f" · mail: không quét · mốc: {d['moc']}"
+    return " · ".join(phan) + f" · mail: không quét · mốc: {d['moc']}" + duoi
 
 
 def _dong_viec(r, ai):
@@ -202,6 +216,10 @@ def sinh_bao_cao(d):
         r += [f"  {_dong_viec(x, ai)[2:]}" for x in ds[:12]]
     if not d["theo_nguoi"]:
         r.append("- không có việc mở")
+    if d["theo_nguoi_giu"]:
+        r += ["", "## 4b. Tài liệu theo người giữ"]
+        for ng, ds in sorted(d["theo_nguoi_giu"].items()):
+            r.append(f"{ng}: " + ", ".join(f"{x[1].strip()} {x[2].strip()[:30]}" for x in ds))
     r += ["", "## 5. Tài liệu đang hoạt động"]
     r += [f"- {x[1].strip()} · {x[2].strip()} · {x[3].strip()} · {x[7].strip()}"
           f" · {x[5].strip()}" for x in d["tl_song"]] or ["- không có"]

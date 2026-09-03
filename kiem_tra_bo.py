@@ -3064,6 +3064,32 @@ def main(goc):
                 sys.argv = _argvb
             ca.append(("bàn giao nêu phần mềm còn ghi người cũ ở vế phụ trách",
                        "vế phụ trách" in _bufb3.getvalue()))
+            # viết TỰ NHIÊN "Long (trưởng nhóm KD) sang Trân" + tài liệu Long
+            # đang giữ (cờ giữ:Long) - neo phải nhận tên và liệt tài liệu
+            # (audit giám đốc, đợt 3)
+            _ghi(_pb, _pb.read_text(encoding="utf-8").replace(
+                "@NHIP.BANGIAO    Long, Trân, 2026-08-20",
+                "@NHIP.BANGIAO    Long (trưởng nhóm KD) sang Trân, 2026-08-20", 1))
+            _ghi(_sob / "TAILIEU.md",
+                 (_sob / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| DA1 | T-097 | Ho so khach A | v01 | 2026-08-20 |"
+                   " Kho 03_Thuong_mai/kh_a.md | HIỆN HÀNH | NHÁP | 2026-08-20 |"
+                   " qs | noi bo | | giữ:Long | | " + _Gb + " |" + NL)
+            (_khob / "03_Thuong_mai").mkdir(exist_ok=True)
+            _ghi(_khob / "03_Thuong_mai" / "kh_a.md", "x")
+            _bufb5 = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb5):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("bàn giao viết tự nhiên vẫn nhận tên, liệt tài liệu đang giữ",
+                       "LƯU Ý  bàn giao" in _bufb5.getvalue()
+                       and "tài liệu còn ghi Long giữ" in _bufb5.getvalue()))
             # backup ngày (X5 mục 7): xóa backup_<ngày> thì 0m2 phải nhắc
             import shutil as _shbg
             _shbg.rmtree(_sob / "_lich_su" / "backup_20260828",
@@ -3519,8 +3545,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 113,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 113: bớt ca là"
+             not hong and len(ca) == 114,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 114: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:

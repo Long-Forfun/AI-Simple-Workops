@@ -2476,8 +2476,11 @@ def main(goc):
             # cắt đuôi "cũ/mới": người điền xuôi khuôn "<tên người cũ,
             # người mới>" thành "An cũ, Bình mới" - giữ nguyên là câm cả hai
             # vế (giám khảo rubric 06)
+            # nhận MỌI cách viết: "Tuấn, Dũng, 2026-09-15" · "Tuấn (trưởng
+            # nhóm KD) sang Dũng" · "Tuấn -> Dũng" · "Tuấn cũ, Dũng mới"
+            _m_tc = re.match(r"\s*([^,(\n>-]+?)\s*(?:\(|,|->|\bsang\b|$)", _v_bg)
             _ten_cu = re.sub(r"\s*\(?(c[ũu]|m[ớo]i)\)?$", "",
-                             _v_bg.split(",")[0].strip())[:30]
+                             (_m_tc.group(1) if _m_tc else _v_bg).strip())[:30]
             if _ten_cu:
                 _viec_cu = [
                     (_r[1] or "?").strip()[:12]
@@ -2508,9 +2511,17 @@ def main(goc):
                         r"(?:ph[ụu] tr[áa]ch|owner)[^·]*" + re.escape(_ten_cu),
                         "\n".join(_kh_bg), re.I):
                     _pm_cu.append(_ma_bg)
-                if _viec_cu or _pm_cu:
+                # tài liệu người cũ đang GIỮ (cờ giữ:<tên> ở TAILIEU)
+                _tl_cu = [
+                    (_r[1] or "?").strip()[:12]
+                    for _r in dong_bang(doc(so / "TAILIEU.md"))
+                    if len(_r) > 12 and bo_dau(_ten_cu) in bo_dau(_r[12])
+                    and "giu:" in bo_dau(_r[12])]
+                if _viec_cu or _pm_cu or _tl_cu:
                     _vepm = (f"; phần mềm {_liet(_pm_cu[:2])} còn ghi"
-                             f" {_ten_cu} ở vế phụ trách C2" if _pm_cu else "")
+                             f" {_ten_cu} ở vế phụ trách C2" if _pm_cu else "") \
+                        + (f"; {len(_tl_cu)} tài liệu còn ghi {_ten_cu} giữ"
+                           f" ({_liet(_tl_cu[:3])})" if _tl_cu else "")
                     print(f"        LƯU Ý  bàn giao: {len(_viec_cu)} việc đang"
                           f" mở còn gán {_ten_cu} ({_liet(_viec_cu[:3])})"
                           f"{_vepm} - @NHIP.BANGIAO dặn rà sang người mới,"
