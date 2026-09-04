@@ -80,8 +80,9 @@ chốt sổ     kết phiên an toàn, vét các lượt ghi dở
 đồng bộ quan sát   (nâng cao) cho AI cập nhật sổ theo bản mới nhất trên kho
 ```
 
-Kênh chat (Zalo, Messenger): lối bán thủ công -
-dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
+Excel đang dùng (công nợ, chấm công): giữ nguyên, sổ chỉ trỏ file. Giấy ký
+chỉ có scan: bạn đọc số, AI ghi. Kênh chat (Zalo, Messenger): export chat
+ra .txt hay dán CẢ ĐOẠN vào phiên, AI tự tách từng tin và xử
 như mục đến ở cửa vào (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
@@ -143,20 +144,20 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 |---|---|
 | [DOC_TRUOC.md](DOC_TRUOC.md) | Tổng quan bộ, đọc trước |
 | [INSTRUCTION_WORKOPS_v11.md](INSTRUCTION_WORKOPS_v11.md) | Luật thường trực, dán nguyên văn vào Project instructions |
-| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Mọi tham số công ty; phiên đầu điền, rev 0 = chưa cài |
-| [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm: ký tự, động từ, từ theo phạm vi |
-| [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành đầu ra rời công ty |
+| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Tham số công ty; rev 0 = chưa cài |
+| [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm theo phạm vi |
+| [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành ra ngoài |
 | [X3_CUAVAO_TEMPLATE.md](X3_CUAVAO_TEMPLATE.md) | Luật cửa vào: file đến, hai chặng, bảng chờ duyệt |
-| [X3E_EMAIL_TEMPLATE.md](X3E_EMAIL_TEMPLATE.md) | Pipeline mail đầy đủ, chỉ nạp khi bật profile EMAIL |
-| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế, các câu tắt |
+| [X3E_EMAIL_TEMPLATE.md](X3E_EMAIL_TEMPLATE.md) | Pipeline mail, chỉ khi bật EMAIL |
+| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát, các câu tắt |
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
-| [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
+| [X9_CAIDAT.md](X9_CAIDAT.md) | Cài đặt; kho có sẵn (3b); nâng cấp (3c) |
 | [_so/](_so) | Năm sổ lõi rỗng + PLANNING (mức C) + THU (khi bật EMAIL) + hai view máy sinh |
 | [bao_cao.py](bao_cao.py) | Máy sinh bảng điều khiển + báo cáo quản lý |
 | [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ công ty ĐANG CHẠY |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
-| [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
+| [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký đổi mới |
 | [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp mọi file, nạp một lần cho AI đánh giá |
 
 ## Nguyên tắc vận hành
@@ -192,7 +193,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 94 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 95 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -261,6 +262,62 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 95: TEAM bốn vai - nghiên cứu, đánh giá, tối ưu, phản biện - đợt A+B
+
+Người dùng yêu cầu tổ chức team agent: nghiên cứu · đánh giá · đề xuất tối
+ưu · phản biện, rồi lên kế hoạch, thực hiện, kiểm tra. Bốn agent chạy song
+song trên bản vòng 64; kết quả HỘI TỤ về cùng vài lỗ - dấu hiệu tốt:
+
+· NGHIÊN CỨU: bộ nên NHẬN thói quen cũ (Excel, Zalo export, scan giấy ký)
+  thay vì bắt đổi; chưa có ranh giới với phần mềm kế toán; thẻ phần mềm 8
+  trường đúng cho 7g nhưng thiếu phần giám đốc ra quyết định; danh bạ chưa
+  có khuôn; lộ trình CSV/SQLite là đặc tả cho thứ đang CẤM.
+· ĐÁNH GIÁ: rubric vòng chấm 10 = 96/100 (95·96·91·93·91·95·96·96·97·96);
+  trừ 7g miễn mức B quá rộng, m07 "còn N mục nữa", nhãn "hết hạn" sai nghĩa.
+· TỐI ƯU (vai trợ lý ghi sổ, 11 phiên thật): ~25-30 phút/ngày cho "việc
+  của bộ"; báo oan "bảng sửa tay" khi cửa chưa ghi lượt nào; gõ nhầm mã bị
+  3c tố VĨNH VIỄN vì NHATKY chỉ-thêm; 7g đọc tên phụ trách thành cả cụm
+  chú thích; 0r/X3 lệch nhau về event_id; "9999 ngày".
+· PHẢN BIỆN (41 ca, 5/10 "bản mới không tự đẻ lỗ"): bao_cao tự làm 8e đỏ
+  "MẤT DÒNG" trên kho hợp lệ (8e quét trọn bảng khớp nhãn "Sắp hết hạn (60
+  ngày)"), mốc lệch bộ trạng thái; 7g mức B là CỬA SAU thật ("An" trong
+  "ban", tên ở ô Chờ ai, phụ trách phần mềm khác); 3c oan "KHOI1"/"Them" và
+  miss mã thứ hai; bàn giao "An" khớp "Trân". Kèm bản vá V1-V6 đã chạy thử
+  sạch trọn suite.
+
+ĐỢT A (máy + fixture, 12 ca mới, 120 ca): áp V1-V6 nguyên bản (đối chiếu
+diff từng dòng) + bộ đếm "sắp hết hạn" (X4#14 là cảnh báo trước) + báo cáo
+mục 1 cùng nội dung với bảng + cửa chưa ghi lượt nào khai "CUAn chưa ghi",
+phép 8 chấp nhận + tên phụ trách cắt trước "(" + 0r/X3 event_id vào Căn cứ
+trạng thái + 0m "chưa có bản nào", 0m2 chỉ 7 ngày ghi gần nhất + bảng không
+in một việc hai lần, nhãn "mốc (hạn sớm nhất)" + nhắc tải BANG chỉ khi khai
+Project + lời 9e cho đường tuyệt đối trong kho. 14e của chính bộ bắt tôi
+viết bao(..., True) - đúng lưới, sửa ngay.
+
+ĐỢT B (luật ngắn): NHATKY ngoại lệ thứ ba ĐÍNH CHÍNH (dòng mới "đính chính
+<mã G cũ>:" - 3c, 7g thôi tố dòng cũ; ca I2) · bỏ lộ trình CSV/SQLite ở X5
+mục 5/7 (ngoài phạm vi bộ) · X5 1b: "ghi nhận mức B" áp cho MỌI thao tác kỹ
+thuật đã xảy ra, là ghi nhận không phải cho phép · TAILIEU thêm KHÔNG PHẢN
+HỒI, ĐÃ ĐÓNG; bộ trạng thái thôi đếm thành hằng chung TT_THOI_DEM cho
+dem_qua_han, 8e, bao_cao · X3 mục 4: Excel đang dùng là MỘT dòng TAILIEU +
+DUKIEN trỏ file·sheet·ô, số kế toán chỉ giữ số ĐÃ CHỐT dùng ra ngoài, scan
+giấy ký người đọc số AI ghi · README nêu Excel/Zalo export/scan.
+
+TÁI ĐO 7 mutant (đếm exit code): 7/7 CHẾT. Hai con lượt đầu SỐNG vì ca của
+tôi có HAI LỚP phòng thủ triệt tiêu nhau: V1 (8e) - ca hạn-45-ngày không còn
+khớp nhãn sau khi V2 đổi tên khối, nay ghim bằng TÊN TÀI LIỆU tiếng Việt
+mang chữ "quá hạn 12" (ca thật, gặp thường); V6 (bàn giao) - ca "An sang
+Trân" bị chính vế NGƯỜI MỚI triệt tiêu, nay ghim bằng "An sang Bình, việc
+gán Tuấn Anh". Và chính ca V1 mới bắt được LỖI THẬT của đợt A: nhãn banner
+đổi thành "mốc (hạn sớm nhất):" làm 8e không tìm thấy dòng bộ đếm nữa và
+rơi về quét TRỌN BẢNG - đúng lỗ V1 định vá. Sửa: nhận dòng bằng chữ "mốc".
+Lab hành vi trên kho thật 6/6 đúng. Fixture 121 ca, I2 41, I3 97(nt)/96.
+
+ĐỢT C (đổi khuôn, chờ gật): thẻ phần mềm khối quản trị mềm · danh bạ có mã
+người, bí danh, loại bên, dạng "Ở đâu" Giay <nơi cất> · @VANHANH.TRUC ·
+bao_cao --tim/--duan · câu tắt "nạp file" · dự phòng người gật · dấu mềm
+_dang_ghi_<CỬA>.
 
 ## Vòng 94: audit vai GIÁM ĐỐC - đợt 3: danh bạ, hai người dùng, ẩn nâng cao
 
@@ -1808,10 +1865,10 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1860 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~475) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6132 + khối (không phần mềm trừ thêm mục 1b ~475) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6563 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1860 (thêm X5 mục 3 ~1441 khi ghi sổ; dự án phần mềm thêm mục 1b ~490) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5981 + khối (không phần mềm trừ thêm mục 1b ~490) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2884 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6675 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3683 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3683 + khối | |
@@ -1897,7 +1954,7 @@ toàn bộ 12a-12l.
 Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED,
 EMAIL nên X0 ngắn hơn đáng kể; X3E và sổ THU chỉ được nạp khi bật EMAIL,
 không tăng thuế của bộ lõi.
-CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 ~1025 token (mục 5b gate khi dán chat).
+CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 ~1138 token (mục 5b gate khi dán chat).
 
 ════════════════════════════════════════
 FILE: INSTRUCTION_WORKOPS_v11.md
@@ -2631,8 +2688,8 @@ can_tai:    [{tu, den, co: GOC}]
 Ghi `_INBOX` hỏng: in nguyên khối cho người dùng dán tay, báo "chưa ghi được", cấm
 im lặng.
 
-Chặng 2: trùng `event_id` thì bỏ qua · đổi tên chuẩn ngay lúc tải, tên gốc vào ô "Căn
-cứ trạng thái" của dòng TAILIEU · file gốc ngoài: bất biến, cờ GỐC, tính sha256 và byte ngay lúc nhận ·
+Chặng 2: trùng `event_id` thì bỏ qua · đổi tên chuẩn ngay lúc tải, tên gốc VÀ
+event_id (tên file `_INBOX`) vào ô "Căn cứ trạng thái" của dòng TAILIEU · file gốc ngoài: bất biến, cờ GỐC, tính sha256 và byte ngay lúc nhận ·
 mail là căn cứ dữ kiện thì lưu .eml hoặc .pdf vào `04_Trao_doi\` TRƯỚC rồi DUKIEN mới
 trỏ tới · số đổi thì DUKIEN dòng cũ ghi thay bởi · chuyển `_INBOX` sang `_da_nap\` ·
 cập nhật bộ đếm. Tải hụt: KHÔNG chuyển `_da_nap`, ghi VIEC kèm lý do.
@@ -2647,6 +2704,12 @@ báo giá, hợp đồng            03_Thuong_mai\      mẫu dùng lại       
 
 Một file một bản ở nơi đúng nhất, nơi khác chỉ tham chiếu. Folder ngoài sở hữu: chép
 bản sao về kho ngay. Nói miệng: DUKIEN mức nguồn D, CHƯA KIỂM tới khi có văn bản.
+
+Bảng Excel đang dùng (công nợ, chấm công, tiến độ): giữ nguyên, sổ ghi MỘT
+dòng TAILIEU trỏ file; DUKIEN chỉ giữ số ĐÃ CHỐT dùng ra ngoài, nguồn ghi
+`file · sheet · ô`. Số kế toán (MISA...) cũng vậy: không chép chi tiết sổ
+kế toán vào sổ. Giấy ký chỉ có scan/ảnh: người dùng đọc từng số, AI ghi
+(X0 C7).
 
 # 5. Bảng chờ duyệt
 
@@ -3085,9 +3148,10 @@ thuật trên repo, môi trường, CSDL, secret và hạ tầng nằm NGOÀI PH
 THỰC THI của bộ: AI không tự deploy, migration, ROLLBACK, merge, sửa dữ
 liệu, xoay secret hay đổi quyền ở BẤT KỲ môi trường nào (kể cả dev,
 staging) - chỉ được SOẠN CHECKLIST hoặc MỞ VIỆC chuyển đội kỹ thuật.
-GHI NHẬN thao tác đội kỹ thuật ĐÃ làm: chạm CHẠY THẬT ghi mức B kèm tên
-người phụ trách xác nhận trong ô Làm gì (rà 7g giữ), KHÔNG plan - plan C
-chỉ cho việc AI SẮP làm; dev, staging ghi như việc thường.
+GHI NHẬN thao tác đội kỹ thuật ĐÃ làm (deploy, rollback, sửa hay xóa dữ
+liệu CSDL thật...): mức B kèm tên người phụ trách xác nhận trong ô Làm gì
+(rà 7g giữ) - là GHI NHẬN, không phải cho phép; KHÔNG plan, plan C chỉ cho
+việc AI SẮP làm; dev, staging ghi như việc thường.
 
 SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
 bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
@@ -3171,9 +3235,10 @@ GHI, rà 4 canh vế ĐÃ GHI. Plan ĐANG LÀM quá 7 ngày: lên bàn làm vi�
    ngày của bảng và coi bản đó có thể cũ hơn kho
 ```
 
-NHATKY chỉ-thêm với HAI ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục
-7b. Thấy bản "conflicted copy" của MỘT SỔ trong
+NHATKY chỉ-thêm với BA ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
+dòng mình khi trùng theo bước 2); thay giá trị theo XÓA PHÁP LÝ mục 7b; ĐÍNH
+CHÍNH: gõ nhầm mã hay mức thì KHÔNG sửa dòng cũ, thêm dòng mới mức A với ô
+Làm gì bắt đầu "đính chính <mã G cũ>: ..." - rà 3c, 7g thôi tố dòng cũ. Thấy bản "conflicted copy" của MỘT SỔ trong
 _so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
 bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
 ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
@@ -3190,7 +3255,8 @@ DUKIEN.md     dự án · mã · dữ kiện · giá trị · hiệu lực từ 
               thêm nguồn chỉ định và phạm vi chi tiết) · trạng thái · rà lại trước · ghi lần
 TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN BẢN (HIỆN HÀNH,
               CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ (NHÁP, ĐÃ
-              GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC...) · QUAN SÁT
+              GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC, KHÔNG PHẢN
+              HỒI - bản gửi đi quá @NHIP.CHODOITAC, ĐÃ ĐÓNG...) · QUAN SÁT
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
               nhận...) · nguồn · hết hạn · cờ (GỐC, giữ:<tên người giữ>) ·
               sha256 · ghi lần
@@ -3264,11 +3330,9 @@ do, không XONG.
 không mở cả file. BANG_DIEU_KHIEN và X0_INDEX đọc cả file vì chúng phải ngắn.
 Chuyển `_so\_lich_su\`: việc XONG, HỦY quá 30 ngày · dữ kiện ĐÃ THAY · tài liệu
 đã thay không còn viện dẫn · plan ĐÃ GHI quá 30 ngày. QUYETDINH chia theo năm,
-NHATKY theo quý. CHUYỂN ĐỊNH DẠNG SỔ (CSV, SQLite): đầu file Markdown giữ đúng
-khuôn `NGUON_SU_THAT: <tên file>`, và CHƯA có bản rà đọc được định dạng đó thì
-CẤM chuyển sổ đó - dừng ở bước tách theo khối hay năm là hết. Chuyển mà lưới
-không theo thì mỗi mã G cũ đẻ một dòng 3c lệch vĩnh viễn, đồng thời 3f, 7 và 7b
-hóa mù cho sổ đó trong khi bộ vẫn báo "hệ sạch" - vùng mù nguy hơn báo oan.
+NHATKY theo quý. Đổi định dạng sổ (CSV, SQLite) là NGOÀI PHẠM VI bộ: tách
+theo khối hay năm là hết - chuyển mà lưới rà không theo thì 3c, 3f, 7, 7b hóa
+mù trong khi bộ vẫn báo "hệ sạch".
 Chuyển lịch sử KHÔNG được làm mất dấu mã G: file trong
 `_so\_lich_su\` giữ nguyên ô "Ghi lần", và rà 3c, 3d, 3e đọc cả thư mục đó.
 
@@ -3289,17 +3353,8 @@ bản NGOÀI kho theo @KHO.SAOLUU (X0 C1).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.
-Vẫn vượt: chuyển phần dữ liệu sang CSV hoặc SQLite theo đặc tả tối thiểu, chi
-tiết hóa bằng một plan mức C khi chạm ngưỡng thật:
-
-```
-1  file dữ liệu mới là NGUỒN SỰ THẬT; sổ Markdown còn header, luật đọc, con trỏ
-2  mã V D T Q và mã G vẫn cấp theo mục 3, NHATKY vẫn Markdown, vẫn mở dòng TRƯỚC
-3  đứt giữa lượt ghi: "chốt sổ" của X4 đối chiếu NHATKY với file dữ liệu
-4  dòng thay thế đánh dấu như luật hiện tại, không xóa; backup bản theo ngày vào
-   _so\_lich_su\ trước lượt ghi có đổi cấu trúc
-5  BANG_DIEU_KHIEN sinh từ nguồn sự thật mới, cách đọc của người dùng không đổi
-```
+Vẫn vượt: đó là ngưỡng bộ này dừng - kho cần CSDL thật, ngoài
+phạm vi bộ.
 
 # 7b. Xóa theo yêu cầu pháp lý (nâng cao; CHỈ đọc khi có Q-<mã> yêu cầu xóa)
 

@@ -101,9 +101,10 @@ thuật trên repo, môi trường, CSDL, secret và hạ tầng nằm NGOÀI PH
 THỰC THI của bộ: AI không tự deploy, migration, ROLLBACK, merge, sửa dữ
 liệu, xoay secret hay đổi quyền ở BẤT KỲ môi trường nào (kể cả dev,
 staging) - chỉ được SOẠN CHECKLIST hoặc MỞ VIỆC chuyển đội kỹ thuật.
-GHI NHẬN thao tác đội kỹ thuật ĐÃ làm: chạm CHẠY THẬT ghi mức B kèm tên
-người phụ trách xác nhận trong ô Làm gì (rà 7g giữ), KHÔNG plan - plan C
-chỉ cho việc AI SẮP làm; dev, staging ghi như việc thường.
+GHI NHẬN thao tác đội kỹ thuật ĐÃ làm (deploy, rollback, sửa hay xóa dữ
+liệu CSDL thật...): mức B kèm tên người phụ trách xác nhận trong ô Làm gì
+(rà 7g giữ) - là GHI NHẬN, không phải cho phép; KHÔNG plan, plan C chỉ cho
+việc AI SẮP làm; dev, staging ghi như việc thường.
 
 SECRET (API key, mật khẩu, chuỗi kết nối, .env): KHÔNG nằm trong kho đồng
 bộ, KHÔNG vào sổ hay _INBOX, KHÔNG dán vào phiên; nơi giữ khai ở dòng phần
@@ -187,9 +188,10 @@ GHI, rà 4 canh vế ĐÃ GHI. Plan ĐANG LÀM quá 7 ngày: lên bàn làm vi�
    ngày của bảng và coi bản đó có thể cũ hơn kho
 ```
 
-NHATKY chỉ-thêm với HAI ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
-dòng mình khi trùng theo bước 2), và thay giá trị theo XÓA PHÁP LÝ mục
-7b. Thấy bản "conflicted copy" của MỘT SỔ trong
+NHATKY chỉ-thêm với BA ngoại lệ: sửa ô Trạng thái dòng mình vừa mở (và đổi mã
+dòng mình khi trùng theo bước 2); thay giá trị theo XÓA PHÁP LÝ mục 7b; ĐÍNH
+CHÍNH: gõ nhầm mã hay mức thì KHÔNG sửa dòng cũ, thêm dòng mới mức A với ô
+Làm gì bắt đầu "đính chính <mã G cũ>: ..." - rà 3c, 7g thôi tố dòng cũ. Thấy bản "conflicted copy" của MỘT SỔ trong
 _so: DỪNG lượt ghi; dòng có ở bản conflict mà vắng ở bản chính thì chép sang
 bản chính rồi hòa giải mã theo bước 2, bản conflict chuyển _so\_lich_su\,
 ghi một dòng NHATKY (mức B). Plan là dự kiến, NHATKY là thực ghi, sổ là kết
@@ -206,7 +208,8 @@ DUKIEN.md     dự án · mã · dữ kiện · giá trị · hiệu lực từ 
               thêm nguồn chỉ định và phạm vi chi tiết) · trạng thái · rà lại trước · ghi lần
 TAILIEU.md    dự án · mã · tên · vN · ngày · ở đâu · VAI PHIÊN BẢN (HIỆN HÀNH,
               CŨ, XUNG ĐỘT, KHÔNG XÁC ĐỊNH) · trạng thái nghiệp vụ (NHÁP, ĐÃ
-              GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC...) · QUAN SÁT
+              GỬI DUYỆT, ĐÃ KÝ, ĐÃ NHẬN, ĐÃ THAY, HẾT HIỆU LỰC, KHÔNG PHẢN
+              HỒI - bản gửi đi quá @NHIP.CHODOITAC, ĐÃ ĐÓNG...) · QUAN SÁT
               LÚC · CĂN CỨ TRẠNG THÁI (mail, lời người dùng, quét kho, biên
               nhận...) · nguồn · hết hạn · cờ (GỐC, giữ:<tên người giữ>) ·
               sha256 · ghi lần
@@ -280,11 +283,9 @@ do, không XONG.
 không mở cả file. BANG_DIEU_KHIEN và X0_INDEX đọc cả file vì chúng phải ngắn.
 Chuyển `_so\_lich_su\`: việc XONG, HỦY quá 30 ngày · dữ kiện ĐÃ THAY · tài liệu
 đã thay không còn viện dẫn · plan ĐÃ GHI quá 30 ngày. QUYETDINH chia theo năm,
-NHATKY theo quý. CHUYỂN ĐỊNH DẠNG SỔ (CSV, SQLite): đầu file Markdown giữ đúng
-khuôn `NGUON_SU_THAT: <tên file>`, và CHƯA có bản rà đọc được định dạng đó thì
-CẤM chuyển sổ đó - dừng ở bước tách theo khối hay năm là hết. Chuyển mà lưới
-không theo thì mỗi mã G cũ đẻ một dòng 3c lệch vĩnh viễn, đồng thời 3f, 7 và 7b
-hóa mù cho sổ đó trong khi bộ vẫn báo "hệ sạch" - vùng mù nguy hơn báo oan.
+NHATKY theo quý. Đổi định dạng sổ (CSV, SQLite) là NGOÀI PHẠM VI bộ: tách
+theo khối hay năm là hết - chuyển mà lưới rà không theo thì 3c, 3f, 7, 7b hóa
+mù trong khi bộ vẫn báo "hệ sạch".
 Chuyển lịch sử KHÔNG được làm mất dấu mã G: file trong
 `_so\_lich_su\` giữ nguyên ô "Ghi lần", và rà 3c, 3d, 3e đọc cả thư mục đó.
 
@@ -305,17 +306,8 @@ bản NGOÀI kho theo @KHO.SAOLUU (X0 C1).
 
 Chạm MỘT trong ba là xử lý: sổ vượt 500 dòng dữ liệu · file vượt 1 MB · đọc, tìm
 thường dùng chậm rõ rệt. Bước 1: tách theo khối hoặc năm vào `_so\_lich_su\`.
-Vẫn vượt: chuyển phần dữ liệu sang CSV hoặc SQLite theo đặc tả tối thiểu, chi
-tiết hóa bằng một plan mức C khi chạm ngưỡng thật:
-
-```
-1  file dữ liệu mới là NGUỒN SỰ THẬT; sổ Markdown còn header, luật đọc, con trỏ
-2  mã V D T Q và mã G vẫn cấp theo mục 3, NHATKY vẫn Markdown, vẫn mở dòng TRƯỚC
-3  đứt giữa lượt ghi: "chốt sổ" của X4 đối chiếu NHATKY với file dữ liệu
-4  dòng thay thế đánh dấu như luật hiện tại, không xóa; backup bản theo ngày vào
-   _so\_lich_su\ trước lượt ghi có đổi cấu trúc
-5  BANG_DIEU_KHIEN sinh từ nguồn sự thật mới, cách đọc của người dùng không đổi
-```
+Vẫn vượt: đó là ngưỡng bộ này dừng - kho cần CSDL thật, ngoài
+phạm vi bộ.
 
 # 7b. Xóa theo yêu cầu pháp lý (nâng cao; CHỈ đọc khi có Q-<mã> yêu cầu xóa)
 

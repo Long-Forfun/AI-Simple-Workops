@@ -4,8 +4,8 @@
 
     python bao_cao.py <00_Index>            in báo cáo đầy đủ ra màn hình
     python bao_cao.py <00_Index> --bang     ghi lại _so/BANG_DIEU_KHIEN.md
-    python bao_cao.py <00_Index> --cua CUA2 cửa của phiên (mặc định: cửa có
-                                            lượt ghi mới nhất)
+    python bao_cao.py <00_Index> --cua CUA2 cửa của phiên (mặc định: cửa mà
+                                            X0 C1 khai đúng gốc kho máy này)
 
 Trước vòng 102, bảng điều khiển do AI viết tay từ năm sổ ngày càng dày:
 bảng lệch sổ (8e), bảng cũ hơn lượt ghi (8), và mỗi lần "điểm danh" AI đọc
@@ -57,8 +57,26 @@ def thu_thap(goc, cua=None):
     ma_g = [h[0].strip("* ") for h in nk if re.fullmatch(K.MAU_G, h[0].strip("* "))]
     wm = K.watermark(ma_g)
     if not cua:
+        # cửa của MÁY NÀY: dòng C1 "CUAn = <đường dẫn>" trùng gốc kho đang
+        # chạy. Lấy "cửa có lượt mới nhất" thì trợ lý ở CUA2 đang ĐANG GHI là
+        # bảng của giám đốc ở CUA1 tự nhận cửa CUA2, và câu "phiên khác đang
+        # mở" im đúng lúc cần nói (phản biện 95)
+        _goc_kho = str(goc.resolve().parent).replace("\\", "/").rstrip("/").lower()
+        for _c, _d in re.findall(r"\b(CUA\d+)\s*=\s*([^·\n<]+)", x0nd):
+            try:
+                _dd = str(Path(_d.strip()).resolve()).replace("\\", "/").rstrip("/").lower()
+            except OSError:
+                continue
+            if _dd == _goc_kho:
+                cua = _c
+                break
+    if not cua:
         cua = max(wm, key=lambda c: _khoa_g(wm[c])) if wm else None
+    # cửa chưa có lượt ghi nào (người mới "điểm danh" lần đầu): khai đúng
+    # sự thật "CUAn chưa ghi" - phép 8 chấp nhận, không phải "bảng sửa tay"
     sinh_boi = wm.get(cua) if cua else None
+    if cua and not sinh_boi:
+        sinh_boi = f"{cua} chưa ghi"
     dang_ghi = [h[0].strip("* ") for h in nk if any(o.strip() == "ĐANG GHI" for o in h)]
     # phiên KHÁC đang mở: lượt ĐANG GHI của cửa không phải cửa này (hai người
     # dùng chung kho ở LITE - đợt 3 audit giám đốc)
@@ -80,8 +98,10 @@ def thu_thap(goc, cua=None):
     cho_dt = [r for r in viec_mo if len(r) > 1 and r[1].strip() in qh["chờ đối tác"]]
     cho_chot = [r for r in pl if len(r) > 9 and r[9].strip() == "CHỜ CHỐT"]
 
+    # CÙNG bộ trạng thái "thôi đếm" với dem_qua_han và 8e: lệch một trạng thái
+    # (ĐÃ GIA HẠN, TRẢ HỒ SƠ) là mốc bảng khác mốc 8e, bảng máy sinh tự đỏ
     tl_song = [r for r in tl if len(r) > 7 and "[đã xóa theo Q-" not in "|".join(r)
-               and r[7].strip().upper() not in ("HẾT HIỆU LỰC", "ĐÃ THAY", "HỦY")]
+               and r[7].strip().upper() not in K.TT_THOI_DEM]
     tl_cho_ky = [r for r in tl_song if r[7].strip().upper() in
                  ("ĐÃ GỬI DUYỆT", "CHỜ KÝ", "CHỜ DUYỆT")]
     han_toi, sap_het = [], []
@@ -128,13 +148,14 @@ def dong_bo_dem(d):
            ("chờ đối tác", len(qh["chờ đối tác"])),
            ("chờ bạn chốt (plan C treo)", len(qh["plan C treo"])),
            ("ghi dở (ĐANG GHI)", len(d["dang_ghi"]))]
-    them = [(k, len(qh[k])) for k in ("hết hạn", "rà lại", "_INBOX") if qh[k]]
+    them = [(k, len(qh[k])) for k in ("sắp hết hạn", "rà lại", "_INBOX") if qh[k]]
     duoi = (f" · phiên khác đang mở ({', '.join(d['phien_khac'])})"
             if d.get("phien_khac") else "")
     if not any(n for _, n in dem) and not them:
-        return f"bàn sạch · mốc: {d['moc']}" + duoi
+        return f"bàn sạch · mốc (hạn sớm nhất): {d['moc']}" + duoi
     phan = [f"{k}: {n}" for k, n in dem + them]
-    return " · ".join(phan) + f" · mail: không quét · mốc: {d['moc']}" + duoi
+    return (" · ".join(phan)
+            + f" · mail: không quét · mốc (hạn sớm nhất): {d['moc']}" + duoi)
 
 
 def _dong_viec(r, ai):
@@ -161,14 +182,16 @@ def sinh_bang(d, gon=True):
     if d["qua_han"]:
         can.append("Quá hạn:")
         can += [_dong_viec(x, ai) for x in d["qua_han"][:top]]
-    if d["cho_dt"]:
+    _da_in = {x[1].strip() for x in d["qua_han"][:top]}
+    _cho_dt = [x for x in d["cho_dt"] if x[1].strip() not in _da_in]
+    if _cho_dt:
         can.append("Chờ đối tác quá ngưỡng:")
-        can += [_dong_viec(x, ai) for x in d["cho_dt"][:top]]
+        can += [_dong_viec(x, ai) for x in _cho_dt[:top]]
     if d["tl_cho_ky"]:
         can.append("Tài liệu chờ ký/duyệt: " + ", ".join(
             f"{x[1].strip()} {x[2].strip()[:30]}" for x in d["tl_cho_ky"][:top]))
     if d["sap_het"]:
-        can.append("Sắp hết hạn (60 ngày): " + ", ".join(
+        can.append("Sắp đến hạn (60 ngày tới): " + ", ".join(
             f"{x[2].strip()[:30]} ({dd})" for x, dd in d["sap_het"][:top]))
     if can:
         r += ["## Cần bạn quyết", *can, ""]
@@ -198,12 +221,19 @@ def sinh_bao_cao(d):
         r += ["Quá hạn:"] + [_dong_viec(x, ai) for x in d["qua_han"]]
     if d["cho_dt"]:
         r += ["Chờ đối tác quá ngưỡng:"] + [_dong_viec(x, ai) for x in d["cho_dt"]]
-    if not (d["cho_chot"] or d["qua_han"] or d["cho_dt"]):
+    if d["tl_cho_ky"]:
+        r += ["Tài liệu chờ ký/duyệt:"] + [
+            f"- {x[1].strip()} · {x[2].strip()[:48]} · {x[7].strip()}" for x in d["tl_cho_ky"]]
+    if d["sap_het"]:
+        r += ["Sắp đến hạn (60 ngày tới):"] + [
+            f"- {x[1].strip()} · {x[2].strip()[:48]} · {dd}" for x, dd in d["sap_het"]]
+    if not (d["cho_chot"] or d["qua_han"] or d["cho_dt"] or d["tl_cho_ky"]
+            or d["sap_het"]):
         r.append("- không có")
     r += ["", "## 2. Tài liệu"]
     r += ["Chờ ký/duyệt:"] + ([f"- {x[1].strip()} · {x[2].strip()} · {x[7].strip()}"
                              for x in d["tl_cho_ky"]] or ["- không có"])
-    r += ["Sắp hết hạn trong 60 ngày:"] + (
+    r += ["Sắp đến hạn trong 60 ngày tới:"] + (
         [f"- {x[1].strip()} · {x[2].strip()} · hết hạn {dd}" for x, dd in d["sap_het"]]
         or ["- không có"])
     r += ["", f"## 3. Quyết định tháng {d['hom_nay'].strftime('%m/%Y')}"]
@@ -243,8 +273,11 @@ def main(argv):
                                                         newline=NL)
         print(f"Đã ghi _so/BANG_DIEU_KHIEN.md ({len(bang)} ký tự, cửa {d['cua']},"
               f" sinh_boi {d['sinh_boi']})")
-        print("Nhắc: tải BANG_DIEU_KHIEN và X0_INDEX lên tài liệu Project nếu"
-              " dùng phiên CHAT")
+        _x0_txt = K.doc(sorted(goc.glob("X0_CAUHINH_*.md"))[0])
+        _mpj = re.search(r"^@DUONG\.PROJECT\s+([^\n]*)", _x0_txt, re.M)
+        if _mpj and "<điền" not in _mpj.group(1):
+            print("Nhắc: tải BANG_DIEU_KHIEN và X0_INDEX lên tài liệu Project"
+                  " (phiên CHAT đọc bản đã tải)")
         return 0
     sys.stdout.write(sinh_bao_cao(d))
     return 0

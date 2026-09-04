@@ -51,8 +51,8 @@ can_tai:    [{tu, den, co: GOC}]
 Ghi `_INBOX` hỏng: in nguyên khối cho người dùng dán tay, báo "chưa ghi được", cấm
 im lặng.
 
-Chặng 2: trùng `event_id` thì bỏ qua · đổi tên chuẩn ngay lúc tải, tên gốc vào ô "Căn
-cứ trạng thái" của dòng TAILIEU · file gốc ngoài: bất biến, cờ GỐC, tính sha256 và byte ngay lúc nhận ·
+Chặng 2: trùng `event_id` thì bỏ qua · đổi tên chuẩn ngay lúc tải, tên gốc VÀ
+event_id (tên file `_INBOX`) vào ô "Căn cứ trạng thái" của dòng TAILIEU · file gốc ngoài: bất biến, cờ GỐC, tính sha256 và byte ngay lúc nhận ·
 mail là căn cứ dữ kiện thì lưu .eml hoặc .pdf vào `04_Trao_doi\` TRƯỚC rồi DUKIEN mới
 trỏ tới · số đổi thì DUKIEN dòng cũ ghi thay bởi · chuyển `_INBOX` sang `_da_nap\` ·
 cập nhật bộ đếm. Tải hụt: KHÔNG chuyển `_da_nap`, ghi VIEC kèm lý do.
@@ -67,6 +67,12 @@ báo giá, hợp đồng            03_Thuong_mai\      mẫu dùng lại       
 
 Một file một bản ở nơi đúng nhất, nơi khác chỉ tham chiếu. Folder ngoài sở hữu: chép
 bản sao về kho ngay. Nói miệng: DUKIEN mức nguồn D, CHƯA KIỂM tới khi có văn bản.
+
+Bảng Excel đang dùng (công nợ, chấm công, tiến độ): giữ nguyên, sổ ghi MỘT
+dòng TAILIEU trỏ file; DUKIEN chỉ giữ số ĐÃ CHỐT dùng ra ngoài, nguồn ghi
+`file · sheet · ô`. Số kế toán (MISA...) cũng vậy: không chép chi tiết sổ
+kế toán vào sổ. Giấy ký chỉ có scan/ảnh: người dùng đọc từng số, AI ghi
+(X0 C7).
 
 # 5. Bảng chờ duyệt
 

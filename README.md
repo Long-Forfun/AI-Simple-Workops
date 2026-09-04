@@ -71,8 +71,9 @@ chốt sổ     kết phiên an toàn, vét các lượt ghi dở
 đồng bộ quan sát   (nâng cao) cho AI cập nhật sổ theo bản mới nhất trên kho
 ```
 
-Kênh chat (Zalo, Messenger): lối bán thủ công -
-dán CẢ ĐOẠN chat vào phiên, AI tự tách từng tin và xử
+Excel đang dùng (công nợ, chấm công): giữ nguyên, sổ chỉ trỏ file. Giấy ký
+chỉ có scan: bạn đọc số, AI ghi. Kênh chat (Zalo, Messenger): export chat
+ra .txt hay dán CẢ ĐOẠN vào phiên, AI tự tách từng tin và xử
 như mục đến ở cửa vào (X3 mục 5b); tin nhắn chưa xác nhận tính là nguồn miệng.
 
 Khi AI trình plan cho việc rủi ro: đọc rồi gõ "chốt" hoặc "ok" nếu đồng ý.
@@ -134,20 +135,20 @@ mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuậ
 |---|---|
 | [DOC_TRUOC.md](DOC_TRUOC.md) | Tổng quan bộ, đọc trước |
 | [INSTRUCTION_WORKOPS_v11.md](INSTRUCTION_WORKOPS_v11.md) | Luật thường trực, dán nguyên văn vào Project instructions |
-| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Mọi tham số công ty; phiên đầu điền, rev 0 = chưa cài |
-| [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm: ký tự, động từ, từ theo phạm vi |
-| [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành đầu ra rời công ty |
+| [X0_CAUHINH_TEMPLATE.md](X0_CAUHINH_TEMPLATE.md) | Tham số công ty; rev 0 = chưa cài |
+| [X1_CAM_TEMPLATE.md](X1_CAM_TEMPLATE.md) | Luật cấm theo phạm vi |
+| [X2_PHATHANH_TEMPLATE.md](X2_PHATHANH_TEMPLATE.md) | Luật phát hành ra ngoài |
 | [X3_CUAVAO_TEMPLATE.md](X3_CUAVAO_TEMPLATE.md) | Luật cửa vào: file đến, hai chặng, bảng chờ duyệt |
-| [X3E_EMAIL_TEMPLATE.md](X3E_EMAIL_TEMPLATE.md) | Pipeline mail đầy đủ, chỉ nạp khi bật profile EMAIL |
-| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát sổ lệch thực tế, các câu tắt |
+| [X3E_EMAIL_TEMPLATE.md](X3E_EMAIL_TEMPLATE.md) | Pipeline mail, chỉ khi bật EMAIL |
+| [X4_RASOAT_TEMPLATE.md](X4_RASOAT_TEMPLATE.md) | Luật rà soát, các câu tắt |
 | [X5_HESO_TEMPLATE.md](X5_HESO_TEMPLATE.md) | Mức tác động A B C, vòng đời tài liệu, hệ sổ |
-| [X9_CAIDAT.md](X9_CAIDAT.md) | Kịch bản cài đặt phiên đầu; kho có sẵn (3b); nâng cấp bộ (3c) |
+| [X9_CAIDAT.md](X9_CAIDAT.md) | Cài đặt; kho có sẵn (3b); nâng cấp (3c) |
 | [_so/](_so) | Năm sổ lõi rỗng + PLANNING (mức C) + THU (khi bật EMAIL) + hai view máy sinh |
 | [bao_cao.py](bao_cao.py) | Máy sinh bảng điều khiển + báo cáo quản lý |
 | [kiem_van_hanh.py](kiem_van_hanh.py) | Kiểm máy hệ sổ công ty ĐANG CHẠY |
 | [kiem_tra_bo.py](kiem_tra_bo.py) | Test hồi quy BỘ MẪU cho người bảo trì; PASS hết mới đóng gói |
 | [BENCHMARK_TOKEN.md](BENCHMARK_TOKEN.md) | Benchmark token tĩnh của bộ |
-| [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký các vòng đổi mới, cho người đánh giá |
+| [GHICHU_DOI_MOI_v24_20260824.md](GHICHU_DOI_MOI_v24_20260824.md) | Nhật ký đổi mới |
 | [WORKOPS_STARTER_v24_20260824_GOP.md](WORKOPS_STARTER_v24_20260824_GOP.md) | Bản gộp mọi file, nạp một lần cho AI đánh giá |
 
 ## Nguyên tắc vận hành

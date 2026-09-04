@@ -9,6 +9,62 @@ Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 95: TEAM bốn vai - nghiên cứu, đánh giá, tối ưu, phản biện - đợt A+B
+
+Người dùng yêu cầu tổ chức team agent: nghiên cứu · đánh giá · đề xuất tối
+ưu · phản biện, rồi lên kế hoạch, thực hiện, kiểm tra. Bốn agent chạy song
+song trên bản vòng 64; kết quả HỘI TỤ về cùng vài lỗ - dấu hiệu tốt:
+
+· NGHIÊN CỨU: bộ nên NHẬN thói quen cũ (Excel, Zalo export, scan giấy ký)
+  thay vì bắt đổi; chưa có ranh giới với phần mềm kế toán; thẻ phần mềm 8
+  trường đúng cho 7g nhưng thiếu phần giám đốc ra quyết định; danh bạ chưa
+  có khuôn; lộ trình CSV/SQLite là đặc tả cho thứ đang CẤM.
+· ĐÁNH GIÁ: rubric vòng chấm 10 = 96/100 (95·96·91·93·91·95·96·96·97·96);
+  trừ 7g miễn mức B quá rộng, m07 "còn N mục nữa", nhãn "hết hạn" sai nghĩa.
+· TỐI ƯU (vai trợ lý ghi sổ, 11 phiên thật): ~25-30 phút/ngày cho "việc
+  của bộ"; báo oan "bảng sửa tay" khi cửa chưa ghi lượt nào; gõ nhầm mã bị
+  3c tố VĨNH VIỄN vì NHATKY chỉ-thêm; 7g đọc tên phụ trách thành cả cụm
+  chú thích; 0r/X3 lệch nhau về event_id; "9999 ngày".
+· PHẢN BIỆN (41 ca, 5/10 "bản mới không tự đẻ lỗ"): bao_cao tự làm 8e đỏ
+  "MẤT DÒNG" trên kho hợp lệ (8e quét trọn bảng khớp nhãn "Sắp hết hạn (60
+  ngày)"), mốc lệch bộ trạng thái; 7g mức B là CỬA SAU thật ("An" trong
+  "ban", tên ở ô Chờ ai, phụ trách phần mềm khác); 3c oan "KHOI1"/"Them" và
+  miss mã thứ hai; bàn giao "An" khớp "Trân". Kèm bản vá V1-V6 đã chạy thử
+  sạch trọn suite.
+
+ĐỢT A (máy + fixture, 12 ca mới, 120 ca): áp V1-V6 nguyên bản (đối chiếu
+diff từng dòng) + bộ đếm "sắp hết hạn" (X4#14 là cảnh báo trước) + báo cáo
+mục 1 cùng nội dung với bảng + cửa chưa ghi lượt nào khai "CUAn chưa ghi",
+phép 8 chấp nhận + tên phụ trách cắt trước "(" + 0r/X3 event_id vào Căn cứ
+trạng thái + 0m "chưa có bản nào", 0m2 chỉ 7 ngày ghi gần nhất + bảng không
+in một việc hai lần, nhãn "mốc (hạn sớm nhất)" + nhắc tải BANG chỉ khi khai
+Project + lời 9e cho đường tuyệt đối trong kho. 14e của chính bộ bắt tôi
+viết bao(..., True) - đúng lưới, sửa ngay.
+
+ĐỢT B (luật ngắn): NHATKY ngoại lệ thứ ba ĐÍNH CHÍNH (dòng mới "đính chính
+<mã G cũ>:" - 3c, 7g thôi tố dòng cũ; ca I2) · bỏ lộ trình CSV/SQLite ở X5
+mục 5/7 (ngoài phạm vi bộ) · X5 1b: "ghi nhận mức B" áp cho MỌI thao tác kỹ
+thuật đã xảy ra, là ghi nhận không phải cho phép · TAILIEU thêm KHÔNG PHẢN
+HỒI, ĐÃ ĐÓNG; bộ trạng thái thôi đếm thành hằng chung TT_THOI_DEM cho
+dem_qua_han, 8e, bao_cao · X3 mục 4: Excel đang dùng là MỘT dòng TAILIEU +
+DUKIEN trỏ file·sheet·ô, số kế toán chỉ giữ số ĐÃ CHỐT dùng ra ngoài, scan
+giấy ký người đọc số AI ghi · README nêu Excel/Zalo export/scan.
+
+TÁI ĐO 7 mutant (đếm exit code): 7/7 CHẾT. Hai con lượt đầu SỐNG vì ca của
+tôi có HAI LỚP phòng thủ triệt tiêu nhau: V1 (8e) - ca hạn-45-ngày không còn
+khớp nhãn sau khi V2 đổi tên khối, nay ghim bằng TÊN TÀI LIỆU tiếng Việt
+mang chữ "quá hạn 12" (ca thật, gặp thường); V6 (bàn giao) - ca "An sang
+Trân" bị chính vế NGƯỜI MỚI triệt tiêu, nay ghim bằng "An sang Bình, việc
+gán Tuấn Anh". Và chính ca V1 mới bắt được LỖI THẬT của đợt A: nhãn banner
+đổi thành "mốc (hạn sớm nhất):" làm 8e không tìm thấy dòng bộ đếm nữa và
+rơi về quét TRỌN BẢNG - đúng lỗ V1 định vá. Sửa: nhận dòng bằng chữ "mốc".
+Lab hành vi trên kho thật 6/6 đúng. Fixture 121 ca, I2 41, I3 97(nt)/96.
+
+ĐỢT C (đổi khuôn, chờ gật): thẻ phần mềm khối quản trị mềm · danh bạ có mã
+người, bí danh, loại bên, dạng "Ở đâu" Giay <nơi cất> · @VANHANH.TRUC ·
+bao_cao --tim/--duan · câu tắt "nạp file" · dự phòng người gật · dấu mềm
+_dang_ghi_<CỬA>.
+
 ## Vòng 94: audit vai GIÁM ĐỐC - đợt 3: danh bạ, hai người dùng, ẩn nâng cao
 
 Đợt cuối của 12 đề xuất. Nguyên tắc: KHÔNG đổi schema sổ (mỗi cột thêm là

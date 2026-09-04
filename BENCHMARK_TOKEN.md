@@ -44,10 +44,10 @@ Mỗi dòng là TỔNG của route đó, không cộng dồn giữa các dòng.
 |---|---|---:|---|
 | HOI | DUKIEN theo khối | theo khối | |
 | BAN | không | 0 | |
-| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1860 (thêm X5 mục 3 ~1392 khi ghi sổ; dự án phần mềm thêm mục 1b ~475) | |
-| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~6132 + khối (không phần mềm trừ thêm mục 1b ~475) | |
-| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2814 + khối | |
-| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6563 + khối | |
+| NOI_BO mức A | X5 mục 1 + X1 mục 3, 4 | ~1860 (thêm X5 mục 3 ~1441 khi ghi sổ; dự án phần mềm thêm mục 1b ~490) | |
+| SUA_FILE nội bộ | X5 trừ mục 7b + TAILIEU theo khối | ~5981 + khối (không phần mềm trừ thêm mục 1b ~490) | |
+| CUA_VAO thường (không EMAIL) | X3 mục 1 tới 5 (5b gate khi dán chat) + X5 mục 1 + VIEC, TAILIEU theo khối | ~2884 + khối | |
+| CUA_VAO mail (profile EMAIL) | như trên CỘNG X3E trừ mục 1c phục hồi | ~6675 + khối | |
 | RA_SOAT | X4 + kết quả kiem_van_hanh.py | ~1661 (X4) cộng bảng kết quả in ra | |
 | SOAN_RA thường lệ | X1 + X2 + X5 mục 1 | ~3683 | |
 | SOAN_RA chính thức | thêm DUKIEN + mục X0 được trỏ | ~3683 + khối | |
@@ -133,4 +133,4 @@ toàn bộ 12a-12l.
 Con số trên là CORE đầy đủ. LITE bỏ khối REGULATED, PARALLEL, AUTOMATED,
 EMAIL nên X0 ngắn hơn đáng kể; X3E và sổ THU chỉ được nạp khi bật EMAIL,
 không tăng thuế của bộ lõi.
-CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 ~1025 token (mục 5b gate khi dán chat).
+CUA_VAO thường của LITE chỉ đọc X3 mục 1 tới 5 ~1138 token (mục 5b gate khi dán chat).

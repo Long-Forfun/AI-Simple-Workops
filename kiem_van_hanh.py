@@ -214,6 +214,10 @@ loi = []
 # một cửa một ngày - và phiên sau đọc watermark "-99" rồi cấp lại "-100",
 # sinh mã TRÙNG THẬT (hội đồng vòng 19). X5 mục 3 không đặt trần 99.
 MAU_G = r"G-\d{8}(?:-[A-Z0-9]+)?-\d{2,}(?!\d)"
+# trạng thái TAILIEU THÔI ĐẾM (hết hạn, mốc): MỘT nguồn cho dem_qua_han, 8e và
+# bao_cao - lệch một trạng thái giữa ba nơi là bảng máy sinh tự đỏ (phản biện 95)
+TT_THOI_DEM = ("HẾT HIỆU LỰC", "ĐÃ GIA HẠN", "ĐÃ THAY", "TRẢ HỒ SƠ", "HỦY",
+               "ĐÃ ĐÓNG", "KHÔNG PHẢN HỒI")
 # DANH BẠ PHÉP: DỮ LIỆU, không phải nhãn. Phép 14b của kiem_tra_bo đối
 # chiếu danh bạ này với tập phép mà phép 13 THẬT SỰ ép được trạng thái vi
 # phạm. Hội đồng vòng 15b: 27/36 phép xóa trọn được mà bộ vẫn in "sạch",
@@ -917,7 +921,7 @@ def dem_qua_han(so, x0nd, hom_nay=None):
         so = re.search(r"(\d+)", m.group(1)) if m else None
         return int(so.group(1)) if so else mac_dinh
 
-    ra = {"quá hạn": [], "rà lại": [], "hết hạn": [], "_INBOX": [],
+    ra = {"quá hạn": [], "rà lại": [], "sắp hết hạn": [], "_INBOX": [],
           "plan C treo": [], "chờ đối tác": []}
     for r in dong_bang(doc(so / "VIEC.md")):
         if len(r) > 7 and r[7].strip() not in ("XONG", "HỦY"):
@@ -934,14 +938,14 @@ def dem_qua_han(so, x0nd, hom_nay=None):
     # đã hết hiệu lực, hồ sơ đã trả. Không có các trạng thái này thì lối thoát
     # DUY NHẤT của người dùng là ghi đè ô Hết hạn của một bản ĐÃ KÝ - tức bộ
     # dẫn thẳng tới thao tác làm sai lệch sổ (hội đồng vòng 19).
-    _thoi_dem = ("HẾT HIỆU LỰC", "ĐÃ GIA HẠN", "ĐÃ THAY", "TRẢ HỒ SƠ", "HỦY")
+    _thoi_dem = TT_THOI_DEM
     for r in dong_bang(doc(so / "TAILIEU.md")):
         if len(r) > 11 and "[đã xóa theo Q-" not in "|".join(r):
             if len(r) > 7 and r[7].strip().upper() in _thoi_dem:
                 continue
             h = ngay(r[11])
             if h and (h - hom_nay).days <= _canh:
-                ra["hết hạn"].append(r[1].strip())
+                ra["sắp hết hạn"].append(r[1].strip())
     # HAI BỘ ĐẾM banner X5 khai mà trước vòng 92 không máy nào đếm: plan C
     # treo và chờ đối tác quá ngưỡng - bảng khai 0 mà sổ đầy, 8e vẫn xanh
     # (giám khảo rubric 06, đúng lớp lỗi hội đồng vòng 18, nay đủ 6/6)
@@ -1357,10 +1361,10 @@ def quan_sat_kho(goc, so, kho, loc_ho=None, bay_gio=None):
         f" tức bản đã ký hay đã nộp không còn lưới toàn vẹn nào (X4 dòng 5)."
         f" Chạy lại lượt ghi để đóng sha, mức A")
     bao("9e. đường dẫn sổ không thoát kho" + pv, not _thoat_kho,
-        f"{_liet([f'{m}: {r}' for m, r in _thoat_kho[:3]])}: dòng trỏ RA"
-        f" NGOÀI kho ('..', ổ đĩa hay đường tuyệt đối) - máy sẽ đọc và tính"
-        f" sha trên file không thuộc công ty. Đưa file VÀO kho rồi khai"
-        f" đường dẫn tương đối, mức C")
+        f"{_liet([f'{m}: {r}' for m, r in _thoat_kho[:3]])}: đường dẫn có"
+        f" '..', ổ đĩa hay đầu tuyệt đối - kể cả khi file thật nằm TRONG kho,"
+        f" khai tương đối từ gốc kho (X0 C1); trỏ ra ngoài kho là máy đọc"
+        f" file không thuộc công ty. Sửa ô Ở đâu, mức C")
     bao("9d. tên khai đúng hoa thường với đĩa" + pv, not _lech_hoa,
         f"{_liet(_lech_hoa[:3])}: NTFS cho qua nhưng đồng bộ Linux, git hay"
         f" rsync coi là MẤT FILE. Sửa sổ theo tên thật trên đĩa, mức A")
@@ -2399,7 +2403,9 @@ def main(goc):
                                  if f.is_file()), default=0)
                 _ngay = int((_t0m.time() - _moi_nhat) / 86400) if _moi_nhat else 9999
                 bao("0m. nơi sao lưu ngoài kho còn cập nhật", _ngay <= 7,
-                    f"{_sl_d}: bản mới nhất cách đây {_ngay} ngày - đây là bản"
+                    f"{_sl_d}: "
+                    + (f"bản mới nhất cách đây {_ngay} ngày" if _moi_nhat
+                       else "CHƯA CÓ bản sao nào") + " - đây là bản"
                     f" DUY NHẤT sống sót một lượt rollback trọn _so. Sao lại, mức A")
 
     # 0n. Cache quan sát là chỗ luật ổn định hai lượt đặt trọn niềm tin, mà
@@ -2458,8 +2464,9 @@ def main(goc):
                    if f.is_file() and f.name not in _van0r]
         if _mo_coi:
             _loi0r.append(f"nạp MỒ CÔI: {_liet(_mo_coi[:3])} - không sổ nào"
-                          f" mang tên gốc (X3 chặng 2 bắt ghi vào Căn cứ"
-                          f" trạng thái); dựng lại lượt nạp")
+                          f" ghi TÊN FILE _INBOX này (event_id) ở ô Căn cứ"
+                          f" trạng thái (X3 chặng 2); nối event_id vào dòng"
+                          f" đã nạp, mức A")
     bao("0r. _inbox sang _da_nap sạch vòng đời", not _loi0r,
         "; ".join(_loi0r) + ". Mức A")
 
@@ -2472,6 +2479,8 @@ def main(goc):
         # giao" và re.search không neo vớ nhầm câu đó thay vì dòng khai C9
         _mbg = re.search(r"^@NHIP\.BANGIAO\s+([^\n<]+)", doc(x0s[0]), re.M)
         _v_bg = (_mbg.group(1).strip() if _mbg else "")
+        # ngày đứng TRƯỚC ("2026-08-20: Long sang Trân") thì tên cũ đọc ra "2026"
+        _v_bg = re.sub(r"^\s*\d{4}-\d{2}-\d{2}\s*[:,-]?\s*", "", _v_bg)
         if _v_bg and not re.match(r"(?i)ch[ưu]a c[óo]", _v_bg):
             # cắt đuôi "cũ/mới": người điền xuôi khuôn "<tên người cũ,
             # người mới>" thành "An cũ, Bình mới" - giữ nguyên là câm cả hai
@@ -2481,12 +2490,30 @@ def main(goc):
             _m_tc = re.match(r"\s*([^,(\n>-]+?)\s*(?:\(|,|->|\bsang\b|$)", _v_bg)
             _ten_cu = re.sub(r"\s*\(?(c[ũu]|m[ớo]i)\)?$", "",
                              (_m_tc.group(1) if _m_tc else _v_bg).strip())[:30]
+            # người MỚI: vế sau dấu "->", "sang" hay dấu phẩy đầu tiên
+            _m_tm = re.search(r"(?:->|\bsang\b|,)\s*([^,(\n>-]+?)\s*(?:\(|,|$)",
+                              _v_bg[_m_tc.end(1):] if _m_tc else "")
+            _ten_moi = re.sub(r"\s*\(?(c[ũu]|m[ớo]i)\)?$", "",
+                              _m_tm.group(1).strip())[:30] if _m_tm else ""
+
+            def _co_ten(_o, _ten):
+                """tên đứng NGUYÊN TỪ (bỏ dấu): "An" không nằm trong "Trân",
+                "Long" nhận cả "Nguyễn Văn Long" lẫn "Long" (tên gọi là từ cuối)."""
+                _o_kd, _t_kd = bo_dau(_o or ""), bo_dau(_ten or "")
+                _ung = {_t_kd, _t_kd.split()[-1]} if _t_kd.strip() else set()
+                return any(re.search(r"(?<![a-z0-9])" + re.escape(_u)
+                                     + r"(?![a-z0-9])", _o_kd) for _u in _ung if _u)
+
+            def _cua_nguoi_cu(_o):
+                return _co_ten(_o, _ten_cu) and not (
+                    _ten_moi and bo_dau(_ten_moi) != bo_dau(_ten_cu)
+                    and _co_ten(_o, _ten_moi))
             if _ten_cu:
                 _viec_cu = [
                     (_r[1] or "?").strip()[:12]
                     for _r in dong_bang(doc(so / "VIEC.md"))
                     if len(_r) > 7 and _r[7].strip() not in ("XONG", "HỦY")
-                    and bo_dau(_ten_cu) in bo_dau(_r[4] if len(_r) > 4 else "")]
+                    and _cua_nguoi_cu(_r[4] if len(_r) > 4 else "")]
                 # người GẬT mức C đã nghỉ mà C2 vẫn ghi tên: 7g sẽ mãi
                 # bảo đi xin cái gật của người cũ (giám khảo rubric 05)
                 # tách C2 thành TỪNG KHỐI entry rồi tìm trong TRỌN khối:
@@ -2515,8 +2542,8 @@ def main(goc):
                 _tl_cu = [
                     (_r[1] or "?").strip()[:12]
                     for _r in dong_bang(doc(so / "TAILIEU.md"))
-                    if len(_r) > 12 and bo_dau(_ten_cu) in bo_dau(_r[12])
-                    and "giu:" in bo_dau(_r[12])]
+                    if len(_r) > 12 and "giu:" in bo_dau(_r[12])
+                    and _cua_nguoi_cu(_r[12])]
                 if _viec_cu or _pm_cu or _tl_cu:
                     _vepm = (f"; phần mềm {_liet(_pm_cu[:2])} còn ghi"
                              f" {_ten_cu} ở vế phụ trách C2" if _pm_cu else "") \
@@ -2535,8 +2562,11 @@ def main(goc):
         _ngay_ghi = set()
         for _f0m2 in sorted(so.glob("NHATKY_*.md")):
             _ngay_ghi |= set(re.findall(r"\bG-(\d{8})-", doc(_f0m2)))
+        # X5 mục 7 chỉ giữ 7 bản: chỉ soi 7 NGÀY CÓ LƯỢT GHI gần nhất, nhắc
+        # xa hơn là nhắc vô nghĩa (tối ưu vai trợ lý); đếm theo ngày ghi chứ
+        # không theo lịch để fixture ngày cố định không hỏng dần
         _thieu_bk = sorted(
-            _ng for _ng in _ngay_ghi
+            _ng for _ng in sorted(_ngay_ghi)[-7:]
             if not (so / "_lich_su" / f"backup_{_ng}").is_dir())
         if _thieu_bk:
             print(f"        LƯU Ý  0m2: {len(_thieu_bk)} ngày có lượt ghi mà"
@@ -2631,6 +2661,15 @@ def main(goc):
         # không phải "ít nhất một sổ": ghi đè ô Ghi lần của MỘT sổ từng đi im
         # trong khi X5 mục 3 bước 3 hứa "3c lệch mãi" (hội đồng vòng 14)
         khong_dau = []
+        # ĐÍNH CHÍNH (X5 mục 3, ngoại lệ 3): dòng mới có ô Làm gì bắt đầu
+        # "đính chính <mã G cũ>:" thì dòng cũ thôi bị 3c/7g tố - NHATKY chỉ-thêm
+        # nên gõ nhầm một mã là bị tố vĩnh viễn (tối ưu vai trợ lý)
+        _dinh_chinh = set()
+        for h in hang_nk:
+            _mdc = re.match(r"\s*(?:đính chính|dinh chinh)\s+(" + MAU_G + r")",
+                            h[4] if len(h) > 4 else "", re.I)
+            if _mdc:
+                _dinh_chinh.add(_mdc.group(1))
         _ma_theo_so = {}
         for _tso in SO_CO_GHI_LAN:
             _cot = 0 if _tso in ("QUYETDINH.md", "PLANNING.md") else 1
@@ -2643,6 +2682,8 @@ def main(goc):
             cham = (h[5] if len(h) > 5 else "")
             if not (any(o == "XONG" for o in h) and re.fullmatch(MAU_G, ma)):
                 continue
+            if ma in _dinh_chinh:
+                continue   # dòng đã được đính chính bởi dòng sau
             _cham_kd = bo_dau(cham)
             if "khong" in _cham_kd and "da xoa theo q-" not in _cham_kd:
                 continue  # khuôn chuẩn của X5 mục 7b là "không, đã xóa theo
@@ -2668,9 +2709,16 @@ def main(goc):
             # nói "bảng khai 3, sổ đếm 2, sinh lại bảng" là xúi xóa nốt dấu vết
             # (giám khảo vai giám đốc). Từng MÃ khai ở "Chạm sổ nào" phải còn
             # trong sổ đó (hay đã sang _lich_su).
-            for _tso, _mdong in re.findall(
+            # MÃ dòng luôn có dấu gạch (V-, D-, T-, Q-, P-, #L-): bản cũ nhận
+            # mọi chữ HOA đứng sau tên sổ ("VIEC KHOI1 V-...", "VIEC Them
+            # V-...") làm "dòng KHOI1 đã BIẾN MẤT" oan; và "V-005, V-006" hai
+            # mã một ô chỉ soi mã đầu (phản biện 95)
+            _MA_DONG = r"[A-Z#][A-Za-z0-9]*-[A-Za-z0-9-]+"
+            for _tso, _cum in re.findall(
                     r"\b(VIEC|DUKIEN|TAILIEU|QUYETDINH|PLANNING|THU)\s+"
-                    r"([A-Z#][A-Za-z0-9-]{2,})", cham):
+                    r"(?:[A-Za-z0-9_]+\s+)?(" + _MA_DONG
+                    + r"(?:\s*,\s*" + _MA_DONG + r")*)", cham):
+              for _mdong in re.findall(_MA_DONG, _cum):
                 if _mdong not in _ma_theo_so.get(_tso + ".md", set()):
                     khong_dau.append(
                         f"dòng {_mdong} mà lượt {ma} khai chạm đã BIẾN MẤT khỏi"
@@ -3001,6 +3049,7 @@ def main(goc):
         _nhanh_pm = []  # GIÁ TRỊ nhánh tự deploy, cũng để 7g đọc lại
         _db_pm = []     # tên ĐÍCH DANH CSDL chạy thật (rubric 03)
         _pt_pm = []     # tên NGƯỜI phụ trách vận hành - 7g nêu thẳng ai gật
+        _neo_theo_pm = []  # (host, nhánh, csdl, phụ trách) của TỪNG phần mềm - 7g
         for _i, _dg in enumerate(_dong_pm):
             # KHÔNG đòi 2-6 ký tự HOA: không văn bản nào của bộ khai luật
             # đó, mà mã ngoài khuôn ngầm làm công ty khai ĐÚNG bị 7d và
@@ -3026,25 +3075,30 @@ def main(goc):
             # (giám khảo rubric vòng 03)
             _mh = re.search(r"(?:nơi\s+)?ch[ạa]y\s+th[ậa]t\s*:?\s*([^·\n]+)",
                             _khoi_pm)
+            _h_i, _n_i, _d_i, _p_i = [], [], [], []   # riêng phần mềm này
             if _mh:
-                _host_pm += [_h.rstrip(".,;·") for _h in re.findall(
+                _h_i += [_h.rstrip(".,;·") for _h in re.findall(
                     r"[A-Za-z0-9][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_-]+)+",
                     _mh.group(1))]
                 # máy chủ NỘI BỘ không có dấu chấm ("VPS-01", "prod2"):
                 # token đơn chỉ vào neo khi mang CHỮ SỐ hay dấu gạch - từ
                 # tiếng Việt thường ("chưa rõ", "máy chủ") đứng ngoài
                 # (giám khảo rubric 05)
-                _host_pm += [_h for _h in re.findall(
+                _h_i += [_h for _h in re.findall(
                     r"(?<![\w.-])([A-Za-z][A-Za-z0-9-]{2,})(?![\w.])",
                     _mh.group(1))
                     if re.search(r"[0-9-]", _h)]
+                _host_pm += _h_i
             _mpt = re.search(r"(?:ph[ụu] tr[áa]ch(?:\s+v[ậa]n h[àa]nh)?"
                              r"|owner|on-?call)\s*:?\s*([^·\n]+)",
                              _khoi_pm, re.I)
             if _mpt and not re.search(r"(?i)ch[ưu]a r[õo]", _mpt.group(1)):
-                _ten_pt = _mpt.group(1).strip().rstrip(".,;·")
+                # "Tuấn (kỹ thuật, GẬT mức C)" -> "Tuấn": tên là phần trước
+                # dấu ngoặc/phẩy, không phải cả cụm chú thích (tối ưu vai trợ lý)
+                _ten_pt = re.split(r"[(,;]", _mpt.group(1))[0].strip().rstrip(".·")
                 if _ten_pt:
                     _pt_pm.append(_ten_pt[:30])
+                    _p_i.append(_ten_pt[:30])
             _mdb = re.search(r"(?:csdl|c[ơo] s[ởo] d[ữu] li[ệe]u"
                              r"|kho d[ữu] li[ệe]u|database|\bdb\b)"
                              r"\s*(?:ch[ạa]y\s+th[ậa]t)?\s*:?\s*([^·\n]+)",
@@ -3053,11 +3107,14 @@ def main(goc):
                 _ten_db = _mdb.group(1).strip().rstrip(".,;·")
                 if _ten_db:
                     _db_pm.append(_ten_db[:40])
+                    _d_i.append(_ten_db[:40])
+            _neo_theo_pm.append((_h_i, _n_i, _d_i, _p_i))
             _mb = re.search(r"nh[áa]nh\s+t[ựu]\s+deploy[^·]*?"
                             r"(?:th[ậa]t\s+)?([A-Za-z0-9][\w./-]*)\s*(?:·|$)",
                             _khoi_pm)
             if _mb and not re.search(r"(?i)kh[ôo]ng c[óo]", _mb.group(0)):
                 _nhanh_pm.append(_mb.group(1).rstrip(".,;"))
+                _n_i.append(_mb.group(1).rstrip(".,;"))
             # nhận CẢ bản có dấu lẫn không dấu: người Việt gõ cả hai kiểu, dò
             # mỗi bản có dấu là phạt oan công ty gõ "chay that" (bàn thử vòng 45)
             _can_pm = [("repo", r"repo\s*[:=]?\s*\S"),
@@ -3178,18 +3235,47 @@ def main(goc):
                  + re.escape(_b) + r"(?![\w.-])"
                  for _b in _nhanh_pm]
         _sx = []
+        _dinh_chinh_7g = set()
+        for _r in hang_nk:
+            _mdc = re.match(r"\s*(?:đính chính|dinh chinh)\s+(" + MAU_G + r")",
+                            _r[4] if len(_r) > 4 else "", re.I)
+            if _mdc:
+                _dinh_chinh_7g.add(_mdc.group(1))
         for _r in hang_nk:
             if len(_r) < 5:
                 continue
             _lg, _muc = _r[4], _r[3].strip()
             if _muc == "C" or not re.search(_dv, _lg):
                 continue
+            if _r[0].strip("* ") in _dinh_chinh_7g:
+                continue   # dòng đã được đính chính (X5 mục 3 ngoại lệ 3)
             # chuyện ĐÃ XẢY RA do đội kỹ thuật làm: ghi nhận mức B kèm TÊN
             # người phụ trách xác nhận là đủ - bắt plan C để ghi nhận một việc
             # đã rồi là thủ tục chiều bộ (audit vai giám đốc, đợt 2)
-            if _muc == "B" and _pt_pm and any(
-                    bo_dau(_pt) in bo_dau("|".join(_r)) for _pt in _pt_pm):
+            if not any(re.search(_n, _lg, re.I) for _n in _neo):
                 continue
+            # chuyện ĐÃ XẢY RA mức B: tên phụ trách phải đứng NGUYÊN TỪ trong
+            # ô Làm gì, và là phụ trách của ĐÚNG phần mềm mà lượt này chạm
+            # (neo chữ "prod"/"chạy thật" không thuộc phần mềm nào thì nhận
+            # mọi phụ trách). Bản cũ tìm chuỗi con trên CẢ DÒNG: "An" nằm
+            # trong "ban", "Hà" trong "hanh", tên ở ô Chờ ai cũng đủ im - mọi
+            # lượt sản xuất hạ được xuống B (phản biện 95)
+            if _muc == "B" and _pt_pm:
+                _pt_ung = set()
+                for _h_i, _n_i, _d_i, _p_i in _neo_theo_pm:
+                    _neo_i = ["(?<![\\w.-])" + re.escape(_h) for _h in _h_i] + [
+                        re.escape(_d) for _d in _d_i] + [
+                        r"(?:merge|g[ộo]p|đ[ẩa]y l[êe]n|day len|đ[ưu]a|dua"
+                        r"|\bsquash\b|\brebase\b)[^·]*?(?<![\w.-])"
+                        + re.escape(_b) + r"(?![\w.-])" for _b in _n_i]
+                    if any(re.search(_n, _lg, re.I) for _n in _neo_i):
+                        _pt_ung |= set(_p_i)
+                if not _pt_ung:
+                    _pt_ung = set(_pt_pm)   # chỉ neo chữ suông: nhận mọi phụ trách
+                _lg_kd = bo_dau(_lg)
+                if any(re.search(r"(?<![a-z0-9])" + re.escape(bo_dau(_pt))
+                                 + r"(?![a-z0-9])", _lg_kd) for _pt in _pt_ung):
+                    continue
             if any(re.search(_n, _lg, re.I) for _n in _neo):
                 _sx.append(f"{(_r[0] or '?').strip()[:22]} (mức {_muc or 'trống'})")
         bao("7g. chạm CHẠY THẬT phải ghi mức C", not _sx,
@@ -3448,7 +3534,13 @@ def main(goc):
             # NHATKY đã mất dòng, sinh lại bảng là XÓA BẰNG CHỨNG CUỐI CÙNG
             # (hội đồng vòng 13: phép cũ dẫn thẳng người dùng tới thao tác đó)
             moi_hon = bang_moi_hon(gb, c, wm)
-            if not gb or not c:
+            _chua_ghi = re.search(r"sinh_boi:\s*(CUA\d+)\s+chưa ghi", bdk)
+            if _chua_ghi and _chua_ghi.group(1) not in wm:
+                # cửa vừa mở, chưa có lượt ghi nào (giám đốc "điểm danh" ở
+                # CUA2 lần đầu): bảng khai đúng sự thật, không phải sửa tay
+                _ok8 = _chua_ghi.group(1) not in wm
+                bao("8. BANG_DIEU_KHIEN sinh từ watermark cửa nó", _ok8, "")
+            elif not gb or not c:
                 bao("8. BANG_DIEU_KHIEN sinh từ watermark cửa nó", False,
                     "bảng chưa khai sinh_boi hay watermark mang mã G có cửa:"
                     " bảng sinh TRƯỚC lượt ghi đầu tiên thì ghi \"cai dat\"; bảng"
@@ -3493,8 +3585,16 @@ def main(goc):
                               + "; ".join(f"{k} {len(v)} ({_liet(v[:3])})"
                                           for k, v in _qh.items() if v))
             else:
+                # chỉ đọc DÒNG BỘ ĐẾM (dòng mang "mốc:"), không quét trọn bảng:
+                # mục "Sắp hết hạn (60 ngày)" của chính bảng máy sinh khớp nhãn
+                # "hết hạn" + số 60 và 8e tố "có thể MẤT DÒNG" oan (phản biện 95)
+                # nhận dòng bộ đếm bằng chữ "mốc" (nhãn có thể là "mốc:" hay
+                # "mốc (hạn sớm nhất):"): đòi đúng "mốc:" là rơi về quét TRỌN
+                # bảng và tên tài liệu mang chữ "quá hạn 12" tố oan (vòng 105)
+                _dong_dem = next((_l for _l in bdk_nd.splitlines() if "mốc" in _l),
+                                 bdk_nd)
                 for _k, _v in _qh.items():
-                    _m8 = re.search(re.escape(_k) + r"\D{0,12}?(\d+)", bdk_nd)
+                    _m8 = re.search(re.escape(_k) + r"\D{0,12}?(\d+)", _dong_dem)
                     if _m8 and int(_m8.group(1)) != len(_v):
                         _loi8e.append(
                             f"{_k}: bảng khai {_m8.group(1)}, sổ đếm {len(_v)}"
@@ -3516,8 +3616,7 @@ def main(goc):
             for _r8 in dong_bang(doc(so / "TAILIEU.md")):
                 if len(_r8) > 11 and "[đã xóa theo Q-" not in "|".join(_r8) \
                         and (len(_r8) <= 7 or _r8[7].strip().upper()
-                             not in ("HẾT HIỆU LỰC", "ĐÃ GIA HẠN", "ĐÃ THAY",
-                                     "TRẢ HỒ SƠ", "HỦY")):
+                             not in TT_THOI_DEM):
                     _m8h = re.search(r"(\d{4}-\d{2}-\d{2})", _r8[11])
                     if _m8h and _m8h.group(1) >= _dt8e.date.today().isoformat():
                         _han_toi.append(_m8h.group(1))

@@ -75,11 +75,11 @@ NGAN_SACH = {
     "WORKOPS_STARTER_v24_20260824_GOP.md": 260000,  # bản gộp để đánh giá, KHÔNG nạp
     # vào phiên nào; vòng 46 gỡ hai script ra nên hạ trần 400.000 xuống 260.000
     "bao_cao.py": 14000,        # máy sinh bảng + báo cáo, AI chỉ dịch
-    "kiem_tra_bo.py": 220000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
+    "kiem_tra_bo.py": 235000,   # ngoài mọi route, và từ vòng 46 KHÔNG còn
     # trong bản gộp: file này không tốn token của phiên nào. Trần ở đây chỉ là
     # tín hiệu BẢO TRÌ. Nâng vòng 47 cho phép 15 (danh mục trạng thái); ràng
     # buộc thật của nó là 14, 14b, 14c và 15 phải xanh, không phải số ký tự
-    "kiem_van_hanh.py": 205000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
+    "kiem_van_hanh.py": 215000,  # ngoài route, nhưng ĐẦU RA dán vào phiên RA_SOAT;
     # trần THẬT của file này là phép 13b và 13c trên ĐẦU RA, số ký tự chỉ là
     # proxy. Nâng vòng 47 cho 7f, 7g, 3g và các vá của hội đồng vòng 17; hai
     # trần ĐẦU RA vẫn xanh, tức thứ người dùng THẬT SỰ trả tiền không tăng
@@ -1454,6 +1454,75 @@ def phep_fuzz(goc, phu_them=()):
     thu("ghi nhận deploy đã xảy ra mức B kèm tên phụ trách (không được kêu)",
         _ca_7g_ghi_nhan, False)
 
+    def _ca_dinh_chinh(k, i, so, G, sua):
+        """ĐÚNG LUẬT (X5 mục 3 ngoại lệ 3): lượt cũ gõ nhầm mã ở Chạm sổ
+        (V-DA1-033), lượt sau ĐÍNH CHÍNH bằng dòng mới - 3c thôi tố dòng cũ.
+        Lượt sau dựng đủ nhân chứng (bảng watermark theo G2)."""
+        sua(so / "NHATKY_2026Q3.md", "| VIEC V-DA1-001 |", "| VIEC V-DA1-033 |")
+        G2 = "G-20260828-CUA1-02"
+        _ghi(so / "NHATKY_2026Q3.md",
+             (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| " + G2 + " | 2026-08-28 | CUA1.2700.ef | A |"
+             " đính chính " + G + ": chạm đúng là VIEC V-DA1-001 |"
+             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
+        _ghi(so / "VIEC.md",
+             (so / "VIEC.md").read_text(encoding="utf-8").replace(
+                 " | " + G + " |", " | " + G + " " + G2 + " |"))
+        b = (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+        _ghi(so / "BANG_DIEU_KHIEN.md", b.replace("CUA1=" + G, "CUA1=" + G2)
+             .replace("sinh_boi: " + G, "sinh_boi: " + G2))
+
+    thu("đính chính mã gõ nhầm bằng dòng NHATKY mới (không được kêu)",
+        _ca_dinh_chinh, False)
+
+    def _ca_7g_an_ban(k, i, so, G, sua):
+        """Phụ trách tên "An", lượt B không tên nhưng có chữ "ban" (bản):
+        so chuỗi con là "an" nằm trong "ban" và im - cửa sau hạ mọi lượt sản
+        xuất xuống B (phản biện team 95). Nay tên phải NGUYÊN TỪ."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He A · repo github.com/cty/a · web · dev may doi,"
+               " staging stg.a.vn, chạy thật a.bacha.vn" + NL
+             + "        · secret o Vault · nhánh tự deploy main · CSDL chua ro" + NL
+             + "        · phụ trách vận hành: An ·" + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-19 | 2026-08-28 | CUA1.2500.yz | B |"
+             " deploy ban moi len a.bacha.vn | khong | khong | XONG | khong |" + NL)
+
+    thu3("phụ trách 'An', lượt B chỉ có chữ 'ban' - không phải xác nhận",
+         _ca_7g_an_ban, "7g.")
+
+    def _ca_7g_cho_ai(k, i, so, G, sua):
+        """Tên phụ trách chỉ ở ô CHỜ AI (đang chờ, chưa xác nhận) - không được
+        tính là xác nhận (phản biện team 95)."""
+        _p = i / "X0_CAUHINH_FUZ.md"
+        _s = _p.read_text(encoding="utf-8")
+        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
+        _ghi(_p, _s[:_m.end()] + NL
+             + "  DA1  He A · repo github.com/cty/a · web · dev may doi,"
+               " chạy thật a.bacha.vn" + NL
+             + "        · secret o Vault · nhánh tự deploy main · CSDL chua ro" + NL
+             + "        · phụ trách vận hành: Nam ·" + _s[_m.end():])
+        _nk = so / "NHATKY_2026Q3.md"
+        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
+             + "| G-20260828-CUA1-20 | 2026-08-28 | CUA1.2600.ab | B |"
+             " deploy v2 len a.bacha.vn | khong | Nam | XONG | khong |" + NL)
+
+    thu3("tên phụ trách chỉ ở ô Chờ ai - chưa xác nhận", _ca_7g_cho_ai, "7g.")
+
+    thu("ô Chạm sổ ghi 'VIEC KHOI1 V-DA1-001' - chữ hoa không phải mã (không được kêu)",
+        lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
+                                     "| VIEC V-DA1-001 |", "| VIEC KHOI1 V-DA1-001 |"),
+        False)
+
+    thu3("ô Chạm sổ hai mã một ô, mã thứ hai không có",
+         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
+                                      "| VIEC V-DA1-001 |",
+                                      "| VIEC V-DA1-001, V-DA1-006 |"), "3c.")
+
     def _ca_7g_phat_hanh(k, i, so, G, sua):
         """'phat hanh ban 2.1 len <host chạy thật>' mức B: nêu ĐÍCH DANH host
         mà lọt vì thiếu động từ (giám khảo rubric vòng 02, ca g8)."""
@@ -1962,9 +2031,9 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 94 if _os_dem.name == "nt" else 93   # ca 9d chỉ có trên NTFS
-    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 39, _i3_mong):
-        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 39,"
+    _i3_mong = 97 if _os_dem.name == "nt" else 96   # ca 9d chỉ có trên NTFS
+    if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 41, _i3_mong):
+        hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 41,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
                     f" này trong CÙNG lượt vá")
 
@@ -2928,6 +2997,101 @@ def main(goc):
                        not any(l.startswith("8") for l in _lech_bc2)
                        and "quá hạn: 1" in _bang2 and "plan C treo): 1" in _bang2))
 
+        # ---- V1/V2 (phản biện team): bảng máy sinh KHÔNG được tự làm 8e đỏ ----
+        with tempfile.TemporaryDirectory() as _tdv1:
+            _khov, _idxv, _sov, _Gv = _kho_song(goc, _tdv1)
+            import datetime as _dtv
+            _h45 = (_dtv.date.today() + _dtv.timedelta(days=45)).isoformat()
+            _h20 = (_dtv.date.today() + _dtv.timedelta(days=20)).isoformat()
+            (_khov / "03_Phap_ly").mkdir(exist_ok=True)
+            _ghi(_khov / "03_Phap_ly" / "hd45.md", "x")
+            _ghi(_khov / "03_Phap_ly" / "gh.md", "y")
+            _ghi(_sov / "TAILIEU.md",
+                 (_sov / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| DA1 | T-201 | HD 45 ngay | v01 | 2026-08-20 |"
+                   " Kho 03_Phap_ly/hd45.md | HIỆN HÀNH | ĐÃ KÝ | 2026-08-20 | qs |"
+                   " noi bo | " + _h45 + " | | | " + _Gv + " |" + NL
+                 + "| DA1 | T-202 | Gia han cu | v01 | 2026-08-20 |"
+                   " Kho 03_Phap_ly/gh.md | HIỆN HÀNH | ĐÃ GIA HẠN | 2026-08-20 |"
+                   " qs | noi bo | " + _h20 + " | | | " + _Gv + " |" + NL)
+            # tên tài liệu tiếng Việt bình thường mang chữ "quá hạn" kèm
+            # số: quét TRỌN bảng thì khối "Tài liệu đang hoạt động" khớp nhãn
+            # bộ đếm và 8e tố oan (V1, phản biện team 95)
+            _ghi(_khov / "03_Phap_ly" / "bc.md", "z")
+            _ghi(_sov / "TAILIEU.md",
+                 (_sov / "TAILIEU.md").read_text(encoding="utf-8").rstrip(NL) + NL
+                 + "| DA1 | T-203 | Thống kê quá hạn 12 tháng | v01 | 2026-08-20 |"
+                   " Kho 03_Phap_ly/bc.md | HIỆN HÀNH | NHÁP | 2026-08-20 | qs |"
+                   " noi bo | | | | " + _Gv + " |" + NL)
+            _bv = _bc.sinh_bang(_bc.thu_thap(_idxv))
+            _ghi(_sov / "BANG_DIEU_KHIEN.md", _bv)
+            _lv = _ra_soat(_idxv, _khov)
+            ca.append(("bảng máy sinh với hạn 45 ngày, ĐÃ GIA HẠN và tên tài"
+                       " liệu mang chữ 'quá hạn 12' không tự đỏ 8e",
+                       not any(l.startswith("8e") for l in _lv)
+                       and _h45 in _bv and _h20 not in _bv
+                       and "quá hạn 12 tháng" in _bv))
+        # ---- V3: cửa của MÁY NÀY theo đường dẫn C1, phiên khác đang mở ----
+        with tempfile.TemporaryDirectory() as _tdv3:
+            _kho3, _idx3, _so3, _G3 = _kho_song(goc, _tdv3)
+            _p3 = _idx3 / "X0_CAUHINH_FUZ.md"
+            _ghi(_p3, _p3.read_text(encoding="utf-8").replace(
+                "CUA1 = <điền: đường dẫn gốc trên máy 1>", "CUA1 = " + str(_kho3), 1))
+            _ghi(_so3 / "NHATKY_2026Q3.md",
+                 (_so3 / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip(NL)
+                 + NL + "| G-20260829-CUA2-01 | 2026-08-29 | CUA2.0900.cd | A |"
+                 " dang ghi | khong | khong | ĐANG GHI | khong |" + NL)
+            _d3 = _bc.thu_thap(_idx3)
+            ca.append(("bao_cao lấy cửa của máy này theo C1, báo phiên khác đang mở",
+                       _d3["cua"] == "CUA1"
+                       and "phiên khác đang mở (CUA2)" in _bc.dong_bo_dem(_d3)))
+            # cửa CUA3 chưa ghi lượt nào: bảng khai "CUA3 chưa ghi", phép 8 im
+            _d3b = _bc.thu_thap(_idx3, "CUA3")
+            _ghi(_so3 / "BANG_DIEU_KHIEN.md", _bc.sinh_bang(_d3b))
+            _l3 = _ra_soat(_idx3, _kho3)
+            ca.append(("cửa chưa ghi lượt nào: bảng 'CUA3 chưa ghi', phép 8 không tố",
+                       "sinh_boi: CUA3 chưa ghi" in (_so3 / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
+                       and not any(l.startswith("8.") for l in _l3)))
+        # ---- Đánh giá B: >15 file chưa vào sổ phải in "còn N mục nữa" ----
+        with tempfile.TemporaryDirectory() as _tdm7:
+            _kho7, _idx7, _so7, _G7 = _kho_song(goc, _tdm7)
+            (_kho7 / "03_Thuong_mai").mkdir(exist_ok=True)
+            for _n7 in range(18):
+                _ghi(_kho7 / "03_Thuong_mai" / f"KD_20260828_BG_X_file{_n7:02d}_v01.md",
+                     f"noi dung {_n7}")
+            import json as _js7, contextlib as _cl7, io as _io7
+            _out7 = ""
+            for _lan in range(2):
+                _buf7, _argv7 = _io7.StringIO(), sys.argv
+                try:
+                    sys.argv = ["kvh", str(_idx7), str(_kho7)]
+                    with _cl7.redirect_stdout(_buf7):
+                        try:
+                            _kv26.main(_idx7)
+                        except SystemExit:
+                            pass
+                finally:
+                    sys.argv = _argv7
+                _out7 = _buf7.getvalue()
+                _pc = _so7 / "_quan_sat_truoc.json"
+                if _lan == 0 and _pc.is_file():
+                    # lùi cache 400 s: luật ổn định 5 phút mà không phải chờ thật
+                    _cj = _js7.loads(_pc.read_text(encoding="utf-8"))
+
+                    def _lui(o):
+                        if isinstance(o, dict):
+                            for _k, _v in o.items():
+                                if _k == "luc" and isinstance(_v, (int, float)):
+                                    o[_k] = _v - 400
+                                else:
+                                    _lui(_v)
+                        elif isinstance(o, list):
+                            for _v in o:
+                                _lui(_v)
+                    _lui(_cj)
+                    _pc.write_text(_js7.dumps(_cj, ensure_ascii=False), encoding="utf-8")
+            ca.append((">15 file chưa vào sổ thì in 'còn N mục nữa' (m07)",
+                       "còn 3 mục nữa chưa vào sổ" in _out7))
         # KHO GIỮA CÀI ĐẶT: X0 đã đổi tên theo mã nhưng còn rev 0, chưa dấu
         # vết ghi - trạng thái HỢP LỆ giữa lượt cài X9, không phép 0i* nào
         # được kêu; mutant or-hóa báo oan mà suite xanh (rubric 09, m05)
@@ -3090,6 +3254,70 @@ def main(goc):
             ca.append(("bàn giao viết tự nhiên vẫn nhận tên, liệt tài liệu đang giữ",
                        "LƯU Ý  bàn giao" in _bufb5.getvalue()
                        and "tài liệu còn ghi Long giữ" in _bufb5.getvalue()))
+            # người cũ "An", việc gán "Trân": tên phải NGUYÊN TỪ, không được nhắc oan;
+            # "Nguyễn Văn Long (kế toán) sang Trân" với sổ ghi "Long" phải nhắc
+            # (phản biện team 95, V6)
+            _ghi(_pb, _pb.read_text(encoding="utf-8").replace(
+                "@NHIP.BANGIAO    Long (trưởng nhóm KD) sang Trân, 2026-08-20",
+                "@NHIP.BANGIAO    An sang Trân, 2026-08-20", 1))
+            _bufb6 = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb6):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("bàn giao: 'An' không khớp 'Trân' (tên nguyên từ)",
+                       "còn gán An" not in _bufb6.getvalue()))
+            # người cũ "An", người mới "Bình", việc gán "Tuấn Anh": chỉ vế
+            # NGƯỜI CŨ khớp sai nếu so chuỗi con, không vế nào triệt tiêu (V6)
+            _ghi(_pb, _pb.read_text(encoding="utf-8").replace(
+                "@NHIP.BANGIAO    An sang Trân, 2026-08-20",
+                "@NHIP.BANGIAO    An sang Bình, 2026-08-20", 1))
+            _ghi(_sob / "VIEC.md",
+                 (_sob / "VIEC.md").read_text(encoding="utf-8").replace(
+                     "| Trân |", "| Tuấn Anh |"))
+            _bufb6b = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb6b):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("bàn giao: 'An' không khớp 'Tuấn Anh' (biên từ, không"
+                       " vế nào triệt tiêu)",
+                       "còn gán An" not in _bufb6b.getvalue()))
+            _ghi(_sob / "VIEC.md",
+                 (_sob / "VIEC.md").read_text(encoding="utf-8").replace(
+                     "| Tuấn Anh |", "| Trân |"))
+            _ghi(_pb, _pb.read_text(encoding="utf-8").replace(
+                "@NHIP.BANGIAO    An sang Bình, 2026-08-20",
+                "@NHIP.BANGIAO    An sang Trân, 2026-08-20", 1))
+            _ghi(_pb, _pb.read_text(encoding="utf-8").replace(
+                "@NHIP.BANGIAO    An sang Trân, 2026-08-20",
+                "@NHIP.BANGIAO    Nguyễn Văn Long (kế toán) sang Trân, 2026-08-20", 1))
+            _ghi(_sob / "VIEC.md",
+                 (_sob / "VIEC.md").read_text(encoding="utf-8").replace("| Trân |", "| Long |"))
+            _bufb7 = _iob.StringIO()
+            try:
+                sys.argv = ["kvh", str(_idxb), str(_khob)]
+                with _clb.redirect_stdout(_bufb7):
+                    try:
+                        _kv26.main(_idxb)
+                    except SystemExit:
+                        pass
+            finally:
+                sys.argv = _argvb
+            ca.append(("bàn giao: tên đầy đủ 'Nguyễn Văn Long' nhận sổ ghi 'Long'",
+                       "LƯU Ý  bàn giao" in _bufb7.getvalue()
+                       and "còn gán Nguyễn Văn Long" in _bufb7.getvalue()))
+
             # backup ngày (X5 mục 7): xóa backup_<ngày> thì 0m2 phải nhắc
             import shutil as _shbg
             _shbg.rmtree(_sob / "_lich_su" / "backup_20260828",
@@ -3545,8 +3773,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 114,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 114: bớt ca là"
+             not hong and len(ca) == 121,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 121: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
