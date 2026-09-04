@@ -115,28 +115,16 @@ X0 tới X5, AI tự tìm tới đúng mục đúng lúc.
 
 ## Công ty có phần mềm
 
-Bộ QUẢN LÝ HIỆN TRẠNG phần mềm - với điều kiện KHAI RÕ PHẠM VI TỔ
-CHỨC ngay từ đầu: AI hỏi ở phiên cài đặt (X9 mục 1 câu 3), giá trị nằm ở
-X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
+Khai MỘT dòng ở X0 C2: `<MÃ PM>  <tên> · repo <URL> · mô tả tới <ngày>:
+<phần mềm làm gì>`. Hết. Mô tả là bản chụp để trả lời nhanh khỏi mở repo
+mỗi lần; hỏi thứ cần chính xác thì AI đọc thẳng repo rồi cập nhật lại mô
+tả kèm ngày mới. Không bắt bạn khai tính năng, môi trường, hạ tầng ra sổ.
 
-```
-HẠ TẦNG   repo · thành phần chính · môi trường (dev, staging, prod)
-          · nơi chạy thật (host, kể cả máy chủ nội bộ) · nơi giữ secret
-          · nhánh tự deploy (merge vào là ra production)
-DỮ LIỆU   CSDL/kho dữ liệu chạy thật (tên đích danh)
-CON NGƯỜI người phụ trách vận hành - ai GẬT các lượt rủi ro
-```
-
-Ba tầng: (1) WORKOPS Core - việc, dữ kiện, tài liệu, quyết
-định, nhật ký; (2) Software Inventory - thẻ mô tả phần mềm,
-chỉ đọc/cập nhật hồ sơ; (3) Software Operations - NGOÀI PHẠM VI: bộ không
-deploy, migration, rollback, sửa CSDL, xoay secret hay đổi quyền hộ - AI
-chỉ soạn checklist hay mở việc chuyển đội kỹ thuật. Rà 7d CƯỠNG CHẾ khai
-(nêu đích danh trường thiếu). Khai đủ thì
-các vận hành liên quan mới chính xác: repo là nguồn sự thật của code,
-secret không vào kho hay sổ; lượt GHI NHẬN chạm CHẠY THẬT phải mức C,
-đúng NGƯỜI PHỤ TRÁCH duyệt, nghỉ thì bàn giao có máy nhắc. Chi tiết: X5
-mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật".
+Ba luật đi kèm, để kho khỏi loạn: repo là NGUỒN SỰ THẬT của code (code
+không chép vào kho) · secret không vào kho, không vào sổ · lượt ghi chạm
+CHẠY THẬT là mức C, đội kỹ thuật đã làm rồi thì ghi mức B kèm chữ "xác
+nhận". Bộ KHÔNG deploy, migration, sửa CSDL hay đổi quyền hộ - chỉ ghi
+nhận và mở việc chuyển đội kỹ thuật.
 
 ## Trong repo có gì
 
@@ -193,7 +181,7 @@ python kiem_van_hanh.py "<gốc kho>/00_Index" "<gốc kho>"
 FILE: DOC_TRUOC.md
 ════════════════════════════════════════
 
-# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 95 · 20260824 · đọc file này trước
+# BỘ KHỞI TẠO WORKOPS · v24 · vòng vá 96 · 20260824 · đọc file này trước
 
 Bộ này dựng hệ vận hành cho MỘT công ty, từ zero hay trên kho có sẵn (X9
 mục 3b); công ty có phần mềm xem thêm X9 mục 1 câu 3 và X5 mục 1b. Bốn bước:
@@ -262,6 +250,45 @@ nội bộ tự rà, tự dựng case, tự đóng vai người dùng.
 Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` để file này
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
+
+## Vòng 96: thẻ phần mềm TÁM TRƯỜNG về MỘT - repo, kèm mô tả có ngày
+
+Người dùng chốt lại phạm vi: "có PM có git thì t biết nó làm gì, có tính
+năng gì; lúc t hỏi thì nó check thêm cái git là xong - làm rối mà ngu", và
+"nó có thể có info là mô tả repo tới ngày xxx, để tiết kiệm, còn có thể đọc
+thêm cho chính xác".
+
+Tám trường (repo · thành phần · môi trường · nơi chạy thật · secret · nhánh
+tự deploy · CSDL · phụ trách) phải nuôi bằng tay chỉ để MỘT phép kiểm neo
+đích danh - đúng thứ người dùng gọi là rối. Nay:
+
+  @DUAN.PHANMEM
+    <MÃ PM>  <tên> · repo <URL>
+             · mô tả tới <YYYY-MM-DD>: <phần mềm làm gì>
+
+Mô tả là BẢN CHỤP để trả lời nhanh khỏi mở repo mỗi lần, KHÔNG phải nguồn
+sự thật. Hỏi thứ cần chính xác (có tính năng nào không, phiên bản nào, đổi
+gì gần đây) hay mô tả đã cũ: AI ĐỌC REPO rồi cập nhật lại mô tả kèm ngày
+mới, mức A; trả lời từ bản chụp thì nói rõ "theo mô tả tới <ngày>". Cùng
+khuôn cache-có-mốc mà bộ quan sát kho đã dùng.
+
+Máy đi theo: 7d chỉ còn đòi REPO. 7g giữ luật "chạm chạy thật là mức C"
+nhưng neo bằng CHỮ trong chính câu ghi ("chạy thật", "prod") thay vì neo
+đích danh host/nhánh/CSDL - nói đúng mức chắc chắn của mình; chuyện đội kỹ
+thuật ĐÃ làm thì mức B kèm chữ "xác nhận" là đủ, không cần khớp tên người.
+Neo bàn giao thôi quét vế phụ trách C2. Ba luật giữ nguyên vì chúng bảo vệ
+kho: repo là nguồn sự thật của code, secret không vào kho hay sổ, bộ KHÔNG
+deploy hay sửa CSDL hộ. X9 câu 3 hỏi đúng một thứ: repo ở đâu.
+
+Gỡ chín ca fixture chỉ tồn tại vì bảy trường cũ (thiếu phụ trách, thiếu
+CSDL, tên ở ô Chờ ai, tên nằm trong chữ khác, host thứ hai, nhánh tự
+deploy, squash, gộp không dấu, máy chủ nội bộ) và ca bàn giao vế phụ trách.
+Fixture 120 ca, I2 41, I3 88(nt)/87. X0 ngắn đi ~450 ký tự, kiem_van_hanh
+~8.700, kiem_tra_bo ~14.300.
+
+BỎ LUÔN đợt C đã soạn hôm trước (danh bạ có mã người và bí danh · người
+trực tạm · dự phòng gật · thẻ quản trị mềm): người dùng chỉ ra đó là vẽ vai
+người, "người vẫn là chính, AI là trợ lý thôi" - chưa từng lên commit.
 
 ## Vòng 95: TEAM bốn vai - nghiên cứu, đánh giá, tối ưu, phản biện - đợt A+B
 
@@ -2191,13 +2218,14 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
 @DUAN.<MÃ DA>    <tên dự án>          đang chạy | NGỪNG
 @DUAN.CTY        việc của công ty, không thuộc dự án nào    luôn có
 
-@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
-  <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
-           (dev, staging, prod) · nơi chạy thật · nơi giữ secret
-           (vault, secret manager, hay "chưa rõ") · nhánh tự deploy chạy thật
-           (nhánh merge vào là ra production, hay "không có auto-deploy")
-           · CSDL chạy thật (tên ĐÍCH DANH máy neo mức C, hay "CSDL chưa rõ")
-           · phụ trách vận hành <tên - người GẬT lượt mức C, hay "chưa rõ">
+@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm MỘT dòng:
+  <MÃ PM>  <tên> · repo <URL hay đường dẫn>
+           · mô tả tới <YYYY-MM-DD>: <một, hai câu phần mềm làm gì>
+  Mô tả là BẢN CHỤP cho câu hỏi nhanh, KHÔNG phải nguồn sự thật - repo mới
+  là. Hỏi thứ cần CHÍNH XÁC (có tính năng nào không, phiên bản nào, đổi gì
+  gần đây), hay mô tả đã cũ so với việc đang làm: AI ĐỌC REPO rồi cập nhật
+  lại dòng mô tả kèm ngày mới (mức A). Trả lời từ bản chụp thì nói rõ
+  "theo mô tả tới <ngày>".
   Repo là NGUỒN SỰ THẬT của code: code KHÔNG chép vào kho, KHÔNG qua
   _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành. Chạm code vẫn
   ghi VIEC, QUYETDINH, cột Liên kết trỏ commit hay PR. Một phần mềm nhiều
@@ -3420,11 +3448,9 @@ C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
    việc chính?
 2  Kho đặt ở đâu? (đường dẫn gốc, AI thử đọc để kiểm. Ai nữa dùng kho - trợ
    lý? Mỗi người một cửa CUA2, CUA3 ở X0 C1, LITE vẫn được)
-3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
-   là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức theo X0 C2
-   @DUAN.PHANMEM: repo · thành phần · môi trường · nơi chạy thật · nơi giữ
-   secret · nhánh tự deploy · CSDL chạy thật · người phụ trách vận hành -
-   hỏi thiếu là 7d đỏ ngay sau khi người dùng trả lời đúng câu hỏi)
+3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự
+   án là PHẦN MỀM thì hỏi thêm ĐÚNG MỘT thứ: repo ở đâu - X0 C2
+   @DUAN.PHANMEM; AI đọc repo một lượt rồi tự viết dòng "mô tả tới <ngày>")
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:

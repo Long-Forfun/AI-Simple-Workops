@@ -106,28 +106,16 @@ X0 tới X5, AI tự tìm tới đúng mục đúng lúc.
 
 ## Công ty có phần mềm
 
-Bộ QUẢN LÝ HIỆN TRẠNG phần mềm - với điều kiện KHAI RÕ PHẠM VI TỔ
-CHỨC ngay từ đầu: AI hỏi ở phiên cài đặt (X9 mục 1 câu 3), giá trị nằm ở
-X0 C2 @DUAN.PHANMEM, mỗi phần mềm một dòng:
+Khai MỘT dòng ở X0 C2: `<MÃ PM>  <tên> · repo <URL> · mô tả tới <ngày>:
+<phần mềm làm gì>`. Hết. Mô tả là bản chụp để trả lời nhanh khỏi mở repo
+mỗi lần; hỏi thứ cần chính xác thì AI đọc thẳng repo rồi cập nhật lại mô
+tả kèm ngày mới. Không bắt bạn khai tính năng, môi trường, hạ tầng ra sổ.
 
-```
-HẠ TẦNG   repo · thành phần chính · môi trường (dev, staging, prod)
-          · nơi chạy thật (host, kể cả máy chủ nội bộ) · nơi giữ secret
-          · nhánh tự deploy (merge vào là ra production)
-DỮ LIỆU   CSDL/kho dữ liệu chạy thật (tên đích danh)
-CON NGƯỜI người phụ trách vận hành - ai GẬT các lượt rủi ro
-```
-
-Ba tầng: (1) WORKOPS Core - việc, dữ kiện, tài liệu, quyết
-định, nhật ký; (2) Software Inventory - thẻ mô tả phần mềm,
-chỉ đọc/cập nhật hồ sơ; (3) Software Operations - NGOÀI PHẠM VI: bộ không
-deploy, migration, rollback, sửa CSDL, xoay secret hay đổi quyền hộ - AI
-chỉ soạn checklist hay mở việc chuyển đội kỹ thuật. Rà 7d CƯỠNG CHẾ khai
-(nêu đích danh trường thiếu). Khai đủ thì
-các vận hành liên quan mới chính xác: repo là nguồn sự thật của code,
-secret không vào kho hay sổ; lượt GHI NHẬN chạm CHẠY THẬT phải mức C,
-đúng NGƯỜI PHỤ TRÁCH duyệt, nghỉ thì bàn giao có máy nhắc. Chi tiết: X5
-mục 1b; build: X2. Chưa rõ: trả lời "chưa rõ, hỏi đội kỹ thuật".
+Ba luật đi kèm, để kho khỏi loạn: repo là NGUỒN SỰ THẬT của code (code
+không chép vào kho) · secret không vào kho, không vào sổ · lượt ghi chạm
+CHẠY THẬT là mức C, đội kỹ thuật đã làm rồi thì ghi mức B kèm chữ "xác
+nhận". Bộ KHÔNG deploy, migration, sửa CSDL hay đổi quyền hộ - chỉ ghi
+nhận và mở việc chuyển đội kỹ thuật.
 
 ## Trong repo có gì
 

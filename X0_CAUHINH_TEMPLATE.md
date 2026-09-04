@@ -89,13 +89,14 @@ Một công ty có nhiều dự án. Mọi việc, dữ kiện, tài liệu gắ
 @DUAN.<MÃ DA>    <tên dự án>          đang chạy | NGỪNG
 @DUAN.CTY        việc của công ty, không thuộc dự án nào    luôn có
 
-@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:
-  <MÃ PM>  <tên> · repo <URL hay đường dẫn> · thành phần chính · môi trường
-           (dev, staging, prod) · nơi chạy thật · nơi giữ secret
-           (vault, secret manager, hay "chưa rõ") · nhánh tự deploy chạy thật
-           (nhánh merge vào là ra production, hay "không có auto-deploy")
-           · CSDL chạy thật (tên ĐÍCH DANH máy neo mức C, hay "CSDL chưa rõ")
-           · phụ trách vận hành <tên - người GẬT lượt mức C, hay "chưa rõ">
+@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm MỘT dòng:
+  <MÃ PM>  <tên> · repo <URL hay đường dẫn>
+           · mô tả tới <YYYY-MM-DD>: <một, hai câu phần mềm làm gì>
+  Mô tả là BẢN CHỤP cho câu hỏi nhanh, KHÔNG phải nguồn sự thật - repo mới
+  là. Hỏi thứ cần CHÍNH XÁC (có tính năng nào không, phiên bản nào, đổi gì
+  gần đây), hay mô tả đã cũ so với việc đang làm: AI ĐỌC REPO rồi cập nhật
+  lại dòng mô tả kèm ngày mới (mức A). Trả lời từ bản chụp thì nói rõ
+  "theo mô tả tới <ngày>".
   Repo là NGUỒN SỰ THẬT của code: code KHÔNG chép vào kho, KHÔNG qua
   _INBOX; kho chỉ giữ hồ sơ, quyết định, tài liệu phát hành. Chạm code vẫn
   ghi VIEC, QUYETDINH, cột Liên kết trỏ commit hay PR. Một phần mềm nhiều

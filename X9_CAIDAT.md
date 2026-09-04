@@ -32,11 +32,9 @@ C11, hết hiệu lực từ rev 1). Hỏi BA câu bắt buộc:
    việc chính?
 2  Kho đặt ở đâu? (đường dẫn gốc, AI thử đọc để kiểm. Ai nữa dùng kho - trợ
    lý? Mỗi người một cửa CUA2, CUA3 ở X0 C1, LITE vẫn được)
-3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự án
-   là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức theo X0 C2
-   @DUAN.PHANMEM: repo · thành phần · môi trường · nơi chạy thật · nơi giữ
-   secret · nhánh tự deploy · CSDL chạy thật · người phụ trách vận hành -
-   hỏi thiếu là 7d đỏ ngay sau khi người dùng trả lời đúng câu hỏi)
+3  Dự án đầu tiên tên gì, mã gì? (dự án CTY cho việc chung tự thêm sẵn; dự
+   án là PHẦN MỀM thì hỏi thêm ĐÚNG MỘT thứ: repo ở đâu - X0 C2
+   @DUAN.PHANMEM; AI đọc repo một lượt rồi tự viết dòng "mô tả tới <ngày>")
 ```
 
 Câu 4, chọn profile (X0 C0), người dùng không rõ thì mặc định LITE:

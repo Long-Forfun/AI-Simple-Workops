@@ -1445,13 +1445,13 @@ def phep_fuzz(goc, phu_them=()):
         _nk = so / "NHATKY_2026Q3.md"
         _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
              + "| " + G2 + " | 2026-08-28 | CUA1.2400.wx | B |"
-             " ghi nhan: ABC Soft da deploy ban 1.2 len bl.bacha.vn, Nam xac"
+             " ghi nhan: ABC Soft da deploy ban 1.2 len chay that, Nam xac"
              " nhan | khong | khong | XONG | khong |" + NL)
         b = (so / "BANG_DIEU_KHIEN.md").read_text(encoding="utf-8")
         _ghi(so / "BANG_DIEU_KHIEN.md", b.replace("CUA1=" + G, "CUA1=" + G2)
              .replace("sinh_boi: " + G, "sinh_boi: " + G2))
 
-    thu("ghi nhận deploy đã xảy ra mức B kèm tên phụ trách (không được kêu)",
+    thu("ghi nhận deploy đã xảy ra mức B kèm chữ xác nhận (không được kêu)",
         _ca_7g_ghi_nhan, False)
 
     def _ca_dinh_chinh(k, i, so, G, sua):
@@ -1474,44 +1474,6 @@ def phep_fuzz(goc, phu_them=()):
 
     thu("đính chính mã gõ nhầm bằng dòng NHATKY mới (không được kêu)",
         _ca_dinh_chinh, False)
-
-    def _ca_7g_an_ban(k, i, so, G, sua):
-        """Phụ trách tên "An", lượt B không tên nhưng có chữ "ban" (bản):
-        so chuỗi con là "an" nằm trong "ban" và im - cửa sau hạ mọi lượt sản
-        xuất xuống B (phản biện team 95). Nay tên phải NGUYÊN TỪ."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He A · repo github.com/cty/a · web · dev may doi,"
-               " staging stg.a.vn, chạy thật a.bacha.vn" + NL
-             + "        · secret o Vault · nhánh tự deploy main · CSDL chua ro" + NL
-             + "        · phụ trách vận hành: An ·" + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-19 | 2026-08-28 | CUA1.2500.yz | B |"
-             " deploy ban moi len a.bacha.vn | khong | khong | XONG | khong |" + NL)
-
-    thu3("phụ trách 'An', lượt B chỉ có chữ 'ban' - không phải xác nhận",
-         _ca_7g_an_ban, "7g.")
-
-    def _ca_7g_cho_ai(k, i, so, G, sua):
-        """Tên phụ trách chỉ ở ô CHỜ AI (đang chờ, chưa xác nhận) - không được
-        tính là xác nhận (phản biện team 95)."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He A · repo github.com/cty/a · web · dev may doi,"
-               " chạy thật a.bacha.vn" + NL
-             + "        · secret o Vault · nhánh tự deploy main · CSDL chua ro" + NL
-             + "        · phụ trách vận hành: Nam ·" + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-20 | 2026-08-28 | CUA1.2600.ab | B |"
-             " deploy v2 len a.bacha.vn | khong | Nam | XONG | khong |" + NL)
-
-    thu3("tên phụ trách chỉ ở ô Chờ ai - chưa xác nhận", _ca_7g_cho_ai, "7g.")
 
     thu("ô Chạm sổ ghi 'VIEC KHOI1 V-DA1-001' - chữ hoa không phải mã (không được kêu)",
         lambda k, i, so, G, sua: sua(so / "NHATKY_2026Q3.md",
@@ -1536,7 +1498,7 @@ def phep_fuzz(goc, phu_them=()):
         _nk = so / "NHATKY_2026Q3.md"
         _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
              + "| G-20260828-CUA1-12 | 2026-08-28 | CUA1.1400.cd | B |"
-             " phat hanh ban 2.1 len banle.bacha.vn |"
+             " phat hanh ban 2.1 len moi truong chay that |"
              " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
 
     thu3("phat hanh lên host chạy thật mà ghi mức B", _ca_7g_phat_hanh, "7g.")
@@ -1561,24 +1523,6 @@ def phep_fuzz(goc, phu_them=()):
                " ĐÃ THAY | Q-999 | " + G + " |" + NL)
 
     thu3("ĐÃ THAY mà Thay bởi trỏ Q không tồn tại", _ca_13m_qma, "13m.")
-
-    def _ca_7g_vps(k, i, so, G, sua):
-        """Máy chủ nội bộ KHÔNG dấu chấm ('chạy thật VPS-01'): trước vòng 89
-        _host_pm rỗng và triển khai lên nó lọt cả 7g cứng lẫn mềm."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He noi bo · repo github.com/cty/nb · web · dev may"
-               " doi, chạy thật VPS-01 · secret o Vault ·" + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-17 | 2026-08-28 | CUA1.2300.uv | B |"
-             " trien khai ban moi len VPS-01 | VIEC V-DA1-001 | khong |"
-             " XONG | khong |" + NL)
-
-    thu3("triển khai lên máy chủ nội bộ không dấu chấm mà mức B", _ca_7g_vps,
-         "7g.")
 
     def _ca_13o_ma(k, i, so, G, sua):
         """Dòng cũ HẾT HIỆU LỰC khai 'thay bởi D-DA1-999' mà mã đó KHÔNG tồn
@@ -1768,96 +1712,6 @@ def phep_fuzz(goc, phu_them=()):
     thu("file nhị phân 300 KB chứa chuỗi giống secret (không được kêu)",
         _ca_7e2_nhiphan, False)
 
-    def _ca_7d_phutrach(k, i, so, G, sua):
-        """Khai đủ BẢY trường hạ tầng + dữ liệu mà thiếu NGƯỜI PHỤ TRÁCH:
-        7d phải đòi - không biết ai gật thì mức C là cái gật của không ai."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He du trach · repo github.com/cty/dt · web · dev may"
-               " doi, staging stg.dt.vn, chạy thật dt.bacha.vn" + NL
-             + "        · secret o Vault · nhánh tự deploy main"
-               " · CSDL chua ro ·" + _s[_m.end():])
-
-    thu3("khai đủ hạ tầng mà thiếu người phụ trách vận hành", _ca_7d_phutrach,
-         "7d.")
-
-    def _ca_7d_csdl(k, i, so, G, sua):
-        """Khai đủ mọi trường kể cả phụ trách mà thiếu CSDL: 7d phải đòi -
-        thiếu nó thì update dữ liệu khách không có neo nào (rubric 03)."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He kho van · repo github.com/cty/tkv · web · dev may"
-               " doi, staging stg.tkv.vn, chạy thật tkv.bacha.vn" + NL
-             + "        · secret o Vault · nhánh tự deploy main"
-               " · phụ trách vận hành: anh Bo ·" + _s[_m.end():])
-
-    thu3("khai đủ kể cả phụ trách mà thiếu CSDL chạy thật", _ca_7d_csdl,
-         "7d.")
-
-    def _ca_7g_csdl(k, i, so, G, sua):
-        """Khai CSDL chạy thật đích danh, rồi ghi update dữ liệu trên đúng
-        CSDL đó mức A. X5 mục 1 định nghĩa đây là mức C mà trước vòng 85 máy
-        không có neo nào (giám khảo rubric vòng 03)."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He ban hang · repo github.com/cty/bh · web · dev may"
-               " doi, chạy thật bh.bacha.vn" + NL
-             + "        · secret o Vault · CSDL chạy thật: CSDL khach hang ·"
-             + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-15 | 2026-08-28 | CUA1.2000.op | A |"
-             " chay update bang gia tren CSDL khach hang |"
-             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
-
-    thu3("update dữ liệu trên CSDL chạy thật đã khai mà ghi mức A",
-         _ca_7g_csdl, "7g.")
-
-    def _ca_7g_host2(k, i, so, G, sua):
-        """Khai HAI host chạy thật trên một vế ('app... va api...'), rồi ghi
-        deploy lên host THỨ HAI mức B. Bản chỉ neo host đầu để lọt ca này
-        (giám khảo rubric vòng 03)."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He hai host · repo github.com/cty/haihost" + NL
-             + "        · web + api · dev may doi, chạy thật app.bacha.vn va"
-               " api.bacha.vn" + NL
-             + "        · secret o Vault ·" + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-14 | 2026-08-28 | CUA1.1800.kl | B |"
-             " deploy ban moi len api.bacha.vn |"
-             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
-
-    thu3("deploy lên host THỨ HAI của vế chạy thật mà ghi mức B",
-         _ca_7g_host2, "7g.")
-
-    def _ca_7g_squash(k, i, so, G, sua):
-        """'squash branch feature vao main' mức B: nhánh tự deploy nêu đích
-        danh mà lọt vì thiếu động từ (giám khảo rubric vòng 02, ca g10)."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He kho van · repo github.com/cty/khovan" + NL
-             + "        · api · dev may doi, chạy thật khovan.bacha.vn" + NL
-             + "        · secret o Vault · nhánh tự deploy main ·" + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-13 | 2026-08-28 | CUA1.1500.ef | B |"
-             " squash branch feature vao main |"
-             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
-
-    thu3("squash vào nhánh tự deploy mà ghi mức B", _ca_7g_squash, "7g.")
-
     def _ca_0r_hai_noi(k, i, so, G, sua):
         """Cùng tên ở cả _inbox lẫn _da_nap: bản chép sót, phiên sau nạp lại."""
         _ghi(so / "_inbox" / "bao_gia_x.pdf", "x")
@@ -1901,26 +1755,6 @@ def phep_fuzz(goc, phu_them=()):
 
     thu("file _da_nap có tên gốc ở Căn cứ trạng thái (không được kêu)",
         _ca_0r_dung, False)
-
-    def _ca_7g_khong_dau(k, i, so, G, sua):
-        """Khai nhánh tự deploy, rồi ghi lượt GỘP KHÔNG DẤU vào đúng nhánh đó
-        ở mức B. Động từ "gop nhanh" đã nằm trong _dv từ vòng 19; neo nhánh
-        không nhận thì kiểu gõ phổ biến nhất lọt (giám khảo rubric 01)."""
-        _p = i / "X0_CAUHINH_FUZ.md"
-        _s = _p.read_text(encoding="utf-8")
-        _m = re.search(r"^@DUAN\.PHANMEM.*$", _s, re.M)
-        _ghi(_p, _s[:_m.end()] + NL
-             + "  DA1  He dat hang · repo github.com/cty/dathang" + NL
-             + "        · web · dev may doi, chạy thật dathang.bacha.vn" + NL
-             + "        · secret o Vault · nhánh tự deploy main ·" + _s[_m.end():])
-        _nk = so / "NHATKY_2026Q3.md"
-        _ghi(_nk, _nk.read_text(encoding="utf-8").rstrip(NL) + NL
-             + "| G-20260828-CUA1-11 | 2026-08-28 | CUA1.1300.ab | B |"
-             " Gop nhanh feature/dat-hang vao main sau review |"
-             " VIEC V-DA1-001 | khong | XONG | khong |" + NL)
-
-    thu3("gộp KHÔNG DẤU vào nhánh tự deploy mà ghi mức B", _ca_7g_khong_dau,
-         "7g.")
 
     def _ca_8e_het_han(k, i, so, G, sua):
         """Chứng thư hết hạn 2020-01-01 (quá khứ vĩnh viễn - ca không hỏng
@@ -1986,11 +1820,11 @@ def phep_fuzz(goc, phu_them=()):
              + "| DA1 | D-009 | Chuoi ket noi | postgres://u:p%40ss@db.x.vn:5432/d"
                " | 2026-08-28 | NOI_BO | x | A | ĐÃ KIỂM | 2026-12-31 | "
              + G + " |" + NL), "7e.")
-    thu3("dự án phần mềm khai thiếu trường phạm vi tổ chức",
+    thu3("dự án phần mềm khai mà KHÔNG có repo",
          lambda k, i, so, G, sua: sua(i / "X0_CAUHINH_FUZ.md",
-             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:",
-             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm PHẠM VI TỔ CHỨC, mỗi phần mềm một dòng:"
-             + NL + "  APP  Ung dung dat hang · repo git.cty.vn/app · web"), "7d.")
+             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm MỘT dòng:",
+             "@DUAN.PHANMEM    dự án PHẦN MỀM khai thêm MỘT dòng:"
+             + NL + "  APP  Ung dung dat hang · web + may chu"), "7d.")
     thu3("lượt mức C trong NHATKY mà không plan nào mang mã đó",
          lambda k, i, so, G, sua: _ghi(so / "NHATKY_2026Q3.md",
              (so / "NHATKY_2026Q3.md").read_text(encoding="utf-8").rstrip() + NL
@@ -2031,7 +1865,7 @@ def phep_fuzz(goc, phu_them=()):
 
     # Ghim SỐ CA bắt được vế "bỏ bớt ca"; hai vế kia do hai CA MỒI trên giữ.
     import os as _os_dem
-    _i3_mong = 97 if _os_dem.name == "nt" else 96   # ca 9d chỉ có trên NTFS
+    _i3_mong = 88 if _os_dem.name == "nt" else 87   # ca 9d chỉ có trên NTFS
     if (_dem["I1"], _dem["I2"], _dem["I3"]) != (7, 41, _i3_mong):
         hong.append(f"số ca phép 13 lệch: {_dem}; bộ khai I1 7 (kể CA MỒI), I2 41,"
                     f" I3 {_i3_mong} - bớt ca là bớt lưới; đổi số thì sửa con số"
@@ -3202,32 +3036,6 @@ def main(goc):
                 sys.argv = _argvb
             ca.append(("việc mở gán người MỚI thì bàn giao im",
                        "LƯU Ý  bàn giao" not in _bufb2.getvalue()))
-            # vế PHỤ TRÁCH C2: người gật mức C đã nghỉ mà C2 còn ghi tên -
-            # LƯU Ý phải nêu (rubric 05, khoản 3)
-            _s_pm = _pb.read_text(encoding="utf-8")
-            import re as _rebg
-            _m_pm = _rebg.search(r"^@DUAN\.PHANMEM.*$", _s_pm, _rebg.M)
-            # khuôn NHIỀU DÒNG - đúng khuôn ví dụ của template; bản
-            # một-dòng làm regex cũ "tái đo chết" mà không phủ khuôn thật
-            # (giám khảo rubric 06)
-            _ghi(_pb, _s_pm[:_m_pm.end()] + NL
-                 + "  DA1  He cu · repo github.com/cty/hc · web · dev may"
-                   " doi, chạy thật hc.bacha.vn" + NL
-                 + "        · secret o Vault · CSDL chua ro" + NL
-                 + "        · phụ trách vận hành: Long ·"
-                 + _s_pm[_m_pm.end():])
-            _bufb3 = _iob.StringIO()
-            try:
-                sys.argv = ["kvh", str(_idxb), str(_khob)]
-                with _clb.redirect_stdout(_bufb3):
-                    try:
-                        _kv26.main(_idxb)
-                    except SystemExit:
-                        pass
-            finally:
-                sys.argv = _argvb
-            ca.append(("bàn giao nêu phần mềm còn ghi người cũ ở vế phụ trách",
-                       "vế phụ trách" in _bufb3.getvalue()))
             # viết TỰ NHIÊN "Long (trưởng nhóm KD) sang Trân" + tài liệu Long
             # đang giữ (cờ giữ:Long) - neo phải nhận tên và liệt tài liệu
             # (audit giám đốc, đợt 3)
@@ -3773,8 +3581,8 @@ def main(goc):
         hong = [t for t, ok in ca if not ok]
         # số ca lấy từ chính danh sách, khỏi lệch nhãn khi thêm bớt fixture
         kiem(f"11. fixture bộ quan sát ({len(ca)} ca)",
-             not hong and len(ca) == 121,
-             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 121: bớt ca là"
+             not hong and len(ca) == 120,
+             str(hong) + (f" · đếm được {len(ca)} ca mà bộ khai 120: bớt ca là"
                           f" bớt lưới không ai hay; đổi số thì sửa con số này"
                           f" trong CÙNG lượt vá" if len(ca) != 91 else ""))
     except Exception as e:
@@ -3826,9 +3634,9 @@ def main(goc):
         # Đây là yêu cầu nghiệp vụ có thật của người dùng ("công ty có dự án
         # phần mềm cần nắm rõ phạm vi tổ chức để các vận hành liên quan
         # chính xác hơn"), nên nó phải do MÁY giữ chứ không do lời khai.
-        ("README có mục riêng cho công ty phần mềm, kèm LÝ DO phải khai", "## Công ty có phần mềm" in docs["README.md"] and "KHAI RÕ PHẠM VI TỔ" in docs["README.md"] and "vận hành liên quan mới chính xác" in docs["README.md"] and "NGOÀI PHẠM VI" in docs["README.md"]),
-        ("X9 hỏi phạm vi tổ chức ngay phiên cài đặt khi dự án là phần mềm", "là PHẦN MỀM thì hỏi đủ TÁM trường phạm vi tổ chức" in docs["X9_CAIDAT.md"] and "người phụ trách vận hành" in docs["X9_CAIDAT.md"]),
-        ("X0 C2 khai đủ NĂM trường phạm vi tổ chức phần mềm", all(t in docs["X0_CAUHINH_TEMPLATE.md"] for t in ["@DUAN.PHANMEM", "repo <URL hay đường dẫn>", "thành phần chính", "môi trường", "nơi chạy thật", "nơi giữ secret"])),
+        ("README có mục riêng cho công ty phần mềm, nêu repo là nguồn sự thật", "## Công ty có phần mềm" in docs["README.md"] and "NGUỒN SỰ THẬT của code" in docs["README.md"] and "mô tả tới <ngày>" in docs["README.md"]),
+        ("X9 hỏi repo ngay phiên cài đặt khi dự án là phần mềm", "hỏi thêm ĐÚNG MỘT thứ: repo ở đâu" in docs["X9_CAIDAT.md"] and "mô tả tới <ngày>" in docs["X9_CAIDAT.md"]),
+        ("X0 C2 thẻ phần mềm chỉ repo và mô tả có ngày chụp", all(t in docs["X0_CAUHINH_TEMPLATE.md"] for t in ["@DUAN.PHANMEM", "repo <URL hay đường dẫn>", "mô tả tới <YYYY-MM-DD>", "BẢN CHỤP", "ĐỌC REPO"])),
         ("repo là nguồn sự thật của code, code KHÔNG chép vào kho", "Repo là NGUỒN SỰ THẬT" in docs["X0_CAUHINH_TEMPLATE.md"] and "code KHÔNG chép vào kho" in docs["X0_CAUHINH_TEMPLATE.md"]),
         ("X5 mục 1b có gate, bảng mức repo, luật SECRET và dữ liệu khách", "# 1b." in docs["X5_HESO_TEMPLATE.md"] and "CHỈ đọc khi dự án thuộc X0 C2" in docs["X5_HESO_TEMPLATE.md"] and "SECRET" in docs["X5_HESO_TEMPLATE.md"] and "dữ liệu khách" in docs["X5_HESO_TEMPLATE.md"]),
         ("phát hành phần mềm cho khách có bảng kiểm riêng ở X2", "Phát hành PHẦN MỀM cho khách" in docs["X2_PHATHANH_TEMPLATE.md"] and "release note" in docs["X2_PHATHANH_TEMPLATE.md"]),

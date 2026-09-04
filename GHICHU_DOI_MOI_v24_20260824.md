@@ -9,6 +9,45 @@ Các mục vòng 1 tới 49 đã chuyển sang `GHICHU_LICHSU_v24_20260824.md` �
 không phình mãi - X9 mục 3c chép GHICHU vào kho MỌI công ty mỗi lượt nâng cấp.
 Lịch sử không mất, chỉ đổi chỗ.
 
+## Vòng 96: thẻ phần mềm TÁM TRƯỜNG về MỘT - repo, kèm mô tả có ngày
+
+Người dùng chốt lại phạm vi: "có PM có git thì t biết nó làm gì, có tính
+năng gì; lúc t hỏi thì nó check thêm cái git là xong - làm rối mà ngu", và
+"nó có thể có info là mô tả repo tới ngày xxx, để tiết kiệm, còn có thể đọc
+thêm cho chính xác".
+
+Tám trường (repo · thành phần · môi trường · nơi chạy thật · secret · nhánh
+tự deploy · CSDL · phụ trách) phải nuôi bằng tay chỉ để MỘT phép kiểm neo
+đích danh - đúng thứ người dùng gọi là rối. Nay:
+
+  @DUAN.PHANMEM
+    <MÃ PM>  <tên> · repo <URL>
+             · mô tả tới <YYYY-MM-DD>: <phần mềm làm gì>
+
+Mô tả là BẢN CHỤP để trả lời nhanh khỏi mở repo mỗi lần, KHÔNG phải nguồn
+sự thật. Hỏi thứ cần chính xác (có tính năng nào không, phiên bản nào, đổi
+gì gần đây) hay mô tả đã cũ: AI ĐỌC REPO rồi cập nhật lại mô tả kèm ngày
+mới, mức A; trả lời từ bản chụp thì nói rõ "theo mô tả tới <ngày>". Cùng
+khuôn cache-có-mốc mà bộ quan sát kho đã dùng.
+
+Máy đi theo: 7d chỉ còn đòi REPO. 7g giữ luật "chạm chạy thật là mức C"
+nhưng neo bằng CHỮ trong chính câu ghi ("chạy thật", "prod") thay vì neo
+đích danh host/nhánh/CSDL - nói đúng mức chắc chắn của mình; chuyện đội kỹ
+thuật ĐÃ làm thì mức B kèm chữ "xác nhận" là đủ, không cần khớp tên người.
+Neo bàn giao thôi quét vế phụ trách C2. Ba luật giữ nguyên vì chúng bảo vệ
+kho: repo là nguồn sự thật của code, secret không vào kho hay sổ, bộ KHÔNG
+deploy hay sửa CSDL hộ. X9 câu 3 hỏi đúng một thứ: repo ở đâu.
+
+Gỡ chín ca fixture chỉ tồn tại vì bảy trường cũ (thiếu phụ trách, thiếu
+CSDL, tên ở ô Chờ ai, tên nằm trong chữ khác, host thứ hai, nhánh tự
+deploy, squash, gộp không dấu, máy chủ nội bộ) và ca bàn giao vế phụ trách.
+Fixture 120 ca, I2 41, I3 88(nt)/87. X0 ngắn đi ~450 ký tự, kiem_van_hanh
+~8.700, kiem_tra_bo ~14.300.
+
+BỎ LUÔN đợt C đã soạn hôm trước (danh bạ có mã người và bí danh · người
+trực tạm · dự phòng gật · thẻ quản trị mềm): người dùng chỉ ra đó là vẽ vai
+người, "người vẫn là chính, AI là trợ lý thôi" - chưa từng lên commit.
+
 ## Vòng 95: TEAM bốn vai - nghiên cứu, đánh giá, tối ưu, phản biện - đợt A+B
 
 Người dùng yêu cầu tổ chức team agent: nghiên cứu · đánh giá · đề xuất tối

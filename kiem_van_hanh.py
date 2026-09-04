@@ -2514,30 +2514,7 @@ def main(goc):
                     for _r in dong_bang(doc(so / "VIEC.md"))
                     if len(_r) > 7 and _r[7].strip() not in ("XONG", "HỦY")
                     and _cua_nguoi_cu(_r[4] if len(_r) > 4 else "")]
-                # người GẬT mức C đã nghỉ mà C2 vẫn ghi tên: 7g sẽ mãi
-                # bảo đi xin cái gật của người cũ (giám khảo rubric 05)
-                # tách C2 thành TỪNG KHỐI entry rồi tìm trong TRỌN khối:
-                # bản regex một-dòng chết trên chính khuôn nhiều dòng của
-                # template - fixture một-dòng "tái đo chết" mà không phủ
-                # khuôn thật (giám khảo rubric 06)
-                _c2bg = cat_muc(doc(x0s[0]), 2)
-                _pm_bg = _c2bg[_c2bg.find("@DUAN.PHANMEM"):] \
-                    if "@DUAN.PHANMEM" in _c2bg else ""
-                _pm_cu, _kh_bg, _ma_bg = [], [], None
-                for _dg in _pm_bg.splitlines():
-                    _mkb = re.match(r"\s{2}([A-Z0-9]{2,6})\s", _dg)
-                    if _mkb:
-                        if _ma_bg and re.search(
-                                r"(?:ph[ụu] tr[áa]ch|owner)[^·]*"
-                                + re.escape(_ten_cu),
-                                "\n".join(_kh_bg), re.I):
-                            _pm_cu.append(_ma_bg)
-                        _ma_bg, _kh_bg = _mkb.group(1), []
-                    _kh_bg.append(_dg)
-                if _ma_bg and re.search(
-                        r"(?:ph[ụu] tr[áa]ch|owner)[^·]*" + re.escape(_ten_cu),
-                        "\n".join(_kh_bg), re.I):
-                    _pm_cu.append(_ma_bg)
+                _pm_cu = []
                 # tài liệu người cũ đang GIỮ (cờ giữ:<tên> ở TAILIEU)
                 _tl_cu = [
                     (_r[1] or "?").strip()[:12]
@@ -3045,117 +3022,24 @@ def main(goc):
         _c2 = cat_muc(_x0c2, 2)
         _pm = _c2[_c2.find("@DUAN.PHANMEM"):] if "@DUAN.PHANMEM" in _c2 else ""
         _dong_pm, _ma_pm, _thieu_pm = _pm.splitlines(), [], []
-        _host_pm = []   # GIÁ TRỊ nơi chạy thật, để 7g đọc lại
-        _nhanh_pm = []  # GIÁ TRỊ nhánh tự deploy, cũng để 7g đọc lại
-        _db_pm = []     # tên ĐÍCH DANH CSDL chạy thật (rubric 03)
-        _pt_pm = []     # tên NGƯỜI phụ trách vận hành - 7g nêu thẳng ai gật
-        _neo_theo_pm = []  # (host, nhánh, csdl, phụ trách) của TỪNG phần mềm - 7g
         for _i, _dg in enumerate(_dong_pm):
-            # KHÔNG đòi 2-6 ký tự HOA: không văn bản nào của bộ khai luật
-            # đó, mà mã ngoài khuôn ngầm làm công ty khai ĐÚNG bị 7d và
-            # 7d2 buộc tội, còn công ty khai THIẾU thì nhận đúng thông
-            # điệp ấy - lời hứa của README sai cả hai chiều (vòng 16)
+            # KHÔNG đòi 2-6 ký tự HOA: mã ngoài khuôn ngầm làm công ty khai
+            # ĐÚNG bị 7d và 7d2 buộc tội (vòng 16)
             _m = re.match(r"^  ([A-Za-z0-9][A-Za-z0-9_.-]{0,23})  +\S", _dg)
             if not _m:
                 continue
             _khoi_pm = _dg
             for _kx in _dong_pm[_i + 1:]:
-                # dòng NỐI của một khai báo thụt SÂU hơn (4 dấu cách trở lên);
-                # dòng định nghĩa cú pháp của template chỉ thụt 2, nên không bị
-                # gom nhầm vào khai báo thật rồi cho đủ từ khóa oan
+                # dòng NỐI thụt SÂU hơn; dòng cú pháp của template thụt 2 nên
+                # không bị gom nhầm vào khai báo thật
                 if not re.match(r"^ {3,}\S", _kx) or "<MÃ PM>" in _kx or "<tên>" in _kx:
                     break
                 _khoi_pm += " " + _kx.strip()
             _ma_pm.append(_m.group(1))
-            # GIÁ TRỊ nơi chạy thật: "chạy thật app.cty.vn" -> app.cty.vn.
-            # Bỏ qua "chưa rõ" (đó là khai hợp lệ tạm thời, 7d đã lo).
-            # bắt TRỌN vế sau "chạy thật" rồi nhặt MỌI token dạng domain:
-            # re.search một host làm "app.tst.vn va api.tst.vn" chỉ neo host
-            # đầu, deploy lên host thứ hai lọt cả 7g cứng lẫn lưới mềm
-            # (giám khảo rubric vòng 03)
-            _mh = re.search(r"(?:nơi\s+)?ch[ạa]y\s+th[ậa]t\s*:?\s*([^·\n]+)",
-                            _khoi_pm)
-            _h_i, _n_i, _d_i, _p_i = [], [], [], []   # riêng phần mềm này
-            if _mh:
-                _h_i += [_h.rstrip(".,;·") for _h in re.findall(
-                    r"[A-Za-z0-9][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_-]+)+",
-                    _mh.group(1))]
-                # máy chủ NỘI BỘ không có dấu chấm ("VPS-01", "prod2"):
-                # token đơn chỉ vào neo khi mang CHỮ SỐ hay dấu gạch - từ
-                # tiếng Việt thường ("chưa rõ", "máy chủ") đứng ngoài
-                # (giám khảo rubric 05)
-                _h_i += [_h for _h in re.findall(
-                    r"(?<![\w.-])([A-Za-z][A-Za-z0-9-]{2,})(?![\w.])",
-                    _mh.group(1))
-                    if re.search(r"[0-9-]", _h)]
-                _host_pm += _h_i
-            _mpt = re.search(r"(?:ph[ụu] tr[áa]ch(?:\s+v[ậa]n h[àa]nh)?"
-                             r"|owner|on-?call)\s*:?\s*([^·\n]+)",
-                             _khoi_pm, re.I)
-            if _mpt and not re.search(r"(?i)ch[ưu]a r[õo]", _mpt.group(1)):
-                # "Tuấn (kỹ thuật, GẬT mức C)" -> "Tuấn": tên là phần trước
-                # dấu ngoặc/phẩy, không phải cả cụm chú thích (tối ưu vai trợ lý)
-                _ten_pt = re.split(r"[(,;]", _mpt.group(1))[0].strip().rstrip(".·")
-                if _ten_pt:
-                    _pt_pm.append(_ten_pt[:30])
-                    _p_i.append(_ten_pt[:30])
-            _mdb = re.search(r"(?:csdl|c[ơo] s[ởo] d[ữu] li[ệe]u"
-                             r"|kho d[ữu] li[ệe]u|database|\bdb\b)"
-                             r"\s*(?:ch[ạa]y\s+th[ậa]t)?\s*:?\s*([^·\n]+)",
-                             _khoi_pm, re.I)
-            if _mdb and not re.search(r"(?i)ch[ưu]a r[õo]", _mdb.group(1)):
-                _ten_db = _mdb.group(1).strip().rstrip(".,;·")
-                if _ten_db:
-                    _db_pm.append(_ten_db[:40])
-                    _d_i.append(_ten_db[:40])
-            _neo_theo_pm.append((_h_i, _n_i, _d_i, _p_i))
-            _mb = re.search(r"nh[áa]nh\s+t[ựu]\s+deploy[^·]*?"
-                            r"(?:th[ậa]t\s+)?([A-Za-z0-9][\w./-]*)\s*(?:·|$)",
-                            _khoi_pm)
-            if _mb and not re.search(r"(?i)kh[ôo]ng c[óo]", _mb.group(0)):
-                _nhanh_pm.append(_mb.group(1).rstrip(".,;"))
-                _n_i.append(_mb.group(1).rstrip(".,;"))
-            # nhận CẢ bản có dấu lẫn không dấu: người Việt gõ cả hai kiểu, dò
-            # mỗi bản có dấu là phạt oan công ty gõ "chay that" (bàn thử vòng 45)
-            _can_pm = [("repo", r"repo\s*[:=]?\s*\S"),
-                       ("thành phần chính",
-                        r"thành phần|thanh phan|gồm|gom|\bweb\b|\bapi\b"
-                        r"|máy chủ|may chu|mobile|\bapp\b"),
-                       ("môi trường (dev, staging hay prod)",
-                        r"dev|staging|prod|môi trường|moi truong"),
-                       ("nơi chạy thật", r"chạy thật|chay that"),
-                       ("nơi giữ secret", r"secret|bí mật|bi mat"),
-                       # X5 mục 1b BẮT phân biệt "merge vào nhánh mà CI/CD tự
-                       # deploy chạy thật là C", mà schema không có ô nào khai
-                       # nhánh đó: luật gác đúng chỗ hiểm nhưng phụ thuộc một
-                       # dữ kiện bộ không bao giờ hỏi, nên MỌI lượt merge rơi
-                       # về mức A theo mặc định thực tế (hội đồng vòng 18)
-                       ("nhánh tự deploy chạy thật",
-                        r"nhánh tự deploy|nhanh tu deploy|auto-?deploy"),
-                       # update bảng giá trên CSDL khách là mức C theo X5 mục
-                       # 1 mà máy không có neo nào nếu không hỏi tên (rubric 03)
-                       ("CSDL/kho dữ liệu chạy thật",
-                        r"csdl|cơ sở dữ liệu|co so du lieu|kho dữ liệu"
-                        r"|kho du lieu|database|\bdb\b"),
-                       # lượt mức C mà không biết hỏi AI GẬT thì "plan và cái
-                       # gật TRƯỚC" là cái gật của không ai cả (vế TỔ CHỨC
-                       # của phạm vi phần mềm - hạ tầng và dữ liệu đã có neo)
-                       ("người phụ trách vận hành",
-                        r"phụ trách|phu trach|owner|chịu trách nhiệm"
-                        r"|chiu trach nhiem|on-?call")]
-            # Bỏ đoạn "repo ..." ra trước khi dò BỐN trường còn lại: khai
-            # báo phân đoạn bằng dấu ·, mà dò từ khóa trên TRỌN dòng thì
-            # trường này ăn ké chữ của trường kia - `repo git.cty.vn/app` một
-            # mình từng thỏa luôn cả "thành phần chính" nên công ty bỏ trống
-            # trường đó vẫn xanh (hội đồng vòng 16, mục cuối còn mở của họ)
-            _ngoai_repo = " · ".join(
-                _d for _d in _khoi_pm.split("·")
-                if not re.match(r"\s*repo\b", _d, re.I))
-            _hut = [_ten for _ten, _mau in _can_pm
-                    if not re.search(_mau, _khoi_pm if _ten == "repo"
-                                     else _ngoai_repo, re.I)]
-            if _hut:
-                _thieu_pm.append(f"{_m.group(1)} thiếu: {', '.join(_hut)}")
+            # MỘT trường duy nhất: repo. Phần mềm làm gì, chạy ở đâu thì hỏi
+            # tới đâu AI đọc repo tới đó - X0 chỉ giữ con trỏ (vòng 108).
+            if not re.search(r"repo\s*[:=]?\s*\S", _khoi_pm, re.I):
+                _thieu_pm.append(f"{_m.group(1)} chưa khai repo")
         # QUÊN KHAI HẲN: C2 có dự án đang chạy và sổ đầy dấu vết làm phần mềm
         # mà @DUAN.PHANMEM trống trơn - cả chuỗi mức duyệt repo của X5 mục 1b
         # không kích hoạt được, deploy chạy thật bị xử như việc nhẹ (vòng 16)
@@ -3171,16 +3055,11 @@ def main(goc):
             if _dau_pm:
                 _thieu_pm.append("@DUAN.PHANMEM chưa khai dòng nào, trong khi sổ đã"
                                  " có dấu vết làm phần mềm")
-        bao("7d. dự án phần mềm khai đủ phạm vi",
-            not _thieu_pm,
-            f"{' · '.join(_thieu_pm[:3])}. Thiếu trường nào thì vận hành liên quan"
-            f" trường đó chạy mù: không rõ repo thì code có thể bị chép vào kho;"
-            f" không rõ đâu là môi trường CHẠY THẬT thì deploy đáng lẽ mức C bị"
-            f" hạ xuống A (X5 mục 1b); không rõ nơi giữ secret thì secret rơi"
-            f" vào sổ hay _INBOX. CHƯA BIẾT CŨNG KHAI ĐƯỢC: gõ đúng tên trường"
-            f" kèm chữ \"chưa rõ\" (ví dụ \"secret chưa rõ\") ngay tại dòng -"
-            f" đó là giá trị hợp lệ, KHÔNG đưa vào C12; hỏi lại đội kỹ thuật"
-            f" khi tiện; mức B")
+        bao("7d. dự án phần mềm khai repo", not _thieu_pm,
+            f"{' · '.join(_thieu_pm[:3])}: repo là NGUỒN SỰ THẬT của code -"
+            f" không khai thì code có thể bị chép vào kho, và AI không biết"
+            f" đọc đâu khi bạn hỏi phần mềm làm gì. Khai một dòng ở X0 C2:"
+            f" <MÃ PM> <tên> · repo <URL>, mức B")
 
         # dòng TAILIEU dạng "Repo" chỉ hợp lệ khi công ty CÓ khai phần mềm
         # 7d2 từng chỉ nổ khi C2 chưa khai phần mềm NÀO, nên công ty khai một
@@ -3222,18 +3101,10 @@ def main(goc):
                r"|\bhotfix\b|s[ửu]a n[óo]ng|sua nong"
                r"|l[ấa]y b[ảa]n sao|lay ban sao|b[ậa]t c[ờo]|t[ắa]t c[ờo]"
                r"|c[ấa]p quy[ềe]n|cap quyen|thu h[ồo]i quy[ềe]n")
-        _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"] + [
-            "(?<![\\w.-])" + re.escape(_h) for _h in _host_pm] + [
-            re.escape(_d) for _d in _db_pm]
-        # merge vào ĐÚNG nhánh tự deploy là chạm chạy thật, dù câu ghi không
-        # nhắc chữ nào về production - đó là cả lý do trường này tồn tại
-        # nhận cả KHÔNG DẤU: danh sách động từ _dv cố ý nhận "gop nhanh"
-        # mà neo nhánh lại đòi "gộp" có dấu - kiểu gõ phổ biến nhất lọt mức
-        # thấp ở đúng lượt merge vào nhánh tự deploy (giám khảo rubric 01)
-        _neo += [r"(?:merge|g[ộo]p|đ[ẩa]y l[êe]n|day len|đ[ưu]a|dua"
-                 r"|\bsquash\b|\brebase\b)[^·]*?(?<![\w.-])"
-                 + re.escape(_b) + r"(?![\w.-])"
-                 for _b in _nhanh_pm]
+        # Neo bằng CHỮ trong chính câu ghi. Trước vòng 108 bộ bắt khai host,
+        # nhánh tự deploy, CSDL, người phụ trách rồi neo đích danh - bảy
+        # trường phải nuôi bằng tay cho một phép kiểm. X0 nay chỉ giữ repo.
+        _neo = [r"ch[ạa]y\s+th[ậa]t", r"(?<![\w-])prod(uction)?(?![\w-])"]
         _sx = []
         _dinh_chinh_7g = set()
         for _r in hang_nk:
@@ -3254,38 +3125,20 @@ def main(goc):
             # đã rồi là thủ tục chiều bộ (audit vai giám đốc, đợt 2)
             if not any(re.search(_n, _lg, re.I) for _n in _neo):
                 continue
-            # chuyện ĐÃ XẢY RA mức B: tên phụ trách phải đứng NGUYÊN TỪ trong
-            # ô Làm gì, và là phụ trách của ĐÚNG phần mềm mà lượt này chạm
-            # (neo chữ "prod"/"chạy thật" không thuộc phần mềm nào thì nhận
-            # mọi phụ trách). Bản cũ tìm chuỗi con trên CẢ DÒNG: "An" nằm
-            # trong "ban", "Hà" trong "hanh", tên ở ô Chờ ai cũng đủ im - mọi
-            # lượt sản xuất hạ được xuống B (phản biện 95)
-            if _muc == "B" and _pt_pm:
-                _pt_ung = set()
-                for _h_i, _n_i, _d_i, _p_i in _neo_theo_pm:
-                    _neo_i = ["(?<![\\w.-])" + re.escape(_h) for _h in _h_i] + [
-                        re.escape(_d) for _d in _d_i] + [
-                        r"(?:merge|g[ộo]p|đ[ẩa]y l[êe]n|day len|đ[ưu]a|dua"
-                        r"|\bsquash\b|\brebase\b)[^·]*?(?<![\w.-])"
-                        + re.escape(_b) + r"(?![\w.-])" for _b in _n_i]
-                    if any(re.search(_n, _lg, re.I) for _n in _neo_i):
-                        _pt_ung |= set(_p_i)
-                if not _pt_ung:
-                    _pt_ung = set(_pt_pm)   # chỉ neo chữ suông: nhận mọi phụ trách
-                _lg_kd = bo_dau(_lg)
-                if any(re.search(r"(?<![a-z0-9])" + re.escape(bo_dau(_pt))
-                                 + r"(?![a-z0-9])", _lg_kd) for _pt in _pt_ung):
-                    continue
+            # chuyện ĐÃ XẢY RA (đội kỹ thuật làm, mình chỉ ghi nhận): mức B
+            # kèm chữ "xác nhận" hay "đã làm" trong ô Làm gì là đủ - bắt plan
+            # C để ghi lại một việc đã rồi là thủ tục thừa
+            if _muc == "B" and re.search(
+                    r"(?i)x[áa]c nh[ậa]n|đ[ãa] l[àa]m|ghi nh[ậa]n", _lg):
+                continue
             if any(re.search(_n, _lg, re.I) for _n in _neo):
                 _sx.append(f"{(_r[0] or '?').strip()[:22]} (mức {_muc or 'trống'})")
         bao("7g. chạm CHẠY THẬT phải ghi mức C", not _sx,
-            f"{_liet(_sx[:4])}: ô \"Làm gì\" có động từ sản xuất GIAO với nơi"
-            f" chạy thật khai ở X0 C2"
-            f"{' (' + _liet(_host_pm[:2]) + ')' if _host_pm else ''}. Đội kỹ"
-            f" thuật ĐÃ làm thì ghi mức B kèm tên người phụ trách xác nhận"
-            f"{' (' + _liet(_pt_pm[:2]) + ')' if _pt_pm else ' (khai ở C2)'}"
-            f" ngay trong ô Làm gì; AI không tự làm thao tác này (X5 mục 1b)."
-            f" [AI: không tự hạ mức]")
+            f"{_liet(_sx[:4])}: ô \"Làm gì\" có động từ sản xuất kèm chữ"
+            f" \"chạy thật\" hay \"prod\" mà lượt ghi không ở mức C. Đội kỹ"
+            f" thuật ĐÃ làm rồi thì ghi mức B kèm chữ \"xác nhận\" (ai xác"
+            f" nhận) ngay trong ô Làm gì; AI không tự làm thao tác này (X5"
+            f" mục 1b). [AI: không tự hạ mức]")
         # Lưới MỀM cho động từ chưa vào danh sách: hai vòng rubric liền phát
         # hiện lớp lỗ này bằng động từ MỚI (gop, phat hanh, squash...). Câu
         # mức A/B nhắc ĐÍCH DANH host/nhánh đã khai mà máy không nhận ra động
